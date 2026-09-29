@@ -13,6 +13,10 @@
  * quarta conexão, quando `ana-futura` entra. A versão futura não responde e
  * não há nó de narração depois da pergunta — o gesto de apontar pro mapa é da
  * tela, e o roteiro pede "sem texto" nos 5 segundos de sustentação.
+ *
+ * Falas curtas por decisão: o NPC PLANTA, o apresentador DESENVOLVE. O corpo do
+ * e-mail cabe em duas linhas, e a linha dos "três lugares" fica intacta porque
+ * é o setup das três conexões da revelação.
  */
 import { NOME_PROTAGONISTA } from '../types';
 import type { Cena, Dialogo, DialogoId } from '../types';
@@ -54,18 +58,14 @@ export const DIALOGOS_B5: Record<DialogoId, Dialogo> = {
       {
         tipo: 'fala',
         quem: 'sistema',
-        texto: `${NOME_PROTAGONISTA}, abriu uma posição no time de Plataforma. É efetivação, não é estágio.`,
+        texto: 'Abriu uma posição no time de Plataforma. É efetivação, não é estágio.',
       },
       {
+        // A linha dos "três lugares" é o setup das três conexões do clímax.
         tipo: 'fala',
         quem: 'sistema',
-        texto: 'Seu nome apareceu em três lugares diferentes na conversa de ontem.',
-      },
-      { tipo: 'fala', quem: 'sistema', texto: 'Você tem interesse?' },
-      {
-        tipo: 'fala',
-        quem: 'narrador',
-        texto: `${NOME_PROTAGONISTA} não responde. Ela olha a tela.`,
+        texto:
+          'Seu nome apareceu em três lugares diferentes na conversa de ontem. Você tem interesse?',
       },
       { tipo: 'fala', quem: 'ana', texto: '(baixo) Três lugares?' },
     ],

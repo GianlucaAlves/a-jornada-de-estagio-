@@ -14,6 +14,10 @@
  * (entrega → silêncio → Cláudia → Bianca → mensagem do Marcos). `hotspotsFeitos`
  * não é zerado entre blocos, então cada gate aponta para um id exclusivo deste
  * bloco quando isso importa.
+ *
+ * Falas curtas por decisão: o NPC PLANTA, o apresentador DESENVOLVE. Nenhum
+ * diálogo passa de 6 nós e nenhuma fala passa de duas frases. O conteúdo
+ * temático que saiu das falas está nos blocos "Gancho de fala" do roteiro.
  */
 import { NOME_PROTAGONISTA } from '../types';
 import type { Cena, Dialogo, DialogoId } from '../types';
@@ -98,58 +102,38 @@ export const DIALOGOS_B4: Record<DialogoId, Dialogo> = {
     ],
   },
 
+  /**
+   * A Bianca NÃO ensina as três lições de visibilidade aqui — ela dá a virada e
+   * para. A enumeração ("conta em termos de quem escuta", "conta pra quem não
+   * estava na sala", "escreve onde você quer estar em dois anos") é fala do
+   * APRESENTADOR, e está nos ganchos de 04-bloco-4.md §5. As duas skills saem
+   * de `efeitos` mesmo sem linha de NPC que as explique: o painel é o registro,
+   * a fala ao vivo é a aula.
+   */
   'b4-bianca': {
     id: 'b4-bianca',
     nos: [
-      { tipo: 'fala', quem: 'bianca', texto: 'Ouvi que era hoje. Como foi?' },
-      { tipo: 'fala', quem: 'ana', texto: 'Foi bem. Acho.' },
       {
         tipo: 'fala',
         quem: 'bianca',
-        texto: `(entra, olha o diagrama) Isso é bom, ${NOME_PROTAGONISTA}. Isso é bom de verdade.`,
+        texto: `(entra, olha o diagrama) Isso é bom, ${NOME_PROTAGONISTA}. Bom de verdade.`,
       },
       { tipo: 'fala', quem: 'ana', texto: 'Ninguém falou nada.' },
-      { tipo: 'fala', quem: 'bianca', texto: 'Quem ia falar?' },
       {
         tipo: 'fala',
         quem: 'bianca',
         texto:
-          'Quem tava naquela sala? Quatro pessoas que já sabiam do projeto. Quem não tava? Todo mundo que decide alguma coisa sobre você.',
+          'Quem ia falar? Naquela sala só tinha quem já sabia do projeto — quem decide sobre você não estava lá.',
       },
-      { tipo: 'fala', quem: 'narrador', texto: 'Ela senta na beirada da mesa.' },
       {
         // Callback do par nº 3 do puzzle do Bloco 2.
         tipo: 'fala',
         quem: 'bianca',
         texto:
-          'Lembra o dia que você ligou as quatro trilhas no guardanapo? Você mesma escreveu que não sabia explicar o que fazia pra quem não é técnico. Isso foi um ano atrás.',
+          'Lembra o guardanapo? Você escreveu que não sabia explicar o que faz pra quem não é técnico.',
       },
       { tipo: 'fala', quem: 'ana', texto: '(pausa) Eu nunca fiz essa trilha.' },
       { tipo: 'fala', quem: 'bianca', texto: 'Não. Você fez as outras três.' },
-      {
-        tipo: 'fala',
-        quem: 'narrador',
-        texto: `Bianca lista, e ${NOME_PROTAGONISTA} anota.`,
-      },
-      { tipo: 'fala', quem: 'bianca', texto: 'Três coisas, e nenhuma delas é se vender.' },
-      {
-        tipo: 'fala',
-        quem: 'bianca',
-        texto:
-          'Um: conta o que você fez em termos de quem escuta. Não "implementei verificação de idempotência". "Cliente não é mais cobrado duas vezes."',
-      },
-      {
-        tipo: 'fala',
-        quem: 'bianca',
-        texto:
-          'Dois: conta pra quem não estava na sala. O canal do time, o fórum, a pessoa que te perguntou no café. Não é puxar o saco de ninguém — é deixar rastro.',
-      },
-      {
-        tipo: 'fala',
-        quem: 'bianca',
-        texto:
-          'Três: escreve onde você quer estar em dois anos. (pausa) Porque se você não escrever, alguém escreve pra você.',
-      },
     ],
     efeitos: [
       { tipo: 'concederSkill', skillId: 'visibilidade' },
@@ -165,7 +149,7 @@ export const DIALOGOS_B4: Record<DialogoId, Dialogo> = {
       {
         tipo: 'fala',
         quem: 'marcos',
-        texto: `${NOME_PROTAGONISTA}! Vi o que você postou no canal. Isso resolve o problema do retry inteiro? Posso levar pro Innovation Day de novembro como caso?`,
+        texto: `${NOME_PROTAGONISTA}! Vi o que você postou no canal. Posso levar pro Innovation Day de novembro como caso?`,
       },
     ],
     efeitos: [

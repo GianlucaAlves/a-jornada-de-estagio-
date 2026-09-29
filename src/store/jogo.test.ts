@@ -10,11 +10,22 @@
  * `ecoTexto`, `aberturaTexto`) em vez de duplicados como string literal — o
  * roteiro ainda vai ser reescrito, e reescrever roteiro não deve quebrar teste.
  *
+ * Pela mesma razão, NADA aqui conta nós de diálogo nem depende de um índice
+ * específico: `concluirDialogo` avança até `dialogoAtivo` mudar, lendo
+ * `DIALOGOS[id].nos.length`, e o "meio do diálogo" é derivado desse tamanho.
+ * Diálogos vão encurtar de novo; a suíte não pode encurtar com eles.
+ *
+ * O que É afirmado por literal são as duas tabelas de fronteira de bloco
+ * (inventário e contagem de skills). Ali a duplicação é o teste: comparar a
+ * realidade só contra `estadoAssumido` deixaria passar o erro que está NA
+ * TABELA.
+ *
  * A store é um singleton Zustand: `reiniciar()` no `beforeEach` é o que isola
  * os testes uns dos outros.
  */
 import {
   BLOCOS,
+  CARTOES,
   CENAS,
   CONEXOES,
   DIALOGOS,
@@ -124,18 +135,70 @@ function hotspot(id: HotspotId) {
   return h;
 }
 
-/** Avança o diálogo ativo até o fim, escolhendo a primeira opção nas escolhas. */
-function concluirDialogo(): void {
-  for (let passo = 0; passo < 200; passo++) {
-    const ativo = j().dialogoAtivo;
-    if (!ativo) return;
-    const dialogo = DIALOGOS[ativo.dialogoId];
-    if (!dialogo) throw new Error(`diálogo inexistente: '${ativo.dialogoId}'`);
-    const no = dialogo.nos[ativo.indice];
-    if (no?.tipo === 'escolha' && ativo.escolhaFeita === null) j().escolherOpcao(0);
-    j().avancarDialogo();
+/**
+ * Avança o diálogo ativo até ele terminar, clicando um nó por vez.
+ *
+ * O número de cliques é LIDO do conteúdo (`DIALOGOS[id].nos.length` menos o nó
+ * atual), nunca hardcoded: reescrever falas é a operação mais frequente do
+ * projeto e não pode quebrar a suíte.
+ *
+ * Além de avançar, afirma o contrato de `avancarDialogo`: um clique = um nó,
+ * sempre para frente, e todo nó visitado tem fala escrita.
+ */
+function concluirDialogo(jaVistos: readonly DialogoId[] = []): void {
+  const ativo = j().dialogoAtivo;
+  if (!ativo) return;
+  const dialogo = DIALOGOS[ativo.dialogoId];
+  if (!dialogo) throw new Error(`diálogo inexistente: '${ativo.dialogoId}'`);
+  // Diálogo que se encadeia em círculo prenderia o apresentador no palco.
+  if (jaVistos.includes(dialogo.id)) {
+    throw new Error(`ciclo de diálogo: '${[...jaVistos, dialogo.id].join("' → '")}'`);
   }
-  throw new Error(`diálogo não terminou: '${j().dialogoAtivo?.dialogoId}'`);
+
+  const cliquesEsperados = dialogo.nos.length - ativo.indice;
+  for (let clique = 1; clique <= cliquesEsperados; clique++) {
+    const antes = j().dialogoAtivo;
+    if (!antes) throw new Error(`'${dialogo.id}' terminou antes do último nó`);
+    // O nó apontado pelo índice existe e tem fala — é o que a caixa renderiza.
+    const no = dialogo.nos[antes.indice];
+    if (!no) throw new Error(`'${dialogo.id}' aponta para o nó ${antes.indice}, que não existe`);
+    expect(no.texto.trim(), `'${dialogo.id}' nó ${antes.indice}`).not.toBe('');
+
+    j().avancarDialogo();
+
+    const depois = j().dialogoAtivo;
+    if (clique < cliquesEsperados) {
+      // Um clique = um nó: nem pula, nem fica parado esperando interação.
+      expect(depois?.dialogoId, `'${dialogo.id}' trocou de diálogo no meio`).toBe(dialogo.id);
+      expect(depois?.indice, `'${dialogo.id}' não avançou exatamente um nó`).toBe(
+        antes.indice + 1,
+      );
+    }
+  }
+
+  // Passado o último nó, este diálogo não pode continuar ativo. Um efeito
+  // `dialogo` no fim (encadeamento) abre outro id — por isso a checagem é por id.
+  expect(j().dialogoAtivo?.dialogoId, `'${dialogo.id}' não terminou`).not.toBe(dialogo.id);
+  // Encadeou? Então o próximo também vai até o fim.
+  if (j().dialogoAtivo) concluirDialogo([...jaVistos, dialogo.id]);
+}
+
+/**
+ * Para o diálogo ativo NO MEIO e devolve o índice onde parou.
+ *
+ * O número de cliques vem do tamanho real do diálogo e é limitado a
+ * `nos.length - 1`, então o diálogo nunca termina aqui por acidente — é
+ * justamente o estado "no meio" que os testes de abandono precisam.
+ */
+function avancarAteOMeioDoDialogo(): number {
+  const ativo = j().dialogoAtivo;
+  if (!ativo) throw new Error('nenhum diálogo ativo');
+  const total = DIALOGOS[ativo.dialogoId]?.nos.length ?? 0;
+  const cliques = Math.min(Math.max(1, Math.floor(total / 2)), total - 1);
+  for (let i = 0; i < cliques; i++) j().avancarDialogo();
+  const indice = j().dialogoAtivo?.indice;
+  if (indice === undefined) throw new Error(`'${ativo.dialogoId}' terminou antes do meio`);
+  return indice;
 }
 
 /** Clica e leva a conversa até o fim (os efeitos do diálogo saem no último nó). */
@@ -154,10 +217,13 @@ function conversar(hotspotId: HotspotId): void {
  */
 function atravessarCartao(proximo: 2 | 3 | 4 | 5): void {
   const esperado = INVENTARIO_NA_FRONTEIRA[proximo];
+  const skillsEsperadas = [...BLOCOS[proximo].estadoAssumido.skills];
 
   // Lado de saída: o que o bloco anterior de fato entrega.
   expect(itensPresentes()).toEqual(esperado);
   expect(skillsNoPainel()).toHaveLength(SKILLS_NA_FRONTEIRA[proximo]);
+  // Não só a contagem: as skills certas, na ordem em que ela as aprendeu.
+  expect(skillsNoPainel()).toEqual(skillsEsperadas);
   // A tabela do próximo bloco tem que declarar a MESMA lista.
   expect([...BLOCOS[proximo].estadoAssumido.itens].sort()).toEqual(esperado);
   expect(BLOCOS[proximo].estadoAssumido.skills).toHaveLength(SKILLS_NA_FRONTEIRA[proximo]);
@@ -173,6 +239,7 @@ function atravessarCartao(proximo: 2 | 3 | 4 | 5): void {
   // Lado de entrada: nada se perdeu na troca de bloco.
   expect(itensPresentes()).toEqual(esperado);
   expect(skillsNoPainel()).toHaveLength(SKILLS_NA_FRONTEIRA[proximo]);
+  expect(skillsNoPainel()).toEqual(skillsEsperadas);
 }
 
 /**
@@ -350,6 +417,45 @@ beforeEach(() => {
 // ------------------------------------------------------------------ testes
 
 describe('playthrough completo', () => {
+  /**
+   * `atravessarCartao` é o único caminho da suíte entre blocos, e ele afirma
+   * inventário e skills nos dois lados. Este teste garante que a cobertura é
+   * TOTAL: se um sexto bloco aparecer com cartão próprio, a tabela de fronteira
+   * não vai ter entrada para ele e isto falha antes de o playthrough passar por
+   * cima da fronteira nova sem afirmar nada.
+   */
+  it('existe tabela de inventário e de skills para toda fronteira de bloco', () => {
+    const fronteiras = CARTOES.map((c) => c.bloco);
+    expect(fronteiras).toEqual([2, 3, 4, 5]);
+    expect(Object.keys(INVENTARIO_NA_FRONTEIRA).map(Number)).toEqual(fronteiras);
+    expect(Object.keys(SKILLS_NA_FRONTEIRA).map(Number)).toEqual(fronteiras);
+    // E cada tabela concorda com o estado que o bloco declara assumir.
+    for (const bloco of fronteiras) {
+      const chave = bloco as 2 | 3 | 4 | 5;
+      expect([...BLOCOS[chave].estadoAssumido.itens].sort()).toEqual(
+        INVENTARIO_NA_FRONTEIRA[chave],
+      );
+      expect(BLOCOS[chave].estadoAssumido.skills).toHaveLength(SKILLS_NA_FRONTEIRA[chave]);
+    }
+  });
+
+  /**
+   * A mecânica de ESCOLHA de fala foi removida: diálogo é linear e a resposta da
+   * protagonista é escrita, não opção do apresentador. Esta é a tripwire do lado
+   * da STORE — `integridade.test.ts` guarda o lado do conteúdo. Reintroduzir a
+   * ação de escolha exige apagar este teste, e apagar este teste é uma decisão
+   * consciente, não um merge distraído.
+   */
+  it('a store não expõe ação de escolher opção de diálogo', () => {
+    const acoes = j() as unknown as Record<string, unknown>;
+    expect('escolherOpcao' in acoes).toBe(false);
+    // O diálogo ativo também não carrega estado de escolha pendente.
+    j().entrarNoBloco(1);
+    j().entrarNoLugar('escritorio');
+    j().clicarHotspot('tiago');
+    expect(Object.keys(j().dialogoAtivo ?? {}).sort()).toEqual(['dialogoId', 'indice']);
+  });
+
   it('joga do primeiro clique até as três perguntas finais, com estado afirmado em cada fronteira de bloco', () => {
     // ------------------------------------------------ estado zero
     expect(j().bloco).toBe(1);
@@ -958,10 +1064,12 @@ describe('saída do palco com interação em curso', () => {
     expect(skillsNoPainel()).not.toContain('visibilidade');
     expect(skillsNoPainel()).not.toContain('plano-futuro');
 
-    // Meio do diálogo, não a primeira linha.
-    j().avancarDialogo();
-    j().avancarDialogo();
-    const indiceNoMeio = j().dialogoAtivo?.indice;
+    // Meio do diálogo, não a primeira linha — quantos cliques é derivado do
+    // tamanho real de 'b4-bianca', então encurtar a fala da Bianca não quebra isto.
+    // A virada da Bianca não pode ser um nó só: é ela que concede as duas
+    // últimas skills, e a fuga pelo meio só existe se houver meio.
+    expect(DIALOGOS['b4-bianca']?.nos.length, "'b4-bianca' tem que ter meio").toBeGreaterThan(1);
+    const indiceNoMeio = avancarAteOMeioDoDialogo();
     expect(indiceNoMeio).toBeGreaterThan(0);
 
     j().voltarAoMapa();

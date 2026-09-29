@@ -30,22 +30,22 @@ Mesma mesa do Bloco 1. Mesmo notebook. Mesmo enquadramento — **idêntico**, de
 
 Ana senta. A tela abre **sem senha** — ela digita de cor, sem olhar. Detalhe de 2 segundos que diz dois anos.
 
-Chega uma mensagem:
+Chega uma mensagem. **Cinco falas no total** — o e-mail cabe em duas linhas:
 
 > **De: Cláudia Reis**
 > **Assunto: Vaga — Engenharia de Plataforma**
 >
-> Ana,
->
 > Abriu uma posição no time de Plataforma. É efetivação, não é estágio.
 >
-> Seu nome apareceu em três lugares diferentes na conversa de ontem.
->
-> Você tem interesse?
+> Seu nome apareceu em três lugares diferentes na conversa de ontem. Você tem interesse?
 
-Ana não responde. Ela olha a tela.
+Ana não responde — ela olha a tela.
 
 > **Ana:** *(baixo)* Três lugares?
+
+> ⚠️ A linha dos **três lugares** é o setup das três primeiras conexões da revelação. Ela não pode ser cortada nem parafraseada: a plateia precisa carregar o número "três" até o mapa.
+
+> 💡 **Gancho de fala:** o e-mail não diz *por que* o nome dela apareceu. Ninguém no mundo real recebe essa explicação — **o mapa é que vai dar**. Deixar a pergunta dela no ar e clicar.
 
 **→ Transição automática pro Mapa.** Única transição automática da apresentação inteira — a cena dissolve e o mapa entra.
 

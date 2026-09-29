@@ -34,57 +34,32 @@ Pequeno, bobo, e diz muito sobre onde ela está. Sem item, sem skill — só per
 
 ## 2. Bianca — o coração do bloco
 
-Ela está mexendo no celular, encostada na mesa alta. Olha a Ana.
+Ela está mexendo no celular, encostada na mesa alta. Olha a Ana. Seis falas, e ela **abre** os dois assuntos do bloco sem explicar nenhum — a explicação é sua.
 
-> **Bianca:** Você é do DT7, né? A Cláudia falou de você.
+> **Bianca:** Você é do DT7? A Cláudia falou que você pergunta muito — era elogio.
 >
-> **Ana:** Falou?
->
-> **Bianca:** Falou que você pergunta muito. *(pausa)* Era elogio.
-
-> 💡 **Gancho de fala:** o que o Bloco 1 plantou já rendeu, e ela não ficou sabendo na hora. Isso vai acontecer de novo.
-
-Ana pergunta como ela chegou ali.
-
-> **Bianca:** Eu sou formada em Letras.
+> **Bianca:** Eu faço documentação técnica e desenho de API. Sou formada em **Letras**.
 >
 > **Ana:** *(pausa)* Letras.
 >
-> **Bianca:** Trabalhei seis anos com revisão de texto. Fiz uma transição aos vinte e oito. Hoje eu faço documentação técnica e desenho de API.
-
-Ana pergunta como ela fez.
-
-> **Bianca:** Estudando o que estava faltando. Que é diferente de estudar o que tem na grade.
-
-Aqui vem o núcleo do bloco:
-
-> **Bianca:** Deixa eu te perguntar uma coisa. Na faculdade, quanto tempo você passou aprendendo a ler o log de um sistema que já está rodando em produção?
+> **Bianca:** Transição aos vinte e oito, estudando **o que estava faltando**. Que é diferente de estudar o que tem na grade.
 >
-> **Ana:** Nenhum.
+> **Bianca:** *(anota três trilhas num guardanapo)* **Degree** é trilha com começo e fim. **Percipio** é biblioteca, pra quando você já sabe o nome do problema.
 >
-> **Bianca:** E quanto tempo você passou provando teorema?
->
-> **Ana:** Bastante.
->
-> **Bianca:** Pois é. Nenhum dos dois é inútil. Mas só um deles vai te aparecer na terça-feira.
-
-> 💡 **Gancho de fala:** o diploma não é desperdício, ele é **incompleto**. A faculdade te dá a base de raciocínio; ela não te dá o vocabulário do dia a dia. Quem trata isso como traição da faculdade fica ressentido; quem trata como lacuna, estuda.
-
-Bianca pega um guardanapo.
-
-> **Bianca:** Olha, tem duas coisas aqui dentro que ninguém te conta no primeiro dia. **Degree**, que é trilha estruturada, com certificado, tem começo e fim. E **Percipio**, que é biblioteca — você vai lá quando precisa de uma coisa específica, hoje, agora.
->
-> **Bianca:** Degree é pra quando você não sabe o que não sabe. Percipio é pra quando você já sabe o nome do problema.
-
-Ela anota três trilhas e entrega.
+> **Bianca:** Eu vou estar lá também. Eu não parei de estudar, Ana — ninguém aqui parou.
 
 **→ Ganha: Indicação de trilha**
-**→ Destrava no mapa: Sala de Treinamento**
-
-> **Bianca:** Ah, e eu vou estar lá também. Eu não parei de estudar, Ana. Ninguém aqui parou.
-
 **→ Ganha skill: Leitura de mercado**
 **→ Ganha skill: Aprendizado contínuo**
+**→ Destrava no mapa: Sala de Treinamento**
+
+> 💡 **Gancho 1 — o elogio:** o que o Bloco 1 plantou já rendeu, e ela não ficou sabendo na hora. Isso vai acontecer de novo.
+
+> 💡 **Gancho 2 — faculdade x mercado** *(a Bianca só abriu a porta com "estudar o que faltou"; o resto é seu)*: pergunte à plateia quanto tempo a faculdade dedicou a ler o log de um sistema já rodando em produção. Nenhum. E a provar teorema? Bastante. **Nenhum dos dois é inútil — mas só um deles aparece na terça-feira.** O diploma não é desperdício, ele é **incompleto**: dá a base de raciocínio, não dá o vocabulário do dia a dia. Quem trata isso como traição da faculdade fica ressentido; quem trata como lacuna, estuda.
+
+> 💡 **Gancho 3 — Degree x Percipio** *(ela deu uma frase pra cada; **desenvolva agora**)*: **Degree** é trilha estruturada, com certificado, começo e fim — é pra quando **você não sabe o que não sabe**. **Percipio** é biblioteca sob demanda — é pra quando **você já sabe o nome do problema** e precisa resolver hoje. Errar a ferramenta é o que faz a pessoa desistir: ninguém aguenta uma trilha de 40h pra resolver uma dúvida de 20 minutos, e ninguém constrói base pulando de vídeo em vídeo.
+
+> 💡 **Gancho 4 — "ninguém aqui parou":** a Bianca é a prova viva de que a transição é possível e de que ela não termina. Ela tem seis anos de revisão de texto no currículo e está numa sala de treinamento à noite, igual à estagiária.
 
 ---
 
@@ -98,9 +73,7 @@ Mais próximo que no Bloco 1. A plateia precisa reencontrá-lo pra lembrar dele 
 >
 > **Rafael:** Eu vi que você usou meu ramal zero vezes.
 >
-> **Ana:** *(pausa)* É.
->
-> **Rafael:** Tudo bem. Só não deixa de usar por achar que tá incomodando. Isso é o erro que eu cometi.
+> **Rafael:** Não deixa de usar por achar que tá incomodando. Esse foi o meu erro.
 
 > 💡 **Gancho de fala:** a rede não serve de nada guardada. Ela tem o cartão desde o primeiro dia e nunca ligou.
 
@@ -130,9 +103,11 @@ Sala pequena, TV na parede, mesa longa. Bianca já está lá com o notebook aber
 
 ## 1. Bianca (opcional, antes do puzzle)
 
-> **Bianca:** Senta. Vou te mostrar uma coisa que leva cinco minutos e economiza seis meses.
+> **Bianca:** Senta. Cinco minutos aqui economizam seis meses.
 >
-> **Bianca:** Você lista o que apareceu na sua frente esse mês e não soube resolver. Depois você acha a trilha que fecha cada uma. Não é sobre estudar mais. É sobre estudar **o que faltou**.
+> **Bianca:** Lista o que apareceu na sua frente e você não soube resolver. Depois acha a trilha que fecha cada uma.
+
+> 💡 **Gancho de fala:** é o método inteiro em duas frases, e vale nomear: **não é sobre estudar mais, é sobre estudar o que faltou.** A lista não sai da grade de nenhum curso — ela sai do seu próprio mês.
 
 ---
 
@@ -158,9 +133,7 @@ Sala pequena, TV na parede, mesa longa. Bianca já está lá com o notebook aber
 
 > ⚠️ **Plantio deliberado.** Os pares 1 e 2 são exatamente o que ela vai usar no **Laboratório do Bloco 3**. O par 3 é exatamente o que falta nela no **Bloco 4**. A plateia não precisa notar agora — precisa reconhecer depois. Não comente isso durante o puzzle.
 
-Ao completar os 4:
-
-> *Quatro linhas na tela. Nenhuma delas estava na grade da faculdade.*
+Ao completar os 4, o **Certificado na tela** fica clicável — é ele que dispara o fecho abaixo.
 
 ---
 
@@ -168,7 +141,9 @@ Ao completar os 4:
 
 Ana conclui a primeira: **Fundamentos de Arquitetura de Sistemas**.
 
-> **Bianca:** Quarenta horas. Você fez em três semanas, à noite.
+> *Quatro linhas na tela. Nenhuma delas estava na grade da faculdade.*
+>
+> **Bianca:** Fundamentos de Arquitetura: quarenta horas. Você fez em três semanas, à noite.
 >
 > **Ana:** Eu nem sei se vou usar isso.
 >

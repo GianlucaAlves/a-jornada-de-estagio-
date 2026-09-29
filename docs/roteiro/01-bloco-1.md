@@ -24,6 +24,8 @@ Texto sobre a cena, 4 segundos, depois some:
 
 > *Primeiro dia. Ninguém te olha, e mesmo assim você sente que todo mundo está olhando.*
 
+**Diálogos não têm escolha.** Cada NPC diz de 4 a 6 falas curtas, avança com um clique e acaba. Ele planta a pista e o gancho; **quem desenvolve o tema é você**, nos blocos 💡 abaixo.
+
 ---
 
 ## 1. Notebook (primeiro clique esperado)
@@ -49,35 +51,21 @@ Se o apresentador tentar confirmar vazio:
 
 ## 2. Tiago (TI) — o primeiro que ela tenta
 
-Escolha óbvia, e ele resolve só um terço.
+Escolha óbvia, e ele resolve só um terço. Cinco falas, sem enrolação.
 
-> **Tiago:** Ah, a nova! Beleza? Senha de primeiro acesso, né. Tá no e-mail de boas-vindas.
+> **Tiago:** Ah, a nova! Senha de primeiro acesso tá no e-mail de boas-vindas.
 >
-> **Ana:** Eu... não consigo abrir o e-mail sem a senha.
+> **Ana:** Eu não consigo abrir o e-mail sem a senha.
 >
-> **Tiago:** *(pausa)* É. Faz sentido. *(risada)* Todo mundo cai nessa.
-
-Ele digita algo.
-
-> **Tiago:** Olha, o prefixo é fixo, é **ERI** pra todo mundo. O do meio é o código do teu time, e isso eu não sei de cabeça — pergunta pra tua líder, a Cláudia. E o último é o dia que você entrou.
+> **Tiago:** *(pausa)* É. Todo mundo cai nessa.
+>
+> **Tiago:** O prefixo é fixo: **ERI**, pra todo mundo. O do meio é o código do teu time — isso é com a Cláudia, tua líder.
+>
+> **Tiago:** E o último é o dia que você entrou. *(volta pro rack)* Ninguém chega sabendo.
 
 **→ Preenche campo 1: `ERI`**
 
-Antes de voltar pro rack, ele pergunta:
-
-> **Tiago:** E você é de que área mesmo?
-
-**Escolha da Ana** *(nenhuma altera a progressão — o apresentador escolhe a que combina com a própria fala)*:
-
-- a) "Ainda estou descobrindo, pra ser sincera."
-- b) "Sistemas de Informação. Mas nunca mexi com nada em produção."
-- c) "Boa pergunta."
-
-Qualquer uma:
-
-> **Tiago:** Tranquilo. Ninguém chega sabendo. Qualquer coisa, chama.
-
-> 💡 **Gancho de fala:** o vocabulário. Ela entendeu metade do que ele falou e não pediu pra repetir. Quantas vezes a gente faz isso?
+> 💡 **Gancho de fala:** ele falou em sigla, jogou pra outra pessoa e voltou pro rack em trinta segundos — e não foi grosseria, foi o ritmo normal de quem já está dentro. Ela entendeu metade e não pediu pra repetir. **Quantas vezes a gente faz isso?** Esse é o custo silencioso de não perguntar: você sai da conversa com um terço da informação e com a sensação de que o problema é você.
 
 ---
 
@@ -85,29 +73,19 @@ Qualquer uma:
 
 Ela para, mas por pouco tempo. Isso é de propósito: no Bloco 3 ela vai parar de verdade, e a diferença tem que ser sentida.
 
-> **Cláudia:** Oi. Você é a estagiária nova, né. Cláudia.
+> **Cláudia:** Oi, você é a estagiária nova. Cláudia.
 >
-> **Ana:** Isso. Ana. Eu... preciso do código do time, pra senha.
+> **Ana:** Ana. Preciso do código do time, pra senha.
 >
-> **Cláudia:** **DT7.** *(já andando)* Data & Transformation, sétimo squad.
-
-Ela para dois passos depois e volta meio metro.
-
-> **Cláudia:** O que te trouxe pra cá?
-
-**Escolha da Ana:**
-
-- a) "Queria ver como é na prática. A faculdade é muito teórica."
-- b) "Honestamente? Precisava começar em algum lugar."
-- c) "Quero aprender com gente que já faz isso há tempo."
-
-> **Cláudia:** Hm. *(não reage, anota mentalmente)* Tá. Bom primeiro dia.
-
-E sai.
+> **Cláudia:** **DT7** — Data & Transformation, sétimo squad. *(para, volta meio metro)* O que te trouxe pra cá?
+>
+> **Ana:** Queria ver como é na prática. A faculdade é muito teórica.
+>
+> **Cláudia:** Hm. *(anota mentalmente e sai)* Bom primeiro dia.
 
 **→ Preenche campo 2: `DT7`**
 
-> 💡 **Gancho de fala:** ela não foi hostil, ela estava ocupada. A gente confunde as duas coisas o tempo todo no começo. E ela **ouviu** a resposta — só não mostrou.
+> 💡 **Gancho de fala:** ela não foi hostil, ela estava ocupada — e a gente confunde as duas coisas o tempo todo no começo. Note que ela **voltou meio metro pra perguntar**. Ela ouviu a resposta e não mostrou nada. Guarde essa cena: no Bloco 3 a mesma pessoa vai parar de verdade.
 
 ---
 
@@ -115,31 +93,22 @@ E sai.
 
 Único que puxa conversa sem ela pedir.
 
-> **Rafael:** Você tá há uns quarenta minutos naquela tela de senha, né?
+> **Rafael:** Você tá há quarenta minutos naquela tela, né? Relaxa, eu fiquei uma hora e vinte.
 >
 > **Ana:** *(constrangida)* Tanto assim?
 >
-> **Rafael:** Relaxa, eu fiquei uma hora e vinte. Ano passado. Rafael, Dados.
-
-Ele se aproxima da mesa.
-
-> **Rafael:** O último campo é o dia que você entrou. Hoje, dia **01**. Dois dígitos.
+> **Rafael:** Rafael, Dados. O último campo é o dia que você entrou: hoje, dia **01**, dois dígitos.
+>
+> **Rafael:** *(escreve o ramal atrás de um cartão)* Qualquer coisa que travar, me chama. Sério.
+>
+> **Rafael:** Primeiro dia é sobre conhecer gente, não sobre produzir nada.
 
 **→ Preenche campo 3: `01`**
-
-> **Rafael:** E o DT7 que a Cláudia falou — Data & Transformation. Ela fala em sigla porque a cabeça dela tá sempre em outra coisa, não é com você.
->
-> **Ana:** Como você sabia que era ela que eu tinha perguntado?
->
-> **Rafael:** Porque é sempre ela. *(pega um cartão)* Olha, qualquer coisa que você travar, me chama. Sério. Eu sei exatamente como é hoje.
-
-Ele escreve o ramal atrás, à mão, e entrega.
-
 **→ Ganha: Cartão do Rafael** *(item tardio nº 1)*
 
-> **Rafael:** Primeiro dia é sobre conhecer gente, não sobre produzir nada. Ninguém tá esperando resultado de você hoje.
-
-> 💡 **Gancho de fala:** a coisa mais valiosa do primeiro dia dela não foi a senha — foi ele. E ela não tinha como saber disso ainda.
+> 💡 **Gancho de fala:** ele sabia há quarenta minutos e esperou ela travar — porque ele viveu isso ano passado. A coisa mais valiosa que ela levou do primeiro dia não foi a senha, foi ele. E ela não tinha como saber disso ainda.
+>
+> 💡 **Gancho extra (o que o Rafael não disse):** ele nem precisou explicar por que a Cláudia fala em sigla — **essa parte é sua.** Gente ocupada comprime informação; quem está chegando lê compressão como desinteresse. Quase ninguém está te tratando mal, a maioria está só com a cabeça em outra coisa.
 
 ---
 

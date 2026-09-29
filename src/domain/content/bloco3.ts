@@ -24,7 +24,7 @@ import { NOME_PROTAGONISTA } from '../types';
 import type { Cena, Dialogo, DialogoId } from '../types';
 
 /** Porta trancada do leva-e-traz: clique normal e bloqueio usam o mesmo texto. */
-const MONITOR_TRANCADO = `Linhas e linhas de texto. ${NOME_PROTAGONISTA} reconhece umas palavras. Não reconhece o que elas querem dizer juntas. — "Isso aqui não faz sentido nenhum."`;
+const MONITOR_TRANCADO = `Linhas e linhas de texto. ${NOME_PROTAGONISTA} reconhece as palavras, não o que elas querem dizer juntas. — "Isso aqui não faz sentido nenhum."`;
 
 export const CENAS_B3: readonly Cena[] = [
   // ------------------------------------------------------------ CENA A
@@ -159,7 +159,7 @@ export const DIALOGOS_B3: Record<DialogoId, Dialogo> = {
       {
         tipo: 'fala',
         quem: 'narrador',
-        texto: `Linhas e linhas de texto. ${NOME_PROTAGONISTA} reconhece umas palavras. Não reconhece o que elas querem dizer juntas.`,
+        texto: `Linhas e linhas de texto. ${NOME_PROTAGONISTA} reconhece as palavras, não o que elas querem dizer juntas.`,
       },
       { tipo: 'fala', quem: 'ana', texto: 'Isso aqui não faz sentido nenhum.' },
     ],
@@ -171,20 +171,10 @@ export const DIALOGOS_B3: Record<DialogoId, Dialogo> = {
       {
         tipo: 'fala',
         quem: 'tiago',
-        texto: 'Esse erro aí? Deixa. Ele aparece toda madrugada há uns oito meses.',
+        texto: 'Esse erro aparece toda madrugada há oito meses. A gente reprocessa na mão e segue o jogo.',
       },
-      { tipo: 'fala', quem: 'ana', texto: 'E ninguém olha?' },
-      {
-        tipo: 'fala',
-        quem: 'tiago',
-        texto:
-          'A gente reprocessa na mão de manhã e segue o jogo. (dá de ombros) Entrou no orçamento da rotina.',
-      },
-      {
-        tipo: 'fala',
-        quem: 'narrador',
-        texto: `${NOME_PROTAGONISTA} pede acesso ao histórico completo.`,
-      },
+      { tipo: 'fala', quem: 'tiago', texto: '(dá de ombros) Entrou no orçamento da rotina.' },
+      { tipo: 'fala', quem: 'ana', texto: 'E ninguém olha? Me libera o histórico completo.' },
       { tipo: 'fala', quem: 'tiago', texto: 'Pra quê? Ninguém pediu isso pra você.' },
       { tipo: 'fala', quem: 'ana', texto: 'Ninguém pediu pra eu não olhar também.' },
       { tipo: 'fala', quem: 'tiago', texto: '(pausa, depois ri) Tá liberado.' },
@@ -198,7 +188,7 @@ export const DIALOGOS_B3: Record<DialogoId, Dialogo> = {
       {
         tipo: 'fala',
         quem: 'narrador',
-        texto: `${NOME_PROTAGONISTA} abre o caderno na página de fluxo entre serviços. Olha o log. Olha o caderno. Olha o log de novo.`,
+        texto: `${NOME_PROTAGONISTA} abre o caderno na página de fluxo entre serviços. Olha o log, olha o caderno, olha o log de novo.`,
       },
       {
         tipo: 'fala',
@@ -215,7 +205,7 @@ export const DIALOGOS_B3: Record<DialogoId, Dialogo> = {
       {
         tipo: 'fala',
         quem: 'narrador',
-        texto: `${NOME_PROTAGONISTA} escreve cinco páginas num domingo à noite. Ninguém pediu. Ninguém vai cobrar. Ninguém sabe que ela está fazendo.`,
+        texto: `${NOME_PROTAGONISTA} escreve cinco páginas num domingo à noite. Ninguém pediu, ninguém vai cobrar.`,
       },
       {
         tipo: 'fala',
@@ -232,22 +222,16 @@ export const DIALOGOS_B3: Record<DialogoId, Dialogo> = {
       {
         tipo: 'fala',
         quem: 'ana',
-        texto: 'É o erro da madrugada. Aquele que a gente reprocessa na mão.',
+        texto: 'O erro da madrugada. Aquele que a gente reprocessa na mão.',
       },
       { tipo: 'fala', quem: 'claudia', texto: '(folheando) Quem te pediu isso?' },
       { tipo: 'fala', quem: 'ana', texto: 'Ninguém.' },
       {
         tipo: 'fala',
-        quem: 'narrador',
-        texto: 'Cláudia continua folheando. Chega na última página. Fecha.',
-      },
-      {
-        tipo: 'fala',
         quem: 'claudia',
-        texto: 'O retry não é idempotente. Oito meses. (olha pra ela) Ninguém tinha pedido isso.',
+        texto: 'O retry não é idempotente. Oito meses, e ninguém tinha pedido isso.',
       },
       { tipo: 'fala', quem: 'claudia', texto: 'Guardei seu nome.' },
-      { tipo: 'fala', quem: 'narrador', texto: 'Ela volta pro monitor. A conversa acabou.' },
     ],
   },
 
@@ -260,13 +244,13 @@ export const DIALOGOS_B3: Record<DialogoId, Dialogo> = {
         tipo: 'fala',
         quem: 'marcos',
         texto:
-          'A Cláudia comentou numa reunião. (sorri) Olha, achar o problema é metade. Você quer que alguém conserte?',
+          'A Cláudia comentou numa reunião. Achar o problema é metade — você quer que alguém conserte?',
       },
       { tipo: 'fala', quem: 'ana', texto: 'Quero.' },
       {
         tipo: 'fala',
         quem: 'marcos',
-        texto: 'Então você não precisa de um relatório. Precisa de uma proposta. É diferente.',
+        texto: 'Então você não precisa de um relatório. Precisa de uma proposta.',
       },
     ],
     efeitos: [{ tipo: 'abrirPuzzle', puzzleId: 'estruturar' }],
@@ -278,7 +262,7 @@ export const DIALOGOS_B3: Record<DialogoId, Dialogo> = {
       {
         tipo: 'fala',
         quem: 'marcos',
-        texto: 'Pronto. Agora é uma proposta. Antes era uma reclamação bem pesquisada.',
+        texto: 'Pronto, agora é uma proposta. Antes era uma reclamação bem pesquisada.',
       },
     ],
   },

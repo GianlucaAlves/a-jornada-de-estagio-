@@ -80,121 +80,84 @@ export const CENAS_B1: readonly Cena[] = [
   },
 ];
 
+/**
+ * Os três diálogos são curtos de propósito: o NPC entrega a PISTA e um gancho,
+ * e para. O tema (medo de perguntar, vocabulário, rede) é desenvolvido pelo
+ * apresentador — ver os blocos "Gancho de fala" em docs/roteiro/01-bloco-1.md.
+ *
+ * Cada NPC ainda diz a pista dele de forma literal e inequívoca (`ERI`, `DT7`,
+ * `01`), senão o puzzle da senha fica insolúvel ao vivo.
+ */
 export const DIALOGOS_B1: Record<DialogoId, Dialogo> = {
-  /** Tiago resolve um terço e fala em sigla sem perceber. */
+  /** Tiago resolve um terço e passa a bola pra Cláudia. Pista: ERI. */
   'b1-tiago': {
     id: 'b1-tiago',
     nos: [
       {
         tipo: 'fala',
         quem: 'tiago',
-        texto: 'Ah, a nova! Beleza? Senha de primeiro acesso, né. Tá no e-mail de boas-vindas.',
+        texto: 'Ah, a nova! Senha de primeiro acesso tá no e-mail de boas-vindas.',
       },
-      { tipo: 'fala', quem: 'ana', texto: 'Eu... não consigo abrir o e-mail sem a senha.' },
-      {
-        tipo: 'fala',
-        quem: 'tiago',
-        texto: '(pausa) É. Faz sentido. (risada) Todo mundo cai nessa.',
-      },
-      { tipo: 'fala', quem: 'narrador', texto: 'Ele digita algo.' },
+      { tipo: 'fala', quem: 'ana', texto: 'Eu não consigo abrir o e-mail sem a senha.' },
+      { tipo: 'fala', quem: 'tiago', texto: '(pausa) É. Todo mundo cai nessa.' },
       {
         tipo: 'fala',
         quem: 'tiago',
         texto:
-          'Olha, o prefixo é fixo, é ERI pra todo mundo. O do meio é o código do teu time, e isso eu não sei de cabeça — pergunta pra tua líder, a Cláudia. E o último é o dia que você entrou.',
-      },
-      { tipo: 'fala', quem: 'narrador', texto: 'Antes de voltar pro rack, ele pergunta:' },
-      { tipo: 'fala', quem: 'tiago', texto: 'E você é de que área mesmo?' },
-      {
-        tipo: 'escolha',
-        opcoes: [
-          'Ainda estou descobrindo, pra ser sincera.',
-          'Sistemas de Informação. Mas nunca mexi com nada em produção.',
-          'Boa pergunta.',
-        ],
+          'O prefixo é fixo: ERI, pra todo mundo. O do meio é o código do teu time — isso é com a Cláudia, tua líder.',
       },
       {
         tipo: 'fala',
         quem: 'tiago',
-        texto: 'Tranquilo. Ninguém chega sabendo. Qualquer coisa, chama.',
+        texto: 'E o último é o dia que você entrou. (volta pro rack) Ninguém chega sabendo.',
       },
     ],
   },
 
-  /** Cláudia para, mas por pouco tempo. A diferença com o Bloco 3 é o ponto. */
+  /** Cláudia para, mas por pouco tempo. A diferença com o Bloco 3 é o ponto. Pista: DT7. */
   'b1-claudia': {
     id: 'b1-claudia',
     nos: [
-      { tipo: 'fala', quem: 'claudia', texto: 'Oi. Você é a estagiária nova, né. Cláudia.' },
-      { tipo: 'fala', quem: 'ana', texto: 'Isso. Ana. Eu... preciso do código do time, pra senha.' },
+      { tipo: 'fala', quem: 'claudia', texto: 'Oi, você é a estagiária nova. Cláudia.' },
+      { tipo: 'fala', quem: 'ana', texto: 'Ana. Preciso do código do time, pra senha.' },
       {
         tipo: 'fala',
         quem: 'claudia',
-        texto: 'DT7. (já andando) Data & Transformation, sétimo squad.',
+        texto: 'DT7 — Data & Transformation, sétimo squad. (para, volta meio metro) O que te trouxe pra cá?',
       },
-      { tipo: 'fala', quem: 'narrador', texto: 'Ela para dois passos depois e volta meio metro.' },
-      { tipo: 'fala', quem: 'claudia', texto: 'O que te trouxe pra cá?' },
-      {
-        tipo: 'escolha',
-        opcoes: [
-          'Queria ver como é na prática. A faculdade é muito teórica.',
-          'Honestamente? Precisava começar em algum lugar.',
-          'Quero aprender com gente que já faz isso há tempo.',
-        ],
-      },
+      { tipo: 'fala', quem: 'ana', texto: 'Queria ver como é na prática. A faculdade é muito teórica.' },
       {
         tipo: 'fala',
         quem: 'claudia',
-        texto: 'Hm. (não reage, anota mentalmente) Tá. Bom primeiro dia.',
+        texto: 'Hm. (anota mentalmente e sai) Bom primeiro dia.',
       },
-      { tipo: 'fala', quem: 'narrador', texto: 'E sai.' },
     ],
   },
 
-  /** Rafael: a ponte social. Deixa o cartão — item tardio nº 1. */
+  /** Rafael: a ponte social. Deixa o cartão — item tardio nº 1. Pista: 01. */
   'b1-rafael': {
     id: 'b1-rafael',
     nos: [
       {
         tipo: 'fala',
         quem: 'rafael',
-        texto: 'Você tá há uns quarenta minutos naquela tela de senha, né?',
+        texto: 'Você tá há quarenta minutos naquela tela, né? Relaxa, eu fiquei uma hora e vinte.',
       },
       { tipo: 'fala', quem: 'ana', texto: '(constrangida) Tanto assim?' },
       {
         tipo: 'fala',
         quem: 'rafael',
-        texto: 'Relaxa, eu fiquei uma hora e vinte. Ano passado. Rafael, Dados.',
-      },
-      { tipo: 'fala', quem: 'narrador', texto: 'Ele se aproxima da mesa.' },
-      {
-        tipo: 'fala',
-        quem: 'rafael',
-        texto: 'O último campo é o dia que você entrou. Hoje, dia 01. Dois dígitos.',
+        texto: 'Rafael, Dados. O último campo é o dia que você entrou: hoje, dia 01, dois dígitos.',
       },
       {
         tipo: 'fala',
         quem: 'rafael',
-        texto:
-          'E o DT7 que a Cláudia falou — Data & Transformation. Ela fala em sigla porque a cabeça dela tá sempre em outra coisa, não é com você.',
-      },
-      {
-        tipo: 'fala',
-        quem: 'ana',
-        texto: 'Como você sabia que era ela que eu tinha perguntado?',
+        texto: '(escreve o ramal atrás de um cartão) Qualquer coisa que travar, me chama. Sério.',
       },
       {
         tipo: 'fala',
         quem: 'rafael',
-        texto:
-          'Porque é sempre ela. (pega um cartão) Olha, qualquer coisa que você travar, me chama. Sério. Eu sei exatamente como é hoje.',
-      },
-      { tipo: 'fala', quem: 'narrador', texto: 'Ele escreve o ramal atrás, à mão, e entrega.' },
-      {
-        tipo: 'fala',
-        quem: 'rafael',
-        texto:
-          'Primeiro dia é sobre conhecer gente, não sobre produzir nada. Ninguém tá esperando resultado de você hoje.',
+        texto: 'Primeiro dia é sobre conhecer gente, não sobre produzir nada.',
       },
     ],
     efeitos: [{ tipo: 'concederItem', itemId: 'cartao-rafael' }],

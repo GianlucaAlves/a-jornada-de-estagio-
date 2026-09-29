@@ -134,10 +134,14 @@ export interface Hotspot {
 
 // ---------------------------------------------------------------- diálogos
 
-export type NoDialogo =
-  | { tipo: 'fala'; quem: Locutor; texto: string }
-  /** Escolhas da protagonista. Todas convergem — nenhuma altera progressão. */
-  | { tipo: 'escolha'; opcoes: string[] };
+/**
+ * Uma linha de diálogo. Só existe um formato: fala.
+ *
+ * O campo `tipo` permanece como discriminante fixo para manter a forma
+ * explícita no conteúdo e deixar espaço para variações futuras sem que
+ * todo o conteúdo precise mudar.
+ */
+export type NoDialogo = { tipo: 'fala'; quem: Locutor; texto: string };
 
 export interface Dialogo {
   id: DialogoId;
@@ -277,5 +281,4 @@ export type Tela =
 export interface DialogoAtivo {
   dialogoId: DialogoId;
   indice: number;
-  escolhaFeita: number | null;
 }

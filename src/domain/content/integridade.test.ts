@@ -14,7 +14,7 @@
  *
  * Nada aqui renderiza nada nem toca a store: é leitura do próprio conteúdo.
  */
-import type { Efeito, DialogoId, LugarId } from '../types';
+import type { BlocoId, Dialogo, DialogoId, Efeito, LugarId, PuzzleId } from '../types';
 
 import {
   BLOCOS,
@@ -154,6 +154,97 @@ const EFEITOS_ALCANCAVEIS: readonly Efeito[] = (() => {
  */
 const DIALOGOS_DE_TELA: readonly DialogoId[] = ['b5-fecho'];
 
+// ------------------------------------------------- limites da forma do diálogo
+
+/**
+ * Teto de nós por diálogo. Igual ao maior diálogo do conteúdo atual — aceita
+ * tudo o que existe hoje e reprova crescimento. Justificativa no teste.
+ */
+const MAX_NOS_POR_DIALOGO = 6;
+
+/**
+ * Teto de caracteres por fala. Derivado da medição do conteúdo novo (maior
+ * fala: 136) com folga, e abaixo da maior fala da versão anterior (245).
+ * Justificativa completa no teste.
+ */
+const MAX_CARACTERES_POR_FALA = 180;
+
+/** Quantos nós existem no total. Usado só para impedir teste vácuo. */
+const TOTAL_DE_NOS = Object.values(DIALOGOS).reduce((n, d) => n + d.nos.length, 0);
+
+/**
+ * Falas que a apresentação inteira depende de ouvir. Não são "falas bonitas":
+ * cada uma é setup de algo que acontece depois, em outro arquivo ou em outro
+ * bloco. Ver o teste para o que cada uma sustenta.
+ */
+const FRASES_ASSINATURA: readonly string[] = [
+  'Guardei seu nome.',
+  'Provavelmente não vai. Não agora.',
+  'Entrou no orçamento da rotina.',
+  'Quem ia falar?',
+  'Eu fui efetivada?',
+  'Seu nome apareceu em três lugares diferentes na conversa de ontem.',
+];
+
+/**
+ * Fala sem direção de cena e com espaços normalizados. "(pausa)" e
+ * "(dá de ombros)" são marcação para quem lê a linha em voz alta, não parte da
+ * frase — então mexer na direção não pode reprovar a frase-assinatura.
+ */
+function semDirecaoDeCena(texto: string): string {
+  return texto.replace(/\([^)]*\)/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+// ----------------------------------------------------- travessia por bloco
+
+/**
+ * Tudo o que um bloco alcança a partir das próprias cenas: os diálogos que os
+ * hotspots dele disparam (fechamento transitivo) e os efeitos de ambos.
+ *
+ * Derivado das cenas, não de lista fixa: acrescentar cena ou hotspot num bloco
+ * entra aqui sozinho.
+ */
+function alcancavelDoBloco(bloco: BlocoId): { dialogos: Dialogo[]; efeitos: Efeito[] } {
+  const efeitos: Efeito[] = [];
+  const fila: DialogoId[] = [];
+  for (const cena of CENAS) {
+    if (cena.bloco !== bloco) continue;
+    for (const h of cena.hotspots) efeitos.push(...h.efeitos, ...(h.efeitosComItem ?? []));
+  }
+  for (const e of efeitos) if (e.tipo === 'dialogo') fila.push(e.dialogoId);
+  const vistos = new Set<DialogoId>();
+  while (fila.length > 0) {
+    const id = fila.pop();
+    if (id === undefined || vistos.has(id)) continue;
+    vistos.add(id);
+    const doDialogo = DIALOGOS[id]?.efeitos ?? [];
+    efeitos.push(...doDialogo);
+    for (const e of doDialogo) if (e.tipo === 'dialogo') fila.push(e.dialogoId);
+  }
+  const dialogos = [...vistos].flatMap((id) => (DIALOGOS[id] ? [DIALOGOS[id]] : []));
+  return { dialogos, efeitos };
+}
+
+/** Em qual bloco este puzzle é aberto. Derivado dos efeitos, não declarado. */
+function blocoQueAbre(puzzleId: PuzzleId): BlocoId {
+  for (const bloco of [1, 2, 3, 4, 5] as BlocoId[]) {
+    const abre = alcancavelDoBloco(bloco).efeitos.some(
+      (e) => e.tipo === 'abrirPuzzle' && e.puzzleId === puzzleId,
+    );
+    if (abre) return bloco;
+  }
+  throw new Error(`nenhum bloco abre o puzzle '${puzzleId}'`);
+}
+
+/**
+ * O texto contém este trecho como token isolado? Usado para pista de senha:
+ * `'01'` não pode passar por casar dentro de `'2018'`.
+ */
+function contemToken(texto: string, token: string): boolean {
+  const escapado = token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return new RegExp(`(^|[^0-9A-Za-zÀ-ÿ])${escapado}([^0-9A-Za-zÀ-ÿ]|$)`).test(texto);
+}
+
 // ------------------------------------------------------------ referências
 
 describe('referências por id', () => {
@@ -286,12 +377,39 @@ describe('hotspots', () => {
 // ------------------------------------------------------------------ diálogos
 
 describe('diálogos', () => {
-  it('todo diálogo tem ao menos um nó e termina em fala, não em escolha pendente', () => {
+  it('todo diálogo tem ao menos um nó, e todo nó é uma fala', () => {
     for (const [id, dialogo] of Object.entries(DIALOGOS)) {
       expect(dialogo.nos.length, `diálogo '${id}' está vazio`).toBeGreaterThan(0);
       const ultimo = dialogo.nos[dialogo.nos.length - 1];
-      expect(ultimo?.tipo, `diálogo '${id}' termina em escolha`).toBe('fala');
+      expect(ultimo?.tipo, `diálogo '${id}' não termina em fala`).toBe('fala');
     }
+  });
+
+  /**
+   * A mecânica de ESCOLHA foi removida do projeto: diálogo é linear, um clique
+   * = um nó, e a resposta da protagonista é fala escrita, não opção do
+   * apresentador. Este teste é o que impede a volta por acidente — por um `as`
+   * no conteúdo, por um merge antigo, ou por alguém reintroduzindo a união em
+   * `NoDialogo`. Olha o DADO em runtime, não o tipo: é o único jeito de pegar
+   * um nó que burlou o compilador.
+   */
+  it('nenhum nó de diálogo tem tipo diferente de fala nem campo de opções', () => {
+    const intrusos: string[] = [];
+    for (const [id, dialogo] of Object.entries(DIALOGOS)) {
+      dialogo.nos.forEach((no, i) => {
+        const bruto = no as unknown as Record<string, unknown>;
+        if (bruto.tipo !== 'fala') intrusos.push(`'${id}' nó ${i}: tipo '${String(bruto.tipo)}'`);
+        if ('opcoes' in bruto) intrusos.push(`'${id}' nó ${i}: tem 'opcoes'`);
+        if (typeof bruto.quem !== 'string' || (bruto.quem as string).trim() === '') {
+          intrusos.push(`'${id}' nó ${i}: sem locutor`);
+        }
+        if (typeof bruto.texto !== 'string') intrusos.push(`'${id}' nó ${i}: sem texto`);
+      });
+    }
+    expect(intrusos).toEqual([]);
+    // Não passa por vacuidade: o conteúdo tem diálogo e tem nó.
+    expect(Object.keys(DIALOGOS).length).toBeGreaterThan(0);
+    expect(TOTAL_DE_NOS).toBeGreaterThan(0);
   });
 
   it('a chave de DIALOGOS é igual ao id do diálogo', () => {
@@ -301,22 +419,81 @@ describe('diálogos', () => {
     expect(divergentes).toEqual([]);
   });
 
-  it('nenhuma fala é vazia e toda escolha tem ao menos duas opções preenchidas', () => {
-    const problemas: string[] = [];
+  it('nenhuma fala é vazia', () => {
+    const vazias: string[] = [];
     for (const [id, dialogo] of Object.entries(DIALOGOS)) {
       dialogo.nos.forEach((no, i) => {
-        if (no.tipo === 'fala' && no.texto.trim() === '') {
-          problemas.push(`'${id}' nó ${i}: fala vazia`);
-        }
-        if (no.tipo === 'escolha') {
-          if (no.opcoes.length < 2) problemas.push(`'${id}' nó ${i}: escolha com < 2 opções`);
-          if (no.opcoes.some((o) => o.trim() === '')) {
-            problemas.push(`'${id}' nó ${i}: opção vazia`);
-          }
+        if (no.texto.trim() === '') vazias.push(`'${id}' nó ${i}`);
+      });
+    }
+    expect(vazias).toEqual([]);
+  });
+
+  /**
+   * O NPC PLANTA, o apresentador DESENVOLVE. Um diálogo longo rouba o tempo de
+   * fala de quem está no palco e obriga o apresentador a esperar cliques em
+   * silêncio. O teto é o tamanho do maior diálogo que sobreviveu à reescrita
+   * (6 nós: 'b2-bianca-cafezinho', 'b3-tiago', 'b3-claudia', 'b4-bianca'), ou
+   * seja: aceita todo o conteúdo atual e reprova qualquer crescimento.
+   */
+  it(`nenhum diálogo passa de ${MAX_NOS_POR_DIALOGO} nós`, () => {
+    const inchados = Object.entries(DIALOGOS)
+      .filter(([, d]) => d.nos.length > MAX_NOS_POR_DIALOGO)
+      .map(([id, d]) => `'${id}': ${d.nos.length} nós`);
+    expect(inchados).toEqual([]);
+  });
+
+  /**
+   * Limite de parede de texto.
+   *
+   * Medido no conteúdo, não escolhido no ar: a maior fala hoje tem 136
+   * caracteres (a do guardanapo, em 'b2-bianca-cafezinho'), e a maior fala da
+   * versão ANTERIOR — a explicação de Degree × Percipio que motivou a reescrita
+   * — tinha 245. O teto de 180 aceita as falas atuais com ~32% de folga para
+   * reescrita, e continua reprovando a volta da parede de texto.
+   *
+   * Conta caracteres e não frases de propósito: vocativo ("Ana! Vi o que você
+   * postou no canal. ...") conta como frase a mais sem ser parede de texto, e a
+   * caixa de diálogo se preocupa com comprimento, não com pontuação.
+   */
+  it(`nenhuma fala passa de ${MAX_CARACTERES_POR_FALA} caracteres`, () => {
+    const longas: string[] = [];
+    for (const [id, dialogo] of Object.entries(DIALOGOS)) {
+      dialogo.nos.forEach((no, i) => {
+        if (no.texto.length > MAX_CARACTERES_POR_FALA) {
+          longas.push(`'${id}' nó ${i}: ${no.texto.length} caracteres`);
         }
       });
     }
-    expect(problemas).toEqual([]);
+    expect(longas).toEqual([]);
+  });
+
+  /**
+   * As frases-assinatura. Cada uma é carregada por algo fora do próprio
+   * diálogo, e perder qualquer uma numa reescrita quebra a apresentação em
+   * silêncio:
+   *
+   * - "Guardei seu nome." é o texto da 2ª conexão do clímax (ver CONEXOES).
+   * - "Provavelmente não vai. Não agora." é o setup que o Bloco 5 cobra.
+   * - "Entrou no orçamento da rotina." é o tema do Bloco 3 em uma frase.
+   * - "Quem ia falar?" é o tema do Bloco 4 em uma frase.
+   * - "Seu nome apareceu em três lugares diferentes..." é o setup das TRÊS
+   *   conexões de item: sem ela, três linhas se acendem sem pergunta que as peça.
+   * - "Eu fui efetivada?" é a última fala da apresentação.
+   *
+   * A comparação ignora direção de cena entre parênteses, porque "(pausa)" e
+   * "(dá de ombros)" são marcação para quem lê, não parte da frase. Mexer na
+   * direção segue livre; apagar a frase, não.
+   */
+  it('as frases-assinatura continuam no conteúdo', () => {
+    const falas = Object.values(DIALOGOS).flatMap((d) =>
+      d.nos.map((no) => semDirecaoDeCena(no.texto)),
+    );
+    const ausentes = FRASES_ASSINATURA.filter((frase) => {
+      const alvo = semDirecaoDeCena(frase);
+      return !falas.some((fala) => fala.includes(alvo));
+    });
+    expect(ausentes).toEqual([]);
   });
 
   it('todo diálogo é alcançável de alguma cena, salvo os consumidos por tela', () => {
@@ -350,6 +527,26 @@ describe('puzzles', () => {
     expect(def.gabarito.length).toBe(3);
     for (const campo of def.gabarito) expect(campo.trim()).not.toBe('');
     expect(def.rotulo.trim()).not.toBe('');
+  });
+
+  /**
+   * O puzzle da senha é SOCIAL: a resposta não está na tela, está na boca dos
+   * NPCs. Se uma reescrita das falas tirar `DT7` de cena, o puzzle fica
+   * insolúvel ao vivo — e o erro só aparece com a plateia olhando, porque o
+   * compilador não tem como ligar uma string de gabarito a uma fala.
+   *
+   * Casa por token isolado, não por substring: `'01'` não pode passar de graça
+   * por aparecer dentro de `'2018'`.
+   */
+  it('cada campo do gabarito da senha é dito em alguma fala do bloco do puzzle', () => {
+    const def = PUZZLES.senha;
+    if (def.tipo !== 'senha') throw new Error("PUZZLES.senha não é do tipo 'senha'");
+    const bloco = blocoQueAbre('senha');
+    const falas = alcancavelDoBloco(bloco).dialogos.flatMap((d) => d.nos.map((n) => n.texto));
+    expect(falas.length, `bloco ${bloco} não tem fala nenhuma`).toBeGreaterThan(0);
+
+    const mudos = def.gabarito.filter((campo) => !falas.some((f) => contemToken(f, campo)));
+    expect(mudos).toEqual([]);
   });
 
   it("'associar' tem gabarito bijetor entre as duas colunas", () => {

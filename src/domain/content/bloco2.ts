@@ -92,61 +92,41 @@ export const CENAS_B2: readonly Cena[] = [
 ];
 
 export const DIALOGOS_B2: Record<DialogoId, Dialogo> = {
-  /** O coração do bloco: é a Bianca que verbaliza o gap. */
+  /**
+   * O coração do bloco. Ela ABRE os dois assuntos (grade x mercado, Degree x
+   * Percipio) em uma frase cada e para — a explicação é do apresentador, ver
+   * os ganchos em docs/roteiro/02-bloco-2.md.
+   */
   'b2-bianca-cafezinho': {
     id: 'b2-bianca-cafezinho',
     nos: [
-      { tipo: 'fala', quem: 'bianca', texto: 'Você é do DT7, né? A Cláudia falou de você.' },
-      { tipo: 'fala', quem: 'ana', texto: 'Falou?' },
-      { tipo: 'fala', quem: 'bianca', texto: 'Falou que você pergunta muito. (pausa) Era elogio.' },
-      { tipo: 'fala', quem: 'narrador', texto: 'Ana pergunta como ela chegou ali.' },
-      { tipo: 'fala', quem: 'bianca', texto: 'Eu sou formada em Letras.' },
+      {
+        tipo: 'fala',
+        quem: 'bianca',
+        texto: 'Você é do DT7? A Cláudia falou que você pergunta muito — era elogio.',
+      },
+      {
+        tipo: 'fala',
+        quem: 'bianca',
+        texto: 'Eu faço documentação técnica e desenho de API. Sou formada em Letras.',
+      },
       { tipo: 'fala', quem: 'ana', texto: '(pausa) Letras.' },
       {
         tipo: 'fala',
         quem: 'bianca',
         texto:
-          'Trabalhei seis anos com revisão de texto. Fiz uma transição aos vinte e oito. Hoje eu faço documentação técnica e desenho de API.',
-      },
-      { tipo: 'fala', quem: 'narrador', texto: 'Ana pergunta como ela fez.' },
-      {
-        tipo: 'fala',
-        quem: 'bianca',
-        texto: 'Estudando o que estava faltando. Que é diferente de estudar o que tem na grade.',
+          'Transição aos vinte e oito, estudando o que estava faltando. Que é diferente de estudar o que tem na grade.',
       },
       {
         tipo: 'fala',
         quem: 'bianca',
         texto:
-          'Deixa eu te perguntar uma coisa. Na faculdade, quanto tempo você passou aprendendo a ler o log de um sistema que já está rodando em produção?',
-      },
-      { tipo: 'fala', quem: 'ana', texto: 'Nenhum.' },
-      { tipo: 'fala', quem: 'bianca', texto: 'E quanto tempo você passou provando teorema?' },
-      { tipo: 'fala', quem: 'ana', texto: 'Bastante.' },
-      {
-        tipo: 'fala',
-        quem: 'bianca',
-        texto:
-          'Pois é. Nenhum dos dois é inútil. Mas só um deles vai te aparecer na terça-feira.',
-      },
-      { tipo: 'fala', quem: 'narrador', texto: 'Bianca pega um guardanapo.' },
-      {
-        tipo: 'fala',
-        quem: 'bianca',
-        texto:
-          'Olha, tem duas coisas aqui dentro que ninguém te conta no primeiro dia. Degree, que é trilha estruturada, com certificado, tem começo e fim. E Percipio, que é biblioteca — você vai lá quando precisa de uma coisa específica, hoje, agora.',
+          '(anota três trilhas num guardanapo) Degree é trilha com começo e fim. Percipio é biblioteca, pra quando você já sabe o nome do problema.',
       },
       {
         tipo: 'fala',
         quem: 'bianca',
-        texto:
-          'Degree é pra quando você não sabe o que não sabe. Percipio é pra quando você já sabe o nome do problema.',
-      },
-      { tipo: 'fala', quem: 'narrador', texto: 'Ela anota três trilhas e entrega.' },
-      {
-        tipo: 'fala',
-        quem: 'bianca',
-        texto: 'Ah, e eu vou estar lá também. Eu não parei de estudar, Ana. Ninguém aqui parou.',
+        texto: 'Eu vou estar lá também. Eu não parei de estudar, Ana — ninguém aqui parou.',
       },
     ],
     efeitos: [
@@ -171,30 +151,28 @@ export const DIALOGOS_B2: Record<DialogoId, Dialogo> = {
       },
       { tipo: 'fala', quem: 'ana', texto: 'Por pouco.' },
       { tipo: 'fala', quem: 'rafael', texto: 'Eu vi que você usou meu ramal zero vezes.' },
-      { tipo: 'fala', quem: 'ana', texto: '(pausa) É.' },
       {
         tipo: 'fala',
         quem: 'rafael',
-        texto:
-          'Tudo bem. Só não deixa de usar por achar que tá incomodando. Isso é o erro que eu cometi.',
+        texto: 'Não deixa de usar por achar que tá incomodando. Esse foi o meu erro.',
       },
     ],
   },
 
-  /** Antes do puzzle: o método. Listar o que faltou, depois achar a trilha. */
+  /** Antes do puzzle: o método, em duas linhas. */
   'b2-bianca-treinamento': {
     id: 'b2-bianca-treinamento',
     nos: [
       {
         tipo: 'fala',
         quem: 'bianca',
-        texto: 'Senta. Vou te mostrar uma coisa que leva cinco minutos e economiza seis meses.',
+        texto: 'Senta. Cinco minutos aqui economizam seis meses.',
       },
       {
         tipo: 'fala',
         quem: 'bianca',
         texto:
-          'Você lista o que apareceu na sua frente esse mês e não soube resolver. Depois você acha a trilha que fecha cada uma. Não é sobre estudar mais. É sobre estudar o que faltou.',
+          'Lista o que apareceu na sua frente e você não soube resolver. Depois acha a trilha que fecha cada uma.',
       },
     ],
   },
@@ -213,10 +191,9 @@ export const DIALOGOS_B2: Record<DialogoId, Dialogo> = {
       },
       {
         tipo: 'fala',
-        quem: 'narrador',
-        texto: 'Ana conclui a primeira: Fundamentos de Arquitetura de Sistemas.',
+        quem: 'bianca',
+        texto: 'Fundamentos de Arquitetura: quarenta horas. Você fez em três semanas, à noite.',
       },
-      { tipo: 'fala', quem: 'bianca', texto: 'Quarenta horas. Você fez em três semanas, à noite.' },
       { tipo: 'fala', quem: 'ana', texto: 'Eu nem sei se vou usar isso.' },
       { tipo: 'fala', quem: 'bianca', texto: 'Provavelmente não vai. (pausa) Não agora.' },
     ],

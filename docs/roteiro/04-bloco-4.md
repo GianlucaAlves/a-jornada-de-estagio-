@@ -79,6 +79,8 @@ Retórica. ~15 segundos. Nada é esperado do sistema, ninguém precisa responder
 
 Se o apresentador clicar nela *(ela é a única que ainda não saiu)*:
 
+> ℹ️ **Regra de diálogo deste bloco (e de todos):** o NPC **planta**, o apresentador **desenvolve**. Nenhum diálogo passa de 6 falas, nenhuma fala passa de duas frases, e não há escolhas de fala. Todo conteúdo temático que não está na boca do NPC está num **Gancho de fala** — os ganchos não são enfeite, são o roteiro do apresentador.
+
 > **Cláudia:** Bom trabalho. *(já de pé, notebook debaixo do braço)*
 >
 > **Ana:** Obrigada.
@@ -93,47 +95,39 @@ E sai.
 
 ## 5. Bianca — a virada
 
-Ela aparece na porta. Não estava na reunião.
+Ela aparece na porta. Não estava na reunião. **Seis linhas, e ela para.** Ela não ensina nada aqui — ela vira a mesa e sai do caminho.
 
-> **Bianca:** Ouvi que era hoje. Como foi?
->
-> **Ana:** Foi bem. Acho.
->
-> **Bianca:** *(entra, olha o diagrama)* Isso é bom, Ana. Isso é bom de verdade.
+> **Bianca:** *(entra, olha o diagrama)* Isso é bom, Ana. Bom de verdade.
 >
 > **Ana:** Ninguém falou nada.
 >
-> **Bianca:** Quem ia falar?
-
-Pausa.
-
-> **Bianca:** Quem tava naquela sala? Quatro pessoas que já sabiam do projeto. Quem **não** tava? Todo mundo que decide alguma coisa sobre você.
-
-Ela senta na beirada da mesa.
-
-> **Bianca:** Lembra o dia que você ligou as quatro trilhas no guardanapo? Você mesma escreveu que não sabia explicar o que fazia pra quem não é técnico. Isso foi um ano atrás.
+> **Bianca:** Quem ia falar? Naquela sala só tinha quem já sabia do projeto — quem decide sobre você não estava lá.
+>
+> **Bianca:** Lembra o guardanapo? Você escreveu que não sabia explicar o que faz pra quem não é técnico.
 >
 > **Ana:** *(pausa)* Eu nunca fiz essa trilha.
 >
 > **Bianca:** Não. Você fez as outras três.
 
-> ⚠️ **Callback do Bloco 2.** É o par nº 3 do puzzle de associar. A plateia identificou o gap junto com ela e viu ela não fechar. Se alguém lembrar, a cena ganha muito. Se não lembrar, a Bianca explica em duas linhas.
+> ⚠️ **Callback do Bloco 2.** É o par nº 3 do puzzle de associar. A plateia identificou o gap junto com ela e viu ela não fechar. A Bianca não explica o callback — se a plateia não lembrar, **o apresentador é quem lembra**, numa frase, antes de clicar.
 
-> 💡 **Gancho de fala:** visibilidade não é autopromoção. É **tradução**. Ela fez um trabalho excelente numa língua que só quatro pessoas falam.
+> 💡 **Gancho de fala:** visibilidade não é autopromoção. É **tradução**. Ela fez um trabalho excelente numa língua que só quatro pessoas falam — e a trilha que ela deixou de fazer era exatamente a de traduzir.
 
 ---
 
-## 6. Aprender a comunicar
+## 6. Aprender a comunicar — **fala do apresentador**
 
-Bianca lista, e Ana anota:
+A Bianca plantou; quem desenvolve é o apresentador. O sistema concede as duas skills no fim do diálogo dela, **sem nenhuma linha de NPC que as explique** — a explicação é ao vivo. Enumerar aqui, olhando pro painel de skills que acabou de acender:
 
-> **Bianca:** Três coisas, e nenhuma delas é se vender.
+> 💡 **Gancho de fala — três coisas, e nenhuma delas é se vender:**
 >
-> **Bianca:** Um: conta o que você fez **em termos de quem escuta**. Não "implementei verificação de idempotência". *"Cliente não é mais cobrado duas vezes."*
+> **Um: conta o que você fez em termos de quem escuta.** Não "implementei verificação de idempotência". *"Cliente não é mais cobrado duas vezes."*
 >
-> **Bianca:** Dois: conta pra quem não estava na sala. O canal do time, o fórum, a pessoa que te perguntou no café. Não é puxar o saco de ninguém — é deixar rastro.
+> **Dois: conta pra quem não estava na sala.** O canal do time, o fórum, a pessoa que te perguntou no café. Não é puxar o saco de ninguém — é deixar rastro.
 >
-> **Bianca:** Três: escreve onde você quer estar em dois anos. *(pausa)* Porque se você não escrever, alguém escreve pra você.
+> **Três: escreve onde você quer estar em dois anos.** Porque se você não escrever, alguém escreve pra você.
+
+> ℹ️ A terceira é a única origem do tema *plano de futuro* na apresentação inteira. Se o apresentador cortar, a skill **Plano de futuro** acende no painel sem nunca ter sido dita. Não cortar.
 
 **→ Ganha skill: Visibilidade**
 **→ Ganha skill: Plano de futuro**
@@ -144,7 +138,7 @@ Bianca lista, e Ana anota:
 
 Notificação discreta no canto — primeira vez que o notebook dela recebe algo na apresentação. Planta o mecanismo do Bloco 5.
 
-> **Marcos:** Ana! Vi o que você postou no canal. Isso resolve o problema do retry inteiro? Posso levar pro Innovation Day de novembro como caso?
+> **Marcos:** Ana! Vi o que você postou no canal. Posso levar pro Innovation Day de novembro como caso?
 
 > 💡 **Gancho de fala:** ela postou. Levou uma hora e um parágrafo. Foi a coisa de maior retorno por esforço que ela fez em dois anos — e ela quase não fez.
 
@@ -174,4 +168,5 @@ O cartão 5 faz trabalho duplo sozinho: dois anos é o contrato inteiro. A plate
 | Puzzle | Montar 4 peças *(o mais satisfatório)* |
 | Requisito especial | **Pausa de 8s sem feedback** + quebra de quarta parede |
 | Callback | par nº 3 do puzzle do Bloco 2 |
+| Carga do tema | as três lições de comunicação são **fala do apresentador** (§6), não da Bianca |
 | Plantio | notificação no notebook → mecanismo do Bloco 5 |

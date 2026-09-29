@@ -108,7 +108,7 @@ O objetivo do final é **reconhecimento, não surpresa**: se a plateia já suspe
 57. Como dono do projeto, quero trocar o nome da protagonista editando um único lugar, para que a decisão de nome possa ficar para depois.
 58. Como dono do projeto, quero que as caixas de diálogo sejam dimensionadas com folga, para que um nome ou fala mais longa não quebre layout no dia.
 59. Como dono do projeto, quero que cada apresentador possa reescrever o roteiro do próprio bloco isoladamente, para que a edição de um bloco não afete os outros.
-60. Como dono do projeto, quero escolhas de fala da protagonista que não alteram progressão, para que cada apresentador escolha a resposta que combina com a narração dele.
+60. Como dono do projeto, quero diálogo linear — sem escolha de fala —, com NPC que planta o tema em poucas falas curtas, para que o tema seja desenvolvido pela minha voz ao vivo e não lido da tela pela plateia.
 
 ### Robustez para apresentação ao vivo
 
@@ -249,9 +249,15 @@ Cinco NPCs fixos e recorrentes, cada um aparecendo em pelo menos dois blocos, to
 
 Ganho secundário: elenco fixo mostra as outras pessoas também mudando, o que sustenta "carreira em construção contínua" sem linha de exposição. Custo de arte cai de ~15 personagens para 5.
 
-### Escolhas de diálogo
+### Diálogo linear: o NPC planta, o apresentador desenvolve
 
-A protagonista tem escolhas de fala em momentos de autoconhecimento. **Nenhuma altera progressão** — todas convergem. Existem para que cada apresentador selecione a resposta que combina com a própria narração.
+Não existe escolha de fala. Um nó de diálogo é sempre uma fala (`NoDialogo` tem um único formato), e **um clique = um nó**.
+
+A versão anterior tinha escolhas convergentes da protagonista, para que cada apresentador selecionasse a resposta que combinava com a narração dele. Foram removidas junto com uma reescrita que encurtou todos os diálogos: o NPC entrega a **pista e o gancho**, e para. Todo conteúdo temático que saiu da boca do NPC virou "Gancho de fala" nos docs de roteiro.
+
+O motivo é tempo de palco. Fala longa obriga o apresentador a esperar cliques em silêncio enquanto a plateia lê a tela — e a plateia lê mais rápido do que qualquer um fala. Escolha de fala custava um clique que não avançava a história e dava à plateia uma decisão que ela não tomava.
+
+A forma é travada por teste, não por convenção (`integridade.test.ts`): nenhum nó tem tipo diferente de `fala`, nenhum diálogo passa de **6 nós**, nenhuma fala passa de **180 caracteres**, e as frases-assinatura que o clímax cobra continuam no conteúdo.
 
 ## Testing Decisions
 
@@ -280,6 +286,9 @@ Renderizar componentes e clicar via testing-library foi considerado e rejeitado:
 - **A tese, assertada** — ao fim das quatro conexões, a barra de itens está vazia e as nove skills estão presentes.
 - **Sequência da revelação** — as quatro conexões só avançam por disparo explícito e apenas em ordem.
 - **Integridade do grafo de conteúdo** — todo hotspot referencia id existente, todo diálogo termina, todo puzzle tem gabarito válido. Exercitado pelos mesmos testes de progressão, sem criar uma segunda seam. Parte disso é garantida em tempo de compilação pela decisão de conteúdo tipado.
+- **Forma do diálogo** — nenhum nó tem tipo diferente de `fala` (a mecânica de escolha não volta por acidente), nenhum diálogo passa de 6 nós, nenhuma fala passa de 180 caracteres, e as frases-assinatura que o clímax cobra continuam no conteúdo. É o contrapeso da reescrita: o roteiro pode mudar de palavra, não de forma.
+- **Pista de puzzle dita em voz alta** — cada campo do gabarito da senha aparece como token isolado em alguma fala do bloco do puzzle. Sem isso, uma reescrita das falas do Bloco 1 torna o puzzle insolúvel ao vivo e o compilador não tem como saber.
+- **Nenhuma asserção conta nós de diálogo** — a suíte avança diálogo lendo `DIALOGOS[id].nos.length` em vez de um número escrito à mão. Reescrever falas é a operação mais frequente do projeto; ela não pode custar manutenção de teste.
 
 ### O que não tem cobertura automatizada
 

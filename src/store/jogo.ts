@@ -68,7 +68,6 @@ export interface AcoesJogo {
   clicarHotspot: (hotspotId: HotspotId) => void;
   selecionarItem: (itemId: ItemId | null) => void;
   avancarDialogo: () => void;
-  escolherOpcao: (indice: number) => void;
   resolverPuzzle: (puzzleId: PuzzleId) => void;
   fecharNarracao: () => void;
   fecharMensagemFalha: () => void;
@@ -151,9 +150,7 @@ export const useJogo = create<Jogo>((set, get) => {
           break;
 
         case 'dialogo':
-          set({
-            dialogoAtivo: { dialogoId: efeito.dialogoId, indice: 0, escolhaFeita: null },
-          });
+          set({ dialogoAtivo: { dialogoId: efeito.dialogoId, indice: 0 } });
           break;
 
         case 'abrirPuzzle':
@@ -325,33 +322,24 @@ export const useJogo = create<Jogo>((set, get) => {
       set({ itemSelecionado: s.itemSelecionado === itemId ? null : itemId });
     },
 
+    /**
+     * Um clique = um nó. Diálogo é linear: não há estado intermediário para
+     * esperar, então todo clique avança.
+     */
     avancarDialogo: () => {
       const s = get();
       if (!s.dialogoAtivo) return;
       const dialogo = DIALOGOS[s.dialogoAtivo.dialogoId];
       if (!dialogo) return;
-      const no = dialogo.nos[s.dialogoAtivo.indice];
-      // Numa escolha, espera a seleção do apresentador.
-      if (no?.tipo === 'escolha' && s.dialogoAtivo.escolhaFeita === null) return;
 
       const proximo = s.dialogoAtivo.indice + 1;
       if (proximo >= dialogo.nos.length) {
+        // Efeitos do diálogo só valem no fim — ver o guard de `voltarAoMapa`.
         set({ dialogoAtivo: null });
         if (dialogo.efeitos) aplicar(dialogo.efeitos);
         return;
       }
-      set({ dialogoAtivo: { ...s.dialogoAtivo, indice: proximo, escolhaFeita: null } });
-    },
-
-    escolherOpcao: (indice) => {
-      const s = get();
-      if (!s.dialogoAtivo) return;
-      const dialogo = DIALOGOS[s.dialogoAtivo.dialogoId];
-      const no = dialogo?.nos[s.dialogoAtivo.indice];
-      if (no?.tipo !== 'escolha') return;
-      if (indice < 0 || indice >= no.opcoes.length) return;
-      // Todas convergem: a escolha é registrada, a progressão não muda.
-      set({ dialogoAtivo: { ...s.dialogoAtivo, escolhaFeita: indice } });
+      set({ dialogoAtivo: { ...s.dialogoAtivo, indice: proximo } });
     },
 
     resolverPuzzle: (puzzleId) => {

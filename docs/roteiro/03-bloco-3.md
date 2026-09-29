@@ -28,7 +28,7 @@ Sala técnica. Racks, dois monitores grandes com log rolando, cadeira ruim. Luz 
 
 Primeiro clique, **sem as anotações selecionadas**:
 
-> *Linhas e linhas de texto. Ana reconhece umas palavras. Não reconhece o que elas querem dizer juntas.*
+> *Linhas e linhas de texto. Ana reconhece as palavras, não o que elas querem dizer juntas.*
 >
 > **Ana:** Isso aqui não faz sentido nenhum.
 
@@ -40,21 +40,19 @@ Nada acontece. É a porta do leva-e-traz.
 
 ## 2. Tiago — o acesso
 
-> **Tiago:** Esse erro aí? Deixa. Ele aparece toda madrugada há uns oito meses.
+> **Tiago:** Esse erro aparece toda madrugada há oito meses. A gente reprocessa na mão e segue o jogo.
 >
-> **Ana:** E ninguém olha?
+> **Tiago:** *(dá de ombros)* **Entrou no orçamento da rotina.**
 >
-> **Tiago:** A gente reprocessa na mão de manhã e segue o jogo. *(dá de ombros)* Entrou no orçamento da rotina.
-
-Ana pede acesso ao histórico completo.
-
+> **Ana:** E ninguém olha? Me libera o histórico completo.
+>
 > **Tiago:** Pra quê? Ninguém pediu isso pra você.
 >
-> **Ana:** Ninguém pediu pra eu não olhar também.
+> **Ana:** **Ninguém pediu pra eu não olhar também.**
 >
 > **Tiago:** *(pausa, depois ri)* Tá liberado.
 
-> 💡 **Gancho de fala:** *"'Entrou no orçamento da rotina'. Toda empresa tem uns cinco desses. Todo mundo sabe, ninguém olha, porque olhar não é tarefa de ninguém."* — **esse é o bloco inteiro em uma frase.**
+> 💡 **Gancho de fala:** *"'Entrou no orçamento da rotina'. Toda empresa tem uns cinco desses. Todo mundo sabe, ninguém olha, porque olhar não é tarefa de ninguém."* — **esse é o bloco inteiro em uma frase.** E repare que o Tiago não é vilão: ele é uma pessoa razoável protegendo o próprio dia. A pergunta que fica pra plateia é qual erro de madrugada existe no time dela agora.
 
 ---
 
@@ -62,7 +60,7 @@ Ana pede acesso ao histórico completo.
 
 **O elo.** O que ela estudou no Bloco 2 é literalmente o que abre a porta aqui.
 
-> *Ana abre o caderno na página de fluxo entre serviços. Olha o log. Olha o caderno. Olha o log de novo.*
+> *Ana abre o caderno na página de fluxo entre serviços. Olha o log, olha o caderno, olha o log de novo.*
 >
 > **Ana:** Espera. Esses dois sistemas não deveriam estar conversando nessa ordem.
 
@@ -106,14 +104,14 @@ Ao fechar a sequência, as duas últimas linhas acendem juntas:
 
 ## 5. Quadro branco — montar o Relatório
 
-> *Ana escreve cinco páginas num domingo à noite. Ninguém pediu. Ninguém vai cobrar. Ninguém sabe que ela está fazendo.*
-
-**→ Ganha: Relatório**
-**→ Ganha skill: Proatividade**
-
+> *Ana escreve cinco páginas num domingo à noite. Ninguém pediu, ninguém vai cobrar.*
+>
 > **Ana:** *(pra si mesma)* E se ela achar que eu tô passando por cima de alguém?
 
 Fica no ar sem resposta.
+
+**→ Ganha: Relatório**
+**→ Ganha skill: Proatividade**
 
 > 💡 **Gancho de fala:** o medo do Bloco 1 não desapareceu — ele mudou de assunto. Antes era medo de perguntar; agora é medo de se expor. Ele vai mudar de assunto de novo no Bloco 4.
 
@@ -129,26 +127,22 @@ Cláudia está na mesa dela. Diferente do Bloco 1: ela **para**.
 
 > **Cláudia:** O que é isso?
 >
-> **Ana:** É o erro da madrugada. Aquele que a gente reprocessa na mão.
+> **Ana:** O erro da madrugada. Aquele que a gente reprocessa na mão.
 >
 > **Cláudia:** *(folheando)* Quem te pediu isso?
-
-Pausa longa. Deixa a plateia desconfortável.
-
+>
 > **Ana:** Ninguém.
-
-Cláudia continua folheando. Chega na última página. Fecha.
-
-> **Cláudia:** O retry não é idempotente. Oito meses. *(olha pra ela)* Ninguém tinha pedido isso.
+>
+> **Cláudia:** O retry não é idempotente. Oito meses, e ninguém tinha pedido isso.
 >
 > **Cláudia:** **Guardei seu nome.**
 
-Ela volta pro monitor. A conversa acabou.
+Ela volta pro monitor. A conversa acabou — o diálogo termina seco, sem despedida. Deixe o silêncio.
 
 **→ Ganha skill: Protagonismo**
 **→ Destrava no mapa: Innovation**
 
-> 💡 **Gancho de fala:** *"Ela não foi promovida. Não ganhou bônus. Não teve aplauso. Ganhou quatro palavras de uma pessoa ocupada."* — e o apresentador deve deixar essas quatro palavras **no ar**, sem explicar. Elas voltam no Bloco 5.
+> 💡 **Gancho de fala:** *"Ela não foi promovida. Não ganhou bônus. Não teve aplauso. Ganhou quatro palavras de uma pessoa ocupada."* — e o apresentador deve deixar essas quatro palavras **no ar**, sem explicar. Elas voltam no Bloco 5. Se quiser reforço, só aponte o contraste: é a mesma Cláudia que no Bloco 1 não parou dois segundos.
 
 ---
 
@@ -168,13 +162,13 @@ Espaço aberto, post-its na parede, mesas redondas, gente em pé. Energia oposta
 >
 > **Ana:** *(desconcertada)* Como você...
 >
-> **Marcos:** A Cláudia comentou numa reunião. *(sorri)* Olha, achar o problema é metade. Você quer que alguém conserte?
+> **Marcos:** A Cláudia comentou numa reunião. Achar o problema é metade — você quer que alguém conserte?
 >
 > **Ana:** Quero.
 >
-> **Marcos:** Então você não precisa de um relatório. Precisa de uma **proposta**. É diferente.
+> **Marcos:** Então você não precisa de um relatório. Precisa de uma **proposta**.
 
-> 💡 **Gancho de fala:** ele não está corrigindo ela — está mostrando o canal. Iniciativa sem estrutura morre na gaveta. O i9 existe justamente pra isso: transformar "eu notei uma coisa" em algo que entra em roadmap.
+> 💡 **Gancho de fala:** ele não está corrigindo ela — está mostrando o canal, e a frase dele para justo antes da parte que importa. **Relatório x proposta é diferença de destino, não de formato:** relatório vira anexo de e-mail, proposta entra em roadmap. Iniciativa sem estrutura morre na gaveta, e o **i9** existe exatamente pra transformar "eu notei uma coisa" em algo que alguém pode aprovar, orçar e executar.
 
 ---
 
@@ -200,7 +194,7 @@ Ao tentar colocar um distrator:
 
 Ao completar:
 
-> **Marcos:** Pronto. Agora é uma proposta. Antes era uma reclamação bem pesquisada.
+> **Marcos:** Pronto, agora é uma proposta. Antes era uma reclamação bem pesquisada.
 
 **→ Ganha: Crachá do Innovation** *(item tardio nº 3)*
 
