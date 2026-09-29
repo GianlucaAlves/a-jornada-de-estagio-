@@ -1,0 +1,219 @@
+/*
+ * Reset mínimo + classes base.
+ *
+ * Os valores aqui são os mesmos de src/styles/tokens.ts — CSS não importa TS,
+ * então a duplicação é consciente e limitada a este arquivo. Componentes usam
+ * os tokens; nunca literais.
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: #000000; /* cores.letterbox */
+  color: #ffffff; /* cores.texto */
+  font-family: 'Segoe UI', 'Noto Sans', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 28px; /* tipografia.tamanhos.corpo */
+  line-height: 1.45; /* tipografia.alturaLinha.corpo */
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden; /* o canvas é fixo: nunca há scroll */
+}
+
+#root {
+  height: 100%;
+}
+
+h1,
+h2,
+h3,
+p,
+ul,
+ol,
+li,
+figure {
+  margin: 0;
+  padding: 0;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  /* Arte de personagem e item é PNG com fundo transparente. */
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  margin: 0;
+  cursor: pointer;
+}
+
+/* ------------------------------------------------------------ foco visível */
+
+:focus {
+  outline: none;
+}
+
+/* Anel de foco grosso: 1px seria invisível na projeção. */
+:focus-visible {
+  outline: 6px solid #ffd43b; /* borda.grossa + cores.foco */
+  outline-offset: 4px;
+}
+
+/* ------------------------------------------------------------ classes base */
+
+/** Botão padrão: alvo amplo, contraste alto, sem gradiente. */
+.jogo-botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px; /* espaco.sm */
+  min-height: 64px; /* alvo.minimo */
+  padding: 20px 32px; /* espaco.md espaco.lg */
+  font-size: 28px; /* tipografia.tamanhos.corpo */
+  font-weight: 700; /* tipografia.pesos.forte */
+  color: #ffffff;
+  background: #121c2e; /* cores.painel */
+  border: 4px solid #ffffff; /* borda.media + cores.contorno */
+  border-radius: 16px; /* raio.md */
+  transition: border-color 600ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* Hover mexe só na borda: componentes sobrescrevem fundo por estilo inline,
+   e trocar o fundo aqui arruinaria o contraste do texto naqueles casos. */
+.jogo-botao:hover {
+  border-color: #ffd43b; /* cores.destaque */
+}
+
+.jogo-botao[disabled] {
+  cursor: default;
+}
+
+/** Botão sem moldura, para alvos que são a própria arte. */
+.jogo-botao-nu {
+  display: block;
+  padding: 0;
+  background: none;
+  border: none;
+  color: inherit;
+  text-align: left;
+}
+
+/** Caixa de conteúdo: fundo sólido, borda grossa, margem generosa. */
+.jogo-caixa {
+  background: #0a1220; /* cores.caixa */
+  border: 6px solid #ffffff; /* borda.grossa */
+  border-radius: 28px; /* raio.lg */
+  padding: 48px; /* espaco.xl */
+  box-shadow: 0 8px 0 rgba(0, 0, 0, 0.85); /* sombra.caixa */
+}
+
+.jogo-texto {
+  font-size: 28px; /* corpo */
+  line-height: 1.45;
+  color: #ffffff;
+}
+
+.jogo-texto-apoio {
+  /* Piso absoluto do spec: 22px. Nunca menos. */
+  font-size: 22px;
+  line-height: 1.45;
+  color: #e4ecfa; /* cores.textoApoio — claro, não cinza médio */
+}
+
+.jogo-titulo {
+  font-size: 56px; /* tipografia.tamanhos.titulo */
+  font-weight: 900;
+  line-height: 1.2;
+  color: #ffffff;
+}
+
+/* ------------------------------------------------------- animações amplas */
+
+/* Entradas lentas e amplas: movimento rápido e delicado é o que a
+   compressão destrói. Nada abaixo de 600ms. */
+@keyframes jogo-aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.jogo-aparecer {
+  animation: jogo-aparecer 800ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+@keyframes jogo-surgir {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.jogo-surgir {
+  animation: jogo-surgir 1000ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+/* Bob/inclinação sutil da protagonista enquanto desliza.
+   Não é ciclo de caminhada: é um único sprite balançando. */
+@keyframes jogo-bob {
+  0% {
+    transform: translateY(0) rotate(-1.5deg);
+  }
+  50% {
+    transform: translateY(-14px) rotate(1.5deg);
+  }
+  100% {
+    transform: translateY(0) rotate(-1.5deg);
+  }
+}
+
+.jogo-bob {
+  animation: jogo-bob 600ms cubic-bezier(0.22, 0.61, 0.36, 1) infinite;
+  transform-origin: 50% 100%;
+}
+
+/* Pulso de atenção para o cursor de item selecionado. Amplo e lento. */
+@keyframes jogo-pulso {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+.jogo-pulso {
+  animation: jogo-pulso 1200ms cubic-bezier(0.22, 0.61, 0.36, 1) infinite;
+}
+
+/* Respeita quem desligou animação no sistema; a apresentação segue legível. */
+@media (prefers-reduced-motion: reduce) {
+  .jogo-aparecer,
+  .jogo-surgir,
+  .jogo-bob,
+  .jogo-pulso {
+    animation: none;
+  }
+}
