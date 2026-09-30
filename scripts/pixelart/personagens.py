@@ -224,6 +224,7 @@ def _cabeca(
     pescoco: bool = True,
     barba: str = "",
     oculos: bool = False,
+    coque: int = 0,
 ) -> int:
     """Desenha cabeça e cabelo; devolve a primeira linha livre (a do ombro).
 
@@ -234,6 +235,11 @@ def _cabeca(
     `franja_baixa` é como se faz o olhar para baixo da pose encolhida: a franja
     desce 1px e empurra TODAS as feições com ela, em vez de redesenhar o rosto.
     Combinado com `pescoco=False`, dá queixo enfiado no peito (bíblia §5.2).
+
+    `coque` troca a franja por linha de cabelo alta e põe um nó saindo do alto
+    da cabeça. É o terceiro estado de cabelo e o único que altera o contorno
+    ACIMA da cabeça — ver o campo `Corpo.coque` para o porquê do nó sair pela
+    lateral e não pelo topo.
     """
     base, sombra, _ = _PELES[pele]
     meia = volume // 2
@@ -254,6 +260,32 @@ def _cabeca(
     g.segmento(esq + 3, y_topo + 4, luz_cabelo * 4)
     g.segmento(esq + 4, y_topo + 5, luz_cabelo * 2)
 
+    if coque:
+        # PRIMEIRA TENTATIVA ERRADA, registrada porque é o tipo de coisa que se
+        # tenta de novo: o nó saiu pela LATERAL do alto da cabeça (x30..34 na
+        # altura da têmpora), para caber com y_topo=2 e manter a Cláudia a mais
+        # alta do elenco sem tocar na grade. Olhando o PNG a 4x, aquilo não lia
+        # como cabelo preso: lia como BONÉ. Massa escura estreita mais um lump
+        # na lateral é a silhueta de uma aba, e a mecha grisalha deitada no topo
+        # completava a ilusão virando faixa de boné.
+        #
+        # O nó tem de sair por CIMA, e é isso que custa as três linhas de grade
+        # que `y_topo` desce. Off-axis para a direita (centro em 26,5 e não em
+        # 25) porque simetria perfeita lê como boneco de vitrine (bíblia §9).
+        if y_topo < 3:
+            raise ErroDeArte(
+                "coque exige y_topo>=3: o nó ocupa 3 linhas acima da calota, "
+                "`contornar()` ocupa uma quarta, e `_respirar()` descarta a "
+                "linha 0 — nó mais alto perde o contorno no quadro 2 e a tira "
+                "TREME (bíblia §6.3)"
+            )
+        for dy, (x0, w) in enumerate(((EIXO, 4), (EIXO - 1, 6), (EIXO - 1, 6))):
+            g.linha_h(x0, y_topo - 3 + dy, w, cabelo)
+        # Luz na aresta superior-esquerda do nó, como em todo volume do jogo
+        # (bíblia §2.6). Sem ela o nó é mancha; com ela é volume preso.
+        g.segmento(EIXO, y_topo - 3, luz_cabelo * 2)
+        g.segmento(EIXO - 1, y_topo - 2, luz_cabelo * 2)
+
     y_rosto = y_topo + 8 + (1 if franja_baixa else 0)
     if franja_baixa:
         g.linha_h(esq, y_topo + 8, volume, cabelo)
@@ -264,7 +296,13 @@ def _cabeca(
         g.linha_h(esq, y_rosto + i, volume, cabelo)
     _rosto(g, y_rosto, pele, cabelo)
 
-    if franja:
+    if coque:
+        # Linha do cabelo ALTA e cheia, em vez de franja: cabelo preso não cai
+        # na testa. É 1px numa cabeça de 11px de largura e é justamente o que
+        # separa esta cabeça da da Ana, que tem franja em diagonal cobrindo
+        # duas linhas de testa.
+        g.linha_h(esq, y_rosto, volume, cabelo)
+    elif franja:
         # Franja cortando a testa em diagonal, mais longa de um lado. Sem ela a
         # calota fecha num arco perfeito e a cabeça lê como capacete: nada no
         # contorno do cabelo quebra a simetria, e é a simetria que faz o
@@ -344,6 +382,21 @@ class Corpo:
     franja: bool = True
     """Desliga a franja para cabeça raspada: franja em cabelo raspado lê como
     mancha na testa."""
+    coque: int = 0
+    """Cabelo PRESO: nó saindo do alto da cabeça, e linha do cabelo alta.
+
+    Terceiro estado de cabelo, entre `franja=True` (solto) e `franja=False`
+    (raspado), e é o único que muda a silhueta ACIMA da cabeça. Existe porque a
+    Cláudia precisava deixar de ser a Ana repintada e os dois eixos baratos —
+    tom de cabelo e tom de roupa — são justamente os que a compressão de vídeo
+    come primeiro (bíblia §9). Cabelo preso lê de longe, lê nas duas escalas
+    (`retratos.py` consome o mesmo campo) e diz "líder" sem rótulo (§5.4).
+
+    Descartado: coque no TOPO da grade. A base é fixa em y=81, o topo útil
+    acaba em y=2 porque `contornar()` ocupa uma linha acima e `_respirar()`
+    come outra — nó desenhado acima disso perde o contorno no quadro de
+    respiração e a tira TREME, que é o defeito de §6.3. Por isso o nó sai pela
+    LATERAL do alto da cabeça, onde há grade sobrando."""
     barba: str = ""
     oculos: bool = False
     y_topo: int = 3
@@ -353,6 +406,15 @@ class Corpo:
     roupa: tuple[str, str, str] = ("d", "c", "b")
     """(luz, corpo, sombra) da peça de cima. Três casas ADJACENTES da rampa:
     salto de dois valores vira mancha em vez de volume (bíblia §2.5)."""
+    roupa_braco: tuple[str, str, str] | None = None
+    """(luz, corpo, sombra) da MANGA, quando ela não é da mesma peça do tronco.
+    None = manga na cor do tronco, que é o caso de blazer, camisa e moletom.
+
+    Existe para o COLETE, e colete é a única peça da lista de §5.4 que muda a
+    silhueta por VALOR em vez de por contorno: o tronco fica escuro e os braços
+    ficam claros, então a figura tem duas faixas de valor onde todas as outras
+    têm uma. É o que faz a Cláudia ler diferente da Ana a três metros da tela,
+    onde "azul-marinho uma casa mais escuro" não lia nada."""
     gola: tuple[str, str] = ("8", "7")
     torso_peito: tuple[int, int] = (20, 30)
     torso_cintura: tuple[int, int] = (20, 30)
@@ -472,8 +534,12 @@ def _braco_com_mao(
     A mão em pele no fim do braço é o que faz o braço LER como braço: um tubo
     de tecido sem mão é lido como dobra da roupa, e foi parte do "é quase como
     se ela não tivesse braços".
+
+    A manga sai de `roupa_braco` e cai em `roupa` quando ela não existe: é o
+    que permite colete (tronco escuro, manga clara) sem que blazer, camisa e
+    moletom precisem declarar nada.
     """
-    luz, corpo, sombra = c.roupa
+    luz, corpo, sombra = c.roupa_braco or c.roupa
     base_pele, sombra_pele, _ = _PELES[c.pele]
     # Braço em sombra do lado que não pega luz: o volume do braço tem de se
     # opor ao do tronco, senão os dois viram a mesma superfície.
@@ -518,6 +584,7 @@ def _figura(c: Corpo) -> Grade:
         pescoco=c.pescoco,
         barba=c.barba,
         oculos=c.oculos,
+        coque=c.coque,
     )
     if c.braco and c.braco[0][0] != y_ombro:
         raise ErroDeArte(
@@ -601,8 +668,13 @@ def _figura(c: Corpo) -> Grade:
         # colunas do vão, e só na linha do ombro — ali braço e torso são um só
         # de propósito, porque é onde o braço se articula. Passar por cima do
         # braço apagaria a aresta iluminada dele.
-        g.linha_h(c.braco[0][3] + 1, y_ombro, px0 - c.braco[0][3] - 1, luz)
-        g.linha_h(px1 + 1, y_ombro, segs_dir[0][2] - px1 - 1, sombra)
+        #
+        # Na cor da MANGA e não do tronco: num colete é a camisa que passa por
+        # cima do ombro, e costurar em cor de colete abriria uma ilha escura
+        # entre dois campos claros — que lê como furo, não como ombro.
+        luz_manga, _corpo_manga, sombra_manga = c.roupa_braco or c.roupa
+        g.linha_h(c.braco[0][3] + 1, y_ombro, px0 - c.braco[0][3] - 1, luz_manga)
+        g.linha_h(px1 + 1, y_ombro, segs_dir[0][2] - px1 - 1, sombra_manga)
 
         if c.comprimento_cabelo:
             # Cabelo comprido cai NA FRENTE do ombro, então vem depois do braço:
@@ -842,17 +914,38 @@ def _extra_rafael(g: Grade, c: Corpo) -> None:
 
 
 def _extra_claudia(g: Grade, c: Corpo) -> None:
-    """Braços cruzados, com o vão aplicado na HORIZONTAL.
+    """Colete aberto sobre camisa, e braços cruzados com o vão na HORIZONTAL.
 
     Cruzar os braços fecha o vão vertical por definição — o antebraço encosta no
     peito. A separação então tem de vir de outra direção: a linha 29 fica
     transparente de x18 a x32 e `contornar()` a transforma na aresta superior do
     antebraço. É o mesmo truque do vão de 1px, girado 90 graus, e é o que evita
     que o bloco de braços cruzados derreta no tronco.
+
+    O ANTEBRAÇO É DA COR DA MANGA, e é o achado que conserta o defeito desta
+    rodada. Ela tem colete escuro e camisa clara, então a faixa de braços
+    cruzados atravessa o peito como uma BARRA CLARA sobre campo quase preto: 19
+    px de largura, 4 de altura, ~100 pontos de luminância de diferença. Nenhuma
+    outra figura do elenco tem barra horizontal de valor no peito, e é o traço
+    que sobrevive à compressão — ao contrário de "blazer uma casa mais escuro
+    que o da Ana", que era o que ela tinha antes e não lia de jeito nenhum.
     """
-    luz, corpo, sombra = c.roupa
+    luz, corpo, sombra = c.roupa_braco or c.roupa
     base_pele, sombra_pele, _ = _PELES[c.pele]
     y = _y_ombro(c)
+
+    # Botoeira do colete: a camisa aparece numa faixa de 3px entre as duas
+    # bordas do colete, e as bordas em K é que fazem a peça ler como ABERTA em
+    # vez de blazer fechado — o mesmo mecanismo do cardigã da Bianca. Três
+    # linhas contíguas, nunca pontos soltos: nesta escala 1px isolado não lê
+    # como botão, lê como defeito de alpha.
+    claro, escuro_gola = c.gola
+    for dy in range(y + 4, y + 7):
+        g.linha_h(EIXO - 1, dy, 3, claro)
+        g.ponto(EIXO + 1, dy, escuro_gola)
+        g.ponto(EIXO - 2, dy, CONTORNO)
+        g.ponto(EIXO + 2, dy, CONTORNO)
+
     for x in range(18, 33):
         g.ponto(x, y + 7, VAZIO)
     faixa: Segmentos = ((y + 8, y + 11, 16, 34),)
@@ -949,29 +1042,69 @@ RAFAEL = Corpo(
     extra=_extra_rafael,
 )
 
-# Líder do DT7, a mais alta do elenco. Cabelo curto e estruturado com mecha
-# grisalha, blazer escuro (uma casa abaixo do da Ana, na mesma família: mesma
-# empresa, outra patente) e braços cruzados. Vão de 2px no braço de cima.
-# Terço inferior: alfaiataria cinza-azulada (`3`, 66) e scarpin quase preto (`1`
-# com solado em K, 26). É a única do elenco com o pé MAIS ESCURO que a calça —
-# contraste invertido, e é ele que faz a silhueta dela ler como formal.
+# Líder do DT7, a mais alta do elenco.
+#
+# ELA ERA A ANA REPINTADA. O defeito relatado pelo dono e confirmado na folha de
+# contato: blazer azul-marinho, cabelo castanho no ombro, colarinho branco e
+# crachá amarelo — os quatro traços da Ana, num tom de azul uma casa abaixo. Em
+# cena com as duas juntas (fases 1, 3 e 4) a plateia não sabia quem era quem, e
+# uma casa de rampa é exatamente o que a compressão de vídeo come primeiro.
+#
+# Cinco eixos mudaram JUNTOS, porque a bíblia §5.4 é explícita em que trocar o
+# tom do mesmo blazer não é diferenciar:
+#
+# (1) CABELO, comprimento E volume. `coque=1`: o nó no alto da cabeça é o único
+#     traço do elenco que altera o contorno ACIMA da cabeça, e cabelo preso é
+#     silhueta — lê a três metros da tela, onde "castanho um tom diferente" não
+#     lia nada. A Ana tem cabelo SOLTO com 3 linhas de queda no ombro; são as
+#     duas pontas opostas da mesma medida, e nenhuma delas depende de cor.
+# (2) COR do cabelo: preto `R` com mecha grisalha `U`. Era castanho `Q` com
+#     `U` — a mesma família da Ana. Preto sobre grisalho dá ~110 pontos de
+#     luminância na mecha, que é o dobro do que ela tinha.
+# (3) SILHUETA DE ROUPA: colete, não blazer. `lapela=False` e `pin=""` matam os
+#     dois acessórios que ela dividia com a Ana (lapela e crachá amarelo), e
+#     `roupa_braco` põe a manga da camisa numa faixa de valor própria. Ver
+#     `_extra_claudia` para a consequência que importa: barra clara de braços
+#     cruzados atravessando um peito quase preto.
+# (4) PALETA: colete `("3","2","1")` — neutro frio quase preto, o corpo em 46 de
+#     luminância contra os 66 do blazer da Ana — e camisa camel `("r","q","p")`,
+#     que é madeira CLARA (152). Ela passa a ser a única figura do elenco com
+#     quente claro no torso, e a única cuja roupa tem duas faixas de valor.
+#     A gola vai para `("r","q")`: o colarinho deixa de ser branco, que era o
+#     quarto traço compartilhado.
+# (5) POSTURA e ALTURA seguem sendo dela: braços cruzados (só ela no elenco) e a
+#     silhueta mais alta — o topo do contorno dela cai em y=1, contra y=2 do
+#     Rafael, que é o segundo.
+#
+# POR QUE `y_topo` CAIU DE 2 PARA 5. O nó precisa de 3 linhas acima da calota e
+# `contornar()` de uma quarta. Com y_topo=2 não havia grade e a tentativa de
+# resolver isso pela lateral virou boné (ver `_cabeca`). O crânio dela desceu
+# 3px e o CABELO devolveu 4: ela continua sendo a mais alta, mas a altura passou
+# a vir do penteado, que é onde ela lê como decisão em vez de como estatura. O
+# braço desce junto — `Corpo.braco` tem de começar na linha do ombro, e `_figura`
+# levanta erro se não começar.
+#
+# Terço inferior mantido de propósito: alfaiataria cinza-azulada (`3`, 66) e
+# scarpin quase preto (`1` com solado em K, 26). É a única do elenco com o pé
+# MAIS ESCURO que a calça — contraste invertido, e é ele que faz a silhueta dela
+# ler como formal. Mexer aqui só desfaria raciocínio de piso já registrado.
 CLAUDIA = Corpo(
     nome="claudia",
     pele="clara",
-    cabelo="Q",
+    cabelo="R",
     luz_cabelo="U",
-    volume_cabelo=13,
-    y_topo=2,
-    roupa=("c", "b", "a"),
-    gola=("8", "7"),
+    volume_cabelo=17,
+    coque=1,
+    y_topo=5,
+    roupa=("3", "2", "1"),
+    roupa_braco=("r", "q", "p"),
+    gola=("r", "q"),
     calca=("4", "3", "2"),
     sapato=("1", "K", "4"),
     torso_cintura=(21, 29),
-    lapela=True,
-    braco=((22, 33, 15, 17),),
+    braco=((25, 36, 15, 17),),
     mao=False,
-    linhas_vao=(23, 28),
-    pin="J",
+    linhas_vao=(26, 31),
     extra=_extra_claudia,
 )
 

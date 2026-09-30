@@ -1219,137 +1219,226 @@ def outra_area() -> Grade:
     A fase 5 acontece aqui porque a Ana se deslocou para conversar com alguém de
     fora do time dela — e o deslocamento é o que diz que a conversa importava.
 
+    ┌──────────────────────────────────────────────────────────────────────────┐
+    │ REESCRITA NA v2.1 A PARTIR DE TRÊS DEFEITOS VISTOS NA TELA.              │
+    │                                                                          │
+    │ 1. **Lavada.** E a causa medida NÃO é falta de amplitude: a versão antiga │
+    │    já ia de luma 26 a 203 (p5..p95), que é 70% da escala. O que fazia a  │
+    │    cena ler como lavada era a ÁREA de claro, e ela estava concentrada    │
+    │    numa banda só. Medido no PNG antigo, fração de pixels com luma > 140: │
+    │                                                                          │
+    │        y   0.. 26  teto .................. 24%                          │
+    │        y  26.. 70  parede alta ........... 80%                          │
+    │        y  70..105  parede ................ 67%  <- o problema           │
+    │        y 105..144  altura de cabeça ...... 15%                          │
+    │        y 144..232  piso .................. 69%                          │
+    │        cena inteira ...................... 49%                          │
+    │                                                                          │
+    │    Ou seja: metade da imagem era quase-branca, e a faixa y 70..105 — a   │
+    │    que fica logo ACIMA do mobiliário, atrás de ombro e de monitor — era  │
+    │    2/3 clara. Repare que a faixa de CABEÇA já era escura (15%): o feltro │
+    │    antigo cobria y 106..144, então o rosto já recortava. Este comentário │
+    │    dizia o contrário na primeira redação e estava errado; corrigido      │
+    │    depois de medir, porque documento errado propaga defeito mais rápido  │
+    │    que código errado (bíblia §10).                                       │
+    │                                                                          │
+    │    A correção é levar o feltro de y=106 para y=70: aquela banda cai de   │
+    │    67% para 20% de claro (luma média 148 -> 91) e a cena inteira cai de  │
+    │    49% para 42%. A faixa alta (26..70) FICA clara de propósito — é ela   │
+    │    que recebe o lanternim e justifica a luz de cima.                     │
+    │ 2. **Não lia como escritório.** Lia como BIBLIOTECA: uma estante de      │
+    │    lombadas coloridas na parede alta, um tampo de madeira de 196x28 px   │
+    │    sem nada em cima (que lê como balcão de atendimento), um sofá de      │
+    │    espera — e NENHUM posto de trabalho. Um monitor e um notebook fechado │
+    │    em 480px de cena não fazem escritório.                                │
+    │ 3. **Artefato no chão.** O `tapete` (x 100..236, y 194..224) saía como um│
+    │    retângulo claro pontilhado no meio do piso. O motivo está escrito em  │
+    │    `props.tapete`, que ficou fora de circulação por causa disto.         │
+    └──────────────────────────────────────────────────────────────────────────┘
+
     O PROBLEMA REAL DESTA CENA NÃO É DESENHAR UM ESCRITÓRIO, É NÃO DESENHAR O
-    ESCRITÓRIO DA FASE 1. A revisão anterior já apontou que janela e poça
-    repetidas entre cenas leem como carimbo, e repintar o mesmo layout seria o
-    mesmo erro numa escala maior. Oito coisas mudam, e nenhuma delas é a paleta:
+    ESCRITÓRIO DA FASE 1. O dono foi específico: *"é um escritório assim como a
+    primeira fase, porém um visual diferente de escritório, pois é uma sala
+    diferente na mesma empresa."* Ou seja: mesmos MÓVEIS (baia, monitor, cadeira
+    de escritório), outro LUGAR. Trocar os móveis por móveis de outro tipo de
+    sala é o que produziu a biblioteca. Onze coisas mudam, e nenhuma delas é
+    "trocar mesa por estante":
 
     1. **A geometria da luz.** O Escritório recebe sol de uma janela LATERAL ao
-       poente, e a mancha dele no piso é um quadrilátero inclinado encostado na
-       parede da direita. Aqui não há janela para fora nenhuma: a luz natural cai
-       de um lanternim no TETO, e a mancha é centrada, simétrica e no meio do
-       piso. A plateia lê "outro lugar" antes de saber por quê.
-    2. **A altura das divisórias.** Lá, cinco painéis de baia de 54-56px, todos
-       na mesma altura, com tela espiando por cima. Aqui só há os dois extremos:
-       biombo de bancada de 20px, que não esconde ninguém, e divisória de piso a
-       teto de 100px, que fecha sala de verdade. Nada na meia-altura.
-    3. **A densidade.** Lá o miolo é cheio (duas baias, duas mesas, rack,
-       caixas). Aqui o miolo é deliberadamente VAZIO — um tapete e nada em cima
-       dele — e a ocupação foi empurrada para as bordas (armários, sala fechada,
-       estante). Andar de outro time visto de passagem é mais vazio, e a fase
-       precisa de piso livre para a conversa.
+       poente, e a mancha dele no piso é um quadrilátero INCLINADO encostado na
+       parede da direita. Aqui não há janela para fora nenhuma: a luz natural
+       cai de um lanternim no TETO, e a mancha é `inclinacao=0` — luz de cima
+       não inclina. Geometria de mancha é a coisa que a plateia lê primeiro sem
+       saber que está lendo.
+    2. **A altura das divisórias.** Lá, cinco painéis de baia de 54-56px com
+       tela espiando por cima — a imagem canônica de escritório de baias. Aqui
+       só há biombo de bancada de 18px, que não esconde ninguém: mesmo móvel,
+       outra altura, outro jeito de trabalhar. É o eixo que o dono pediu.
+    3. **A densidade e o AGRUPAMENTO.** Lá são mesas individuais, cada uma com
+       seu painel. Aqui são POSTOS COMPARTILHADOS: um bench de 196px com dois
+       lugares dividindo o mesmo tampo, mais um posto solto à esquerda.
     4. **O material e o valor da parede.** Lá é parede pintada lisa de cima a
-       baixo, escurecendo em bandas. Aqui a parede alta é clara e a meia-parede é
-       FELTRO acústico azul-escuro — a faixa atrás da CABEÇA passa a ser a coisa
-       mais escura da cena, e o rosto claro da figura recorta nela. É o sanduíche
-       de valor da decisão 2, com os valores em outra ordem.
+       baixo. Aqui a faixa alta (y 26..70) é clara — é ela que recebe o
+       lanternim — e daí para baixo é FELTRO acústico azul-escuro até o rodapé,
+       74 linhas. O feltro antigo começava em 106 e o trecho y 70..105 era 2/3
+       claro; levá-lo a 70 tira 47 pontos percentuais de área clara justamente
+       na banda que fica atrás de ombro e acima de monitor.
     5. **O teto.** Lá, 16 linhas de forro modular com duas calhas embutidas.
-       Aqui, 26 linhas e um lanternim: pé-direito maior, que é o que se sente ao
-       trocar de andar.
-    6. **O piso.** Lá carpete `6554` e nenhum tapete. Aqui piso claro `7665` com
-       um tapete de área no meio — e o tapete é NEUTRO por obrigação técnica
-       (ver `props.tapete`), não por gosto.
-    7. **O mobiliário.** Lá, mesas individuais com painel. Aqui, uma bancada
-       comunitária de madeira, compartilhada, sem divisão por pessoa.
-    8. **O primeiro plano.** Lá, painel de baia à esquerda e planta alta à
-       direita. Aqui, a divisória de vidro jateado da sala de onde a cena é vista
-       e o encosto de um sofá.
+       Aqui, 26 linhas e um lanternim: pé-direito maior, que é o que se sente
+       ao trocar de andar.
+    6. **O piso.** Lá carpete em bandas lisas `6554`. Aqui piso duro `7665`
+       LADRILHADO, com as juntas convergindo para um ponto de fuga — carpete
+       não tem junta, e a junta é o que diz "outro andar" de longe.
+    7. **A iluminação artificial.** Lá, calhas embutidas no forro. Aqui,
+       pendentes sobre o bench e uma luminária de MESA no posto da esquerda.
+    8. **A sala fechada.** Lá tudo é aberto. Aqui há uma divisória de piso a
+       teto com a porta dentro dela, no canto esquerdo, com o vidro jateado em
+       tom ESCURO (`tom_vidro="4"`): sala fechada sem luz acesa. Escolha de
+       área clara, não de gosto — ver `props.divisoria_de_gabinete`.
+    9. **Os armários de lockers.** Móvel de andar compartilhado, e o
+       Escritório não tem nada parecido.
+    10. **O conteúdo da parede.** Lá: cartaz, relógio, TV, placa, rack, janela
+        de skyline. Aqui: quadro branco de time, mural de post-its, TV de
+        indicadores. Nenhum dos três está na fase 1.
+    11. **O primeiro plano.** Lá, painel de baia à esquerda e planta alta à
+        direita. Aqui, a divisória de vidro jateado da sala de onde a cena é
+        vista e o encosto de um sofá.
+
+    TRÊS RETÂNGULOS RESERVADOS, e a arte não desenha nada dentro deles (objeto
+    pintado no fundo + sprite por cima = fantasma duplo):
+
+      x  76..115, y 115..143  `b5-caderno`, base em 143 — é por isso que o
+                              tampo do posto da esquerda está em y=143 exato.
+      x 317..365, y 109..145  `b5-grade`, ancorado pelo CENTRO. Ela encosta no
+                              biombo do bench, o que é o certo para uma folha
+                              impressa apoiada na mesa.
+      x 173..249, y 105..189  faixa em que a Bianca fica em pé (pos 44%/70%).
+
+    As duas sombras de contato dos objetos são pintadas no tampo, nas posições
+    exatas que `bloco5.ts` declara: o PNG do objeto é transparente e a UI o põe
+    sobre qualquer fundo, então ele não pode trazer sombra própria (bíblia §4.4).
     """
     hz = HZ_OUTRA_AREA
-    g = Grade(LARGURA, ALTURA, "6")
+    g = Grade(LARGURA, ALTURA, "5")
 
-    # --- FUNDO: teto alto com lanternim, parede clara, meia-parede de feltro
+    # --- FUNDO: teto alto com lanternim, faixa clara, feltro escuro até o chão
     props.forro_de_teto(g, 0, 26, passo=30)
-    props.claraboia(g, 240, 2, 168, 20)
-    props.parede_pintada(g, 26, 104, "7766")
-    props.parede_de_feltro(g, 106, hz, ripas=11)
+    # Lanternim FORA DO CENTRO (cx=150 e não 240), e a razão é de iluminação, não
+    # de composição: a mancha dele no piso tem de caber num trecho de piso livre
+    # que não colida com as duas poças das pendentes. Centrado em 240, a mancha
+    # do teto e a poça da pendente de x=250 se somavam no mesmo pedaço de chão e
+    # o resultado era um borrão claro de 180px sem fonte identificável — duas
+    # luzes empilhadas leem como uma luz errada.
+    props.claraboia(g, 150, 2, 168, 20)
+    props.parede_pintada(g, 26, 68, "76")
+    # A MEIA-PAREDE VIROU PAREDE INTEIRA, e é a correção central do defeito 1.
+    # O feltro ia de 106 a 144 (38 linhas) e ficava quase todo atrás de móvel;
+    # agora desce de 70 até o rodapé (74 linhas), cobrindo TODA a faixa em que a
+    # cabeça de uma figura cai nesta cena (y 62..142, conforme as paradas de
+    # `bloco5.ts`). Ripa a cada 16px em vez de 11: numa faixa duas vezes mais
+    # alta, junta a cada 11px vira veludo cotelê.
+    props.parede_de_feltro(g, 70, hz, ripas=16)
 
-    # sala fechada à esquerda: divisória de piso a teto + porta. É o que o
-    # Escritório não tem em nenhum ponto — lá tudo é aberto e de meia altura.
-    _assentar(g, 72, hz, props.divisoria_de_gabinete(118, 100), sombra=False)
-    _assentar(g, 152, hz, props.porta(34, 94), sombra=False)
-    # armários pessoais na direita: móvel de andar compartilhado
+    # Pendentes e halos ANTES dos quadros de parede, de propósito: `_halo` aclara
+    # o char que encontra, então um halo pintado depois salpicaria luz em cima do
+    # papel dos cartazes — erro já cometido na Sala de Reuniões e registrado lá.
+    for cx, alt, base, rx, ry in ((250, 30, 62, 19, 14), (352, 26, 66, 17, 13)):
+        _assentar(g, cx, base, props.luminaria_pendente(alt), sombra=False)
+        _halo(g, cx, base + 18, rx, ry)
+
+    # Sala fechada no canto esquerdo, com a porta DENTRO da divisória. O vidro
+    # jateado vai em tom escuro (ver `props.divisoria_de_gabinete`): é a parede
+    # contra a qual a Ana para em x 8%, e ela precisa ser escura para o rosto
+    # dela recortar.
+    _assentar(g, 24, hz, props.divisoria_de_gabinete(56, 100, tom_vidro="4"), sombra=False)
+    _assentar(g, 24, hz, props.porta(30, 90), sombra=False)
+
+    # parede povoada em três alturas (decisão 4 do topo do arquivo). Tudo entre
+    # y=72 e y=112, acima do biombo do bench (112) e do tampo do posto (143).
+    g.colar(48, 72, props.quadro_branco(64, 40))  # quadro do time
+    g.colar(124, 74, props.tv_de_parede(44, 28, "dash"))  # a tela ligada da parede
+    g.colar(180, 74, props.painel_de_post_its(42, 36))
+    g.colar(232, 84, props.grelha_de_ar(26, 14))
+    g.colar(276, 72, props.cartaz(26, 36, acento=props.VERDE[3]))
+    g.colar(312, 78, props.cartaz(24, 30, acento=props.LUZ[3]))
+    g.colar(372, 84, props.placa_sinalizacao(20, 12))
     _assentar(g, 448, hz, props.armario_de_lockers(68, 76), sombra=False)
     _assentar(g, 448, 68, props.vaso_planta_baixa(20), sombra=False)
-
-    # OS QUADROS FICAM NAS COLUNAS QUE AS PENDENTES NÃO OCUPAM, e isto é uma
-    # correção de depois de olhar. As duas pendentes penduram em x=252 e x=348 e
-    # cada uma ocupa ~22px de largura descendo de y=32 a y=62; na primeira versão
-    # o mural de post-its e a TV estavam justamente ali, e a lâmpada aparecia
-    # GRUDADA neles, que é a mesma classe de defeito do monitor flutuando com o
-    # suporte no ar que a prévia pegou uma vez. Prateleira à esquerda das duas,
-    # TV entre elas, mural à direita — e o relógio saiu de cena, porque três das
-    # seis cenas já têm um e não ter é mais um eixo de diferença.
-    g.colar(178, 46, props.prateleira(58, 44, props.MADEIRA))
-    g.colar(278, 46, props.tv_de_parede(44, 28, "dash"))
-    g.colar(368, 48, props.painel_de_post_its(38, 34))
     props.rodape(g, hz, tom=props.AZUL[0])
 
-    # --- CHÃO: claro, e a mancha do lanternim CENTRADA nele
-    props.piso_em_bandas(g, hz, ALTURA, "7665")
+    # --- CHÃO: piso DURO e ladrilhado, com a mancha do lanternim sem inclinação
+    props.piso_ladrilhado(g, hz, ALTURA, "7665", cx=240)
     # Duas passadas de mancha, uma escura e uma clara, como `parede_pintada` faz.
-    # Este é o piso mais claro e mais exposto das cenas — 480x86 px com o miolo
-    # deliberadamente sem móvel — e com uma passada só sobravam trechos lisos bem
-    # acima dos ~40x40 do checklist §4.5. "Vazio de propósito" não pode virar
-    # "esqueceram de desenhar aqui".
+    # Este é o piso mais claro e mais exposto das cenas e com uma passada só
+    # sobravam trechos lisos bem acima dos ~40x40 do checklist §4.5.
     props.manchas(g, 0, hz + 2, LARGURA, ALTURA, quantidade=20, semente=577)
     props.manchas(g, 0, hz + 6, LARGURA, ALTURA, quantidade=13, semente=613, claras=True)
     # `inclinacao=0` e `barras=3` para casar com os três caibros do lanternim:
     # luz de cima não inclina, e a sombra dos caibros dentro da mancha é o que diz
     # que a fonte é a abertura do teto e não uma janela fora de quadro.
     props.poca_de_janela(
-        g, 168, 166, 144, 60, inclinacao=0, barras=3, travessa=0, quente=None, passos=1
+        g, 100, 182, 100, 48, inclinacao=0, barras=3, travessa=0, quente=None, passos=1
     )
+    # As poças das pendentes, quentes, fora da mancha do lanternim (ver o
+    # comentário do lanternim). Tamanhos diferentes: duas poças idênticas são o
+    # carimbo que a revisão de janelas já pegou uma vez.
+    props.poca_de_luz(g, 250, 204, 32, 12, quente="z", passos=1)
+    props.poca_de_luz(g, 352, 198, 26, 10, quente="z", passos=1)
 
-    # duas pendentes quentes sobre a bancada comunitária, com poça no chão
-    for cx, alt in ((252, 30), (348, 26)):
-        _assentar(g, cx, 62, props.luminaria_pendente(alt), sombra=False)
-        _halo(g, cx, 74, 18, 13)
-    props.poca_de_luz(g, 252, 214, 32, 12, quente="z", passos=1)
-    props.poca_de_luz(g, 348, 208, 26, 10, quente="z", passos=1)
+    # --- MEIO / POSTO DA ESQUERDA. Tampo em y=143 exato porque é ali que a base
+    # do `b5-caderno` cai; x 76..115 do tampo fica VAZIO para ele.
+    _assentar(g, 124, 177, props.mesa_de_trabalho(140, 34, props.MADEIRA))
+    _assentar(g, 124, 143, props.divisoria_acustica(120, 18), sombra=False)
+    # Luminária de MESA e não pendente: escala humana num posto solto, e é ela
+    # que cumpre "fonte de luz quente com poça" no lado esquerdo da imagem, onde
+    # as duas pendentes não alcançam.
+    _assentar(g, 66, 143, props.luminaria_de_mesa(), sombra=False)
+    props.poca_de_luz(g, 68, 141, 17, 3, quente="r")
+    _assentar(g, 134, 143, props.monitor(32, 26, "log"), sombra=False)
+    _assentar(g, 168, 143, props.monitor(28, 22, "grafico"), sombra=False)
+    props.reflexo_de_tela(g, 120, 146, 64, 3, props.TELA[1])
+    _assentar(g, 188, 143, props.caneca(props.NEUTRO[6]), sombra=False)
+    props.sombra_de_contato(g, 96, 143, 44)  # sombra do `b5-caderno`
+    _assentar(g, 100, 194, props.cadeira_escritorio(props.AZUL))
 
-    # --- MEIO: a bancada comunitária. Tampo 130..157, aresta 158..161,
+    # --- MEIO / BENCH COMPARTILHADO. Tampo 130..157, aresta 158..161,
     # pés 162..169 — base em 170, que deixa 61 linhas de piso livre embaixo.
+    #
+    # O TAMPO CONTINUA SENDO O MESMO PROP E A MESMA BASE DE ANTES, de propósito:
+    # as coordenadas de `bloco5.ts` foram medidas contra esta geometria. O que
+    # mudou é o que está EM CIMA dele. Um tampo de 196x28 com um monitor e um
+    # notebook fechado lê como balcão; o mesmo tampo com dois biombos de
+    # bancada, três monitores e duas cadeiras lê como dois postos de trabalho —
+    # e "posto de trabalho de verdade" era o que faltava.
     _assentar(g, 300, 170, props.mesa_de_reuniao(196, 40, props.MADEIRA))
     # O tampo tem 196x28 e saiu como uma LAJE marrom no meio da imagem: os três
     # veios que `mesa_de_reuniao` desenha não bastam nessa largura. Duas passadas
     # de mancha clara quebram a laje sem subir o contraste, que é o que faria o
     # tampo ganhar "nuvens" (o erro já registrado em `props.manchas`).
     props.manchas(g, 210, 132, 392, 156, quantidade=7, semente=811, claras=True)
-    _assentar(g, 300, 134, props.divisoria_acustica(80, 20), sombra=False)
-    _assentar(g, 246, 150, props.monitor(32, 26, "grafico"), sombra=False)
-    _assentar(g, 344, 150, props.notebook(28, 20, "desktop"), sombra=False)
-    props.reflexo_de_tela(g, 224, 153, 46, 3, props.TELA[1])
-    _assentar(g, 282, 150, props.caneca(props.NEUTRO[6]), sombra=False)
-    _assentar(g, 318, 148, props.garrafa_agua(14), sombra=False)
-    _assentar(g, 372, 152, props.pilha_de_papel(14, 8), sombra=False)
-    _assentar(g, 224, 148, props.pilha_de_papel(12, 6), sombra=False)
-    _assentar(g, 386, 146, props.caneca(props.TELA[2]), sombra=False)
-    # Havia um terceiro vaso no tampo e um notebook fechado em x=400. Os dois
-    # saíram depois de olhar: o vaso caía encostado na traseira do monitor e lia
-    # como moita nascendo atrás da tela, e o notebook em 400 ficava METADE FORA do
-    # tampo (que termina em 398) — pendurado no ar, que é a classe de defeito do
-    # monitor flutuando com o suporte no ar. Objeto de tampo tem de caber no tampo.
-    # ACENTO VERMELHO da cena, e o único: uma cadeira na bancada. Escolhido no
+    _assentar(g, 246, 130, props.divisoria_acustica(86, 18), sombra=False)
+    _assentar(g, 354, 130, props.divisoria_acustica(86, 18), sombra=False)
+    _assentar(g, 224, 130, props.monitor(32, 26, "grafico"), sombra=False)
+    _assentar(g, 262, 130, props.monitor(30, 24, "log"), sombra=False)
+    _assentar(g, 296, 130, props.notebook(26, 18, "desktop"), sombra=False)
+    _assentar(g, 384, 130, props.monitor(28, 22, "dash"), sombra=False)
+    props.reflexo_de_tela(g, 206, 133, 40, 3, props.TELA[1])
+    _assentar(g, 212, 148, props.garrafa_agua(14), sombra=False)
+    _assentar(g, 232, 150, props.telefone(15, 8), sombra=False)
+    _assentar(g, 256, 148, props.pilha_de_papel(12, 6), sombra=False)
+    _assentar(g, 300, 152, props.caneca(props.NEUTRO[6]), sombra=False)
+    _assentar(g, 374, 150, props.pilha_de_papel(14, 8), sombra=False)
+    props.sombra_de_contato(g, 341, 145, 50)  # sombra da `b5-grade`
+    # ACENTO VERMELHO da cena, e o único: uma cadeira no bench. Escolhido no
     # mobiliário e não num objeto pequeno porque este é o miolo da imagem e é
     # onde a conversa da fase 5 acontece — o olho tem de descansar ali.
     _assentar(g, 272, 176, props.cadeira_escritorio(props.VERMELHO))
     _assentar(g, 380, 180, props.cadeira_escritorio(perfil=True), espelhar=True)
 
-    _assentar(g, 190, 172, props.armario_baixo(58, 28, props.AZUL))
-    _assentar(g, 190, 144, props.vaso_planta_baixa(22), sombra=False)
-    # Sofá de espera na frente da sala fechada, base em 178 — ENCOSTADO na parede,
-    # não avançado para o meio. Ele enche o vão de 180x50 px que sobrava entre a
-    # divisória e o armário e ainda diz "aqui se espera para falar com alguém", que
-    # é literalmente o motivo de a Ana estar neste andar.
-    _assentar(g, 92, 178, props.sofa_pequeno(66, 34))
-    # A papelada estava em x=60 com base em 144 e saiu FLUTUANDO logo acima do
-    # braço do sofá, porque 144 é a linha da junta parede-piso e não a de nenhuma
-    # superfície. Foi para o tampo do armário, que existe e está em 144.
-    _assentar(g, 212, 144, props.pilha_de_papel(14, 8), sombra=False)
-    # tapete no miolo vazio: é o que faz "vazio de propósito" ler diferente de
-    # "esqueceram de desenhar aqui"
-    _assentar(g, 168, 224, props.tapete(136, 30), sombra=False)
+    # Planta alta na frente dos lockers. Base em 190 e encostada na borda: a
+    # fase 5 põe três figuras neste piso e todo prop de chão a mais come coluna
+    # de parada. x 395..429 não é usado por nenhuma delas.
+    _assentar(g, 412, 190, props.vaso_planta_alta(62))
 
     # --- FRENTE: a divisória de vidro jateado da sala de onde se olha, e o
     # encosto de um sofá. Nem painel de baia nem planta alta — os dois primeiros
@@ -1368,13 +1457,57 @@ def outra_area() -> Grade:
 
 
 def sala_reunioes() -> Grade:
-    """Mesa grande, TV, vidro, formal e simétrica.
+    """A Sala de Reuniões onde acontece a INNOVATION WEEK (ADR-026).
 
     Simetria aqui é composição, não espelho: TV no centro exato (x=240), mesa
     centrada em 240, calha de luz centrada e os dois primeiros planos
     equilibrados. O vidro entra à esquerda e a janela à direita para que a
     simetria não fique inerte — sala perfeitamente espelhada lê como cartão de
     visita, não como lugar.
+
+    ┌──────────────────────────────────────────────────────────────────────────┐
+    │ DEFEITO VISTO NA TELA (v2.1): A SALA NÃO LIA COMO EVENTO.                │
+    │                                                                          │
+    │ O texto de abertura da fase 4 promete *"Innovation Week: a sala inteira  │
+    │ é gente apresentando o que fez"* e o cenário entregava uma sala de       │
+    │ reunião VAZIA. A vestimenta que existia não chegava: a faixa de tecido   │
+    │ tinha 240px em azul quase do mesmo valor da calha de luz 12px acima, e   │
+    │ as duas juntas liam como duas luminárias paralelas — a faixa não lia     │
+    │ como faixa nenhuma. Três coisas entraram:                                │
+    │                                                                          │
+    │ 1. **A faixa cresceu, desceu e virou VERMELHA.** 300px, em y 30..48,     │
+    │    longe da calha. Vermelho é o ÚNICO acento vermelho desta cena agora   │
+    │    (a pasta que ficava na mesa saiu por isso — bíblia §3 dá um por cena) │
+    │    e gastá-lo na faixa do evento é escolha de composição: o primeiro     │
+    │    lugar onde o olho para passa a ser o que nomeia o lugar.              │
+    │ 2. **Sessão de pôsteres na divisória de vidro da esquerda**, com banho   │
+    │    de luz na parede e dois spots de trilho apontados. O evento deixa de  │
+    │    estar só num canto da imagem.                                         │
+    │ 3. **Fila de assentos no primeiro plano**, cortada pela borda de baixo,  │
+    │    no lugar dos dois encostos soltos. É a plateia em cadeira vazia; a    │
+    │    gente entra por cima, como `objeto-plateia`.                          │
+    └──────────────────────────────────────────────────────────────────────────┘
+
+    TODO O ACRÉSCIMO MORA FORA DA FAIXA DE CAMINHADA, E ISSO É RESTRIÇÃO, NÃO
+    ESTILO. Esta é a cena mais apertada do projeto: a mesa oval cobre o miolo e
+    a faixa de piso pisável tem entre 7 e 16 linhas em várias colunas
+    (y 152..167 no centro-direita). Qualquer totem ou cavalete novo com base no
+    piso invalidaria as coordenadas de `bloco4.ts`. Então o evento entra por
+    onde não há piso: faixa pendurada no teto, pôsteres na parede e no vidro,
+    spots no trilho, material de credenciamento na credência que já existe, e
+    primeiro plano abaixo de y=226.
+
+    TRÊS RETÂNGULOS RESERVADOS (de `bloco4.ts`):
+      x 192..288, y  51..111  `tv` (centro)
+      x 216..264, y 104..172  `entrega` — AMPLIADO na v2.1. Ele guardava um
+                              sprite de ITEM de 24x24 (o crachá) e agora guarda
+                              o `objeto-atril`, que é bem maior. Com base em
+                              y=167 (62% do canvas) o atril ocupa x 222..258 e
+                              y 111..167, e a sombra de contato dele está
+                              pintada em (240, 167). Foi por isso que o
+                              `suporte_de_tv` e a cadeira do meio saíram deste
+                              trecho: ver os comentários no corpo.
+      x 326..366, y 172..200  `notebook` (base, em cima da mesa)
     """
     hz = HZ_REUNIOES
     g = Grade(LARGURA, ALTURA, "4")
@@ -1382,10 +1515,6 @@ def sala_reunioes() -> Grade:
     props.parede_pintada(g, 0, hz, "5443")
     props.forro_de_teto(g, 0, 14)
     _luminaria_de_teto(g, 240, 150)
-    # TRÊS RETÂNGULOS RESERVADOS (de `bloco4.ts`):
-    #   x 192..288, y  51..111  `tv` (centro)
-    #   x 228..252, y 128..152  `entrega` (centro, sprite de ITEM)
-    #   x 326..366, y 172..200  `notebook` (base, em cima da mesa)
     # Os pilares saíram de 192/292 para 176/304 porque encostavam nas duas
     # colunas extremas do retângulo da TV — e pilar atrás de TV com aura viraria
     # uma borda dupla no hover.
@@ -1427,18 +1556,36 @@ def sala_reunioes() -> Grade:
         g, 336, 154, 84, 54, inclinacao=-20, barras=2, travessa=0, quente=None, passos=1
     )
 
-    # --- credência sob a TV. Tampo em y=126; x 256..300 fica VAZIO para
-    # `entrega` (278,113), e x 204..276 / y 64..108 fica vazio para a `tv`.
+    # --- credência sob a TV. Tampo em y=126.
+    # O TRECHO x 216..264 DO TAMPO FICA VAZIO, e ele cresceu na v2.1: o hotspot
+    # `entrega` guardava um crachá de 24x24 e passa a guardar o atril, que tem
+    # 36x56 px de arte. A papelada e a garrafa recuaram para a esquerda e o
+    # material de credenciamento para a direita.
     _assentar(g, 240, 156, props.armario_baixo(140, 30, props.MADEIRA))
-    _assentar(g, 186, 126, props.vaso_planta_baixa(20), sombra=False)
-    _assentar(g, 208, 126, props.garrafa_agua(14), sombra=False)
-    _assentar(g, 222, 126, props.pilha_de_papel(11, 6), sombra=False)
-    g.colar(232, 110, props.suporte_de_tv(16, 8))
+    _assentar(g, 182, 126, props.vaso_planta_baixa(20), sombra=False)
+    _assentar(g, 198, 126, props.garrafa_agua(14), sombra=False)
+    _assentar(g, 210, 126, props.pilha_de_papel(11, 6), sombra=False)
+    # O `suporte_de_tv` SAIU daqui (estava em x 232..248, y 110..118). Ele cai
+    # inteiro dentro do retângulo do atril, e suporte metade coberto por um
+    # objeto lê como TV flutuando — que é a classe de defeito que a prévia já
+    # pegou uma vez neste projeto. A TV está na altura de TV de parede e lê como
+    # fixada na parede, igual às outras cinco cenas, que nunca tiveram suporte.
+    #
+    # Sombra de contato do atril, em y=167 e não 168: 168 é a primeira fila do
+    # TAMPO da mesa grande, e sombra pintada ali assenta o atril em cima da mesa
+    # em vez de no piso atrás dela. 167 é a última fila de piso daquela coluna.
+    props.sombra_de_contato(g, 240, 167, 40)
 
-    # cadeiras ao fundo, simétricas em torno de 240. Base em 178 e não em 172:
-    # com a base mais alta a aranha de cinco pontas ficava VISÍVEL acima da
-    # aresta da mesa e as cadeiras liam como placas flutuando.
-    for cx in (148, 240, 332):
+    # Cadeiras ao fundo, e agora são QUATRO: a do meio saiu de x=240 (caía dentro
+    # do retângulo do atril, e cadeira pintada atrás de um objeto cuja base está
+    # mais à frente lê como objeto flutuando) e nasceram duas em 200 e 284. Quatro
+    # em vez de três também serve ao evento: fila mais densa lê como sala ocupada.
+    #
+    # x 312..345 NÃO RECEBE CADEIRA NOVA, e isto é geometria, não estética: as
+    # paradas de `bloco4.ts` em 65%, 66% e 70% caem nessas colunas, onde a faixa
+    # de piso tem 7 a 16 linhas entre o rodapé e a mesa. Uma cadeira ali reduz a
+    # corrida de piso e reprova três paradas de uma vez.
+    for cx in (148, 200, 284, 332):
         _assentar(g, cx, 178, props.cadeira_escritorio())
     for cx, esp in ((104, False), (386, True)):
         _assentar(g, cx, 202, props.cadeira_escritorio(perfil=True), espelhar=esp)
@@ -1452,56 +1599,68 @@ def sala_reunioes() -> Grade:
     _assentar(g, 268, 198, props.pilha_de_papel(14, 8), sombra=False)
     props.reflexo_de_tela(g, 126, 192, 34, 3, props.TELA[1])
     props.sombra_de_contato(g, 346, 200, 44)  # sombra do objeto interativo
-    # ACENTO VERMELHO, único: a pasta sobre a mesa
-    g.retangulo(288, 192, 22, 6, props.VERMELHO[3])
-    g.linha_h(288, 192, 22, props.VERMELHO[4])
-    g.linha_h(288, 197, 22, props.VERMELHO[1])
-    g.linha_v(309, 192, 6, props.VERMELHO[1])
-
+    # A PASTA VERMELHA QUE FICAVA AQUI SAIU. A bíblia §3 dá UM acento vermelho
+    # por cena e ele passou para a faixa do evento, que é 300px de largura e
+    # nomeia o lugar. Dois vermelhos — um na faixa e um de 22x6 na mesa —
+    # dividiriam o olho, e o de 22x6 perderia de qualquer jeito.
     _assentar(g, 16, 238, props.vaso_planta_alta(66))
 
-    # --- INNOVATION WEEK (ADR-026): esta sala passa a ser ONDE O EVENTO ACONTECE,
-    # e precisa comunicar exposição além de reunião.
+    # --- INNOVATION WEEK (ADR-026): esta sala é ONDE O EVENTO ACONTECE, e
+    # precisa comunicar exposição além de reunião.
     #
-    # TODO O ACRÉSCIMO MORA ACIMA DA LINHA DO PISO, E ISSO É UMA RESTRIÇÃO, NÃO
-    # UM ESTILO. Outra frente está posicionando figuras contra a geometria de chão
-    # ATUAL desta cena; qualquer totem, cavalete ou mesa de credenciamento novo
-    # teria base no piso e invalidaria aquele trabalho. Então o evento entra por
-    # onde não há piso: faixa pendurada no teto, painel de pôsteres na única faixa
-    # de parede livre, spots de trilho e material de credenciamento em cima da
-    # credência que já existe. Mapa de chão idêntico, leitura da sala trocada.
-    # Faixa mais CURTA e em tecido azul: com 300px de largura e tecido quase
-    # branco ela atravessava a imagem inteira colada na calha do teto e as duas
-    # liam como duas luminárias paralelas. 240px centrados em 240 deixam a faixa
-    # sobre a mesa, que é onde faixa de evento fica.
-    g.colar(120, 24, props.faixa_pendurada(240, 16))
-    # O BANHO DA PAREDE VEM ANTES DOS PÔSTERES, e isso é correção de olhar. Estava
-    # depois, e a `poca_de_luz` aclara o char que encontra — então ela salpicava
-    # laranja EM CIMA dos três pôsteres, o que lia como mancha no papel em vez de
-    # luz na parede. Lavando a parede primeiro, os pôsteres entram limpos e leem
-    # como iluminados porque o que está em volta deles está.
+    # Faixa de tecido VERMELHA, 300px, em y 30..48. Era azul, com 240px, em
+    # y 24..40: naquele tom e naquela altura ela caía na mesma faixa de valor da
+    # calha de luz e as duas liam como duas luminárias paralelas. Vermelho de
+    # valor médio contra a parede fria `5`/`4` é a única combinação desta paleta
+    # que diz "tecido de evento" sem virar lâmpada.
+    g.colar(90, 30, props.faixa_pendurada(300, 18, props.VERMELHO))
+    # O BANHO DE PAREDE VEM ANTES DOS PÔSTERES, e isso é correção de olhar.
+    # Estava depois, e a `poca_de_luz` aclara o char que encontra — então ela
+    # salpicava laranja EM CIMA dos pôsteres, o que lia como mancha no papel em
+    # vez de luz na parede. Lavando a parede primeiro, os pôsteres entram limpos
+    # e leem como iluminados porque o que está em volta deles está.
     props.poca_de_luz(g, 380, 116, 54, 30, quente="x", passos=1)
+    props.poca_de_luz(g, 118, 74, 52, 30, quente="x", passos=1)
     # Fileira de pôsteres de projeto sob a janela: é a faixa de parede que sobrou
     # (x 330..430 entre a base da janela em y=96 e o rodapé em 152) e é a única da
     # cena que não colide com os três retângulos reservados.
     for i, px in enumerate((336, 370, 404)):
         g.colar(px, 104, props.cartaz(26, 38, acento=(props.TELA[3], props.VERDE[3], props.LUZ[3])[i]))
-    # Dois spots de trilho apontados para os pôsteres. Sem a consequência na
-    # parede o spot é uma caixinha no teto — mesma lógica da poça no chão: luz sem
-    # efeito na superfície lê como adesivo.
-    g.colar(348, 16, props.projetor(18, 10))
-    g.colar(404, 16, props.projetor(18, 10))
-    # material de credenciamento na credência, na faixa livre do tampo (x 254..308)
-    _assentar(g, 264, 126, props.pilha_de_papel(18, 10), sombra=False)
-    _assentar(g, 290, 126, props.copos(3), sombra=False)
+    # SESSÃO DE PÔSTERES NO VIDRO DA ESQUERDA. Pôster colado em divisória de
+    # vidro é literalmente o que se vê num evento de pôsteres, e é o único lugar
+    # da metade esquerda onde cabe algo: a porta ocupa x 15..53 e o vidro vai de
+    # 64 a 172, todo acima da linha do piso. Custo zero em geometria de chão.
+    for i, px in enumerate((78, 118)):
+        g.colar(px, 56, props.cartaz(28, 38, acento=(props.LUZ[3], props.TELA[3])[i]))
+    # Quatro spots de trilho, dois por parede de pôster. Sem a consequência na
+    # parede o spot é uma caixinha no teto — mesma lógica da poça no chão.
+    for px in (348, 404, 82, 122):
+        g.colar(px, 16, props.projetor(18, 10))
+    # material de credenciamento na credência, na faixa livre do tampo (x 266..310)
+    _assentar(g, 274, 126, props.pilha_de_papel(18, 10), sombra=False)
+    _assentar(g, 296, 126, props.copos(3), sombra=False)
 
-    # --- FRENTE: dois encostos cortados pela borda, equilibrados
-    _assentar(g, 128, 280, _encosto_de_primeiro_plano(104, 50), sombra=False)
-    _escurecer(g, 74, 228, 110, 42, 2)
-    _aresta_de_luz(g, 74, 228, 110, 12, 2)
-    _assentar(g, 352, 282, _encosto_de_primeiro_plano(104, 50), sombra=False)
-    _escurecer(g, 298, 230, 110, 40, 2)
-    _aresta_de_luz(g, 298, 230, 110, 12, 2)
+    # --- FRENTE: a plateia em cadeira vazia, cortada pela borda inferior.
+    # Substitui os dois encostos soltos que ficavam em x 76..180 e 300..404 e
+    # liam como duas tarjas preta nos cantos. Ver `props.fileira_de_assentos`
+    # para o motivo de o bloco ser opaco em toda a largura: é o mapa de chão que
+    # exige, não a arte.
+    #
+    # UM passo de rampa, e não dois, e isto é correção de OLHAR. Com `_escurecer`
+    # de 2 passos a fila virou exatamente o defeito que ela existe para consertar:
+    # a rampa azul tem 5 casas, o prop já usa a mais escura (`a`) na fila de trás,
+    # e dois passos empurram o corpo do assento (`c`) e o realce (`d`) para `a` e
+    # `b` — todo o primeiro plano colapsa em dois tons quase iguais e sai uma
+    # TARJA PRETA de 1920px. Um passo mantém a separação entre fila da frente e
+    # fila de trás, que é o que desenha a silhueta.
+    #
+    # E NÃO SE APLICA `_aresta_de_luz` AQUI. Ela acende o primeiro pixel opaco de
+    # cada coluna, e entre x 90 e 390 esse pixel é a ARESTA DA MESA (que ocupa
+    # y 216..228), não o encosto — o realce iria para o lugar errado e a mesa
+    # ganharia um fio branco atravessando a imagem. O realce de topo desta fila já
+    # vem desenhado no próprio prop, na altura certa de cada encosto.
+    _assentar(g, 240, 270, props.fileira_de_assentos(480, 54, assentos=6), sombra=False)
+    _escurecer(g, 0, 226, LARGURA, 44, 1)
     _vinheta(g)
     return g
 
@@ -1717,6 +1876,26 @@ CAIXAS_DE_OBJETO: dict[str, tuple[int, int]] = {
     "quadro-branco": (72, 48),
     "mural-postits": (80, 56),
     "tv-grande": (96, 60),
+    # ------------------------------------------------- refinamento da v2.1
+    # Os dois primeiros herdam DE PROPÓSITO a caixa do asset que substituem:
+    # `objeto-caderno` entra no lugar de `objeto-notebook-aberto` (160x112 px de
+    # tela) e `objeto-grade-curricular` no lugar de `objeto-monitor-ligado`
+    # (192x144). Assim a frente de conteúdo troca UMA STRING — o `assetId` — e a
+    # grade de 4x continua fechando. Se ela decidir outro tamanho, é aqui que
+    # muda, e a mudança é de uma linha.
+    "caderno": (40, 28),
+    "grade-curricular": (48, 36),
+    # Os dois da fase 4 são novos e não têm caixa herdada. Estes são os números
+    # que a frente de interação precisa declarar em `bloco4.ts`:
+    #   objeto-atril   -> largura: 144, altura: 224
+    #   objeto-plateia -> largura: 800, altura: 192
+    "atril": (36, 56),
+    "plateia": (200, 48),
+    # ACHADO, NÃO ESCOPO: `objeto-painel-processo` está no manifest e é usado por
+    # `bloco3.ts` com 192x144, mas nunca foi gerado — o hotspot da Linha de
+    # Produção caía no placeholder rotulado, e em silêncio, porque a cadeia de
+    # fallback de `Imagem.tsx` não quebra. Ver `props.painel_de_processo`.
+    "painel-processo": (48, 36),
 }
 
 
@@ -1735,15 +1914,27 @@ def _objeto(nome: str, prop: Grade) -> tuple[str, Grade]:
 
 
 def _objetos() -> list[tuple[str, Grade]]:
-    """Um PNG por asset de objeto declarado no manifest — sete, não dez.
+    """Um PNG por asset de objeto declarado no manifest — doze na v2.1.
 
-    A primeira versão desta frente gerou dez arquivos, um por hotspot que não é
-    NPC nem item. A frente de interação resolveu diferente e é ela que manda,
-    porque é ela que declara o `assetId`: `notebook-trilha` e o notebook dos
-    Blocos 4 e 5 reaproveitam `objeto-notebook-aberto`, `monitor` e
+    Eram sete. A primeira versão desta frente gerou dez arquivos, um por hotspot
+    que não é NPC nem item; a frente de interação resolveu diferente e é ela que
+    manda, porque é ela que declara o `assetId`: `notebook-trilha` e o notebook
+    dos Blocos 4 e 5 reaproveitam `objeto-notebook-aberto`, `monitor` e
     `notebook-aberto` do Bloco 1 reaproveitam `objeto-monitor-ligado`, e
-    `conclusao-trilha` e `entrega` viraram `tipo: 'item'` (usam o sprite do item
-    que concedem, da frente de itens). Sobram sete arquivos.
+    `conclusao-trilha` e `entrega` viraram `tipo: 'item'`. Sobraram sete.
+
+    A v2.1 acrescenta CINCO, e cada um tem uma razão diferente:
+
+    - `caderno` e `grade-curricular` nascem de arte emprestada que CONTRADIZIA o
+      próprio rótulo: a fase 5 desenhava "Caderno dela" com um laptop e "Grade do
+      próximo semestre" com um monitor. O conteúdo falava de papel e a tela
+      mostrava equipamento.
+    - `atril` e `plateia` nascem de a fase 4 não mostrar apresentação nenhuma: o
+      hotspot "Apresentar" tinha como arte o crachá que ele CONCEDE, e a sala
+      estava vazia embaixo de um texto que promete "a sala inteira é gente
+      apresentando".
+    - `painel-processo` não é escopo novo: ele já estava no manifest e já era
+      usado por `bloco3.ts`, e simplesmente nunca tinha sido gerado.
 
     Cada um sai contornado porque aqui a silhueta fechada é o que a aura de
     hover segue (bíblia §7.2) — é a única exceção à regra 4 do topo de
@@ -1763,6 +1954,12 @@ def _objetos() -> list[tuple[str, Grade]]:
         _objeto("quadro-branco", props.quadro_branco(68, 44)),
         _objeto("mural-postits", props.painel_de_post_its(76, 52)),
         _objeto("tv-grande", props.tv_de_parede(92, 56, "diagrama")),
+        # --- v2.1
+        _objeto("caderno", props.caderno_aberto(36, 22)),
+        _objeto("grade-curricular", props.grade_impressa(42, 28)),
+        _objeto("atril", props.atril(32, 52)),
+        _objeto("plateia", props.plateia(196, 44)),
+        _objeto("painel-processo", props.painel_de_processo(44, 32)),
     ]
 
 

@@ -1,54 +1,269 @@
-# BLOCO 5 — A CHANCE APARECE
+# BLOCO 5 — É ESSE O CAMINHO?
 
-> # ⚠️ ESTE ARQUIVO ESTÁ DESATUALIZADO, E O DESVIO É GRANDE
+**Tema:** competências, faculdade, incerteza
+**Apresenta:** Marianna
+**Laço:** Outra área da empresa *(um lugar só — ADR-031)*
+**Sprite:** `ana-confiante`
+**Cartão:** **2 anos depois — É esse o caminho?**
+**Puzzle:** nenhum — **a mecânica desta fase é o painel de skills**
+**Tempo alvo:** 8 min
+
+> Conteúdo tipado em `src/domain/content/bloco5.ts`, e é lá que estão as
+> decisões, a janela de coordenadas e os motivos. Este arquivo é a fala de quem
+> apresenta.
 >
-> **O corpo deste documento é o roteiro da v1, e ele descreve o CLÍMAX — que
-> migrou para a fase 6 (ADR-024).** A fase 5 da v2 é outra coisa inteira:
-> competências, faculdade e a pergunta "é esse o caminho?" (ADR-028), sem puzzle,
-> com o painel de skills como mecânica, e a volta da Bianca para falar de pivotar
-> (ADR-027).
+> O clímax **não** é mais aqui: ele migrou para a fase 6 (ADR-024, ADR-029). O
+> roteiro da v1 desta fase está preservado no apêndice, no fim, até existir
+> `docs/roteiro/06-bloco-6.md`.
+
+---
+
+## A regra desta fase, antes de qualquer fala
+
+**O jogo nunca afirma nem prevê o desfecho** (ADR-028). Ela não sabe se fica, e
+por não saber, poderia ser que não fosse.
+
+E a fase **pensa em voz alta** o que acontece nas duas hipóteses. Isso é novo na
+v2.1, e é o pedido do dono: *"faltou a reflexão na fase 5 sobre a possibilidade
+de não ser efetivado quando Ana ainda não sabe o que vai acontecer"*.
+
+A linha entre as duas coisas é fina, e quem apresenta pode apagá-la sem querer:
+
+| ❌ Não diga | ✅ Diga |
+|---|---|
+| "Ela vai ser efetivada, vocês vão ver" | "Ninguém falou nada com ela ainda" |
+| "Se não der, foi bom mesmo assim" | "O que ela aprendeu a fazer é dela nas duas hipóteses" |
+| "Spoiler: dá tudo certo" | *(silêncio — a fase 6 dá a notícia)* |
+
+> ⚠️ **Prometer o final aqui destrói a fase 6**, que é inteira a notícia e o
+> porquê. E consolar antes da hora transforma a Ana em alguém que já se
+> conformou — ela não é isso, ela é alguém que não sabe e tem orgulho do que
+> construiu.
+
+---
+
+## Estado da cena
+
+Um lugar só. **Outra área da empresa**: andar diferente, baias de outro time,
+outra luz. A Ana atravessou o prédio para ter meia hora com alguém de fora do
+time dela.
+
+| Hotspot | O que é | Porta |
+|---|---|---|
+| **Caderno dela** | o motivo de abrir o painel de skills | — |
+| **Grade do próximo semestre** | folha impressa, a pergunta da fase | — |
+| **Bianca** *(Documentação de produto)* | a conversa, e o fecho | exige os dois acima |
+
+> 💡 **Gancho de abertura:** o lugar já é argumento. *"Ela não chamou ninguém pra
+> mesa dela. Ela levantou, atravessou o prédio e pediu meia hora de uma pessoa de
+> outro time."* — fazer isso no fim do estágio é a fase 1 ao contrário.
+
+## Abertura
+
+> *Dois anos. O contrato fecha em três semanas e ninguém falou nada sobre isso.
+> Ela pediu meia hora com alguém de outro time, e atravessou o prédio para ter.*
+
+> ⚠️ **"Ninguém falou nada sobre isso" é o eixo da fase.** Não conserte esse
+> silêncio com uma previsão.
+
+---
+
+## 1. Caderno dela — e o painel de skills
+
+> *Ela abre uma página nova e escreve em cima: o que eu sei fazer hoje. A lista
+> sai maior do que ela esperava, e nenhuma linha dela estava no plano.*
+
+**→ Abra o painel de skills e percorra as nove, uma por uma.** É isto o
+"gameplay" desta fase: não há puzzle, e a revisão do estágio inteiro é a pessoa
+clicando cada skill enquanto fala.
+
+> 💡 **Gancho de fala:** ler duas ou três em voz alta e dizer de onde cada uma
+> veio — coragem de perguntar é o corredor da fase 1, proatividade é o domingo à
+> noite da fase 3. *"Nada disso estava numa descrição de vaga. Tudo isso ela
+> consegue provar."*
 >
-> **Fonte de verdade da fase 5 hoje: `src/domain/content/bloco5.ts`**, cujo
-> cabeçalho carrega o desenho, a janela de coordenadas e os motivos. A cena
-> acontece em **Outra área da empresa** (ADR-031) — não no Escritório.
+> E o contraste que faz a fase: **currículo é o que você fez; isto é o que você
+> sabe fazer.** A primeira lista envelhece, a segunda não.
+
+---
+
+## 2. Grade do próximo semestre — a pergunta fica aberta
+
+> *A grade do próximo semestre, impressa e dobrada no meio. Ela reconhece três
+> matérias pelo nome. Nenhuma das três é o que ela faz todo dia.*
+
+> 💡 **Gancho de fala:** perguntar para a plateia, de verdade, e esperar. *"Quem
+> aqui está fazendo um curso que não conversa com o trabalho?"* — em plateia de
+> estagiário sobe mais mão do que se espera.
 >
-> Tudo daqui para baixo cita coisas que não existem mais: `laboratorio`,
-> `innovation` e `sala-treinamento` deixaram de ser lugares (ADR-009, ADR-026);
-> os itens `senha`, `indicacao-trilha` e `projeto-entregue` foram cortados
-> (ADR-014, ADR-017); "A vaga pede Arquitetura de Sistemas" trocou de eixo
-> (ADR-023); e o mapa tem cinco lugares, não seis.
+> **Não responda.** Nem "a faculdade não serve", nem "serve sim, tenha fé". Esta
+> é a pergunta que a fase 5 existe para deixar no ar, e a Bianca, no beat
+> seguinte, responde com o que aconteceu com ela — não com uma tese.
+
+---
+
+## 3. Bianca (Documentação de produto) — a fala do pivô
+
+Sem os dois beats anteriores: *"Bianca está terminando uma coisa. Ela pediu meia
+hora, e a meia hora é pra conversar — não pra chegar sem pergunta."*
+
+Com os dois, seis falas:
+
+> **Bianca:** Você está com cara de quem está fazendo uma conta que não fecha.
 >
-> **Reescrever isto é trabalho da frente de escrita da fase 5 e da fase 6**, e
-> não foi feito aqui porque inventar roteiro seria inventar escopo. O banner
-> existe para que ninguém ensaie por este arquivo.
+> **Ana:** Eu não sei se eu fico. E não sei se é isso que eu quero fazer.
+>
+> **Ana:** **Se eu ficar, eu já sei onde eu sento na segunda. Se não ficar, eu
+> saio com esse caderno e sem saber o que ele vale lá fora.**
+>
+> **Bianca:** Eu desenho API e escrevo documentação técnica. Sou formada em
+> Letras.
+>
+> **Bianca:** Eu nem sabia que isso existia. Levei um tempo pra parar de chamar
+> isso de desvio.
+>
+> **Bianca:** **O que você aprendeu a fazer aqui é seu. Isso não fica com a
+> empresa.**
+
+**→ Ganha skill: Plano de futuro**
+**→ Fecha a fase.**
+
+> ⚠️ **PARE no terceiro clique** — na fala em negrito da Ana. É o beat mais
+> importante desta fase e o único momento da apresentação inteira em que as duas
+> hipóteses ficam na tela ao mesmo tempo. Deixe ler.
+
+> 💡 **Gancho de fala, e é aqui que a lição mora — é sua, não do jogo:**
+>
+> **1. Pivotar não é erro.** A Bianca é formada em Letras e trabalha com
+> tecnologia. Ela não seguiu o caminho previsto e está bem — e repare que ela não
+> disse que ia dar tudo certo para a Ana. Ela contou o que aconteceu com ela.
+> *"Ninguém neste time está exatamente onde planejou estar. E 'desvio' é um nome
+> que a gente dá depois, olhando pra trás."*
+>
+> **2. A experiência adquirida é o que mais importa.** As duas hipóteses da Ana
+> têm uma coisa em comum, e é a única coisa que ela controla: a lista do caderno.
+> *"Efetivação é uma decisão de outra pessoa. O que você sabe fazer é a única
+> parte que é sua."*
+>
+> **3. E na segunda-feira?** Peça uma coisa concreta: escrever a própria lista.
+> Não o currículo — a lista do que sabe fazer hoje e não sabia no primeiro dia.
+> *"Se ela caber em três linhas, você tem seis meses pra fazer ela caber em
+> dez."*
+
+> ⚠️ Se alguém da plateia perguntar **"e ela foi efetivada?"** — a resposta é
+> *"boa pergunta"* e o próximo clique. A fase 6 responde, e responde dizendo
+> **por quê**. Antecipar aqui é gastar o clímax de graça.
+
+---
+
+## Fecho do bloco
+
+> *Ela não sabe se fica.*
+> *Sabe o que leva se não ficar.*
+
+> 💡 **Gancho de fecho:** as duas frases do fecho são a fase inteira, e a segunda
+> não é consolo — é inventário. *"Ela não está em paz com a incerteza. Ela só não
+> está de mãos vazias dentro dela."*
+
+**→ Passa o bastão.** Cartão **"3 semanas depois — O que ela se tornou"**.
+
+---
+
+## Checklist do bloco
+
+| Elemento | Status |
+|---|---|
+| Itens ganhos | nenhum |
+| Itens consumidos | nenhum — os três tardios seguem na barra até a fase 6 |
+| Skills ganhas | Plano de futuro *(a nona)* |
+| Lugar | Outra área *(destravado na entrada, concluído no fim do diálogo)* |
+| NPCs | Bianca |
+| Puzzle | nenhum — **o painel de skills é a mecânica** |
+| Laço | abre e fecha em Outra área |
+| Porta | Bianca exige Caderno **e** Grade |
+| Requisito de fala | parar no nó 3 e deixar as duas hipóteses na tela |
+
+---
+
+## O que a v2.1 mudou aqui
+
+**1. Entrou o passo do meio.** O diálogo tinha *"Eu não sei se eu fico"* e, quatro
+falas depois, *"o que você aprendeu a fazer aqui é seu"* — e nada entre as duas.
+A Ana nunca pensava no que acontece se a efetivação não vier. Agora pensa, nas
+duas hipóteses, em uma fala só, e termina sem resposta: a resposta é a última
+fala da Bianca. O `fechoTexto` da fase já dizia isso desde o começo (*"Sabe o que
+leva se não ficar"*); o diálogo é que não dizia.
+
+**Custo declarado:** a pergunta da Ana *"E era isso que você queria?"* saiu. O
+teto é de seis falas por diálogo (o NPC planta, quem apresenta desenvolve), e
+entre aquela pergunta e a reflexão, a reflexão vale mais.
+
+**2. Os dois objetos deixaram de ser arte emprestada.** "Caderno dela" era
+desenhado com um laptop e "Grade do próximo semestre" com um monitor — o rótulo
+perdia a discussão com a tela em ambos. Agora apontam para `objeto-caderno`
+(papel) e `objeto-grade-curricular` (folha impressa), com proporção de papel e
+âncora `base`.
+
+---
+
+## Fechamento visual da v2.1
+
+Os dois PNGs agora existem e foram conferidos na prévia: o caderno aberto pousa
+na mesa baixa e a grade impressa na mesa comprida. `outra-area` também foi
+revestida como escritório de baias — com monitores, cadeiras, divisórias e luz
+quente no piso — e o antigo retângulo pontilhado no chão não está mais lá.
+
+As coordenadas dos objetos foram revistas contra essa geometria final. Ainda
+vale a regra geral: se alguém mover esse mobiliário no futuro, precisa rodar
+`previa_de_cena.py` e conferir visualmente a âncora dos dois objetos; o teste de
+chão protege pessoas, não objetos sobre mesas.
+
+---
+---
+
+# APÊNDICE — o roteiro da v1 deste arquivo
+
+> ⚠️ **NADA DAQUI PARA BAIXO É A FASE 5.** Este é o roteiro da v1, e ele descreve
+> o **clímax**, que migrou para a fase 6 (ADR-024, ADR-029, ADR-030). Está
+> preservado aqui, e não apagado, porque é o único lugar do repositório onde a
+> especificação de animação das quatro conexões existe em prosa — e a fase 6
+> ainda não tem arquivo de roteiro próprio. **Quem escrever
+> `docs/roteiro/06-bloco-6.md` leva este apêndice para lá e o atualiza.**
+>
+> O que já se sabe que mudou, e que este apêndice **não** reflete:
+> `laboratorio`, `innovation` e `sala-treinamento` deixaram de ser lugares
+> (ADR-009, ADR-026); os itens `senha`, `indicacao-trilha` e `projeto-entregue`
+> foram cortados (ADR-014, ADR-017); *"A vaga pede Arquitetura de Sistemas"*
+> trocou de eixo para *"quarenta horas que ninguém mandou fazer"* (ADR-023); o
+> mapa tem cinco lugares; a fase 6 abre com a notícia e corta para a festa no
+> Cafezinho, em vez de terminar no Escritório (ADR-029); e as quatro conexões são
+> traçadas **enquanto** um personagem fala, não numa tela separada (ADR-030).
 
 **Temas:** efetivação x experiência + carreira em construção contínua + as 3 perguntas
-**Lugares:** ~~Escritório → Mapa~~ → hoje a fase 5 é **Outra área da empresa**; o mapa e a revelação são a fase 6
+**Lugares:** Escritório → Mapa
 **Sprite:** `ana-confiante` → `ana-futura`
-**Cartão:** ~~**2 anos depois — A chance aparece**~~ → hoje **2 anos depois — É esse o caminho?**
+**Cartão:** **2 anos depois — A chance aparece**
 **Tempo alvo:** 13 min
 
 > Objetivo do bloco é **reconhecimento, não surpresa**. A plateia pode já ter sacado — e se sacou, melhor. O alvo não é "não vi vindo", é *"claro, era isso o tempo todo"*.
 
 ---
 
-# CENA A — ESCRITÓRIO
+## CENA A — ESCRITÓRIO *(v1)*
 
-## Estado da cena
+### Estado da cena
 
 Mesma mesa do Bloco 1. Mesmo notebook. Mesmo enquadramento — **idêntico**, de propósito. A única coisa diferente na cena é a postura dela.
 
 **Hotspot:** Notebook
 
-## Abertura
+### Abertura
 
 > *Dois anos. O contrato fecha em três semanas. Ninguém falou nada sobre isso.*
 
 > 💡 **Gancho de fala:** o apresentador deve apontar que é a mesma cena do começo. *"Mesma cadeira. Mesmo notebook. Mesma tela de login que ela não sabia abrir."*
 
----
-
-## 1. Notebook — a mensagem
+### 1. Notebook — a mensagem
 
 Ana senta. A tela abre **sem senha** — ela digita de cor, sem olhar. Detalhe de 2 segundos que diz dois anos.
 
@@ -73,7 +288,7 @@ Ana não responde — ela olha a tela.
 
 ---
 
-# CENA B — O MAPA
+## CENA B — O MAPA *(v1)*
 
 O mapa que a plateia olhou por 50 minutos. Os 6 lugares, todos revelados, nenhum silhuetado. Fundo escuro.
 
@@ -81,13 +296,11 @@ No centro, onde não havia nada: **o convite**, um nó luminoso.
 
 A barra de itens continua embaixo. O painel de skills continua na lateral. Nada foi escondido.
 
----
-
-## 2. A REVELAÇÃO — especificação da animação
+### 2. A REVELAÇÃO — especificação da animação
 
 Cada conexão é disparada **por clique do apresentador**. Nunca por timer. Ele controla o ritmo e fala por cima de cada uma.
 
-### Parâmetros contra a compressão do Teams
+#### Parâmetros contra a compressão do Teams
 
 | Parâmetro | Valor |
 |---|---|
@@ -98,7 +311,7 @@ Cada conexão é disparada **por clique do apresentador**. Nunca por timer. Ele 
 | Contraste | linha clara sobre fundo escuro, sem gradiente |
 | Proibido | partículas, brilho difuso, linha fina, animação rápida |
 
-### Conexão 1 — Cartão do Rafael
+#### Conexão 1 — Cartão do Rafael
 
 O ícone do cartão na barra **pulsa uma vez**. A linha sai dele, sobe até o Escritório, e do Escritório até o convite.
 
@@ -110,9 +323,7 @@ O cartão **se apaga na barra**.
 
 > 💡 **Gancho de fala:** *"Ela ganhou esse cartão no primeiro dia, num corredor, de um cara que ela nunca ligou. Ele ficou dois anos no inventário sem servir pra nada."*
 
----
-
-### Conexão 2 — Certificado do Degree
+#### Conexão 2 — Certificado do Degree
 
 Linha do certificado → Sala de Treinamento → convite.
 
@@ -122,9 +333,7 @@ O certificado se apaga.
 
 > 💡 **Gancho de fala:** retomar textualmente a fala da Bianca. *"'Eu nem sei se vou usar isso.' 'Provavelmente não vai. Não agora.'"* — e deixar a frase respirar.
 
----
-
-### Conexão 3 — Crachá do Innovation
+#### Conexão 3 — Crachá do Innovation
 
 Linha do crachá → Innovation → convite.
 
@@ -134,9 +343,7 @@ O crachá se apaga.
 
 > 💡 **Gancho de fala:** ela foi no evento por curiosidade. Não foi estratégia. **Não precisa ser estratégia** — precisa acontecer.
 
----
-
-### Conexão 4 — A proatividade
+#### Conexão 4 — A proatividade
 
 Diferente das três. Não sai da barra de itens: sai do **painel de skills**, na lateral. Linha mais grossa (10px), traçado mais lento (1200ms), partindo de *Proatividade / Protagonismo* → Laboratório → Escritório → convite.
 
@@ -148,9 +355,7 @@ A skill **não se apaga**. Ela fica acesa.
 
 > 💡 **Gancho de fala:** as três primeiras conexões foram **portas**. Essa é o **motivo**. As portas abriram pra muita gente; ela foi escolhida por causa do domingo à noite em que escreveu cinco páginas que ninguém pediu.
 
----
-
-## 3. A imagem da tese
+### 3. A imagem da tese
 
 Depois da quarta conexão, o apresentador clica uma vez mais.
 
@@ -171,9 +376,9 @@ Texto, centralizado, grande:
 
 ---
 
-# CENA C — O FECHO
+## CENA C — O FECHO *(v1)*
 
-## 4. A versão futura
+### 4. A versão futura
 
 O mapa escurece devagar, mas **não apaga** — fica aceso ao fundo.
 
@@ -189,9 +394,7 @@ Sustentar por 5 segundos. Sem texto. Sem movimento.
 
 > 💡 **Gancho de fala:** a pergunta estava errada. *"Efetivação é um evento, e ela ia perguntar sobre um evento. A resposta é um mapa inteiro — dois anos de conversas, trilhas, um erro de madrugada, um crachá de cordão torto."* Se ela tivesse sido efetivada e não tivesse construído nada daquilo, não teria nada pra apontar.
 
----
-
-## 5. As três perguntas
+### 5. As três perguntas
 
 O mapa e os personagens desaparecem. Fundo escuro. Uma pergunta por vez, disparada por clique do apresentador. Fonte grande, centralizada.
 
@@ -209,9 +412,7 @@ O mapa e os personagens desaparecem. Fundo escuro. Uma pergunta por vez, dispara
 
 As três juntas na tela. E ficam.
 
----
-
-## 6. Silêncio
+### 6. Silêncio
 
 Nada muda. Nenhum botão, nenhum "fim", nenhum logo.
 
@@ -223,7 +424,7 @@ O apresentador não fala. A tela fica assim até alguém encerrar a chamada.
 
 ---
 
-## Checklist do bloco
+## Checklist do bloco *(v1 — vale para a fase 6)*
 
 | Elemento | Status |
 |---|---|

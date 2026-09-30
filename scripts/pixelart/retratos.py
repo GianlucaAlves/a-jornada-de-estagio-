@@ -145,10 +145,10 @@ def _volume_de_cabelo(c: Corpo) -> int:
     """Volume de cabelo do retrato, DERIVADO do volume do sprite.
 
     O rosto do retrato tem 19px onde o do sprite tem 11, ou seja 1,73x. Aplicar o
-    mesmo fator ao cabelo é o que faz o Rafael continuar sendo o de cabelo mais
-    volumoso do elenco e a Cláudia a de cabelo mais curto — a diferença de
-    silhueta entre eles é dado de personagem e tem de sobreviver à troca de
-    escala, senão os cinco retratos ficam com a mesma cabeça.
+    mesmo fator ao cabelo é o que faz o Tiago e o Marcos continuarem sendo os de
+    cabeça mais estreita do elenco e o Rafael e a Cláudia os de mais massa — a
+    diferença de silhueta entre eles é dado de personagem e tem de sobreviver à
+    troca de escala, senão os cinco retratos ficam com a mesma cabeça.
 
     Cabeça raspada (`franja=False`) perde 4px: cabelo rente ao crânio é mais
     ESTREITO que cabelo com volume, e essa diferença é metade do que faz o Tiago
@@ -168,17 +168,41 @@ def _alcance_do_cabelo(c: Corpo) -> int:
     ERRO ENCONTRADO NA PRIMEIRA FOLHA DE CONTATO DOS RETRATOS: a massa descia
     sempre até a mandíbula, para os nove. Resultado: NOVE CABELOS IGUAIS, um
     chanel arredondado em todo mundo — inclusive no Tiago e no Marcos, que no
-    sprite têm a cabeça RASPADA, e na Cláudia, que tem cabelo curto estruturado.
+    sprite têm a cabeça RASPADA, e no Rafael, que tem topete e lateral rente.
     É o defeito de "capacete" que a franja existe para evitar, só que aplicado à
     silhueta inteira em vez de ao contorno.
 
-    O alcance agora sai dos campos que o sprite já declara, e as três classes são
-    visivelmente diferentes de longe, que é o teste que importa:
+    O alcance agora sai dos campos que o sprite já declara, e as quatro classes
+    são visivelmente diferentes de longe, que é o teste que importa:
 
+      coque                   cabelo preso: enquadra o rosto todo, nó por cima,
+                              e NÃO cai no ombro
       comprimento_cabelo > 0  cabelo comprido: enquadra o rosto todo e cai no ombro
-      franja, sem comprimento cabelo curto: para na altura da orelha
+      franja, sem comprimento cabelo curto: afunila da têmpora até a face
       sem franja              raspado: só a calota, e a orelha aparece
+
+    POR QUE O CABELO PRESO ENQUADRA O ROSTO TODO. Duas tentativas falharam antes
+    desta, e as duas pela mesma causa. A primeira devolveu 4 (só a têmpora,
+    coerente com "rente ao crânio") e a segunda 9 (o mesmo do cabelo curto):
+    olhando a folha, o retrato continuou lendo como HOMEM nas duas.
+
+    O diagnóstico só apareceu comparando quem FUNCIONA. Os quatro retratos da
+    Ana e o da Bianca leem como mulher, e o que eles têm em comum não é o rosto
+    — o rosto é dado canônico e é o MESMO nos nove. É o `comprimento_cabelo`,
+    que os manda por este ramo e faz a massa descer até abaixo do maxilar. Os que
+    leem como homem são justamente os de alcance curto. Nesta escala a leitura de
+    gênero está na massa de cabelo ao lado e abaixo da face, não em nada acima
+    dela: um nó de 4 linhas no alto, ainda por cima cortado pela moldura do
+    retrato, não compensa maçã e maxilar nus.
+
+    Então o cabelo preso passa a enquadrar como o comprido, e continua se
+    distinguindo dele por duas coisas que sobrevivem à compressão: o nó com
+    estrangulamento no alto, e a AUSÊNCIA de queda no ombro — `_cabelo_comprido`
+    depende de `comprimento_cabelo`, que no cabelo preso é zero. Penteado
+    recolhido, não solto.
     """
+    if c.coque:
+        return H_ROSTO + 3
     if c.comprimento_cabelo:
         return H_ROSTO + 3
     if c.franja:
@@ -335,23 +359,77 @@ def _cabelo(g: Grade, c: Corpo, dy0: int) -> None:
     meia = volume // 2
     esq = EIXO - meia
 
-    # Calota em degraus de largura. Todas ímpares para a coroa cair no eixo.
-    degraus = (volume - 16, volume - 11, volume - 7, volume - 4, volume - 2, volume)
-    for i in range(Y_ROSTO + dy0):
-        idx = i - dy0
-        w = degraus[idx] if 0 <= idx < len(degraus) else volume
-        if idx < 0:
-            continue
-        g.linha_h(EIXO - max(3, w | 1) // 2, i, max(3, w | 1), c.cabelo)
+    if c.coque:
+        # CABELO PRESO. A calota começa 4 linhas mais abaixo e as de cima ficam
+        # para o nó. O espaço sai da CALOTA e não do busto, e isso foi medido:
+        # descer a cabeça inteira (que é o que `_deslocamento_da_cabeca` faria)
+        # deixaria 8 linhas de busto, e o busto precisa das 10 para caber gola,
+        # painel de colete e botoeira — retrato com busto amassado lê como cabeça
+        # decepada na caixa de diálogo.
+        inicio = 4 + dy0
+        for i in range(inicio, Y_ROSTO + dy0):
+            idx = i - inicio
+            degraus = (volume - 12, volume - 6, volume - 2, volume)
+            w = degraus[idx] if idx < len(degraus) else volume
+            w = max(3, w | 1)
+            g.linha_h(EIXO - w // 2, i, w, c.cabelo)
+        # O NÓ, E O ESTRANGULAMENTO QUE O FAZ LER COMO NÓ.
+        #
+        # Segunda tentativa registrada, porque a primeira falhou olhando: um nó
+        # de 3 linhas em cima de uma calota comprimida saiu como cabelo ALTO, e
+        # o retrato continuou lendo como homem. Massa larga em cima de massa
+        # larga é uma cúpula só, por mais linhas que se empilhe.
+        #
+        # O que faz um coque ser um coque é a CINTURA: nó largo, pinça estreita,
+        # cabeça larga. A pinça (7px contra os 11 do nó e os 11 do alto da
+        # calota) é o pixel que importa; sem ela o resto é decoração. Off-axis
+        # em EIXO+1 porque simetria perfeita lê como manequim (bíblia §9).
+        for dy, w in enumerate((11, 13, 11, 7)):
+            g.linha_h(EIXO + 1 - w // 2, dy0 + dy, w, c.cabelo)
+        g.segmento(EIXO - 2, dy0 + 1, c.luz_cabelo * 4)
+        g.ponto(EIXO - 3, dy0 + 2, c.luz_cabelo)
+        # A MECHA GRISALHA, em diagonal pela calota. Ela existe no sprite (onde
+        # `_cabeca` a desenha sempre) e tinha desaparecido aqui quando o ramo do
+        # cabelo preso passou a montar a própria calota: sobravam dois pixels no
+        # nó, e dois pixels não leem como mecha. Quatro de largura por quatro
+        # linhas, derivando 1px por linha, dentro das larguras da calota
+        # comprimida — é o traço que diz senioridade sem rótulo, e é o único
+        # lugar de `U` claro na figura toda.
+        for i in range(4):
+            g.segmento(esq + 3 + i, inicio + 1 + i, c.luz_cabelo * 4)
+    else:
+        # Calota em degraus de largura. Todas ímpares para a coroa cair no eixo.
+        degraus = (volume - 16, volume - 11, volume - 7, volume - 4, volume - 2, volume)
+        for i in range(Y_ROSTO + dy0):
+            idx = i - dy0
+            w = degraus[idx] if 0 <= idx < len(degraus) else volume
+            if idx < 0:
+                continue
+            g.linha_h(EIXO - max(3, w | 1) // 2, i, max(3, w | 1), c.cabelo)
 
-    # Mecha clara descendo em degrau, FORA do centro. Assimetria de 1px mata a
-    # cara de manequim, e na Cláudia esta mecha é grisalha (`U`) — é o traço dela.
-    for i, (dx, w) in enumerate(((2, 5), (3, 5), (4, 4), (5, 3))):
-        g.segmento(esq + dx, dy0 + 2 + i, c.luz_cabelo * w)
+        # Mecha clara descendo em degrau, FORA do centro. Assimetria de 1px mata
+        # a cara de manequim. Não entra no cabelo preso: as linhas em que ela
+        # cairia são o nó, e uma mecha na largura da calota CHEIA ficaria fora da
+        # calota comprimida — pixel solto no vazio, que `contornar()` fecharia
+        # como segunda silhueta. No cabelo preso a mecha vive no nó e na linha do
+        # cabelo (ver `_franja`), que é onde o retrato a mostra melhor.
+        for i, (dx, w) in enumerate(((2, 5), (3, 5), (4, 4), (5, 3))):
+            g.segmento(esq + dx, dy0 + 2 + i, c.luz_cabelo * w)
 
-    # moldura de cabelo atrás do rosto, até onde a classe de cabelo alcança
+    # Moldura de cabelo atrás do rosto, até onde a classe de cabelo alcança.
+    #
+    # AFUNILA quando o cabelo é curto, e isso conserta um defeito visto na folha:
+    # o Rafael tem o maior volume do elenco (29px contra os 19 do rosto) e a
+    # massa descia RETA por 9 linhas, o que desenhava um chanel arredondado — o
+    # retrato dele lia mais feminino que o da Cláudia, que lia como homem. Massa
+    # reta e larga é a silhueta de corte reto; volume no alto com lateral
+    # afunilada é a silhueta de topete, que é o que o sprite dele tem. Cabelo
+    # comprido NÃO afunila: ali a massa enquadra o rosto de propósito.
+    afunilar = c.franja and not c.comprimento_cabelo
     for i in range(_alcance_do_cabelo(c)):
-        g.linha_h(esq, Y_ROSTO + dy0 + i, volume, c.cabelo)
+        w = max(L_ROSTO + 2, volume - 2 * (i // 2)) if afunilar else volume
+        w = max(3, w | 1)
+        g.linha_h(EIXO - w // 2, Y_ROSTO + dy0 + i, w, c.cabelo)
 
 
 def _franja(g: Grade, c: Corpo, dy0: int) -> None:
@@ -364,9 +442,27 @@ def _franja(g: Grade, c: Corpo, dy0: int) -> None:
     Em cabeça raspada a franja é substituída por um recuo de linha de cabelo em
     dither esparso: franja em cabelo raspado lê como mancha na testa (é o que o
     campo `franja` do sprite existe para evitar), mas testa sem NADA na linha do
-    cabelo lê como touca de borracha.
+    cabelo lê como touca de borracha. Em cabelo preso ela vira linha de cabelo
+    alta e varrida — ver o bloco de `coque` abaixo.
     """
     y = Y_ROSTO + dy0
+    if c.coque:
+        # Cabelo preso não cai na testa, mas a linha do cabelo NÃO pode ser uma
+        # barra reta: barra de 19px atravessando a testa foi a segunda coisa que
+        # fez este retrato ler como homem (franja de corte reto). Vira ARCO — a
+        # linha só na primeira fileira, e as TÊMPORAS descendo em degrau dos dois
+        # lados, deixando a testa livre no meio. É o cabelo penteado para trás.
+        #
+        # A mecha grisalha dela vive aqui, na têmpora esquerda: quatro pixels
+        # contíguos DENTRO da massa, nunca soltos — a 4x um pixel claro isolado
+        # sobre pele não lê como mecha, lê como sarda (defeito que este módulo
+        # já registra no rosto).
+        g.segmento(X_ROSTO, y, c.cabelo * L_ROSTO)
+        for dy, w in enumerate((4, 3, 2)):
+            g.segmento(X_ROSTO, y + 1 + dy, c.cabelo * w)
+            g.segmento(X_ROSTO + L_ROSTO - w, y + 1 + dy, c.cabelo * w)
+        g.segmento(X_ROSTO, y + 1, c.luz_cabelo * 4)
+        return
     if not c.franja:
         g.dither(X_ROSTO + 1, y, L_ROSTO - 2, 2, _PELES[c.pele][0], c.cabelo, "esparso")
         return
@@ -481,6 +577,20 @@ def _pescoco_e_busto(g: Grade, c: Corpo, dy0: int) -> None:
     cometido no antebraço do sprite (bíblia §10).
     """
     base, sombra, _ = _PELES[c.pele]
+    # O TRONCO manda no busto, inclusive em quem tem manga de outra cor.
+    #
+    # TENTATIVA DESCARTADA, e ela custou uma rodada de olhar: pintar o ombro na
+    # cor da MANGA e abrir um painel escuro no centro, que é como um colete se
+    # monta de fato. No retrato saiu CAMISA E GRAVATA — ombro claro com faixa
+    # escura vertical no meio é exatamente essa silhueta, e ela empurrou o
+    # retrato da Cláudia de volta para a leitura masculina que esta rodada
+    # existe para consertar.
+    #
+    # Num busto de dez linhas a manga não aparece: o que se vê é ombro e gola. O
+    # contraste manga/tronco do colete vive no SPRITE, onde o braço existe, e o
+    # retrato carrega a peça por cor e por gola — mais a botoeira clara que
+    # `_extra_claudia` desenha, que é clara sobre escuro e por isso lê como
+    # camisa aparecendo, não como gravata.
     luz, corpo, sombra_roupa = c.roupa
     y_ombro = Y_OMBRO + dy0
     larg_max = _largura_do_ombro(c)
@@ -617,19 +727,31 @@ def _extra_marcos(g: Grade, c: Corpo, dy0: int) -> None:
 
 
 def _extra_claudia(g: Grade, c: Corpo, dy0: int) -> None:
-    """Colarinho de blazer fechado e mais estruturado que o da Ana.
+    """Botoeira do colete: o traço que só cabe nesta escala.
 
-    Cláudia é líder e isso está na roupa, não num rótulo (bíblia §5.4): a gola
-    dela fecha alto e tem uma segunda dobra, contra o V aberto da Ana.
+    Cláudia é líder e isso está na roupa, não num rótulo (bíblia §5.4). O colete
+    em si já vem do `roupa_braco` dela, desenhado por `_pescoco_e_busto`; o que
+    falta aqui é a botoeira que o fecha, e é ela que separa colete de blazer num
+    busto de dez linhas.
+
+    DESCARTADO, e vale registrar porque era a solução óbvia: um brinco de 1x2
+    pendurado no lobo, como segundo sinal de gênero. Ele existiu e saiu quando o
+    cabelo preso passou a enquadrar o rosto todo (ver `_alcance_do_cabelo`) — com
+    a massa cobrindo a lateral da face, `_orelhas` não desenha mais a orelha, e
+    brinco sem orelha de onde pender é pixel solto no vazio, que a 4x lê como
+    defeito de alpha e não como jóia.
     """
-    _luz, corpo, sombra = c.roupa
+    claro, escuro_gola = c.gola
     y0 = Y_OMBRO + dy0
-    for i in range(4):
-        y = y0 + 1 + i
-        if y >= ALTURA:
-            break
-        g.linha_h(EIXO - 3 - i, y, 3, sombra)
-        g.linha_h(EIXO + 1 + i, y, 3, corpo)
+
+    # Botoeira: faixa de 3px da camisa entre as duas bordas do colete, embaixo
+    # do V da gola. Contígua, nunca pontos soltos, pelo mesmo motivo acima.
+    for dy in range(7, ALTURA - y0):
+        y = y0 + dy
+        g.linha_h(EIXO - 1, y, 3, claro)
+        g.ponto(EIXO + 1, y, escuro_gola)
+        g.ponto(EIXO - 2, y, CONTORNO)
+        g.ponto(EIXO + 2, y, CONTORNO)
 
 
 EXTRAS: dict[str, object] = {

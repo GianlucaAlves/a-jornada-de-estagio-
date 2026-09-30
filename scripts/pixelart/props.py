@@ -1093,6 +1093,40 @@ def _conteudo_tela(g: Grade, x: int, y: int, w: int, h: int, tipo: str) -> None:
                 g.linha_h(bx + larg_caixa, cy - 1, max(1, vao), brilho)
                 g.linha_h(bx + larg_caixa, cy, max(1, vao), claro)
         g.linha_h(x + 4, y + h - 3, w - 8, meio)
+    elif tipo == "processo":
+        # Painel de acompanhamento da linha: quatro etapas em fila e a TERCEIRA
+        # atrasada, com a fila acumulada embaixo dela. É o conteúdo que a fase 3
+        # inteira depende de a plateia ler, e ele repete em tela o que a esteira
+        # já diz em planta — redundância deliberada: quem não notou o gargalo na
+        # esteira nota no painel, e vice-versa.
+        #
+        # Âmbar e não VERMELHO na etapa lenta, de propósito. A linha de produção
+        # gasta o seu único acento vermelho na torre de sinalização em alerta
+        # (bíblia §3), e um segundo vermelho a 192px de distância dividiria o
+        # olho exatamente no ponto que a cena existe para apontar. Âmbar é a
+        # mesma linguagem da torre sem disputar com ela.
+        g.linha_h(x + 2, y + 1, w - 4, meio)
+        g.linha_h(x + 2, y + 2, (w - 4) // 2, claro)
+        cy = y + h // 2
+        larg_etapa = max(4, (w - 6) // 4 - 2)
+        passo = larg_etapa + 2
+        for i in range(4):
+            bx = x + 3 + i * passo
+            lenta = i == 2
+            corpo = LUZ[1] if lenta else VERDE[1]
+            borda = LUZ[4] if lenta else VERDE[4]
+            alto = 8 if lenta else 6
+            g.retangulo(bx, cy - alto // 2, larg_etapa, alto, corpo)
+            g.moldura(bx, cy - alto // 2, larg_etapa, alto, borda)
+            if i < 3:  # conector entre etapas
+                g.linha_h(bx + larg_etapa, cy, 2, claro)
+        for i in range(4):
+            # fila de peças esperando: barra comprida sob a etapa lenta contra
+            # três curtas. Comprimento é a informação; cor só reforça.
+            bx = x + 3 + i * passo
+            comp = larg_etapa if i == 2 else max(1, larg_etapa // 3)
+            g.linha_h(bx, y + h - 3, comp, LUZ[3] if i == 2 else meio)
+            g.linha_h(bx, y + h - 2, comp, LUZ[1] if i == 2 else fundo)
     elif tipo == "certificado":
         g.retangulo(x + 2, y + 2, w - 4, h - 4, "7")  # folha clara
         for i in range(3):
@@ -2326,18 +2360,36 @@ def claraboia(g: Grade, cx: int, y: int, largura: int, altura: int) -> None:
 def tapete(largura: int = 128, altura: int = 30) -> Grade:
     """Tapete de área, em trama de dois tons neutros com franja.
 
-    NEUTRO por obrigação técnica, não por gosto: `exportar_chao.py` lê madeira e
-    azul como móvel, e um tapete de madeira ou azul abriria um buraco no mapa de
-    chão exatamente no meio da faixa de caminhada — a figura não poderia pisar no
-    tapete. Neutro claro sobre carpete médio ainda lê como tapete, porque o que
-    define tapete nesta escala é a BORDA e a franja, não a cor.
+    ┌──────────────────────────────────────────────────────────────────────────┐
+    │ FORA DE CIRCULAÇÃO. Nenhuma cena chama esta função hoje, e o motivo é um │
+    │ defeito VISTO NA TELA — está escrito aqui porque a próxima pessoa que    │
+    │ pensar em pôr um tapete numa cena precisa saber por que este saiu.       │
+    │                                                                          │
+    │ Em `outra-area` o tapete ficava no miolo do piso (x 100..236, y 194..224)│
+    │ e o feedback do dono foi literal: *"há um retângulo claro pontilhado no  │
+    │ chão... não lê como tapete, lê como falha de render"*. E ele estava       │
+    │ certo — o defeito é estrutural, não de dosagem:                          │
+    │                                                                          │
+    │ 1. O tapete TEM DE ser neutro (madeira e azul são móvel para             │
+    │    `exportar_chao.py`, e um tapete de móvel proibiria pisar nele), e o   │
+    │    piso daquela cena também é neutro. Duas superfícies na mesma família, │
+    │    a 2 passos de distância, separadas só por uma moldura de 1px.         │
+    │ 2. Trama de dither `xadrez` num retângulo de 136x30 px a 4x é uma grade  │
+    │    regular de 544x120 px na tela — o olho lê padrão de erro, não tecido. │
+    │ 3. Não havia nada em cima dele. Tapete existe embaixo de móvel; tapete   │
+    │    sozinho no meio da sala não tem função e por isso não tem leitura.    │
+    │                                                                          │
+    │ O que substituiu: POSTO DE TRABALHO. O tapete estava ali para fazer o    │
+    │ miolo vazio parecer intencional, e o miolo deixou de ser vazio.          │
+    │                                                                          │
+    │ Se um dia voltar: embaixo de mobiliário, com pelo menos 3 passos de      │
+    │ rampa de diferença do piso, e nunca na faixa de caminhada.               │
+    └──────────────────────────────────────────────────────────────────────────┘
 
-    ERRO CORRIGIDO DEPOIS DE OLHAR: a primeira versão tinha campo `7` sobre um
-    piso que também tem banda `7`, e o tapete simplesmente NÃO APARECIA — era um
-    retângulo do mesmo valor do chão com uma linha em volta. Agora o campo é `8`
-    (o mais claro do neutro), a borda é dupla e escura (`5` por dentro, `4` por
-    fora) e a franja é de 2px. A separação passou a ser de dois passos de rampa,
-    que é o mínimo que sobrevive à compressão.
+    ERRO CORRIGIDO DEPOIS DE OLHAR (e que não bastou): a primeira versão tinha
+    campo `7` sobre um piso que também tem banda `7`, e o tapete simplesmente NÃO
+    APARECIA. Passou a campo `8` com borda dupla e franja de 2px — e aí passou a
+    aparecer como artefato, que é o defeito acima.
     """
     g = Grade(largura, altura)
     g.retangulo(0, 2, largura, altura - 4, "8")
@@ -2399,13 +2451,22 @@ def divisoria_acustica(largura: int = 74, altura: int = 20) -> Grade:
     return g
 
 
-def divisoria_de_gabinete(largura: int = 64, altura: int = 96) -> Grade:
+def divisoria_de_gabinete(largura: int = 64, altura: int = 96, *, tom_vidro: str = "6") -> Grade:
     """Divisória de piso a teto: rodapé de madeira e vidro jateado até o teto.
 
     A metade ALTA da mudança de divisória. Ela fecha uma sala de verdade, o que
     o Escritório não tem em nenhum ponto: lá tudo é aberto e de meia altura.
     Vidro jateado e não transparente porque vidro transparente pediria interior
     desenhado, e interior de sala fechada num vão de 64px vira sujeira.
+
+    `tom_vidro` EXISTE PARA CORTAR ÁREA CLARA, e foi acrescentado depois de
+    MEDIR a cena da fase 5. Com o vidro em `6`/`7` esta divisória é 118x75 px de
+    quase-branco parada logo acima do mobiliário, na metade esquerda da imagem —
+    e a banda em que ela vive (y 70..105) era a mais clara da cena depois da
+    parede alta, com 67% dos pixels em luma > 140. Ela não cobria a cabeça de
+    ninguém (a base de madeira dela é que fica na altura de cabeça, e é escura);
+    o problema era de ÁREA, não de silhueta. Em `4` o mesmo prop lê como sala
+    fechada SEM luz acesa, que é mais dramático e custa zero em geometria.
 
     ERRO CORRIGIDO DEPOIS DE OLHAR: a base de madeira ocupava um TERÇO da altura
     no tom médio da rampa, e no meio de uma parede clara ela saiu como um bloco
@@ -2416,6 +2477,9 @@ def divisoria_de_gabinete(largura: int = 64, altura: int = 96) -> Grade:
     """
     g = Grade(largura, altura)
     esc, med, _cla = tons_de_volume(MADEIRA)
+    vidro = tom_vidro
+    claro = mais_claro(vidro)
+    perfil = mais_escuro(vidro, 2)
     base = max(8, altura // 4)
     g.retangulo(0, altura - base, largura, base, esc)
     g.dither(1, altura - base + 1, largura - 2, base - 2, esc, mais_escuro(esc), "esparso")
@@ -2424,18 +2488,18 @@ def divisoria_de_gabinete(largura: int = 64, altura: int = 96) -> Grade:
     g.linha_h(0, altura - 1, largura, mais_escuro(esc))
     # vidro jateado: campo claro, sem reflexo diagonal. O reflexo é o que faz
     # vidro LIMPO, e aqui a intenção é o oposto.
-    g.retangulo(0, 0, largura, altura - base, "6")
-    g.dither(1, 1, largura - 2, altura - base - 2, "6", "7", "denso")
-    g.moldura(0, 0, largura, altura - base, "4")
-    g.linha_h(0, 0, largura, "7")
+    g.retangulo(0, 0, largura, altura - base, vidro)
+    g.dither(1, 1, largura - 2, altura - base - 2, vidro, claro, "denso")
+    g.moldura(0, 0, largura, altura - base, perfil)
+    g.linha_h(0, 0, largura, claro)
     for i in range(1, 3):
         px = round(i * largura / 3)
-        g.linha_v(px, 1, altura - base - 2, "4")
-        g.linha_v(px + 1, 1, altura - base - 2, "7")
+        g.linha_v(px, 1, altura - base - 2, perfil)
+        g.linha_v(px + 1, 1, altura - base - 2, claro)
     # travessa na altura do peito: divisória de vidro sem travessa lê como painel
-    g.linha_h(1, altura - base - 26, largura - 2, "4")
-    g.linha_h(1, altura - base - 25, largura - 2, "7")
-    g.linha_h(0, altura - base - 2, largura, "4")
+    g.linha_h(1, altura - base - 26, largura - 2, perfil)
+    g.linha_h(1, altura - base - 25, largura - 2, claro)
+    g.linha_h(0, altura - base - 2, largura, perfil)
     return g
 
 
@@ -2649,4 +2713,422 @@ def faixa_pendurada(largura: int = 240, altura: int = 16, cloth: str = AZUL) -> 
     for x in range(4, largura - 3, 9):
         g.ponto(x, altura - 1, cla)
         g.ponto(x + 1, altura - 1, med)
+    return g
+
+# ------------------------------------------ objetos interativos da v2.1
+#
+# POR QUE ESTES CINCO PROPS MORAM AQUI E NÃO EM `itens.py`
+# Item é o que entra no inventário e some da cena ao ser usado; objeto é
+# mobiliário clicável, e mobiliário é desta frente. Papel em cima de mesa,
+# atril de piso, plateia de primeiro plano e painel de parede são mobiliário.
+#
+# Os ids já estavam declarados em `src/assets/manifest.ts` antes de existir
+# arquivo — declarar o id antes do PNG é o fluxo normal deste repositório, não
+# gambiarra: a cadeia de fallback de `Imagem.tsx` cobre o vão.
+#
+# ESTES CINCO SÃO A EXCEÇÃO DA REGRA 4 DO TOPO DESTE ARQUIVO: quem os cola é
+# `cenarios._objeto()`, que passa por `contornar()`, porque é a silhueta fechada
+# que a aura de hover segue (bíblia §7.2).
+
+
+def caderno_aberto(largura: int = 36, altura: int = 22) -> Grade:
+    """Caderno de PAPEL aberto, com escrita à mão. NÃO é laptop.
+
+    Nasce de um defeito de RÓTULO, não de arte: o hotspot "Caderno dela" da
+    fase 5 era desenhado com `objeto-notebook-aberto`, e a plateia via um laptop
+    debaixo de uma etiqueta que dizia caderno. Arte emprestada que contradiz o
+    próprio rótulo é pior que placeholder, porque o placeholder confessa.
+
+    TRÊS COISAS FAZEM ISTO LER COMO PAPEL A 4x, e nenhuma delas é a cor:
+
+    1. **O vale central.** Duas páginas com uma dobra no meio, não um retângulo.
+       É a única silhueta que um laptop aberto não tem — laptop dobra para
+       CIMA, caderno dobra para BAIXO.
+    2. **A escrita irregular.** Filas de comprimento desigual, com recuo e uma
+       quebra na segunda metade de algumas. Fila regular lê como tela (é o que
+       `_conteudo_tela` usa de propósito para dizer "log"); fila torta lê como
+       letra. Nunca texto de verdade: a bíblia proíbe fonte pixelada no cenário.
+    3. **A espessura do bloco.** Duas filas de folha acumulada embaixo. Sem
+       elas o caderno lê como duas folhas soltas.
+
+    Zero ciano nesta arte, e isso é regra e não gosto: um pixel de `HIJLM` num
+    objeto de 160px devolve a leitura de tela que ela existe para tirar.
+    """
+    g = Grade(largura, altura)
+    meio = largura // 2
+    corpo = altura - 2  # as duas últimas filas são a espessura do bloco
+
+    # folha com leve perspectiva: a aresta de TRÁS é mais estreita, porque a
+    # plateia olha de cima-à-frente. Retângulo puro lê como adesivo na mesa.
+    for i in range(corpo):
+        t = i / max(1, corpo - 1)
+        recuo = max(0, round((1 - t) * largura * 0.09))
+        g.linha_h(recuo, i, largura - 2 * recuo, "8")
+        g.ponto(recuo, i, "7")
+        g.ponto(largura - 1 - recuo, i, "6")
+
+    # o vale central: é ele que diz caderno em vez de laptop
+    for i in range(corpo):
+        g.ponto(meio - 1, i, "7")
+        g.ponto(meio, i, "6")
+        g.ponto(meio + 1, i, "7")
+    for i in range(2, corpo - 1, 3):  # argolas atravessando o vale
+        g.ponto(meio - 2, i, "5")
+        g.ponto(meio, i, "8")
+        g.ponto(meio + 2, i, "5")
+
+    # título sublinhado na página da esquerda. A fase 5 diz que ela escreve
+    # "o que eu sei fazer hoje" em cima de uma página nova: o sublinhado é a
+    # única maneira de mostrar que existe um título sem escrever letra.
+    g.linha_h(3, 2, meio - 8, "3")
+    g.linha_h(3, 3, meio - 9, "5")
+
+    # escrita à mão: comprimento irregular, recuo alternado e quebra de linha
+    for pagina, x0 in ((0, 3), (1, meio + 3)):
+        util = meio - 6
+        for k in range(4):
+            y = 6 + k * 4 if pagina == 0 else 3 + k * 4
+            if y >= corpo - 2:
+                break
+            comp = max(3, util - 1 - ((k * 5 + pagina * 3) % max(2, util // 2)))
+            g.linha_h(x0 + (1 if k % 2 else 0), y, comp, "4")
+            if comp > 6:  # a linha não fecha reta: letra manuscrita nunca fecha
+                g.linha_h(x0 + 1, y + 1, max(2, comp // 3), "5")
+
+    g.linha_h(1, corpo, largura - 2, "6")  # espessura do bloco de folhas
+    g.linha_h(2, corpo + 1, largura - 4, "5")
+    return g
+
+
+def grade_impressa(largura: int = 42, altura: int = 28) -> Grade:
+    """Grade curricular IMPRESSA: folha com linhas e colunas. NÃO é tela.
+
+    Mesmo defeito de rótulo do `caderno_aberto`: "Grade do próximo semestre" era
+    desenhada com `objeto-monitor-ligado`, e o hotspot dizia grade enquanto a
+    tela mostrava um monitor.
+
+    O que separa folha de tela aqui é a AUSÊNCIA DE MOLDURA e a presença de
+    perspectiva: monitor tem carcaça em volta e fica de pé; folha tem aresta de
+    papel e deita na mesa. E o clipe no canto — silhueta que nenhuma tela tem.
+
+    Marca-texto em `LUZ` e não em ciano: duas células marcadas dizem que ELA
+    marcou, que é o gancho da fase (ela reconhece três matérias e nenhuma é o
+    que faz todo dia). Ciano devolveria a leitura de tela.
+    """
+    g = Grade(largura, altura)
+
+    # folha com perspectiva leve + aresta de papel na frente
+    for i in range(altura):
+        t = i / max(1, altura - 1)
+        recuo = max(0, round((1 - t) * largura * 0.07))
+        g.linha_h(recuo, i, largura - 2 * recuo, "8")
+        g.ponto(recuo, i, "7")
+        g.ponto(largura - 1 - recuo, i, "6")
+    g.linha_h(2, altura - 1, largura - 4, "5")
+
+    colunas, linhas_n = 5, 5
+    passo = (largura - 8) / colunas
+    passo_y = (altura - 10) / linhas_n
+
+    # cabeçalho: faixa escura com um rótulo por coluna. É o que faz a plateia
+    # ler TABELA em vez de folha pautada.
+    g.retangulo(3, 2, largura - 6, 4, "5")
+    g.linha_h(3, 2, largura - 6, "6")
+    for c in range(colunas):
+        g.linha_h(round(4 + c * passo), 4, max(2, round(passo) - 3), "8")
+
+    for l in range(linhas_n + 1):  # grade
+        g.linha_h(3, round(7 + l * passo_y), largura - 6, "6")
+    for c in range(colunas + 1):
+        g.linha_v(round(3 + c * passo), 7, round(linhas_n * passo_y), "6")
+
+    # células ocupadas, e duas delas marcadas a marca-texto
+    ocupadas = ((0, 0), (1, 2), (2, 1), (3, 3), (4, 0), (2, 4))
+    marcadas = ((1, 2), (3, 3))
+    for c, l in ocupadas:
+        x = round(4 + c * passo)
+        y = round(8 + l * passo_y)
+        w = max(2, round(passo) - 2)
+        h = max(2, round(passo_y) - 2)
+        cor = LUZ[3] if (c, l) in marcadas else "6"
+        g.retangulo(x, y, w, h, cor)
+        g.dither(x, y, w, h, cor, mais_claro(cor), "esparso")
+
+    # clipe de papel no canto, fora do centro: a silhueta que diz "impresso"
+    g.linha_v(largura - 9, 0, 6, "5")
+    g.linha_v(largura - 7, 1, 5, "6")
+    g.linha_h(largura - 9, 0, 3, "5")
+    g.linha_h(largura - 9, 6, 3, "4")
+    return g
+
+
+def atril(largura: int = 32, altura: int = 52) -> Grade:
+    """Atril de onde se apresenta: tampo inclinado, folha, painel e base.
+
+    Nasce do defeito mais caro da fase 4: o hotspot cujo rótulo é "Apresentar"
+    tinha como arte o CRACHÁ que ele concede — a recompensa fazendo papel do
+    gesto, flutuando no meio da mesa. Clicava-se num crachá e vinha silêncio.
+
+    DUAS COISAS FAZEM UM ATRIL LER COMO ATRIL E NÃO COMO ARMÁRIO ESTREITO:
+
+    1. **A inclinação do tampo.** Púlpito de topo reto é um armário. A aresta de
+       trás 3px mais alta que a da frente é o que dá a função.
+    2. **A folha em cima.** Sem ela o objeto é um pedestal. Com ela, alguém
+       acabou de subir ali com uma página na mão — que é exatamente o que a
+       fase 4 precisa mostrar.
+
+    A faixa de acento em `LUZ` no painel frontal é o que o faz pertencer a um
+    EVENTO em vez de a uma sala de aula. Não é o acento vermelho da cena: a
+    Sala de Reuniões gasta o vermelho na faixa do evento, e duas fontes de
+    vermelho na mesma imagem dividem o olho.
+
+    O microfone sai FORA do centro de propósito — simetria perfeita lê como
+    móvel de catálogo, e 1px de assimetria já mata isso (bíblia §9).
+    """
+    g = Grade(largura, altura)
+    esc, med, cla = tons_de_volume(AZUL)
+    y_tampo = 5
+    base_corpo = altura - 5
+
+    # microfone em gooseneck, saindo do lado direito
+    linha(g, largura - 10, y_tampo + 1, largura - 8, y_tampo - 2, "3")
+    linha(g, largura - 8, y_tampo - 2, largura - 6, y_tampo - 5, "4")
+    g.retangulo(largura - 7, 0, 3, 3, "2")
+    g.linha_h(largura - 7, 0, 3, "5")
+
+    # TAMPO INCLINADO, DESENHADO COLUNA POR COLUNA. Foi a correção de olhar o
+    # sprite: com o tampo montado por `linha_h` a aresta de cima saía HORIZONTAL
+    # e o objeto lia como pedestal (ou lixeira) com uma faixa laranja. A
+    # inclinação é a única coisa que diz "isto é superfície de leitura", e ela só
+    # existe se a aresta de trás estiver mais ALTA que a da frente — o que, numa
+    # grade de chars, se faz variando o y de início por coluna.
+    inclina = 4
+    for dx in range(largura):
+        topo = y_tampo + inclina - round(inclina * dx / max(1, largura - 1))
+        g.linha_v(dx, topo, 7, med)
+        g.ponto(dx, topo, cla)
+        g.ponto(dx, topo + 6, esc)
+    # a folha sobre o tampo, acompanhando a inclinação: é ela que faz do atril
+    # um atril e não um pedestal
+    for dx in range(5, largura - 9):
+        topo = y_tampo + inclina - round(inclina * dx / max(1, largura - 1))
+        g.linha_v(dx, topo + 1, 4, "8")
+        g.ponto(dx, topo + 1, "z")
+    for k in range(2):  # duas filas de "texto" na folha, de comprimentos desiguais
+        for dx in range(7, largura - 12 - k * 5):
+            topo = y_tampo + inclina - round(inclina * dx / max(1, largura - 1))
+            g.ponto(dx, topo + 2 + k, "5" if k == 0 else "6")
+    # lábio frontal do tampo: sem ele o tampo derrete no corpo
+    g.linha_h(1, y_tampo + inclina + 7, largura - 2, esc)
+
+    # corpo em trapézio: estreita para baixo, o que dá presença ao tampo
+    topo_corpo = y_tampo + inclina + 8
+    for i in range(topo_corpo, base_corpo):
+        t = (i - topo_corpo) / max(1, base_corpo - topo_corpo - 1)
+        recuo = round(3 * t)
+        g.linha_h(3 + recuo, i, largura - 6 - 2 * recuo, med)
+        g.ponto(3 + recuo, i, cla)
+        g.ponto(largura - 4 - recuo, i, esc)
+    g.dither(6, topo_corpo + 2, largura - 12, base_corpo - topo_corpo - 4, med, esc, "esparso")
+
+    # faixa de acento do evento no painel frontal
+    faixa_y = topo_corpo + (base_corpo - topo_corpo) // 3
+    g.retangulo(6, faixa_y, largura - 12, 6, LUZ[1])
+    g.linha_h(6, faixa_y, largura - 12, LUZ[3])
+    g.linha_h(6, faixa_y + 5, largura - 12, LUZ[0])
+    g.linha_h(8, faixa_y + 2, largura - 18, "8")
+    g.linha_h(8, faixa_y + 3, largura - 23, LUZ[4])
+
+    # base alargada: atril sem base cai, e a plateia sabe disso
+    g.retangulo(1, base_corpo, largura - 2, 3, mais_escuro(esc))
+    g.linha_h(1, base_corpo, largura - 2, esc)
+    g.retangulo(3, altura - 2, largura - 6, 2, mais_escuro(esc))
+    g.linha_h(4, altura - 2, largura - 8, esc)
+    return g
+
+
+def plateia(largura: int = 196, altura: int = 46, *, pessoas: int = 5) -> Grade:
+    """Plateia sentada de costas, para PRIMEIRO PLANO cortado pela borda.
+
+    Existe porque o texto de abertura da fase 4 promete *"a sala inteira é gente
+    apresentando"* e o cenário entregava uma sala vazia. Sala de evento sem
+    plateia não é sala de evento — é sala.
+
+    É plano de FRENTE, então é escura (bíblia §4.2) e cortada pela borda
+    inferior (§4.1). O que a faz ler apesar de escura é o REALCE DE ARESTA no
+    alto de cada cabeça e de cada ombro: a luz da sala vem de cima, então só o
+    topo pega luz, e é esse fio claro que desenha a silhueta. Escurecer sem
+    devolver aresta transforma primeiro plano em tarja preta — erro já cometido
+    e a razão de `_aresta_de_luz` existir em `cenarios.py`.
+
+    CINCO PESSOAS, NENHUMA IGUAL À OUTRA, e a variação é por SILHUETA antes de
+    cor (bíblia §5.4 aplicada a figurante): altura de cabeça desigual, volume de
+    cabelo diferente, largura de ombro diferente, e uma delas inclinada. Cinco
+    cabeças idênticas em fila leem como grade de pontos — é o mesmo defeito da
+    fachada do mapa e da cerca de rádios da linha de produção.
+
+    Os tons de pele percorrem as quatro famílias da paleta. Elenco de figurante
+    todo na mesma pele é a versão preguiçosa do mesmo NPC repintado, e aparece
+    tanto quanto no elenco nomeado.
+    """
+    g = Grade(largura, altura)
+    proximo = serie(20250514)
+    passo = largura / pessoas
+    peles = ("S", "T", "k", "N", "l")
+    cabelos = ("P", "Q", "R", "U", "P")
+    roupas = (AZUL, NEUTRO[:5], MADEIRA[:4], AZUL, NEUTRO[:4])
+
+    for i in range(pessoas):
+        cx = round(passo * (i + 0.5)) + (proximo(3) - 1)
+        esc, med, cla = tons_de_volume(roupas[i % len(roupas)])
+        pele = peles[i % len(peles)]
+        cabelo = cabelos[i % len(cabelos)]
+        desce = proximo(4)  # cabeça mais alta ou mais baixa
+        r_cab = 6 + proximo(2)  # raio da cabeça
+        topo = 2 + desce
+        ombro_y = topo + r_cab * 2 + 2
+        meia = round(passo * 0.46) + proximo(3)
+
+        # ombros e costas, abrindo até a borda de baixo
+        for dy in range(ombro_y, altura):
+            t = (dy - ombro_y) / max(1, altura - ombro_y - 1)
+            w = max(2, round(meia * (0.42 + 0.58 * min(1.0, t * 1.9))))
+            g.linha_h(cx - w, dy, 2 * w + 1, med)
+            g.ponto(cx - w, dy, cla)
+            g.ponto(cx + w, dy, esc)
+        g.dither(cx - meia // 2, ombro_y + 4, meia, altura - ombro_y - 5, med, esc, "esparso")
+        # aresta de luz no ombro: sem ela a figura é uma mancha
+        w0 = max(2, round(meia * 0.42))
+        g.linha_h(cx - w0, ombro_y, 2 * w0 + 1, cla)
+
+        # nuca em tom de pele: 2px, e é o que separa cabeça de capuz
+        g.linha_h(cx - 2, ombro_y - 2, 5, pele)
+        g.linha_h(cx - 2, ombro_y - 1, 5, mais_escuro(pele))
+
+        # cabeça, com o cabelo cobrindo a parte de trás (é de costas)
+        _elipse(g, cx, topo + r_cab, r_cab, r_cab + 1, cabelo)
+        _elipse(g, cx - 1, topo + r_cab - 1, r_cab - 2, r_cab - 1, mais_claro(cabelo))
+        g.linha_h(cx - r_cab + 2, topo, 2 * r_cab - 3, mais_claro(cabelo, 2))
+        # orelha de um lado só: assimetria de 1px mata a cara de manequim
+        g.ponto(cx + r_cab - 1, topo + r_cab + 1, pele)
+        g.ponto(cx + r_cab - 1, topo + r_cab + 2, mais_escuro(pele))
+
+        # encosto do assento aparecendo entre as pessoas
+        if i < pessoas - 1:
+            bx = round(passo * (i + 1))
+            g.retangulo(bx - 3, altura - 14, 7, 14, esc)
+            g.linha_h(bx - 3, altura - 14, 7, med)
+    return g
+
+
+def fileira_de_assentos(
+    largura: int = 480,
+    altura: int = 54,
+    ramp: str = AZUL,
+    *,
+    assentos: int = 6,
+    saliencia: int = 10,
+    semente: int = 7,
+) -> Grade:
+    """Fila de assentos vista de trás, para primeiro plano cortado pela borda.
+
+    A vestimenta de evento que NÃO custa geometria de chão. A Sala de Reuniões
+    precisa ler como Innovation Week, e o caminho óbvio — totem, cavalete, mesa
+    de credenciamento — teria base no piso e invalidaria as coordenadas que
+    outra frente mediu contra a cena atual. Assento de primeiro plano vive
+    abaixo da faixa de caminhada, onde ninguém para.
+
+    ┌──────────────────────────────────────────────────────────────────────────┐
+    │ O BLOCO OPACO CONTÍNUO NÃO É PREGUIÇA, É REQUISITO DO MAPA DE CHÃO.      │
+    │                                                                          │
+    │ `exportar_chao.py` devolve, por coluna, a MAIOR corrida contígua de piso │
+    │ abaixo da junta parede-piso. Se esta fila tivesse qualquer vão entre     │
+    │ assentos, aquela coluna teria uma corrida de piso indo até a borda de    │
+    │ baixo da imagem — e na Sala de Reuniões essa corrida seria MAIOR que a   │
+    │ faixa real de caminhada (que ali tem 7 a 16 linhas, porque a mesa oval   │
+    │ cobre o miolo). O mapa passaria a dizer que a figura anda no primeiro    │
+    │ plano, `Cena.chao.test.ts` concordaria, e três paradas da fase 4         │
+    │ reprovariam sem que nada visual tivesse mudado.                          │
+    │                                                                          │
+    │ Daí o desenho: de `saliencia` para baixo é opaco em TODA a largura, e as │
+    │ únicas colunas vazadas ficam nas `saliencia` filas de cima, onde os      │
+    │ encostos sobem. E a rampa é AZUL porque neutro seria lido como PISO pelo │
+    │ exportador — é o mesmo erro que aposentou `props.tapete`.                │
+    └──────────────────────────────────────────────────────────────────────────┘
+
+    Alturas, larguras e centros desiguais por sorteio determinístico: seis
+    encostos idênticos em fila leem como grade de pontos, que é o defeito da
+    primeira fachada do mapa e da primeira fila de rádios da linha de produção.
+    """
+    g = Grade(largura, altura)
+    esc, med, cla = tons_de_volume(ramp)
+    proximo = serie(semente)
+
+    # a fila de TRÁS: bloco opaco, mais escuro, ditherizado. É contra ela que os
+    # encostos da frente recortam, e é ela que fecha todas as colunas.
+    g.retangulo(0, saliencia, largura, altura - saliencia, esc)
+    g.dither(0, saliencia, largura, altura - saliencia, esc, mais_escuro(esc), "esparso")
+
+    passo = largura / assentos
+    for i in range(assentos):
+        w = max(14, round(passo) - 6 - proximo(7))
+        sobe = proximo(saliencia + 1)  # quanto o encosto passa da linha de corte
+        topo = saliencia - sobe
+        cx = round(passo * (i + 0.5)) + (proximo(7) - 3)
+        x = cx - w // 2
+        alto = altura - topo
+        g.retangulo(x, topo + 2, w, alto - 2, med)
+        g.dither(x + 1, topo + 3, w - 2, alto - 5, med, esc, "xadrez")
+        for k in range(3):  # topo arredondado: encosto de canto reto lê como caixa
+            g.linha_h(x + k * 2, topo + 2 - k // 2, w - k * 4, med if k else cla)
+        g.linha_h(x + 2, topo + 2, w - 4, cla)
+        g.linha_v(x, topo + 3, alto - 3, cla)
+        g.linha_v(x + w - 1, topo + 3, alto - 3, esc)
+        for px in (x + 4, x + w - 6):  # costura do estofado
+            g.linha_v(px, topo + 5, alto - 8, esc)
+            g.linha_v(px + 1, topo + 5, alto - 8, cla)
+    return g
+
+
+def painel_de_processo(largura: int = 44, altura: int = 32) -> Grade:
+    """Painel de acompanhamento da linha: caixa industrial + tela de etapas.
+
+    ┌──────────────────────────────────────────────────────────────────────────┐
+    │ ACHADO, NÃO ESCOPO. `objeto-painel-processo` está declarado em          │
+    │ `src/assets/manifest.ts` e é usado por `bloco3.ts` (192x144 px de tela), │
+    │ mas `cenarios._objetos()` nunca o gerava e não existe arte vetorial de  │
+    │ objeto em `src/arte/` — ou seja, o hotspot da Linha de Produção caía no  │
+    │ PLACEHOLDER geométrico rotulado, silenciosamente, porque a cadeia de     │
+    │ fallback de `Imagem.tsx` nunca quebra. Está relatado.                    │
+    └──────────────────────────────────────────────────────────────────────────┘
+
+    Caixa antes de tela: o que separa painel industrial de televisão é a
+    proporção (muito corpo, pouca janela), a botoeira ao lado e a etiqueta
+    embaixo. Mesma lição que `celula_de_processo` já pagou — com o visor
+    ocupando a peça inteira, três cabines em fila liam como parede de monitores.
+    """
+    g = Grade(largura, altura)
+    esc, med, cla = tons_de_volume(AZUL)
+    g.retangulo(0, 0, largura, altura, med)
+    _borda_de_volume(g, 0, 0, largura, altura, cla, esc)
+    g.dither(1, 1, largura - 2, altura - 2, med, mais_escuro(med), "esparso")
+
+    tela_w, tela_h = largura - 13, altura - 11
+    _conteudo_tela(g, 3, 3, tela_w, tela_h, "processo")
+    g.moldura(3, 3, tela_w, tela_h, esc)
+    g.linha_h(3, 3, tela_w, cla)
+
+    # botoeira à direita: três pilotos e um botão de parada
+    for i, tom in enumerate((VERDE[3], LUZ[3], TELA[3])):
+        g.ponto(largura - 6, 6 + i * 5, tom)
+        g.ponto(largura - 5, 6 + i * 5, mais_claro(tom))
+        g.linha_h(largura - 6, 7 + i * 5, 2, esc)
+    g.retangulo(largura - 8, altura - 11, 6, 5, esc)
+    g.linha_h(largura - 8, altura - 11, 6, cla)
+    g.retangulo(largura - 7, altura - 10, 4, 3, VERMELHO[2])
+
+    # etiqueta de identificação: papel claro embaixo da tela
+    g.retangulo(3, altura - 6, tela_w, 3, "7")
+    g.linha_h(4, altura - 6, tela_w - 2, "8")
+    g.linha_h(4, altura - 4, tela_w - 4, "5")
     return g

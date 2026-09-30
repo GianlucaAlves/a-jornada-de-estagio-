@@ -126,6 +126,32 @@ export const MANIFEST: Record<string, string> = {
   'objeto-esteira': `${RAIZ}/objetos/esteira.png`,
   /** Painel de processo da linha: é nele que a etapa lenta fica visível. */
   'objeto-painel-processo': `${RAIZ}/objetos/painel-processo.png`,
+
+  // ------------------------------------------------- refinamento da v2.1
+  // Estes quatro nascem de defeitos vistos NA TELA, não de escopo novo.
+  //
+  // A fase 5 emprestava arte que contradizia o próprio rótulo: "Caderno dela"
+  // era desenhado com `objeto-notebook-aberto` (um laptop) e "Grade do próximo
+  // semestre" com `objeto-monitor-ligado` (um monitor). O conteúdo falava de
+  // papel e de grade curricular; a tela mostrava dois equipamentos, e a cena
+  // deixava de fazer sentido.
+  /** Caderno de PAPEL, aberto, com escrita à mão. Não é laptop. */
+  'objeto-caderno': `${RAIZ}/objetos/caderno.png`,
+  /** Grade curricular impressa: folha com linhas e colunas, não tela. */
+  'objeto-grade-curricular': `${RAIZ}/objetos/grade-curricular.png`,
+
+  // A fase 4 usava o CRACHÁ como botão da ação de apresentar — a recompensa
+  // fazendo papel do gesto. Quem assiste não entendia o que estava acontecendo,
+  // e o silêncio da PAUSA caía sem que nada tivesse sido mostrado antes.
+  /** Atril/púlpito: o lugar de onde se apresenta. É o gesto, não o prêmio. */
+  'objeto-atril': `${RAIZ}/objetos/atril.png`,
+  /**
+   * Plateia sentada, de costas, em primeiro plano. É o que faz a Sala de
+   * Reuniões ler como Innovation Week em vez de sala vazia — o texto de
+   * abertura promete "a sala inteira é gente apresentando" e o cenário
+   * entregava uma sala sem ninguém.
+   */
+  'objeto-plateia': `${RAIZ}/objetos/plateia.png`,
 };
 
 /** Caminho do asset, ou null quando não há entrada no manifest. */
