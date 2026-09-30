@@ -4,3 +4,7 @@ dist/
 *.local
 .DS_Store
 Thumbs.db
+
+# gerador de pixel art (Python)
+__pycache__/
+*.py[cod]

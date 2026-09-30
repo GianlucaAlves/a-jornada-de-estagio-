@@ -1,22 +1,30 @@
 /**
  * A protagonista.
  *
- * Sprite ÚNICO que desliza até o ponto alvo por transition de transform, com
- * bob/inclinação sutil por CSS enquanto se move. Decisões do spec:
+ * Desliza até o ponto alvo por transition de transform. Decisões do spec:
  *
- * - Sem frames de ciclo de caminhada: manter rosto e proporção consistentes
- *   entre frames é onde arte gerada por IA falha mais visivelmente. Trocar por
- *   sprite multi-frame depois é substituição de asset, sem mudar código.
  * - Sem pathfinding: linha reta até o ponto de parada do hotspot.
  * - Clicar de novo durante a caminhada TELEPORTA ao destino.
+ *
+ * O que MUDOU: o `jogo-bob` saiu. Ele balançava o sprite inteiro com rotação, e
+ * era literalmente a "folha de papel arrastando pelo cenário" que o dono do
+ * projeto apontou — nada dentro da figura mexia, então o olho lia um decalque
+ * sendo empurrado. No lugar entrou `SpriteAnimado`: tira de 2 quadros parada,
+ * tira de 4 quadros andando, e queda para uma respiração aproximada por CSS
+ * enquanto as tiras não existem (ver a bíblia §6.2 e §6.3).
+ *
+ * O tamanho vem de `arte.personagem`, que é a grade 50x84 da bíblia na escala
+ * única de 4x — 336px, 31% da altura. Os 520px anteriores eram 6x: a Ana ocupava
+ * 48% da tela e parecia boneco colado em maquete, e pior, NPC em cena na escala
+ * certa ao lado dela leria como dois jogos colados.
  */
 import { useEffect, useRef, useState } from 'react';
 import { NOME_PROTAGONISTA } from '../domain/types';
 import type { Ponto, SpriteId } from '../domain/types';
 import { assetDoSprite } from '../assets/manifest';
 import { useJogo } from '../store/jogo';
-import { CANVAS, camada, duracao, easing, limitarDuracao } from '../styles/tokens';
-import { Imagem } from './Imagem';
+import { CANVAS, arte, camada, easing, limitarDuracao } from '../styles/tokens';
+import { SpriteAnimado } from './SpriteAnimado';
 
 /**
  * Uma ordem de movimento. `seq` existe para que a mesma coordenada possa ser
@@ -53,8 +61,8 @@ export function Protagonista({
   comando,
   onChegar,
   sprite,
-  altura = 520,
-  largura = 260,
+  altura = arte.personagem.altura,
+  largura = arte.personagem.largura,
 }: PropsProtagonista): JSX.Element {
   const spriteDaStore = useJogo((s) => s.sprite);
   const spriteAtivo: SpriteId = sprite ?? spriteDaStore;
@@ -120,25 +128,15 @@ export function Protagonista({
         transition: `transform ${msTransicao}ms ${easing.suave}`,
       }}
     >
-      {/* O bob vive num nó interno: o transform de deslocamento fica livre. */}
-      <div
-        className={movendo ? 'jogo-bob' : undefined}
-        style={{
-          width: '100%',
-          height: '100%',
-          // Assentamento lento ao parar, na janela de animação do spec.
-          transition: `transform ${duracao.curta}ms ${easing.suave}`,
-        }}
-      >
-        <Imagem
-          id={assetDoSprite(spriteAtivo)}
-          rotulo={NOME_PROTAGONISTA}
-          largura={largura}
-          altura={altura}
-          forma="retangulo"
-          style={{ width: '100%', height: '100%' }}
-        />
-      </div>
+      {/* O ciclo de quadros vive num nó interno: o transform de deslocamento
+          fica livre, e a animação do sprite não briga com ele. */}
+      <SpriteAnimado
+        id={assetDoSprite(spriteAtivo)}
+        rotulo={NOME_PROTAGONISTA}
+        largura={largura}
+        altura={altura}
+        estado={movendo ? 'andando' : 'parado'}
+      />
     </div>
   );
 }

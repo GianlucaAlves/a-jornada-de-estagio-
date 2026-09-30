@@ -1,9 +1,31 @@
 # BLOCO 5 — A CHANCE APARECE
 
+> # ⚠️ ESTE ARQUIVO ESTÁ DESATUALIZADO, E O DESVIO É GRANDE
+>
+> **O corpo deste documento é o roteiro da v1, e ele descreve o CLÍMAX — que
+> migrou para a fase 6 (ADR-024).** A fase 5 da v2 é outra coisa inteira:
+> competências, faculdade e a pergunta "é esse o caminho?" (ADR-028), sem puzzle,
+> com o painel de skills como mecânica, e a volta da Bianca para falar de pivotar
+> (ADR-027).
+>
+> **Fonte de verdade da fase 5 hoje: `src/domain/content/bloco5.ts`**, cujo
+> cabeçalho carrega o desenho, a janela de coordenadas e os motivos. A cena
+> acontece em **Outra área da empresa** (ADR-031) — não no Escritório.
+>
+> Tudo daqui para baixo cita coisas que não existem mais: `laboratorio`,
+> `innovation` e `sala-treinamento` deixaram de ser lugares (ADR-009, ADR-026);
+> os itens `senha`, `indicacao-trilha` e `projeto-entregue` foram cortados
+> (ADR-014, ADR-017); "A vaga pede Arquitetura de Sistemas" trocou de eixo
+> (ADR-023); e o mapa tem cinco lugares, não seis.
+>
+> **Reescrever isto é trabalho da frente de escrita da fase 5 e da fase 6**, e
+> não foi feito aqui porque inventar roteiro seria inventar escopo. O banner
+> existe para que ninguém ensaie por este arquivo.
+
 **Temas:** efetivação x experiência + carreira em construção contínua + as 3 perguntas
-**Lugares:** Escritório → **Mapa**
+**Lugares:** ~~Escritório → Mapa~~ → hoje a fase 5 é **Outra área da empresa**; o mapa e a revelação são a fase 6
 **Sprite:** `ana-confiante` → `ana-futura`
-**Cartão:** **2 anos depois — A chance aparece**
+**Cartão:** ~~**2 anos depois — A chance aparece**~~ → hoje **2 anos depois — É esse o caminho?**
 **Tempo alvo:** 13 min
 
 > Objetivo do bloco é **reconhecimento, não surpresa**. A plateia pode já ter sacado — e se sacou, melhor. O alvo não é "não vi vindo", é *"claro, era isso o tempo todo"*.

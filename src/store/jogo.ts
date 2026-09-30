@@ -16,6 +16,7 @@ import type {
   BlocoId,
   Cena,
   DialogoAtivo,
+  DialogoId,
   Efeito,
   EstadoItem,
   EstadoLugar,
@@ -30,7 +31,7 @@ import type {
   Tela,
 } from '../domain/types';
 
-/** Estado da pausa dramática do Bloco 4 — requisito mecânico, não direção. */
+/** Estado da pausa dramática da fase 4 — requisito mecânico, não direção. */
 export type PausaBloco4 = 'inativa' | 'rodando' | 'concluida';
 
 export interface EstadoJogo {
@@ -45,8 +46,28 @@ export interface EstadoJogo {
   skills: SkillId[];
   puzzles: Record<PuzzleId, EstadoPuzzle>;
   puzzleAberto: PuzzleId | null;
+  /**
+   * Quantas vezes um puzzle foi ABERTO nesta sessão. Monótono.
+   *
+   * Existe para ser usado como `key` de React na tela de puzzle: sair reinicia o
+   * puzzle (ADR-011), e o progresso parcial mora em estado local do componente.
+   * Se o overlay permanecer montado por qualquer razão, o estado local
+   * sobreviveria à saída e a pessoa reencontraria metade do puzzle resolvido —
+   * que é pior que não poder sair. Trocar a `key` garante remontagem.
+   */
+  aberturasDePuzzle: number;
   hotspotsFeitos: HotspotId[];
   dialogoAtivo: DialogoAtivo | null;
+  /**
+   * Diálogos que já chegaram ao último nó.
+   *
+   * Existe porque diálogo pode ser RELIDO (ADR-016) e os efeitos de um diálogo
+   * NÃO podem valer duas vezes. Sem isto, reler uma conversa que concede item
+   * ressuscitaria um item já consumido, e reler a que inicia a PAUSA da fase 4
+   * reiniciaria o silêncio no meio da fala do apresentador. A releitura tem de
+   * repetir a FALA, não o efeito — quem relê quer a informação que perdeu.
+   */
+  dialogosConcluidos: DialogoId[];
   narracao: string | null;
   /** Mensagem genérica de falha. Uma só para todas as combinações erradas. */
   mensagemFalha: string | null;
@@ -58,7 +79,7 @@ export interface EstadoJogo {
     versaoFutura: boolean;
     perguntasVisiveis: number;
   };
-  /** Bloco atual sinalizou que terminou; o cartão pode entrar. */
+  /** Fase atual sinalizou que terminou; o cartão pode entrar. */
   blocoConcluido: boolean;
 }
 
@@ -69,6 +90,7 @@ export interface AcoesJogo {
   selecionarItem: (itemId: ItemId | null) => void;
   avancarDialogo: () => void;
   resolverPuzzle: (puzzleId: PuzzleId) => void;
+  fecharPuzzle: () => void;
   fecharNarracao: () => void;
   fecharMensagemFalha: () => void;
   concluirPausaBloco4: () => void;
@@ -78,6 +100,8 @@ export interface AcoesJogo {
   esvaziarBarra: () => void;
   mostrarVersaoFutura: () => void;
   avancarPergunta: () => void;
+  irParaTela: (tela: Tela) => void;
+  continuar: () => void;
   reiniciar: () => void;
 }
 
@@ -86,6 +110,9 @@ export type Jogo = EstadoJogo & AcoesJogo;
 const TODOS_LUGARES = Object.keys(LUGARES) as LugarId[];
 const TODOS_ITENS = Object.keys(ITENS) as ItemId[];
 const TODOS_PUZZLES = Object.keys(PUZZLES) as PuzzleId[];
+
+/** A última fase. Derivado de BLOCOS para que acrescentar fase não exija editar aqui. */
+const ULTIMO_BLOCO = Math.max(...Object.keys(BLOCOS).map(Number)) as BlocoId;
 
 function lugaresIniciais(): Record<LugarId, EstadoLugar> {
   const r = {} as Record<LugarId, EstadoLugar>;
@@ -108,6 +135,9 @@ function puzzlesIniciais(): Record<PuzzleId, EstadoPuzzle> {
 function estadoInicial(): EstadoJogo {
   return {
     bloco: 1,
+    // A abertura NÃO é o estado inicial da store: a escolha "Continuar" ou
+    // "Começar do início" é decisão da camada de tela, que sabe se há progresso
+    // salvo. Quem abre o jogo sem save nenhum não pode ver uma pergunta.
     tela: { tipo: 'cena', lugarId: 'escritorio' },
     lugares: { ...lugaresIniciais(), escritorio: 'destravado' },
     nomesRevelados: ['escritorio'],
@@ -116,8 +146,10 @@ function estadoInicial(): EstadoJogo {
     skills: [],
     puzzles: puzzlesIniciais(),
     puzzleAberto: null,
+    aberturasDePuzzle: 0,
     hotspotsFeitos: [],
     dialogoAtivo: null,
+    dialogosConcluidos: [],
     narracao: null,
     mensagemFalha: null,
     sprite: 'ana-encolhida',
@@ -132,11 +164,181 @@ function estadoInicial(): EstadoJogo {
   };
 }
 
+// ------------------------------------------------------------ persistência
+
+/**
+ * PROGRESSO SALVO NO NAVEGADOR (ADR-018).
+ *
+ * Gravado a cada mudança, e recuperado só por ESCOLHA EXPLÍCITA na abertura. O
+ * pior defeito possível numa apresentação ao vivo é abrir o jogo e ele começar
+ * na fase 4 por causa de um save do ensaio de ontem: retomada silenciosa é
+ * rápida e indefensável.
+ *
+ * A VERSÃO É OBRIGATÓRIA. Um save da v1.1 no navegador de alguém tem
+ * `LugarId` e `ItemId` que não existem mais — `sala-treinamento`, `laboratorio`,
+ * `senha`. Restaurar isso encheria os Records de chaves fantasma e o mapa
+ * mostraria slots que não existem. Save de versão diferente é DESCARTADO em
+ * silêncio: avisar a pessoa sobre um formato interno não ajuda ninguém.
+ */
+const CHAVE_PROGRESSO = 'apresentacao-jogo/progresso';
+
+/** Sobe a cada mudança incompatível de formato. A v2 mudou lugares e itens. */
+const VERSAO_PROGRESSO = 2;
+
+interface ProgressoSalvo {
+  versao: number;
+  bloco: BlocoId;
+  tela: Tela;
+  lugares: Record<LugarId, EstadoLugar>;
+  nomesRevelados: LugarId[];
+  itens: Record<ItemId, EstadoItem>;
+  skills: SkillId[];
+  puzzles: Record<PuzzleId, EstadoPuzzle>;
+  /**
+   * Salvo junto, e não é luxo: `hotspotsFeitos` é o que sustenta todo gate
+   * `requerHotspotsFeitos` e todo `umaVezSo`. Sem ele, continuar rearmaria
+   * portas já abertas e a pessoa reencontraria hotspots que já tinha resolvido.
+   */
+  hotspotsFeitos: HotspotId[];
+  /**
+   * Salvo pelo mesmo motivo de `hotspotsFeitos`: sem ele, continuar faria um
+   * diálogo já visto reaplicar os efeitos dele na próxima releitura.
+   */
+  dialogosConcluidos: DialogoId[];
+  sprite: SpriteId;
+}
+
+/**
+ * Lido preguiçosamente, nunca capturado em variável de módulo: a suíte roda em
+ * ambiente `node`, onde `localStorage` não existe, e os testes de persistência
+ * instalam um armazenamento falso no `globalThis`. Capturar na carga do módulo
+ * tornaria isso impossível de testar sem jsdom.
+ */
+function armazenamento(): Storage | null {
+  try {
+    const alvo = (globalThis as { localStorage?: Storage }).localStorage;
+    return alvo ?? null;
+  } catch {
+    // Navegador com armazenamento bloqueado por política lança no ACESSO.
+    return null;
+  }
+}
+
+/**
+ * Telas que não se restauram.
+ *
+ * Cartão, revelação, perguntas e abertura são momentos com animação e estado
+ * próprio, e o estado da revelação de propósito NÃO é salvo — o clímax replica
+ * do começo, senão continuar cairia num quadro morto no meio de uma animação
+ * que ninguém pode retomar. O mapa é o ponto de retorno honesto: é de onde a
+ * pessoa escolhe para onde ir.
+ */
+function telaRestauravel(tela: Tela): Tela {
+  return tela.tipo === 'cena' || tela.tipo === 'mapa' ? tela : { tipo: 'mapa' };
+}
+
+function salvar(s: EstadoJogo): void {
+  const armazem = armazenamento();
+  if (!armazem) return;
+  const progresso: ProgressoSalvo = {
+    versao: VERSAO_PROGRESSO,
+    bloco: s.bloco,
+    tela: telaRestauravel(s.tela),
+    lugares: s.lugares,
+    nomesRevelados: s.nomesRevelados,
+    itens: s.itens,
+    skills: s.skills,
+    puzzles: s.puzzles,
+    hotspotsFeitos: s.hotspotsFeitos,
+    dialogosConcluidos: s.dialogosConcluidos,
+    sprite: s.sprite,
+  };
+  try {
+    armazem.setItem(CHAVE_PROGRESSO, JSON.stringify(progresso));
+  } catch {
+    // Cota cheia ou modo privado. Perder o save é aceitável; quebrar a
+    // apresentação por causa dele não é.
+  }
+}
+
+function apagarProgresso(): void {
+  const armazem = armazenamento();
+  if (!armazem) return;
+  try {
+    armazem.removeItem(CHAVE_PROGRESSO);
+  } catch {
+    // ver `salvar`
+  }
+}
+
+/** Lê e VALIDA o save. Qualquer suspeita devolve null e o save é ignorado. */
+function lerProgresso(): ProgressoSalvo | null {
+  const armazem = armazenamento();
+  if (!armazem) return null;
+  let bruto: string | null = null;
+  try {
+    bruto = armazem.getItem(CHAVE_PROGRESSO);
+  } catch {
+    return null;
+  }
+  if (bruto === null) return null;
+  try {
+    const dado = JSON.parse(bruto) as Partial<ProgressoSalvo> | null;
+    if (!dado || dado.versao !== VERSAO_PROGRESSO) return null;
+    if (!Object.prototype.hasOwnProperty.call(BLOCOS, String(dado.bloco))) return null;
+    // Os Records precisam ter exatamente as chaves de hoje: uma chave fantasma
+    // de uma versão anterior vazaria para o mapa e para a barra de itens.
+    if (!chavesBatem(dado.lugares, TODOS_LUGARES)) return null;
+    if (!chavesBatem(dado.itens, TODOS_ITENS)) return null;
+    if (!chavesBatem(dado.puzzles, TODOS_PUZZLES)) return null;
+    if (!Array.isArray(dado.skills) || !Array.isArray(dado.hotspotsFeitos)) return null;
+    if (!Array.isArray(dado.dialogosConcluidos)) return null;
+    if (!Array.isArray(dado.nomesRevelados)) return null;
+    if (!dado.tela || typeof dado.tela !== 'object') return null;
+    return dado as ProgressoSalvo;
+  } catch {
+    return null;
+  }
+}
+
+function chavesBatem(alvo: unknown, esperadas: readonly string[]): boolean {
+  if (!alvo || typeof alvo !== 'object') return false;
+  const chaves = Object.keys(alvo as Record<string, unknown>).sort();
+  const alvoEsperado = [...esperadas].sort();
+  return chaves.length === alvoEsperado.length && chaves.every((c, i) => c === alvoEsperado[i]);
+}
+
+/**
+ * Há progresso que valha a pena retomar?
+ *
+ * Não basta existir um save: o save é gravado a cada mudança, então ele existe
+ * desde o primeiro clique — e também existe logo depois de `reiniciar()`. Se
+ * "existe save" fosse a pergunta, a tela de abertura ofereceria "Continuar" para
+ * levar a pessoa de volta ao ponto zero, o que é uma escolha sem sentido.
+ * A pergunta certa é se ALGO ACONTECEU.
+ */
+export function progressoSalvo(): { bloco: BlocoId } | null {
+  const salvo = lerProgresso();
+  if (!salvo) return null;
+  const algoAconteceu =
+    salvo.bloco > 1 ||
+    salvo.skills.length > 0 ||
+    salvo.hotspotsFeitos.length > 0 ||
+    salvo.dialogosConcluidos.length > 0 ||
+    TODOS_ITENS.some((id) => salvo.itens[id] !== 'ausente') ||
+    TODOS_PUZZLES.some((id) => salvo.puzzles[id] !== 'fechado');
+  return algoAconteceu ? { bloco: salvo.bloco } : null;
+}
+
+export function existeProgressoSalvo(): boolean {
+  return progressoSalvo() !== null;
+}
+
 /** Uma cena é um (lugar, bloco). Escritório é base recorrente. */
 export function acharCena(lugarId: LugarId, bloco: BlocoId): Cena | undefined {
   const exata = CENAS.find((c) => c.lugarId === lugarId && c.bloco === bloco);
   if (exata) return exata;
-  // Lugar de bloco anterior, revisitado em estado concluído.
+  // Lugar de fase anterior, revisitado em estado concluído.
   return [...CENAS].reverse().find((c) => c.lugarId === lugarId && c.bloco < bloco);
 }
 
@@ -154,9 +356,25 @@ export const useJogo = create<Jogo>((set, get) => {
           break;
 
         case 'abrirPuzzle':
+          /**
+           * NÃO REBAIXA PUZZLE JÁ RESOLVIDO (ADR-011).
+           *
+           * Antes isto escrevia 'liberado' sem olhar o estado atual, e era por
+           * isso que TODO hotspot que abre puzzle precisava ser `umaVezSo`:
+           * reclicar rebaixava um puzzle 'resolvido' e desarmava a porta
+           * seguinte. Com a correção, reabrir é seguro — e reabrir precisa ser
+           * seguro, porque o puzzle passou a ter botão de sair. Sem isto, o
+           * botão de sair órfãnaria hotspots para sempre: no `sequenciar` da
+           * versão anterior seriam cinco, e a fase nunca emitiria
+           * `blocoConcluido`.
+           */
           set((s) => ({
-            puzzles: { ...s.puzzles, [efeito.puzzleId]: 'liberado' },
+            puzzles:
+              s.puzzles[efeito.puzzleId] === 'resolvido'
+                ? s.puzzles
+                : { ...s.puzzles, [efeito.puzzleId]: 'liberado' },
             puzzleAberto: efeito.puzzleId,
+            aberturasDePuzzle: s.aberturasDePuzzle + 1,
           }));
           break;
 
@@ -255,7 +473,10 @@ export const useJogo = create<Jogo>((set, get) => {
       // Lugar concluído: linha de eco, sem puzzle e sem repetir diálogo.
       if (s.lugares[lugarId] === 'concluido' && cena) {
         set({ narracao: cena.ecoTexto });
-      } else if (cena?.aberturaTexto && !s.hotspotsFeitos.includes(`abertura:${lugarId}:${s.bloco}`)) {
+      } else if (
+        cena?.aberturaTexto &&
+        !s.hotspotsFeitos.includes(`abertura:${lugarId}:${s.bloco}`)
+      ) {
         set((st) => ({
           narracao: cena.aberturaTexto ?? null,
           hotspotsFeitos: [...st.hotspotsFeitos, `abertura:${lugarId}:${st.bloco}`],
@@ -269,8 +490,12 @@ export const useJogo = create<Jogo>((set, get) => {
      * Causa raiz: `clicarHotspot` marca o hotspot em `hotspotsFeitos` na hora,
      * mas os efeitos de um hotspot de diálogo só são aplicados no fim do
      * diálogo. Abandonar pelo meio abriria o gate seguinte SEM conceder a skill,
-     * e o bloco fecharia com o painel errado. Diálogo sempre termina por clique,
+     * e a fase fecharia com o painel errado. Diálogo sempre termina por clique,
      * então recusar nunca prende o apresentador.
+     *
+     * O puzzle tem saída própria (`fecharPuzzle`), que reinicia. Sair para o
+     * mapa com puzzle aberto continua recusado de propósito: seriam duas saídas
+     * com semânticas diferentes para o mesmo gesto.
      */
     voltarAoMapa: () => {
       const s = get();
@@ -288,8 +513,8 @@ export const useJogo = create<Jogo>((set, get) => {
       if (s.dialogoAtivo || s.puzzleAberto || s.pausaBloco4 === 'rodando') return;
       const cena = cenaAtual();
       const h = cena?.hotspots.find((x) => x.id === hotspotId);
-      if (!h) return;
-      if (s.lugares[cena!.lugarId] === 'concluido') return;
+      if (!h || !cena) return;
+      if (s.lugares[cena.lugarId] === 'concluido') return;
 
       const bloqueio = hotspotBloqueado(h);
       if (bloqueio !== null) {
@@ -325,6 +550,12 @@ export const useJogo = create<Jogo>((set, get) => {
     /**
      * Um clique = um nó. Diálogo é linear: não há estado intermediário para
      * esperar, então todo clique avança.
+     *
+     * Diálogo pode ser RELIDO (ADR-016): quem reclica no NPC vê a fala de novo,
+     * e isso acontece de graça aqui — o hotspot dispara `dialogo` outra vez e o
+     * índice volta a zero. Conserta uma classe de problema, não um caso: antes,
+     * qualquer fala perdida era perdida para sempre, e as pistas da senha só
+     * existem nas falas.
      */
     avancarDialogo: () => {
       const s = get();
@@ -334,20 +565,54 @@ export const useJogo = create<Jogo>((set, get) => {
 
       const proximo = s.dialogoAtivo.indice + 1;
       if (proximo >= dialogo.nos.length) {
-        // Efeitos do diálogo só valem no fim — ver o guard de `voltarAoMapa`.
-        set({ dialogoAtivo: null });
-        if (dialogo.efeitos) aplicar(dialogo.efeitos);
+        // Efeitos do diálogo só valem no fim — ver o guard de `voltarAoMapa` —
+        // e só na PRIMEIRA vez, para que reler a fala não repita o efeito.
+        const jaConcluido = s.dialogosConcluidos.includes(dialogo.id);
+        set((st) => ({
+          dialogoAtivo: null,
+          dialogosConcluidos: jaConcluido
+            ? st.dialogosConcluidos
+            : [...st.dialogosConcluidos, dialogo.id],
+        }));
+        if (!jaConcluido && dialogo.efeitos) aplicar(dialogo.efeitos);
         return;
       }
       set({ dialogoAtivo: { ...s.dialogoAtivo, indice: proximo } });
     },
 
+    /**
+     * Resolveu: marca 'resolvido' e fecha o overlay.
+     *
+     * Aceita ser chamado com o puzzle já 'resolvido' porque REABRIR é permitido:
+     * se isto exigisse 'liberado', resolver um puzzle reaberto não fecharia a
+     * tela e o apresentador ficaria preso no overlay. Só 'fechado' é ignorado —
+     * aí o puzzle não está em jogo.
+     */
     resolverPuzzle: (puzzleId) => {
-      const s = get();
-      if (s.puzzles[puzzleId] !== 'liberado') return;
+      if (get().puzzles[puzzleId] === 'fechado') return;
       set((st) => ({
         puzzles: { ...st.puzzles, [puzzleId]: 'resolvido' },
+        puzzleAberto: st.puzzleAberto === puzzleId ? null : st.puzzleAberto,
+      }));
+    },
+
+    /**
+     * SAIR DO PUZZLE (ADR-011). Fecha o overlay e reinicia o puzzle.
+     *
+     * O progresso parcial NÃO é preservado, e é isso que "reinicia" quer dizer:
+     * o que estava montado pela metade mora em estado local do componente, e
+     * `aberturasDePuzzle` muda para que a próxima abertura force remontagem.
+     *
+     * O estado do puzzle na store não é rebaixado: 'liberado' continua
+     * 'liberado' (pode reabrir) e 'resolvido' continua 'resolvido' (a porta
+     * seguinte não se desarma). Um `fecharPuzzle` que rebaixasse 'resolvido'
+     * seria a mesma classe de defeito que o ADR-011 veio consertar.
+     */
+    fecharPuzzle: () => {
+      if (!get().puzzleAberto) return;
+      set((st) => ({
         puzzleAberto: null,
+        aberturasDePuzzle: st.aberturasDePuzzle + 1,
       }));
     },
 
@@ -361,7 +626,7 @@ export const useJogo = create<Jogo>((set, get) => {
 
     avancarBloco: () => {
       const s = get();
-      if (s.bloco >= 5) return;
+      if (s.bloco >= ULTIMO_BLOCO) return;
       const proximo = (s.bloco + 1) as BlocoId;
       const cartao = CARTOES.find((c) => c.bloco === proximo);
       set({
@@ -375,8 +640,8 @@ export const useJogo = create<Jogo>((set, get) => {
     },
 
     /**
-     * Entra no bloco aplicando o estado que ele declara ter recebido.
-     * É o que torna cada bloco construível e ensaiável isoladamente.
+     * Entra na fase aplicando o estado que ela declara ter recebido.
+     * É o que torna cada fase construível e ensaiável isoladamente.
      */
     entrarNoBloco: (bloco) => {
       const def = BLOCOS[bloco];
@@ -454,9 +719,64 @@ export const useJogo = create<Jogo>((set, get) => {
       }));
     },
 
-    reiniciar: () => set(estadoInicial()),
+    /**
+     * Troca de tela sem efeito narrativo, para a camada de tela.
+     *
+     * Existe por causa da abertura: a tela de escolha precisa entrar e sair sem
+     * que isso signifique nada no grafo de conteúdo. Não substitui
+     * `entrarNoLugar` nem `voltarAoMapa`, que carregam regra.
+     */
+    irParaTela: (tela) => set({ tela }),
+
+    /**
+     * Retoma o progresso salvo. Só a tela de abertura chama isto, e só quando a
+     * pessoa escolhe "Continuar" — nunca automaticamente (ADR-018).
+     *
+     * O que não está no save volta ao inicial de propósito: diálogo pendente,
+     * puzzle aberto, narração e o estado da revelação. Retomar no meio de uma
+     * fala seria retomar num quadro que ninguém pode dispensar.
+     */
+    continuar: () => {
+      const salvoAgora = lerProgresso();
+      if (!salvoAgora) return;
+      set({
+        ...estadoInicial(),
+        bloco: salvoAgora.bloco,
+        tela: telaRestauravel(salvoAgora.tela),
+        lugares: { ...salvoAgora.lugares },
+        nomesRevelados: [...salvoAgora.nomesRevelados],
+        itens: { ...salvoAgora.itens },
+        skills: [...salvoAgora.skills],
+        puzzles: { ...salvoAgora.puzzles },
+        hotspotsFeitos: [...salvoAgora.hotspotsFeitos],
+        dialogosConcluidos: [...salvoAgora.dialogosConcluidos],
+        sprite: salvoAgora.sprite,
+      });
+    },
+
+    /**
+     * Começar do início. Era CÓDIGO MORTO: nenhum componente chamava
+     * `reiniciar()`. Passa a ser acionada pela tela de abertura, e é o caminho
+     * de reinício durante a apresentação — F5 leva à escolha.
+     *
+     * Apaga o save junto: "Começar do início" que deixa o save antigo no
+     * navegador é uma promessa quebrada no próximo F5.
+     */
+    reiniciar: () => {
+      apagarProgresso();
+      set(estadoInicial());
+    },
   };
 });
+
+/**
+ * Grava a cada mudança (ADR-018).
+ *
+ * Assinatura de módulo, não `middleware persist`: o que se salva é um
+ * SUBCONJUNTO escolhido do estado, com versão e com telas transitórias
+ * normalizadas, e isso é regra de domínio — não configuração de biblioteca.
+ */
+useJogo.subscribe(salvar);
 
 // ------------------------------------------------------------ seletores
 
@@ -486,6 +806,5 @@ export const seletores = {
 
   conexoesFeitas: (s: EstadoJogo) => CONEXOES.slice(0, s.revelacao.conexoesFeitas),
 
-  terminou: (s: EstadoJogo) =>
-    s.revelacao.perguntasVisiveis === PERGUNTAS_FINAIS.length,
+  terminou: (s: EstadoJogo) => s.revelacao.perguntasVisiveis === PERGUNTAS_FINAIS.length,
 };

@@ -1,0 +1,73 @@
+{
+  "name": "jogo",
+  "description": "Agente de desenvolvimento do apresentacao_jogo. Confiança total DENTRO do repositório: escrita liberada em ./**, toolchain do projeto liberada no shell. Nada fora do repositório é auto-aprovado.",
+  "prompt": "Você trabalha no repositório apresentacao_jogo: uma apresentação em formato de jogo point-and-click, React + Vite + TypeScript, com arte em pixel art gerada por script Python.\n\nLEIA AGENTS.md NA RAIZ ANTES DE QUALQUER COISA. Ele é o contrato do projeto e aponta para docs/biblia-de-arte.md, que é obrigatório para qualquer trabalho de arte ou de UI.\n\nRegras não negociáveis:\n- Escreva em português nos comentários, nomes de domínio e documentos.\n- Rode `npm run typecheck` e `npm test` antes de declarar qualquer trabalho pronto.\n- Toda arte gerada termina com a folha de contato renderizada E OLHADA.\n- Nunca escreva valor literal que já exista em src/styles/tokens.ts ou em scripts/pixelart/paleta.py.",
+  "tools": ["*"],
+  "allowedTools": [
+    "read",
+    "grep",
+    "glob",
+    "code",
+    "todo_list",
+    "introspect",
+    "knowledge",
+    "goal",
+    "subagent",
+    "@memory",
+    "@filesystem",
+    "@eds-mcp",
+    "@aseprite"
+  ],
+  "toolsSettings": {
+    "write": {
+      "allowedPaths": ["./**"]
+    },
+    "shell": {
+      "autoAllowReadonly": true,
+      "denyByDefault": false,
+      "allowedCommands": [
+        ".*npm\\s+(run|test|install|ci|ls|exec).*",
+        ".*npx\\s+.*",
+        ".*\\bnode\\b.*",
+        ".*\\bpython(\\.exe)?\\b.*",
+        ".*\\bpy\\b.*",
+        ".*\\.venv[\\\\/]Scripts[\\\\/]python\\.exe.*",
+        ".*\\buv(\\.exe)?\\b.*",
+        ".*\\btsc\\b.*",
+        ".*\\bvitest\\b.*",
+        ".*\\bvite\\b.*",
+        ".*git\\s+(status|diff|add|commit|log|branch|checkout|switch|restore|stash|show|rev-parse|ls-files|blame|remote|fetch|pull).*",
+        ".*\\b(dir|ls|type|cat|findstr|grep|where|echo|cd|pwd|head|tail|wc|sort)\\b.*",
+        ".*\\bmkdir\\b.*",
+        ".*apresentacao_jogo.*"
+      ],
+      "deniedCommands": [
+        ".*rm\\s+-rf\\s+[/~].*",
+        ".*\\bformat\\b\\s+[a-zA-Z]:.*",
+        ".*\\bshutdown\\b.*",
+        ".*\\bRestart-Computer\\b.*",
+        ".*\\bStop-Computer\\b.*",
+        ".*git\\s+push\\s+--force.*",
+        ".*git\\s+reset\\s+--hard.*",
+        ".*git\\s+clean\\s+-[a-zA-Z]*f.*",
+        ".*npm\\s+publish.*",
+        ".*\\breg\\s+(delete|add)\\b.*",
+        ".*rmdir\\s+/s.*[Ww]indows.*",
+        ".*Remove-Item.*-Recurse.*[Ww]indows.*",
+        ".*\\bnetsh\\b.*",
+        ".*\\bsc\\s+(delete|stop|config)\\b.*"
+      ]
+    },
+    "crew": {
+      "availableAgents": ["kiro_default", "kiro_planner", "kiro_guide"],
+      "trustedAgents": ["kiro_default", "kiro_planner", "kiro_guide"]
+    }
+  },
+  "resources": [
+    "file://AGENTS.md",
+    "file://docs/biblia-de-arte.md",
+    "file://src/styles/tokens.ts",
+    "file://src/domain/types.ts",
+    "skill://.kiro/skills/**/SKILL.md"
+  ]
+}

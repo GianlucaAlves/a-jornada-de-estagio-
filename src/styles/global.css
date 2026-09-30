@@ -53,6 +53,12 @@ img {
   /* Arte de personagem e item é PNG com fundo transparente. */
   -webkit-user-drag: none;
   user-select: none;
+  /* OBRIGATÓRIO para pixel art (bíblia §2.2): o canvas é escalado por fator
+     FRACIONÁRIO (min(vw/1920, vh/1080)). Sem isto o navegador interpola e a
+     arte inteira vira borrão. Com isto ele usa vizinho mais próximo e a grade
+     sobrevive — ao custo de alguns pixels 1 px real mais largos que outros,
+     que é um preço muito menor que o borrão. */
+  image-rendering: pixelated;
 }
 
 button {
@@ -174,23 +180,146 @@ button {
   animation: jogo-surgir 1000ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
 }
 
-/* Bob/inclinação sutil da protagonista enquanto desliza.
-   Não é ciclo de caminhada: é um único sprite balançando. */
-@keyframes jogo-bob {
-  0% {
-    transform: translateY(0) rotate(-1.5deg);
+/* ------------------------------------------------------- hotspot e aura */
+
+/* O hotspot É a arte: o botão não tem moldura nem fundo, e o que avisa que
+   ali existe interação é a aura. Antes disso cada hotspot era um retângulo
+   com o nome escrito dentro, e a arte do NPC não existia na tela. */
+.jogo-hotspot-arte {
+  /* `display: block` não é cosmético: quando a arte cai no placeholder SVG (ou
+     na arte vetorial), um elemento inline ganha o vão de linha de base embaixo.
+     Esse vão entra na altura da caixa, e a âncora de base — que posiciona por
+     `translateY(-100%)` — passa a assentar o objeto alguns px acima do piso. */
+  display: block;
+  image-rendering: pixelated;
+  /* Sombra de contato NÃO entra aqui: o PNG já vem com a dela (bíblia §4.4), e
+     somar as duas daria sombra dupla quando a arte chegar. */
+  transition: filter 600ms cubic-bezier(0.22, 0.61, 0.36, 1); /* duracao.curta */
+}
+
+/* Contorno pixel-perfeito seguindo o alpha do PNG: quatro drop-shadow
+   empilhados, 4px cada — exatamente 1 px de arte na escala 4x, então a aura
+   cai na grade. Um `outline` desenharia a caixa do sprite, não a silhueta.
+
+   Hover E foco, nunca só hover: quem navega por teclado precisa do mesmo
+   sinal. A cor vem de --aura, posta inline pelo componente (destaque para
+   "interagir com", ação para "usar item em"). */
+.jogo-hotspot:hover .jogo-hotspot-arte,
+.jogo-hotspot:focus-visible .jogo-hotspot-arte {
+  filter: drop-shadow(4px 0 0 var(--aura, #ffd43b)) drop-shadow(-4px 0 0 var(--aura, #ffd43b))
+    drop-shadow(0 4px 0 var(--aura, #ffd43b)) drop-shadow(0 -4px 0 var(--aura, #ffd43b));
+}
+
+/* O anel de foco padrão desenharia um retângulo em volta do sprite — de novo
+   a caixa que acabamos de tirar da tela. No hotspot o sinal de foco é a aura. */
+.jogo-hotspot:focus-visible {
+  outline: none;
+}
+
+/* ------------------------------------------------ animação de sprite
+
+   EXCEÇÃO REGISTRADA à janela 600-1200ms (bíblia §6.1): a janela vale para
+   transição e entrada de elemento. Taxa de quadro de sprite fica em 110-180ms,
+   porque ciclo de caminhada a 600ms por quadro não lê como caminhada, lê como
+   defeito. A duração exata vem inline, de `quadro` em tokens.ts. */
+
+.jogo-sprite {
+  background-repeat: no-repeat;
+  background-position-x: 0;
+  image-rendering: pixelated;
+  animation-timing-function: steps(2);
+  animation-iteration-count: infinite;
+}
+
+/* O deslocamento da tira é em PIXEL, não em porcentagem, e isso não é
+   preferência: em `background-position` a porcentagem resolve contra
+   (largura do elemento - largura da imagem), o que quebra de duas formas.
+
+   Sinal: com a imagem maior que a caixa, aquela diferença é NEGATIVA, então
+   porcentagem negativa empurra a imagem para a DIREITA, fora do elemento. Foi
+   isso que fez os NPCs piscarem — `-200%` tirava o sprite da tela na metade do
+   ciclo e a plateia via a figura sumir e voltar.
+
+   Escala: mesmo com o sinal certo, para uma tira de N quadros os quadros caem
+   em 0%, 100/(N-1)%, ... 100%. Com N=2, `steps(2)` de 0% a 100% entrega 0% e
+   50% — meio quadro. A conta em porcentagem só fecharia com (N-1) no
+   denominador, o que é frágil de ler e de manter.
+
+   Em pixel a conta é direta: a tira anda N * largura-do-quadro, e `steps(N)`
+   para exatamente em 0, -1W, -2W ... -(N-1)W. `--tira-fim` vem inline de
+   SpriteAnimado.tsx, que é quem conhece a largura do sprite. */
+@keyframes jogo-quadros {
+  from {
+    background-position-x: 0;
   }
-  50% {
-    transform: translateY(-14px) rotate(1.5deg);
-  }
-  100% {
-    transform: translateY(0) rotate(-1.5deg);
+  to {
+    background-position-x: var(--tira-fim, 0);
   }
 }
 
-.jogo-bob {
-  animation: jogo-bob 600ms cubic-bezier(0.22, 0.61, 0.36, 1) infinite;
-  transform-origin: 50% 100%;
+/* Tira de 2 quadros (respiração): cada quadro ocupa metade do ciclo. */
+.jogo-tira-2 {
+  animation-name: jogo-quadros;
+  animation-timing-function: steps(2);
+}
+
+/* Tira de 4 quadros (caminhada): contato, passagem, contato oposto, passagem. */
+.jogo-tira-4 {
+  animation-name: jogo-quadros;
+  animation-timing-function: steps(4);
+}
+
+/* Respiração de emergência, usada enquanto a tira de quadros não existe.
+   Sobe o sprite inteiro 1 px de arte (4px) em dois passos DUROS — sem
+   interpolação, porque pixel art deslizando meio pixel tremula. Não é o ombro
+   subindo (isso só a tira dá), mas já tira a cara de adesivo.
+
+   Os cortes em 49.9%/50% fazem o salto em vez de `steps()`: `steps(2)` com
+   dois keyframes devolveria metade do deslocamento, e `jump-none` ainda não é
+   seguro em todo navegador que pode rodar a apresentação. */
+@keyframes jogo-respirar {
+  0%,
+  49.9% {
+    transform: translateY(0);
+  }
+  50%,
+  100% {
+    transform: translateY(-4px);
+  }
+}
+
+.jogo-respira {
+  animation-name: jogo-respirar;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+/* Caminhada de emergência: quatro batidas, com ±2px de balanço lateral para
+   que passo esquerdo e direito não sejam o mesmo quadro repetido. Nenhuma
+   rotação: rotação é o que fazia o sprite parecer papel sendo arrastado. */
+@keyframes jogo-passo {
+  0%,
+  24.9% {
+    transform: translate(0, 0);
+  }
+  25%,
+  49.9% {
+    transform: translate(-2px, -4px);
+  }
+  50%,
+  74.9% {
+    transform: translate(0, 0);
+  }
+  75%,
+  100% {
+    transform: translate(2px, -4px);
+  }
+}
+
+.jogo-anda {
+  animation-name: jogo-passo;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
 }
 
 /* Pulso de atenção para o cursor de item selecionado. Amplo e lento. */
@@ -208,12 +337,23 @@ button {
   animation: jogo-pulso 1200ms cubic-bezier(0.22, 0.61, 0.36, 1) infinite;
 }
 
-/* Respeita quem desligou animação no sistema; a apresentação segue legível. */
+/* Respeita quem desligou animação no sistema; a apresentação segue legível.
+   Sprite animado também para: o primeiro quadro da tira é um sprite válido,
+   então parar não deixa buraco na cena. */
 @media (prefers-reduced-motion: reduce) {
   .jogo-aparecer,
   .jogo-surgir,
-  .jogo-bob,
-  .jogo-pulso {
+  .jogo-pulso,
+  .jogo-tira-2,
+  .jogo-tira-4,
+  .jogo-respira,
+  .jogo-anda {
     animation: none;
+  }
+
+  /* A aura continua: ela não é enfeite, é o único sinal de que o objeto
+     responde ao clique. */
+  .jogo-hotspot-arte {
+    transition: none;
   }
 }

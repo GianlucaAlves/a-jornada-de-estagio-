@@ -1,225 +1,171 @@
-# BLOCO 3 — PROATIVIDADE E OS PROJETOS INTERNOS
+# BLOCO 3 — SEM NINGUÉM PEDIR
 
-**Temas:** proatividade / protagonismo + projetos internos i9 / Innovation
-**Lugares:** Laboratório → Escritório *(entrega)* → Innovation
+**Tema:** protagonismo
+**Apresenta:** João
+**Laço:** Linha de Produção → Escritório *(ADR-021, ADR-025 — ver a nota no fim)*
 **Sprite:** `ana-neutra`
-**Cartão:** **6 meses depois — Proatividade**
-**Tempo alvo:** 11 min *(o bloco mais pesado — 3 cenas, 2 puzzles)*
+**Cartão:** **6 meses depois — Sem ninguém pedir**
+**Puzzle:** `estruturar`
+**Tempo alvo:** 9 min
+
+> Conteúdo tipado em `src/domain/content/bloco3.ts`. É a fase mais importante da
+> tese: é aqui que nasce a `proatividade`, a única skill que continua acesa no
+> clímax quando todo o resto se apaga.
 
 ---
-
-# CENA A — LABORATÓRIO
 
 ## Estado da cena
 
-Sala técnica. Racks, dois monitores grandes com log rolando, cadeira ruim. Luz fria e azulada — contraste com o Cafezinho. Tiago está lá.
+A fase acontece em **dois lugares**, e abre na Linha de Produção:
 
-**Hotspots:** Monitor do log · Tiago · Quadro branco
+| Lugar | Hotspots |
+|---|---|
+| **Linha de Produção** *(origem)* | Tiago · Números da linha · Relatório |
+| **Escritório** *(a ida)* | Cláudia |
 
----
+> ⚠️ Quem apresenta precisa saber que o mapa aparece no meio da fase: depois do
+> relatório, a Ana volta ao mapa e entra no Escritório. Não é travamento — é o
+> leva-e-traz da fase, e é o único momento em que a apresentação usa o mapa fora
+> de troca de fase.
 
 ## Abertura
 
 > *Seis meses. Ela tem tarefas de verdade agora. Nenhuma delas é essa.*
 
----
+Ao entrar no Escritório, mais tarde:
 
-## 1. Monitor do log — porta trancada
-
-Primeiro clique, **sem as anotações selecionadas**:
-
-> *Linhas e linhas de texto. Ana reconhece as palavras, não o que elas querem dizer juntas.*
->
-> **Ana:** Isso aqui não faz sentido nenhum.
-
-Nada acontece. É a porta do leva-e-traz.
-
-> 💡 **Gancho de fala:** *"Seis meses atrás ela olharia isso e fecharia a aba. Ela quase fecha."*
+> *Ela atravessou o prédio com três páginas na mão. A mesa é a mesma de seis meses atrás.*
 
 ---
 
-## 2. Tiago — o acesso
+## 1. Tiago (apoio operacional) — o acesso e a frase do bloco
 
-> **Tiago:** Esse erro aparece toda madrugada há oito meses. A gente reprocessa na mão e segue o jogo.
+> **Tiago:** Essa conferência é no papel desde antes de eu entrar. A gente digita
+> no fim do turno e segue o jogo.
 >
 > **Tiago:** *(dá de ombros)* **Entrou no orçamento da rotina.**
 >
-> **Ana:** E ninguém olha? Me libera o histórico completo.
+> **Ana:** E o turno da noite começa sem saber o que ficou pendente.
 >
-> **Tiago:** Pra quê? Ninguém pediu isso pra você.
+> **Tiago:** Começa. Ninguém pediu pra você olhar isso.
 >
 > **Ana:** **Ninguém pediu pra eu não olhar também.**
 >
-> **Tiago:** *(pausa, depois ri)* Tá liberado.
+> **Tiago:** *(pausa, depois ri)* Então olha.
 
-> 💡 **Gancho de fala:** *"'Entrou no orçamento da rotina'. Toda empresa tem uns cinco desses. Todo mundo sabe, ninguém olha, porque olhar não é tarefa de ninguém."* — **esse é o bloco inteiro em uma frase.** E repare que o Tiago não é vilão: ele é uma pessoa razoável protegendo o próprio dia. A pergunta que fica pra plateia é qual erro de madrugada existe no time dela agora.
-
----
-
-## 3. Usar as **Anotações do treinamento** no monitor
-
-**O elo.** O que ela estudou no Bloco 2 é literalmente o que abre a porta aqui.
-
-> *Ana abre o caderno na página de fluxo entre serviços. Olha o log, olha o caderno, olha o log de novo.*
->
-> **Ana:** Espera. Esses dois sistemas não deveriam estar conversando nessa ordem.
-
-**→ Libera o puzzle**
-
-> ⚠️ **Não comente o elo agora.** Se o apresentador disser "viu, o estudo dela serviu!", ele gasta aqui o efeito que o Bloco 5 precisa. Deixe a plateia sentir sozinha. No máximo: uma pausa.
+> 💡 **Gancho de fala:** *"'Entrou no orçamento da rotina'. Toda empresa tem uns
+> cinco desses. Todo mundo sabe, ninguém olha, porque olhar não é tarefa de
+> ninguém."* — **esse é o bloco inteiro em uma frase.** E repare que o Tiago não é
+> vilão: ele é uma pessoa razoável protegendo o próprio dia. A pergunta que fica
+> pra plateia é qual conferência no papel existe no time dela agora.
 
 ---
 
-## 4. PUZZLE — Sequenciar
+## 2. Números da linha — porta trancada
 
-**Mecânica:** 5 linhas de log embaralhadas. Arrastar pra ordem cronológica correta. Quando a ordem fecha, a causa fica óbvia sozinha — o puzzle não "revela" nada, a ordem revela.
+Sem as **Anotações do treinamento** selecionadas:
 
-**Linhas (embaralhadas na tela):**
+> *Os números da linha, do jeito que chegam: escritos à mão e digitados no fim do
+> turno. Ela já olhou isso três vezes esta semana.*
 
-- `03:14` — Fila reenvia o lote *(retry automático)*
-- `03:12` — Serviço de Faturamento envia o lote
-- `03:15` — Serviço de Cadastro processa o lote **duas vezes**
-- `03:12` — Fila de integração aceita o lote
-- `03:14` — Timeout na resposta do Serviço de Cadastro
+Nada acontece. É a porta do leva-e-traz.
 
-**Ordem correta:**
+Com as anotações: o caderno abre na página de como organizar o que se vê, e o
+puzzle libera. **As anotações são consumidas** — é a única porta que atravessa
+duas fases.
 
-```
-03:12  Faturamento envia o lote
-03:12  Fila aceita o lote
-03:14  Timeout na resposta do Cadastro
-03:14  Fila reenvia o lote (retry automático)
-03:15  Cadastro processa o lote duas vezes
-```
-
-Ao fechar a sequência, as duas últimas linhas acendem juntas:
-
-> *O Cadastro recebeu o lote. Demorou pra responder. A fila achou que tinha falhado e mandou de novo.*
->
-> **Ana:** Não falhou nenhuma vez. Funcionou duas.
-
-> 💡 **Gancho de fala:** ela não achou um bug difícil. Ela achou um bug que **ninguém tinha ordenado**. A informação estava ali há oito meses.
+> ⚠️ **Não comente o elo agora.** Se o apresentador disser "viu, o estudo dela
+> serviu!", gasta aqui o efeito que a fase 6 precisa. No máximo: uma pausa.
 
 ---
 
-## 5. Quadro branco — montar o Relatório
+## 3. PUZZLE `estruturar`
 
-> *Ana escreve cinco páginas num domingo à noite. Ninguém pediu, ninguém vai cobrar.*
->
-> **Ana:** *(pra si mesma)* E se ela achar que eu tô passando por cima de alguém?
+**Mecânica:** cinco trechos, três campos. **Dois trechos não entram em lugar
+nenhum** — o puzzle é sobre escolher, não sobre encaixar tudo.
 
-Fica no ar sem resposta.
+**Campos:** `Problema` · `Solução` · `Impacto`
+
+| Trecho | Vai para |
+|---|---|
+| "A conferência de cada lote é anotada no papel e só digitada no fim do turno." | **Problema** |
+| "Conferir direto na planilha compartilhada, no momento da conferência." | **Solução** |
+| "O turno seguinte começa sabendo o que ficou pendente, sem esperar a digitação." | **Impacto** |
+| "O processo é antigo e já era assim antes de eu entrar." | ✗ distrator |
+| "Ninguém tinha reclamado disso até agora." | ✗ distrator |
+
+Ao tentar colocar um distrator: *"Isso é verdade. Mas ninguém consegue fazer nada
+com isso."*
+
+> 💡 **Gancho de fala:** os dois trechos que não entram são **verdadeiros** — é
+> exatamente por isso que enganam. Reclamação bem pesquisada não é proposta. A
+> diferença entre as duas é se a pessoa do outro lado consegue **fazer algo** com o
+> que você escreveu.
+
+---
+
+## 4. Relatório — o momento mais importante da fase
+
+> *Três páginas num domingo à noite. Ninguém pediu, ninguém vai cobrar, e ela ainda
+> não sabe se vai entregar.*
 
 **→ Ganha: Relatório**
 **→ Ganha skill: Proatividade**
 
-> 💡 **Gancho de fala:** o medo do Bloco 1 não desapareceu — ele mudou de assunto. Antes era medo de perguntar; agora é medo de se expor. Ele vai mudar de assunto de novo no Bloco 4.
+> ⚠️ **A `proatividade` é concedida AQUI, na escrita, e não na entrega** — e a
+> distinção é a tese inteira. Se ela viesse do reconhecimento da Cláudia, a
+> mensagem seria "proatividade é o que alguém aplaude". Vinda daqui, ela é o que a
+> Ana fez quando ninguém estava olhando, num domingo, sem garantia nenhuma de
+> retorno.
+
+> 💡 **Gancho de fala:** o medo do Bloco 1 não desapareceu — ele mudou de assunto.
+> Antes era medo de perguntar; agora é medo de se expor, de parecer que está
+> passando por cima de alguém. Ele vai mudar de assunto de novo no Bloco 4. **A
+> frase que importa é "ela ainda não sabe se vai entregar":** escrever foi a parte
+> fácil.
 
 ---
 
-# CENA B — ESCRITÓRIO *(volta)*
+## 5. Cláudia — a entrega
 
-**Leva-e-traz de alcance curto.** O mapa não destrava nada novo: ela volta à própria mesa. Quem narra continua sendo o dono do Bloco 3.
+Sem o relatório na mão: *"Cláudia está entre duas reuniões. Chegar de mãos vazias
+não é conversa."*
 
-## Usar o **Relatório** na Cláudia
-
-Cláudia está na mesa dela. Diferente do Bloco 1: ela **para**.
+Com o relatório — e diferente do Bloco 1, ela **para**:
 
 > **Cláudia:** O que é isso?
 >
-> **Ana:** O erro da madrugada. Aquele que a gente reprocessa na mão.
+> **Ana:** A conferência da linha. Aquela que a gente digita no fim do turno.
 >
 > **Cláudia:** *(folheando)* Quem te pediu isso?
 >
 > **Ana:** Ninguém.
 >
-> **Cláudia:** O retry não é idempotente. Oito meses, e ninguém tinha pedido isso.
+> **Cláudia:** Seis meses fazendo na mão, e ninguém tinha parado pra escrever isso.
 >
 > **Cláudia:** **Guardei seu nome.**
 
-Ela volta pro monitor. A conversa acabou — o diálogo termina seco, sem despedida. Deixe o silêncio.
+Ela volta pro monitor. A conversa acaba seca, sem despedida. **Deixe o silêncio.**
 
 **→ Ganha skill: Protagonismo**
-**→ Destrava no mapa: Innovation**
+**→ Destrava no mapa: Sala de Reuniões**
 
-> 💡 **Gancho de fala:** *"Ela não foi promovida. Não ganhou bônus. Não teve aplauso. Ganhou quatro palavras de uma pessoa ocupada."* — e o apresentador deve deixar essas quatro palavras **no ar**, sem explicar. Elas voltam no Bloco 5. Se quiser reforço, só aponte o contraste: é a mesma Cláudia que no Bloco 1 não parou dois segundos.
-
----
-
-# CENA C — INNOVATION
-
-## Estado da cena
-
-Espaço aberto, post-its na parede, mesas redondas, gente em pé. Energia oposta à do Laboratório. Marcos circulando. **Rafael está no fundo** — a plateia precisa vê-lo aqui.
-
-**Hotspots:** Marcos · Mural de post-its · Rafael
-
----
-
-## 1. Marcos
-
-> **Marcos:** Você é a do relatório do retry!
->
-> **Ana:** *(desconcertada)* Como você...
->
-> **Marcos:** A Cláudia comentou numa reunião. Achar o problema é metade — você quer que alguém conserte?
->
-> **Ana:** Quero.
->
-> **Marcos:** Então você não precisa de um relatório. Precisa de uma **proposta**.
-
-> 💡 **Gancho de fala:** ele não está corrigindo ela — está mostrando o canal, e a frase dele para justo antes da parte que importa. **Relatório x proposta é diferença de destino, não de formato:** relatório vira anexo de e-mail, proposta entra em roadmap. Iniciativa sem estrutura morre na gaveta, e o **i9** existe exatamente pra transformar "eu notei uma coisa" em algo que alguém pode aprovar, orçar e executar.
-
----
-
-## 2. PUZZLE — Estruturar
-
-**Mecânica:** 5 fragmentos soltos, 3 campos. Dois fragmentos são **distratores** e não entram em lugar nenhum — o puzzle é sobre escolher, não sobre encaixar tudo.
-
-**Campos:** `Problema` · `Solução` · `Impacto`
-
-**Fragmentos:**
-
-| Fragmento | Vai para |
-|---|---|
-| "O reenvio automático da fila não verifica se o lote já foi processado." | **Problema** |
-| "Marcar cada lote com um identificador único e ignorar repetições." | **Solução** |
-| "Lotes duplicados geram cobrança em dobro para o cliente final." | **Impacto** |
-| "O sistema é antigo e precisava ser refeito." | ✗ distrator |
-| "Ninguém tinha notado isso antes." | ✗ distrator |
-
-Ao tentar colocar um distrator:
-
-> **Marcos:** Isso é verdade. Mas ninguém consegue fazer nada com isso.
-
-Ao completar:
-
-> **Marcos:** Pronto, agora é uma proposta. Antes era uma reclamação bem pesquisada.
-
-**→ Ganha: Crachá do Innovation** *(item tardio nº 3)*
-
----
-
-## 3. Rafael — reaparição 3
-
-> **Rafael:** Não acredito que você tá aqui.
->
-> **Ana:** Eu também não.
->
-> **Rafael:** *(aponta o crachá dela)* Guarda esse. Eu tenho os meus três.
-
-Terceira aparição dele. A plateia agora tem relação com o Rafael — é isso que faz a primeira conexão do Bloco 5 funcionar.
+> 💡 **Gancho de fala:** *"Ela não foi promovida. Não ganhou bônus. Não teve
+> aplauso. Ganhou quatro palavras de uma pessoa ocupada."* — e deixe essas quatro
+> palavras **no ar**, sem explicar. Elas voltam na fase 6, quando a mesma pessoa
+> disser que o nome da Ana apareceu em três lugares diferentes. Se quiser reforço,
+> só aponte o contraste: é a mesma Cláudia que no Bloco 1 não parou dois segundos.
 
 ---
 
 ## Fecho do bloco
 
-> *Ela entrou no Laboratório pra não olhar um erro.*
-> *Saiu com um relatório, uma proposta registrada, e um crachá de cordão torto.*
+> *Ninguém pediu pra ela olhar aquela etapa.*
+> *Ela saiu de lá com um relatório e com o nome dela dentro dele.*
 
-> 💡 **Gancho de fecho:** *"Liderança sem cargo é isso. Ela não mandou em ninguém. Ela só assumiu uma coisa que não era dela."*
+> 💡 **Gancho de fecho:** *"Liderança sem cargo é isso. Ela não mandou em ninguém.
+> Ela só assumiu uma coisa que não era de ninguém."*
 
-**→ Destrava no mapa: Sala de Reuniões**
 **→ Passa o bastão.** Cartão **"1 ano depois — Mostrar o que fez"**.
 
 ---
@@ -228,11 +174,38 @@ Terceira aparição dele. A plateia agora tem relação com o Rafael — é isso
 
 | Elemento | Status |
 |---|---|
-| Itens ganhos | Relatório *(consumido)*, Crachá do Innovation |
-| Item consumido | Anotações do treinamento *(no monitor)*, Relatório *(na Cláudia)* |
-| Skills ganhas | Proatividade, Protagonismo |
-| Lugares destravados | Innovation, Sala de Reuniões |
-| NPCs | Tiago, Cláudia, Marcos (novo), Rafael |
-| Puzzles | Sequenciar log (5 linhas) · Estruturar proposta (3 campos + 2 distratores) |
-| Leva-e-traz | Anotações (B2→B3) · Relatório (Laboratório→Escritório) |
-| Plantio | "Guardei seu nome" → Bloco 5 |
+| Itens ganhos | Relatório *(consumido na entrega)* |
+| Itens consumidos | Anotações do treinamento *(nos números)*, Relatório *(na Cláudia)* |
+| Skills ganhas | Proatividade, Protagonismo *(nesta ordem)* |
+| Lugar destravado | Sala de Reuniões |
+| NPCs | Tiago, Cláudia |
+| Puzzle | `estruturar` (3 campos + 2 distratores) |
+| Laço | Linha de Produção → Escritório; leva-e-traz da fase 2 para cá |
+
+---
+
+## ✅ A fase já acontece na Linha de Produção
+
+A pendência que este arquivo declarava caiu. O cenário `linha-producao` existe, o
+mapa de piso dele está em `docs/arte/chao.json`, `LUGARES_SEM_CENA_AINDA` está
+vazia, e `b3-tiago`, `b3-monitor` e `b3-relatorio` moram na Linha de Produção. A
+`b3-claudia` ficou no Escritório, que é a ida.
+
+Coordenadas remedidas contra a faixa de piso de lá e olhadas em
+`docs/arte/previa-b3-linha-producao.png`.
+
+### Duas coisas continuam abertas, e nenhuma é de conteúdo
+
+**1. O laço não fecha onde abriu.** O ADR-025 pede que a produção seja origem
+**e** destino. Como a Cláudia é a líder e recebe no Escritório, o último beat da
+fase cai lá. Fechar o laço de verdade exigiria mudar **quem** recebe o relatório
+— ou trazer a Cláudia até a linha — e isso é decisão de história, não de
+coordenada. Fica para quem escreve.
+
+**2. O painel de processo não tem arte.** `objeto-painel-processo` está no
+manifest, mas não existe PNG em `public/assets/objetos/` nem grade em
+`cenarios._objetos()`, que gera sete objetos e não inclui este. Até a frente de
+cenários desenhá-lo, o hotspot "Números da linha" cai na cadeia de fallback de
+`Imagem.tsx` e a plateia vê o placeholder rotulado. **É o único beat da fase sem
+arte** — quem ensaiar antes disso vai ver um retângulo com legenda onde deveria
+haver um painel.

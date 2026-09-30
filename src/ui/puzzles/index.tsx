@@ -7,6 +7,22 @@
  *
  * Os componentes recebem a definição já estreitada por prop — nenhum deles
  * carrega gabarito escrito em código.
+ *
+ * DUAS MUDANÇAS DA V2 VIVEM AQUI:
+ *
+ * 1. O RÓTULO ACESSÍVEL SAI DO CONTEÚDO. Havia um `Record` de rótulos escrito à
+ *    mão neste arquivo, e um deles era "Desafio: ordenar o log" — vocabulário de
+ *    tecnologia que a v2 expurgou (ADR-002), num lugar onde nenhuma revisão de
+ *    conteúdo ia olhar. Agora vem de `def.rotulo`, que é o mesmo texto que a
+ *    plateia lê no título. Duas fontes de verdade para o nome de um puzzle é uma
+ *    fonte a mais do que existe.
+ *
+ * 2. `aberturasDePuzzle` É A `key` DO CORPO. Sair reinicia o puzzle (ADR-011), e
+ *    o progresso parcial mora em estado local dos componentes. Sem trocar a
+ *    `key`, reabrir o mesmo puzzle reencontraria o React com a mesma árvore e o
+ *    estado local sobreviveria — a pessoa voltaria para metade do puzzle
+ *    resolvido, que é pior que não poder sair. A store já mantém o contador
+ *    monótono exatamente para isto.
  */
 import { PUZZLES } from '../../domain/content';
 import type { PuzzleDef } from '../../domain/types';
@@ -18,15 +34,6 @@ import { Estruturar } from './Estruturar';
 import { Montar } from './Montar';
 import { Senha } from './Senha';
 import { Sequenciar } from './Sequenciar';
-
-/** Rótulo acessível do diálogo modal, por mecânica. */
-const ROTULOS: Record<PuzzleDef['tipo'], string> = {
-  senha: 'Desafio: compor a senha',
-  associar: 'Desafio: ligar lacunas e trilhas',
-  sequenciar: 'Desafio: ordenar o log',
-  estruturar: 'Desafio: estruturar a proposta',
-  montar: 'Desafio: montar o diagrama da entrega',
-};
 
 function corpo(def: PuzzleDef): JSX.Element {
   switch (def.tipo) {
@@ -49,6 +56,7 @@ function corpo(def: PuzzleDef): JSX.Element {
 
 export function PuzzleAtivo(): JSX.Element | null {
   const puzzleAberto = useJogo((s) => s.puzzleAberto);
+  const aberturas = useJogo((s) => s.aberturasDePuzzle);
   if (puzzleAberto === null) return null;
 
   const def: PuzzleDef | undefined = PUZZLES[puzzleAberto];
@@ -58,7 +66,7 @@ export function PuzzleAtivo(): JSX.Element | null {
     <div
       role="dialog"
       aria-modal="true"
-      aria-label={ROTULOS[def.tipo]}
+      aria-label={`Desafio: ${def.rotulo}`}
       // O puzzle fica por cima de uma cena: clique aqui não é clique na cena.
       onClick={(evento) => evento.stopPropagation()}
       style={{
@@ -77,7 +85,8 @@ export function PuzzleAtivo(): JSX.Element | null {
         color: cores.texto,
       }}
     >
-      {corpo(def)}
+      {/* A key força remontagem a cada abertura: ver o item 2 do cabeçalho. */}
+      <div key={`${puzzleAberto}-${aberturas}`}>{corpo(def)}</div>
     </div>
   );
 }

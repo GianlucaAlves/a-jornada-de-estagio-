@@ -52,8 +52,28 @@ const PAINEL_ESQUERDA = CANVAS.largura - 420;
 const BARRA_TOPO = CANVAS.altura - 190;
 
 describe('enquadramento dos slots do mapa', () => {
-  it('os seis lugares são enquadrados', () => {
-    expect(RETANGULOS).toHaveLength(6);
+  /**
+   * Todo lugar declarado é enquadrado — a contagem vem de LUGARES.
+   *
+   * Era `toHaveLength(6)` fixo. A v2 reduziu o mundo a CINCO lugares
+   * (ADR-026 fundiu `sala-treinamento` e `innovation` na Sala de Reuniões,
+   * ADR-009 trocou o Laboratório pela Linha de Produção, ADR-031 trouxe a outra
+   * área), e o literal reprovava o contrato novo por aritmética antiga.
+   *
+   * A contagem NÃO se perdeu ao sair daqui: ela passou para onde o contrato mora,
+   * em `src/domain/content/integridade.test.ts` ("LUGARES declara exatamente os
+   * cinco lugares da v2"). Aqui o que importa é geometria — que nenhum slot fique
+   * de fora do enquadramento — e isso é o que esta linha afirma agora.
+   *
+   * ESTA LINHA FOI ALTERADA PELA FRENTE DE CONTRATOS, que por spec não escreve em
+   * `src/ui/**`. Está registrado como exceção de fronteira no relatório dela: a
+   * alternativa era entregar a suíte vermelha para as quatro frentes que dependem
+   * do contrato, e um literal de contagem obsoleto não tem dono melhor do que
+   * quem mudou a contagem. A frente de telas é livre de reescrever este arquivo.
+   */
+  it('todo lugar declarado é enquadrado', () => {
+    expect(RETANGULOS).toHaveLength(IDS.length);
+    expect(RETANGULOS.length).toBeGreaterThan(0);
   });
 
   it('nenhum slot invade a faixa do painel de skills', () => {

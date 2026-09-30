@@ -10,9 +10,47 @@
  */
 import { useEffect, useRef, useState } from 'react';
 import { CARTOES } from '../domain/content';
-import type { CartaoTransicao } from '../domain/types';
+import type { BlocoId, CartaoTransicao } from '../domain/types';
 import { useJogo } from '../store/jogo';
 import { CANVAS, camada, cores, espaco, tipografia } from '../styles/tokens';
+
+/**
+ * O que o cartão diz, por fase. Pura, e exportada para ser testável.
+ *
+ * A suíte roda sem navegador e o zustand serve o estado INICIAL ao renderizar
+ * fora dele — a tela inicial é uma cena, então um teste de markup nunca vê um
+ * cartão. Sem esta função, a única coisa nova do cartão na v2 (o nome de quem
+ * apresenta) não teria como ser provada.
+ */
+export interface TextosDoCartao {
+  tempo: string;
+  titulo: string;
+  /**
+   * Nome do humano que apresenta esta fase ao vivo (ADR-001). Vazio na fase 6 de
+   * propósito: ela é o fim, conduzido por quem estiver no palco, e inventar um
+   * sexto nome criaria uma pessoa que a apresentação não tem.
+   */
+  apresentador: string;
+  /** O que o leitor de telas ouve. Inclui o apresentador quando há um. */
+  rotuloAcessivel: string;
+}
+
+export function textosDoCartao(bloco: BlocoId): TextosDoCartao {
+  const cartao: CartaoTransicao | undefined = CARTOES.find((c) => c.bloco === bloco);
+  const tempo = cartao?.tempo ?? '';
+  const titulo = cartao?.titulo ?? '';
+  const apresentador = cartao?.apresentador ?? '';
+  const base = `Entrar no bloco ${bloco}: ${tempo} ${titulo}.`;
+  return {
+    tempo,
+    titulo,
+    apresentador,
+    rotuloAcessivel:
+      apresentador === ''
+        ? `${base} Clique para continuar`
+        : `${base} Apresenta ${apresentador}. Clique para continuar`,
+  };
+}
 
 /**
  * Trava de entrada da camada — mesmo conceito do `travar()` em Revelacao.tsx.
@@ -59,12 +97,26 @@ export function CartaoDeTransicao(): JSX.Element | null {
 
   const tempo = cartao?.tempo ?? '';
   const titulo = cartao?.titulo ?? '';
+  /**
+   * Nome do humano que apresenta esta fase ao vivo (ADR-001).
+   *
+   * O cartão é o ÚNICO lugar em que o jogo conhece os apresentadores, e é o que
+   * faz a passagem de bastão acontecer DENTRO do produto em vez de ser combinada
+   * fora dele. Vazio na fase 6 de propósito: ela é o fim, conduzido por quem
+   * estiver no palco, e inventar um sexto nome criaria uma pessoa que a
+   * apresentação não tem.
+   */
+  const apresentador = cartao?.apresentador ?? '';
 
   return (
     <button
       type="button"
       className="jogo-surgir"
-      aria-label={`Entrar no bloco ${bloco}: ${tempo} ${titulo}. Clique para continuar`}
+      aria-label={
+        apresentador === ''
+          ? `Entrar no bloco ${bloco}: ${tempo} ${titulo}. Clique para continuar`
+          : `Entrar no bloco ${bloco}: ${tempo} ${titulo}. Apresenta ${apresentador}. Clique para continuar`
+      }
       disabled={travado}
       onClick={() => {
         if (travado) return;
@@ -126,6 +178,28 @@ export function CartaoDeTransicao(): JSX.Element | null {
       >
         {titulo}
       </span>
+
+      {/*
+        O NOME DE QUEM APRESENTA. Fica abaixo do tema e acima do cue de clique,
+        na ordem em que a plateia precisa: quando, o quê, quem. Peso menor que o
+        tema de propósito — o cartão é marcador de capítulo, não crédito de
+        abertura, e o apresentador já vai estar falando.
+      */}
+      {apresentador === '' ? null : (
+        <span
+          aria-hidden
+          style={{
+            fontSize: tipografia.tamanhos.rotulo,
+            fontWeight: tipografia.pesos.forte,
+            lineHeight: tipografia.alturaLinha.compacta,
+            letterSpacing: tipografia.espacamento.largo,
+            color: cores.textoApoio,
+            textAlign: 'center',
+          }}
+        >
+          {`com ${apresentador}`}
+        </span>
+      )}
 
       <span
         aria-hidden

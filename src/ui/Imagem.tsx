@@ -57,7 +57,12 @@ export function Imagem({
   }, [id]);
 
   if (caminho === null || falhou) {
-    const arte = ArteDoAsset({ id, largura, altura, className });
+    /**
+     * `className` NÃO é repassado à arte vetorial: ele já vai no invólucro
+     * abaixo. Aplicar a mesma classe nos dois níveis dobrava o efeito — a
+     * respiração somava 8px em vez de 4, e a aura de hover virava aura de aura.
+     */
+    const arte = ArteDoAsset({ id, largura, altura });
     if (arte !== null) {
       return (
         <div

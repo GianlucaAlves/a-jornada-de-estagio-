@@ -1,27 +1,50 @@
 /**
- * Puzzle do Bloco 2 — associar pares.
+ * Puzzle da FASE 2 — ligar cada lacuna à trilha que fecha ela.
  *
- * Clique na esquerda, clique na direita: nasce uma linha grossa de alto
- * contraste. Par errado, a linha recua e nada acontece — sem mensagem, sem
- * punição, sem estado alterado.
+ * A MECÂNICA FICOU INTACTA (clique na esquerda, clique na direita, nasce uma
+ * linha grossa de alto contraste) porque ela está entre as quatro aprovadas. O
+ * que mudou é o que a auditoria mediu que faltava (spec 03 §3 e §4):
+ *
+ * - PAR ERRADO AVISA. Antes a linha recuava em SILÊNCIO: a tela voltava ao que
+ *   era e nada dizia por quê. Ao vivo isso faz o apresentador narrar o próprio
+ *   erro. Agora o recuo vem com `def.textoErro` na linha de aviso da moldura.
+ * - O CLIQUE MORTO MORREU. A coluna da direita fica `disabled` enquanto nada
+ *   está selecionado à esquerda, e o estilo antigo mantinha `cursor: pointer`
+ *   nela: quatro alvos com mão que não respondem, no estado INICIAL do puzzle —
+ *   o primeiro que a plateia vê. Agora a mão sai por `estiloDeAlvo`.
  *
  * Geometria fixa em px: as âncoras das linhas são calculadas por aritmética, e
  * não medidas do DOM. Medir depende do transform de escala do canvas e é
  * exatamente o tipo de coisa que quebra na projeção.
+ *
+ * A lógica é um redutor puro, exportado e provado por mutação
+ * (`AssociarPares.test.ts`).
  */
-import type { CSSProperties } from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useReducer, useRef, useState } from 'react';
 
 import type { PuzzleAssociar } from '../../domain/types';
 import { useJogo } from '../../store/jogo';
-import { borda, cores, duracao, easing, espaco, raio, tipografia } from '../../styles/tokens';
+import { cores, duracao, espaco } from '../../styles/tokens';
 
-const LARGURA_COLUNA = 560;
-const ALTURA_LINHA = 132;
+import {
+  ALTURA_CORPO,
+  type Aviso,
+  avisoDeAcerto,
+  avisoDeErro,
+  embaralharEstavel,
+  estiloCaixaClicavel,
+  LARGURA_UTIL,
+  MolduraDePuzzle,
+  progressoDe,
+} from './moldura';
+
+// ---------------------------------------------------------------- geometria
+
+const LARGURA_COLUNA = 640;
+const ALTURA_LINHA = 120;
 const ESPACO_LINHA = espaco.lg;
 const ESQUERDA_X = 0;
-const DIREITA_X = 1000;
-const LARGURA_AREA = DIREITA_X + LARGURA_COLUNA;
+const DIREITA_X = 1120;
 
 /** Grossa de propósito: linha fina desaparece na compressão do Teams. */
 const ESPESSURA = 8;
@@ -36,30 +59,101 @@ function centroDaLinha(indice: number): number {
   return indice * (ALTURA_LINHA + ESPACO_LINHA) + ALTURA_LINHA / 2;
 }
 
-/** Hash estável (FNV-1a). Sem Math.random: a ordem é a mesma no ensaio e no palco. */
-function hash(texto: string): number {
-  let h = 2166136261;
-  for (let i = 0; i < texto.length; i += 1) {
-    h ^= texto.charCodeAt(i);
-    h = Math.imul(h, 16777619);
-  }
-  return h >>> 0;
+export function geometriaDe(def: PuzzleAssociar): { largura: number; altura: number } {
+  const linhas = Math.max(1, def.esquerda.length, def.direita.length);
+  return {
+    largura: DIREITA_X + LARGURA_COLUNA,
+    altura: linhas * ALTURA_LINHA + (linhas - 1) * ESPACO_LINHA,
+  };
+}
+
+// ---------------------------------------------------------------- regras
+
+export interface EstadoAssociar {
+  /** id da esquerda -> id da direita, só os pares CERTOS. */
+  ligacoes: Readonly<Record<string, string>>;
+  selecionada: string | null;
+  /** Par errado em exibição, para a linha aparecer e recuar. */
+  erro: { esqId: string; dirId: string } | null;
+  aviso: Aviso;
+}
+
+export type AcaoAssociar =
+  | { tipo: 'clicarEsquerda'; id: string }
+  | { tipo: 'clicarDireita'; id: string }
+  | { tipo: 'recolherErro' };
+
+export function estadoInicialAssociar(): EstadoAssociar {
+  return { ligacoes: {}, selecionada: null, erro: null, aviso: null };
+}
+
+export function associarCompleto(def: PuzzleAssociar, estado: EstadoAssociar): boolean {
+  const total = Object.keys(def.gabarito).length;
+  return total > 0 && Object.keys(estado.ligacoes).length === total;
 }
 
 /**
- * Reordena a coluna da direita de forma determinística. Sem isso, um gabarito
- * escrito em paralelo viraria "ligue cada linha na da frente" e o puzzle
- * deixaria de ser um puzzle.
+ * O redutor.
+ *
+ * Enquanto `erro` não é recolhido, clique nenhum entra: a linha errada está
+ * atravessando a tela e aceitar outro clique em cima dela produziria duas linhas
+ * disputando a mesma âncora. É a única trava, e ela dura o tempo de leitura.
  */
-function ordenarDireita(direita: PuzzleAssociar['direita']): PuzzleAssociar['direita'] {
-  const ordenada = [...direita].sort((a, b) => hash(a.id) - hash(b.id));
-  const igual = ordenada.every((item, i) => item.id === direita[i]?.id);
-  const primeiro = ordenada[0];
-  if (igual && ordenada.length > 1 && primeiro) {
-    return [...ordenada.slice(1), primeiro];
+export function reduzirAssociar(
+  def: PuzzleAssociar,
+  estado: EstadoAssociar,
+  acao: AcaoAssociar,
+): EstadoAssociar {
+  switch (acao.tipo) {
+    case 'clicarEsquerda': {
+      if (estado.erro !== null) return estado;
+      if (estado.ligacoes[acao.id] !== undefined) return estado;
+      return {
+        ...estado,
+        selecionada: estado.selecionada === acao.id ? null : acao.id,
+        aviso: null,
+      };
+    }
+
+    case 'clicarDireita': {
+      if (estado.erro !== null) return estado;
+      const esqId = estado.selecionada;
+      if (esqId === null) return estado;
+      if (Object.values(estado.ligacoes).includes(acao.id)) return estado;
+
+      if (def.gabarito[esqId] !== acao.id) {
+        // O par errado: a linha nasce, o aviso aparece, e o componente agenda o
+        // recuo. Nada no estado de acerto muda — errar não custa progresso.
+        return {
+          ...estado,
+          erro: { esqId, dirId: acao.id },
+          aviso: avisoDeErro(def.textoErro),
+        };
+      }
+
+      const ligacoes = { ...estado.ligacoes, [esqId]: acao.id };
+      const completo = Object.keys(ligacoes).length === Object.keys(def.gabarito).length;
+      return {
+        ligacoes,
+        selecionada: null,
+        erro: null,
+        aviso: completo ? avisoDeAcerto() : null,
+      };
+    }
+
+    case 'recolherErro':
+      // O AVISO FICA. Só a linha recua: o texto some no próximo clique, porque
+      // quem errou precisa de tempo para ler, e a linha já disse o resto.
+      return estado.erro === null ? estado : { ...estado, erro: null, selecionada: null };
+
+    default: {
+      const naoTratado: never = acao;
+      return naoTratado;
+    }
   }
-  return ordenada;
 }
+
+// ---------------------------------------------------------------- traço
 
 interface Traco {
   x1: number;
@@ -83,7 +177,9 @@ function Linha({ traco, recuando }: { traco: Traco; recuando: boolean }): JSX.El
       y1={traco.y1}
       x2={traco.x2}
       y2={traco.y2}
-      stroke={cores.destaque}
+      // A linha errada é LARANJA e a certa é amarela. A cor chega antes do
+      // texto na compressão de vídeo: quem está no fundo da sala já sabe.
+      stroke={recuando ? cores.atencao : cores.destaque}
       strokeWidth={ESPESSURA}
       strokeLinecap="round"
       strokeDasharray={comprimento}
@@ -93,23 +189,27 @@ function Linha({ traco, recuando }: { traco: Traco; recuando: boolean }): JSX.El
   );
 }
 
+// ---------------------------------------------------------------- componente
+
 export interface AssociarParesProps {
   def: PuzzleAssociar;
 }
 
 export function AssociarPares({ def }: AssociarParesProps): JSX.Element {
   const resolverPuzzle = useJogo((s) => s.resolverPuzzle);
-  const [direita] = useState(() => ordenarDireita(def.direita));
-  const [selecionada, setSelecionada] = useState<string | null>(null);
-  const [ligacoes, setLigacoes] = useState<Record<string, string>>({});
-  const [erro, setErro] = useState<{ esqId: string; dirId: string; recuando: boolean } | null>(
-    null,
+  const [estado, despachar] = useReducer(
+    (atual: EstadoAssociar, acao: AcaoAssociar) => reduzirAssociar(def, atual, acao),
+    undefined,
+    estadoInicialAssociar,
   );
+  const [direita] = useState(() => embaralharEstavel(def.direita));
+  const [recuando, setRecuando] = useState(false);
   const temporizadores = useRef<number[]>([]);
 
   const total = Object.keys(def.gabarito).length;
-  const feitas = Object.keys(ligacoes).length;
-  const completo = total > 0 && feitas === total;
+  const feitas = Object.keys(estado.ligacoes).length;
+  const completo = associarCompleto(def, estado);
+  const geometria = geometriaDe(def);
 
   useEffect(
     () => () => {
@@ -124,36 +224,24 @@ export function AssociarPares({ def }: AssociarParesProps): JSX.Element {
     return () => window.clearTimeout(id);
   }, [completo, resolverPuzzle]);
 
-  function agendar(acao: () => void, atraso: number): void {
-    const id = window.setTimeout(acao, atraso);
-    temporizadores.current.push(id);
-  }
-
-  function clicarEsquerda(id: string): void {
-    if (erro || ligacoes[id]) return;
-    setSelecionada((atual) => (atual === id ? null : id));
-  }
-
-  function clicarDireita(dirId: string): void {
-    if (erro) return;
-    const esqId = selecionada;
-    if (!esqId) return;
-    if (Object.values(ligacoes).includes(dirId)) return;
-
-    if (def.gabarito[esqId] === dirId) {
-      setLigacoes((atual) => ({ ...atual, [esqId]: dirId }));
-      setSelecionada(null);
-      return;
+  // O recuo em dois tempos: a linha completa o traçado, inverte, e só então o
+  // estado volta. Fica no componente porque é tempo de tela, não regra.
+  useEffect(() => {
+    if (estado.erro === null) {
+      setRecuando(false);
+      return undefined;
     }
-
-    // Errado: a linha aparece, recua, e o estado volta ao que era.
-    setErro({ esqId, dirId, recuando: false });
-    agendar(() => setErro({ esqId, dirId, recuando: true }), ESPERA_ANTES_DO_RECUO_MS);
-    agendar(() => {
-      setErro(null);
-      setSelecionada(null);
-    }, ESPERA_ANTES_DO_RECUO_MS + duracao.curta);
-  }
+    const idRecuar = window.setTimeout(() => setRecuando(true), ESPERA_ANTES_DO_RECUO_MS);
+    const idLimpar = window.setTimeout(
+      () => despachar({ tipo: 'recolherErro' }),
+      ESPERA_ANTES_DO_RECUO_MS + duracao.curta,
+    );
+    temporizadores.current.push(idRecuar, idLimpar);
+    return () => {
+      window.clearTimeout(idRecuar);
+      window.clearTimeout(idLimpar);
+    };
+  }, [estado.erro]);
 
   function tracoEntre(esqId: string, dirId: string): Traco | null {
     const iEsq = def.esquerda.findIndex((item) => item.id === esqId);
@@ -167,82 +255,50 @@ export function AssociarPares({ def }: AssociarParesProps): JSX.Element {
     };
   }
 
-  const alturaArea =
-    centroDaLinha(Math.max(def.esquerda.length, direita.length) - 1) + ALTURA_LINHA / 2;
-
-  function estiloItem(estado: 'normal' | 'selecionado' | 'ligado'): CSSProperties {
-    const ligado = estado === 'ligado';
-    const aceso = ligado || estado === 'selecionado';
-    return {
-      width: LARGURA_COLUNA,
-      height: ALTURA_LINHA,
-      padding: `0 ${espaco.lg}px`,
-      display: 'flex',
-      alignItems: 'center',
-      textAlign: 'left',
-      fontSize: tipografia.tamanhos.corpo,
-      fontWeight: tipografia.pesos.forte,
-      lineHeight: tipografia.alturaLinha.compacta,
-      color: ligado ? cores.textoInverso : cores.texto,
-      background: ligado ? cores.destaque : cores.caixa,
-      border: `${aceso ? borda.grossa : borda.media}px solid ${
-        aceso ? cores.destaque : cores.contorno
-      }`,
-      borderRadius: raio.md,
-      cursor: ligado ? 'default' : 'pointer',
-      transition: `background ${duracao.curta}ms ${easing.suave}, border-color ${duracao.curta}ms ${easing.suave}`,
-    };
-  }
+  const tracoDoErro = estado.erro ? tracoEntre(estado.erro.esqId, estado.erro.dirId) : null;
 
   return (
-    <div style={{ textAlign: 'center' }}>
-      <h2
-        style={{
-          fontSize: tipografia.tamanhos.subtitulo,
-          fontWeight: tipografia.pesos.maximo,
-          lineHeight: tipografia.alturaLinha.compacta,
-          color: cores.texto,
-        }}
-      >
-        Apareceu na minha frente e eu não soube resolver
-      </h2>
-      <p
-        style={{
-          marginTop: espaco.md,
-          marginBottom: espaco.xl,
-          fontSize: tipografia.tamanhos.corpo,
-          color: cores.textoApoio,
-        }}
-      >
-        Ligue cada lacuna à trilha que fecha ela. {feitas} de {total}.
-      </p>
-
+    <MolduraDePuzzle
+      rotulo={def.rotulo}
+      instrucao={def.instrucao}
+      progresso={progressoDe(feitas, total)}
+      aviso={estado.aviso}
+    >
       <div
         style={{
           position: 'relative',
-          width: LARGURA_AREA,
-          height: alturaArea,
-          margin: '0 auto',
+          width: geometria.largura,
+          height: geometria.altura,
+          maxWidth: LARGURA_UTIL,
+          maxHeight: ALTURA_CORPO,
         }}
       >
         <svg
           aria-hidden="true"
-          width={LARGURA_AREA}
-          height={alturaArea}
-          viewBox={`0 0 ${LARGURA_AREA} ${alturaArea}`}
+          width={geometria.largura}
+          height={geometria.altura}
+          viewBox={`0 0 ${geometria.largura} ${geometria.altura}`}
           style={{ position: 'absolute', left: 0, top: 0, pointerEvents: 'none' }}
         >
-          {Object.entries(ligacoes).map(([esqId, dirId]) => {
+          {Object.entries(estado.ligacoes).map(([esqId, dirId]) => {
             const traco = tracoEntre(esqId, dirId);
-            return traco ? <Linha key={`${esqId}->${dirId}`} traco={traco} recuando={false} /> : null;
+            return traco ? (
+              <Linha key={`${esqId}->${dirId}`} traco={traco} recuando={false} />
+            ) : null;
           })}
 
-          {erro ? <LinhaDeErro erro={erro} tracoEntre={tracoEntre} /> : null}
+          {estado.erro && tracoDoErro ? (
+            <Linha
+              key={`erro-${estado.erro.esqId}-${estado.erro.dirId}`}
+              traco={tracoDoErro}
+              recuando={recuando}
+            />
+          ) : null}
         </svg>
 
         {def.esquerda.map((item, indice) => {
-          const ligado = Boolean(ligacoes[item.id]);
-          const selecionado = selecionada === item.id;
+          const ligado = estado.ligacoes[item.id] !== undefined;
+          const selecionado = estado.selecionada === item.id;
           return (
             <button
               key={item.id}
@@ -251,9 +307,15 @@ export function AssociarPares({ def }: AssociarParesProps): JSX.Element {
               aria-label={`Lacuna: ${item.texto}${ligado ? ' (já ligada)' : ''}`}
               aria-pressed={selecionado}
               disabled={ligado}
-              onClick={() => clicarEsquerda(item.id)}
+              onClick={() => despachar({ tipo: 'clicarEsquerda', id: item.id })}
               style={{
-                ...estiloItem(ligado ? 'ligado' : selecionado ? 'selecionado' : 'normal'),
+                ...estiloCaixaClicavel({
+                  largura: LARGURA_COLUNA,
+                  altura: ALTURA_LINHA,
+                  aceso: ligado,
+                  selecionado,
+                  habilitado: !ligado,
+                }),
                 position: 'absolute',
                 left: ESQUERDA_X,
                 top: indice * (ALTURA_LINHA + ESPACO_LINHA),
@@ -265,17 +327,26 @@ export function AssociarPares({ def }: AssociarParesProps): JSX.Element {
         })}
 
         {direita.map((item, indice) => {
-          const ligado = Object.values(ligacoes).includes(item.id);
+          const ligado = Object.values(estado.ligacoes).includes(item.id);
+          // A coluna da direita só responde com algo escolhido à esquerda. Este
+          // era o clique morto com mão: quatro alvos assim no estado inicial.
+          const habilitado = !ligado && estado.selecionada !== null && estado.erro === null;
           return (
             <button
               key={item.id}
               type="button"
               className="jogo-botao-nu"
               aria-label={`Trilha: ${item.texto}${ligado ? ' (já ligada)' : ''}`}
-              disabled={ligado || selecionada === null}
-              onClick={() => clicarDireita(item.id)}
+              disabled={!habilitado}
+              onClick={() => despachar({ tipo: 'clicarDireita', id: item.id })}
               style={{
-                ...estiloItem(ligado ? 'ligado' : 'normal'),
+                ...estiloCaixaClicavel({
+                  largura: LARGURA_COLUNA,
+                  altura: ALTURA_LINHA,
+                  aceso: ligado,
+                  selecionado: habilitado,
+                  habilitado,
+                }),
                 position: 'absolute',
                 left: DIREITA_X,
                 top: indice * (ALTURA_LINHA + ESPACO_LINHA),
@@ -286,21 +357,8 @@ export function AssociarPares({ def }: AssociarParesProps): JSX.Element {
           );
         })}
       </div>
-    </div>
+    </MolduraDePuzzle>
   );
-}
-
-/** Extraída para que a linha errada remonte (e reanime) a cada tentativa. */
-function LinhaDeErro({
-  erro,
-  tracoEntre,
-}: {
-  erro: { esqId: string; dirId: string; recuando: boolean };
-  tracoEntre: (esqId: string, dirId: string) => Traco | null;
-}): JSX.Element | null {
-  const traco = tracoEntre(erro.esqId, erro.dirId);
-  if (!traco) return null;
-  return <Linha key={`erro-${erro.esqId}-${erro.dirId}`} traco={traco} recuando={erro.recuando} />;
 }
 
 export default AssociarPares;

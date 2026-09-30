@@ -23,16 +23,24 @@ import type { Conexao, ItemId, LugarId, SkillId } from '../domain/types';
 import { useJogo } from '../store/jogo';
 import {
   CANVAS,
+  arte,
+  barra,
   borda,
   camada,
   cores,
   duracao,
   easing,
   espaco,
+  overlay,
   raio,
   tipografia,
 } from '../styles/tokens';
 import { Imagem } from './Imagem';
+import {
+  GEOMETRIA_DO_PAINEL,
+  PASSO_DA_LINHA,
+  PRIMEIRA_LINHA_Y,
+} from './PainelDeSkills';
 
 // ------------------------------------------------------------ geometria
 
@@ -52,26 +60,31 @@ const CONVITE = { x: MAPA_X + MAPA_L / 2, y: MAPA_Y + MAPA_A / 2 };
 const CONVITE_R = 50;
 const NO_R = 44;
 
-// Painel de skills — mesmos números de PainelDeSkills.tsx.
-const PAINEL_L = 420;
-const PAINEL_X = CANVAS.largura - PAINEL_L;
-const PAINEL_Y = 120;
-const PAINEL_BASE = 210;
-const PAINEL_CABECALHO_A = 40;
-const PAINEL_LINHA_A = 40;
-const PAINEL_PASSO = PAINEL_LINHA_A + espaco.md;
-const PAINEL_PRIMEIRA_LINHA_Y = PAINEL_Y + espaco.lg + PAINEL_CABECALHO_A + espaco.md;
+// Painel de skills — a MESMA geometria que PainelDeSkills.tsx exporta.
+//
+// Antes eram números repetidos aqui e lá, e "o painel não salta de lugar quando
+// a tela troca" era uma coincidência entre dois literais iguais escritos em
+// arquivos diferentes. Quando o painel virou acordeão (ADR-020) a coincidência
+// se desfez, e é de uma entrada DESTE painel que sai a quarta linha do clímax.
+const PAINEL_L = GEOMETRIA_DO_PAINEL.largura;
+const PAINEL_X = GEOMETRIA_DO_PAINEL.esquerda;
+const PAINEL_Y = GEOMETRIA_DO_PAINEL.topo;
+const PAINEL_A = GEOMETRIA_DO_PAINEL.altura;
+const PAINEL_CABECALHO_A = GEOMETRIA_DO_PAINEL.cabecalho.altura;
+const PAINEL_LINHA_A = GEOMETRIA_DO_PAINEL.linha.alturaMinima;
+const PAINEL_PASSO = PASSO_DA_LINHA;
+const PAINEL_PRIMEIRA_LINHA_Y = PRIMEIRA_LINHA_Y;
 
-// Barra de itens — mesmos números de BarraDeItens.tsx.
-const BARRA_A = 190;
+// Barra de itens — as mesmas métricas que BarraDeItens.tsx usa, por token.
+const BARRA_A = overlay.barraDeItens;
 const BARRA_Y = CANVAS.altura - BARRA_A;
-const BARRA_ROTULO_L = 120;
-const ITEM_L = 210;
-const ITEM_A = 132;
+const BARRA_ROTULO_L = barra.larguraDoRotulo;
+const ITEM_L = barra.item.largura;
+const ITEM_A = barra.item.altura;
 const ITEM_X = espaco.margem + BARRA_ROTULO_L + espaco.md;
 const ITEM_PASSO = ITEM_L + espaco.md;
 const ITEM_Y = BARRA_Y + espaco.md + (BARRA_A - 2 * espaco.md - ITEM_A) / 2;
-const ICONE = 88;
+const ICONE = barra.icone;
 
 /** Acima da barra e abaixo dos rótulos dos nós, com folga para duas linhas. */
 const FAIXA_TEXTO_Y = 736;
@@ -420,7 +433,7 @@ export function Revelacao(): JSX.Element {
           left: PAINEL_X,
           top: PAINEL_Y,
           width: PAINEL_L,
-          height: CANVAS.altura - PAINEL_Y - PAINEL_BASE,
+          height: PAINEL_A,
           zIndex: camada.overlayPersistente,
           background: cores.veuLeve,
           overflow: 'hidden',
@@ -429,10 +442,10 @@ export function Revelacao(): JSX.Element {
         <h2
           style={{
             position: 'absolute',
-            left: espaco.md,
-            top: espaco.lg,
+            left: GEOMETRIA_DO_PAINEL.padding.horizontal,
+            top: GEOMETRIA_DO_PAINEL.padding.vertical,
             height: PAINEL_CABECALHO_A,
-            fontSize: tipografia.tamanhos.rotulo,
+            fontSize: GEOMETRIA_DO_PAINEL.cabecalho.fonte,
             fontWeight: tipografia.pesos.maximo,
             letterSpacing: tipografia.espacamento.largo,
             color: cores.destaque,
@@ -451,13 +464,13 @@ export function Revelacao(): JSX.Element {
               key={skillId}
               style={{
                 position: 'absolute',
-                left: espaco.md,
+                left: GEOMETRIA_DO_PAINEL.padding.horizontal,
                 top: PAINEL_PRIMEIRA_LINHA_Y - PAINEL_Y + indice * PAINEL_PASSO,
-                width: PAINEL_L - espaco.md - espaco.lg,
+                width: PAINEL_L - 2 * GEOMETRIA_DO_PAINEL.padding.horizontal,
                 height: PAINEL_LINHA_A,
                 display: 'flex',
                 alignItems: 'center',
-                fontSize: tipografia.tamanhos.corpo,
+                fontSize: GEOMETRIA_DO_PAINEL.linha.fonte,
                 fontWeight: conectada ? tipografia.pesos.maximo : tipografia.pesos.forte,
                 lineHeight: tipografia.alturaLinha.compacta,
                 color: acesa ? cores.destaque : cores.texto,
@@ -610,7 +623,12 @@ export function Revelacao(): JSX.Element {
               zIndex: camada.protagonista,
             }}
           >
-            <Imagem id={assetDoSprite('ana-confiante')} rotulo="Ana" largura={190} altura={400} />
+            <Imagem
+              id={assetDoSprite('ana-confiante')}
+              rotulo="Ana"
+              largura={arte.personagem.largura}
+              altura={arte.personagem.altura}
+            />
           </div>
           <div
             className="jogo-surgir"
@@ -624,8 +642,8 @@ export function Revelacao(): JSX.Element {
             <Imagem
               id={assetDoSprite('ana-futura')}
               rotulo="Ana, dez anos depois"
-              largura={230}
-              altura={450}
+              largura={arte.personagem.largura}
+              altura={arte.personagem.altura}
             />
           </div>
 

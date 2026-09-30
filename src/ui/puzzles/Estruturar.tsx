@@ -1,26 +1,64 @@
 /**
- * Puzzle do Bloco 3 (Innovation) — estruturar a proposta.
+ * Puzzle da FASE 3 — a proposta dela, em três campos.
  *
- * Fragmentos à esquerda, campos à direita: selecionar e colocar, a mesma
- * gramática do "usar item em alvo" do resto do jogo.
+ * A MECÂNICA FICOU: escolher um trecho e colocar no campo, que é a mesma
+ * gramática do "usar item em alvo" do resto do jogo. E OS DOIS DISTRATORES
+ * FICAM: estruturar é ESCOLHER, não preencher, e as duas frases que não entram
+ * em lugar nenhum são verdadeiras — é exatamente por isso que enganam.
  *
- * Fragmento com `campo: null` é DISTRATOR: ao tentar colocar, aparece
- * `textoDistrator` e o fragmento volta pra lista. O puzzle é sobre escolher,
- * não sobre preencher — o distrator não encaixa em lugar nenhum.
+ * O que a auditoria mediu e foi consertado aqui:
+ *
+ * - TRECHO NO CAMPO ERRADO AVISA. Antes o campo SACUDIA em silêncio. A sacudida
+ *   sozinha é ambígua: numa tela comprimida ela lê como falha de render, e a
+ *   pessoa não sabe se o clique não pegou ou se a resposta estava errada. Agora
+ *   a sacudida vem com `def.textoErro`. O distrator continua com o texto próprio
+ *   dele, que é outra coisa: "isso é verdade, mas ninguém consegue fazer nada
+ *   com isso" não é um erro de encaixe, é o assunto do puzzle.
+ * - O CLIQUE MORTO MORREU. Os três campos ficam `disabled` enquanto nada está
+ *   escolhido, e o estilo antigo mantinha `cursor: pointer` neles — três alvos
+ *   com mão que não respondem no estado inicial.
+ * - A ALTURA FOI MEDIDA. A auditoria calculou ~954px contra 952 úteis, e o
+ *   estouro era real: `ALTURA_FRAGMENTO` era `minHeight`, então cada trecho que
+ *   quebrasse em duas linhas crescia sem ninguém somar. Agora a altura de cada
+ *   faixa é fixa, `geometriaDe` soma tudo, e `puzzles.tela.test.ts` cobra o
+ *   total contra o orçamento da moldura.
  */
-import type { CSSProperties } from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useReducer } from 'react';
 
 import type { PuzzleEstruturar } from '../../domain/types';
 import { useJogo } from '../../store/jogo';
-import { borda, cores, duracao, easing, espaco, raio, tipografia } from '../../styles/tokens';
+import { cores, duracao, easing, espaco, tipografia } from '../../styles/tokens';
 
-const LARGURA_FRAGMENTOS = 780;
-const LARGURA_CAMPOS = 660;
-const ALTURA_FRAGMENTO = 104;
-const ALTURA_CAMPO = 148;
+import {
+  ALTURA_CORPO,
+  type Aviso,
+  avisoDeAcerto,
+  avisoDeErro,
+  estiloCaixaClicavel,
+  estiloRotuloDeCampo,
+  LARGURA_UTIL,
+  MolduraDePuzzle,
+  progressoDe,
+} from './moldura';
+
+// ---------------------------------------------------------------- geometria
+
+const LARGURA_TRECHOS = 860;
+const LARGURA_CAMPOS = 700;
+const ESPACO_COLUNAS = espaco.xxl;
+const ALTURA_TRECHO = 104;
+const ESPACO_TRECHO = espaco.sm;
+const ALTURA_CAMPO = 120;
+const ESPACO_CAMPO = espaco.lg;
+const ALTURA_ROTULO = Math.ceil(
+  tipografia.tamanhos.corpo * tipografia.alturaLinha.compacta,
+);
+/** Faixa do cabeçalho de coluna. */
+const ALTURA_CABECA = ALTURA_ROTULO + espaco.sm;
+
 const ESPERA_CONCLUSAO_MS = 1200;
-const AVISO_MS = 4500;
+/** Tempo da sacudida. Curto: é um susto, não uma animação. */
+const ESPERA_SACUDIDA_MS = duracao.curta;
 
 const CSS = `
 @keyframes pz-est-sacudir {
@@ -33,27 +71,133 @@ const CSS = `
 .pz-est-sacudir { animation: pz-est-sacudir ${duracao.curta}ms ${easing.suave} 1; }
 `;
 
+export function geometriaDe(def: PuzzleEstruturar): { largura: number; altura: number } {
+  const trechos = Math.max(1, def.fragmentos.length);
+  const campos = Math.max(1, def.campos.length);
+  const colunaTrechos = trechos * ALTURA_TRECHO + (trechos - 1) * ESPACO_TRECHO;
+  const colunaCampos =
+    campos * (ALTURA_ROTULO + espaco.xs + ALTURA_CAMPO) + (campos - 1) * ESPACO_CAMPO;
+  return {
+    largura: LARGURA_TRECHOS + ESPACO_COLUNAS + LARGURA_CAMPOS,
+    altura: ALTURA_CABECA + Math.max(colunaTrechos, colunaCampos),
+  };
+}
+
+// ---------------------------------------------------------------- regras
+
+export interface EstadoEstruturar {
+  /** campoId -> fragmentoId */
+  colocados: Readonly<Record<string, string>>;
+  selecionado: string | null;
+  aviso: Aviso;
+  /** Campo que acabou de recusar, para sacudir junto com o texto. */
+  sacudindo: string | null;
+}
+
+export type AcaoEstruturar =
+  | { tipo: 'clicarTrecho'; id: string }
+  | { tipo: 'clicarCampo'; id: string }
+  | { tipo: 'pararSacudida' };
+
+export function estadoInicialEstruturar(): EstadoEstruturar {
+  return { colocados: {}, selecionado: null, aviso: null, sacudindo: null };
+}
+
+export function estruturarCompleto(
+  def: PuzzleEstruturar,
+  estado: EstadoEstruturar,
+): boolean {
+  return def.campos.length > 0 && Object.keys(estado.colocados).length === def.campos.length;
+}
+
+/**
+ * O redutor. Três respostas possíveis a um encaixe, e só uma é silenciosa:
+ *
+ * - DISTRATOR (`campo: null`): `textoDistrator`. É o assunto do puzzle, não um
+ *   erro de pontaria, e por isso tem texto próprio. A seleção é solta — o
+ *   distrator não vai entrar em lugar nenhum, e manter a frase na mão faria a
+ *   pessoa procurar a casa dela.
+ * - CAMPO ERRADO: `textoErro` e sacudida. A seleção PERMANECE, porque o trecho
+ *   tem casa e quem errou só errou a casa.
+ * - CERTO: encaixa.
+ */
+export function reduzirEstruturar(
+  def: PuzzleEstruturar,
+  estado: EstadoEstruturar,
+  acao: AcaoEstruturar,
+): EstadoEstruturar {
+  switch (acao.tipo) {
+    case 'clicarTrecho': {
+      if (Object.values(estado.colocados).includes(acao.id)) return estado;
+      return {
+        ...estado,
+        selecionado: estado.selecionado === acao.id ? null : acao.id,
+        aviso: null,
+        sacudindo: null,
+      };
+    }
+
+    case 'clicarCampo': {
+      const fragId = estado.selecionado;
+      if (fragId === null) return estado;
+      if (estado.colocados[acao.id] !== undefined) return estado;
+
+      const fragmento = def.fragmentos.find((f) => f.id === fragId);
+      if (!fragmento) return estado;
+
+      if (fragmento.campo === null) {
+        return {
+          ...estado,
+          selecionado: null,
+          aviso: avisoDeErro(def.textoDistrator),
+          sacudindo: acao.id,
+        };
+      }
+
+      if (fragmento.campo !== acao.id) {
+        return {
+          ...estado,
+          aviso: avisoDeErro(def.textoErro),
+          sacudindo: acao.id,
+        };
+      }
+
+      const colocados = { ...estado.colocados, [acao.id]: fragId };
+      const completo = Object.keys(colocados).length === def.campos.length;
+      return {
+        colocados,
+        selecionado: null,
+        aviso: completo ? avisoDeAcerto() : null,
+        sacudindo: null,
+      };
+    }
+
+    case 'pararSacudida':
+      return estado.sacudindo === null ? estado : { ...estado, sacudindo: null };
+
+    default: {
+      const naoTratado: never = acao;
+      return naoTratado;
+    }
+  }
+}
+
+// ---------------------------------------------------------------- componente
+
 export interface EstruturarProps {
   def: PuzzleEstruturar;
 }
 
 export function Estruturar({ def }: EstruturarProps): JSX.Element {
   const resolverPuzzle = useJogo((s) => s.resolverPuzzle);
-  /** campoId -> fragmentoId */
-  const [colocados, setColocados] = useState<Record<string, string>>({});
-  const [selecionado, setSelecionado] = useState<string | null>(null);
-  const [aviso, setAviso] = useState<string | null>(null);
-  const [sacudindo, setSacudindo] = useState<string | null>(null);
-  const temporizadores = useRef<number[]>([]);
-
-  const completo = def.campos.length > 0 && Object.keys(colocados).length === def.campos.length;
-
-  useEffect(
-    () => () => {
-      for (const id of temporizadores.current) window.clearTimeout(id);
-    },
-    [],
+  const [estado, despachar] = useReducer(
+    (atual: EstadoEstruturar, acao: AcaoEstruturar) => reduzirEstruturar(def, atual, acao),
+    undefined,
+    estadoInicialEstruturar,
   );
+
+  const completo = estruturarCompleto(def, estado);
+  const geometria = geometriaDe(def);
 
   useEffect(() => {
     if (!completo) return undefined;
@@ -61,214 +205,155 @@ export function Estruturar({ def }: EstruturarProps): JSX.Element {
     return () => window.clearTimeout(id);
   }, [completo, resolverPuzzle]);
 
-  function agendar(acao: () => void, atraso: number): void {
-    const id = window.setTimeout(acao, atraso);
-    temporizadores.current.push(id);
-  }
+  useEffect(() => {
+    if (estado.sacudindo === null) return undefined;
+    const id = window.setTimeout(
+      () => despachar({ tipo: 'pararSacudida' }),
+      ESPERA_SACUDIDA_MS,
+    );
+    return () => window.clearTimeout(id);
+  }, [estado.sacudindo]);
 
-  function clicarFragmento(id: string): void {
-    setAviso(null);
-    setSelecionado((atual) => (atual === id ? null : id));
-  }
-
-  function clicarCampo(campoId: string): void {
-    const fragId = selecionado;
-    if (!fragId || colocados[campoId]) return;
-
-    const fragmento = def.fragmentos.find((f) => f.id === fragId);
-    if (!fragmento) return;
-
-    // Distrator: verdadeiro, mas ninguém consegue fazer nada com isso.
-    if (fragmento.campo === null) {
-      setSelecionado(null);
-      setAviso(def.textoDistrator);
-      agendar(() => setAviso(null), AVISO_MS);
-      return;
-    }
-
-    // Fragmento certo, campo errado: volta pra lista, sem texto e sem punição.
-    if (fragmento.campo !== campoId) {
-      setSelecionado(null);
-      setSacudindo(campoId);
-      agendar(() => setSacudindo(null), duracao.curta);
-      return;
-    }
-
-    setColocados((atual) => ({ ...atual, [campoId]: fragId }));
-    setSelecionado(null);
-    setAviso(null);
-  }
-
-  const usados = new Set(Object.values(colocados));
+  const usados = new Set(Object.values(estado.colocados));
   const textoPorFragmento = new Map(def.fragmentos.map((f) => [f.id, f.texto]));
 
   return (
-    <div style={{ textAlign: 'center' }}>
+    <MolduraDePuzzle
+      rotulo={def.rotulo}
+      instrucao={def.instrucao}
+      progresso={progressoDe(Object.keys(estado.colocados).length, def.campos.length)}
+      aviso={estado.aviso}
+    >
       <style>{CSS}</style>
-
-      <h2
-        style={{
-          fontSize: tipografia.tamanhos.subtitulo,
-          fontWeight: tipografia.pesos.maximo,
-          lineHeight: tipografia.alturaLinha.compacta,
-          color: cores.texto,
-        }}
-      >
-        Da reclamação para a proposta
-      </h2>
-      <p
-        style={{
-          marginTop: espaco.md,
-          marginBottom: espaco.xl,
-          fontSize: tipografia.tamanhos.corpo,
-          color: cores.textoApoio,
-        }}
-      >
-        Escolha um fragmento e coloque no campo dele. Nem todo fragmento tem campo.
-      </p>
 
       <div
         style={{
+          width: geometria.largura,
+          maxWidth: LARGURA_UTIL,
+          height: geometria.altura,
+          maxHeight: ALTURA_CORPO,
           display: 'flex',
-          gap: espaco.xxl,
+          gap: ESPACO_COLUNAS,
           justifyContent: 'center',
           alignItems: 'flex-start',
         }}
       >
-        <ul
-          style={{
-            width: LARGURA_FRAGMENTOS,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: espaco.md,
-          }}
-        >
-          {def.fragmentos.map((fragmento) => {
-            const colocado = usados.has(fragmento.id);
-            const ativo = selecionado === fragmento.id;
-            return (
-              <li key={fragmento.id}>
-                <button
-                  type="button"
-                  aria-label={`Fragmento: ${fragmento.texto}${colocado ? ' (já usado)' : ''}`}
-                  aria-pressed={ativo}
-                  disabled={colocado}
-                  onClick={() => clicarFragmento(fragmento.id)}
-                  style={{
-                    width: '100%',
-                    minHeight: ALTURA_FRAGMENTO,
-                    padding: `${espaco.md}px ${espaco.lg}px`,
-                    display: 'flex',
-                    alignItems: 'center',
-                    textAlign: 'left',
-                    fontSize: tipografia.tamanhos.corpo,
-                    fontWeight: tipografia.pesos.forte,
-                    lineHeight: tipografia.alturaLinha.compacta,
-                    color: cores.texto,
-                    background: cores.caixa,
-                    border: `${ativo ? borda.grossa : borda.media}px solid ${
-                      ativo ? cores.destaque : cores.contorno
-                    }`,
-                    borderRadius: raio.md,
-                    opacity: colocado ? 0.2 : 1,
-                    cursor: colocado ? 'default' : 'pointer',
-                    transition: `border-color ${duracao.curta}ms ${easing.suave}, opacity ${duracao.curta}ms ${easing.suave}`,
-                  }}
-                >
-                  {fragmento.texto}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
+        <div style={{ width: LARGURA_TRECHOS }}>
+          <span
+            style={{
+              ...estiloRotuloDeCampo(LARGURA_TRECHOS),
+              height: ALTURA_CABECA,
+              textAlign: 'left',
+            }}
+          >
+            Trechos
+          </span>
 
-        <div
-          style={{
-            width: LARGURA_CAMPOS,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: espaco.lg,
-          }}
-        >
-          {def.campos.map((campo) => {
-            const fragId = colocados[campo.id];
-            const texto = fragId ? textoPorFragmento.get(fragId) : undefined;
-            const preenchido = texto !== undefined;
-            return (
-              <div key={campo.id} style={{ textAlign: 'left' }}>
-                <span
-                  style={{
-                    display: 'block',
-                    marginBottom: espaco.xs,
-                    fontSize: tipografia.tamanhos.corpo,
-                    fontWeight: tipografia.pesos.maximo,
-                    letterSpacing: tipografia.espacamento.largo,
-                    textTransform: 'uppercase',
-                    color: cores.destaque,
-                  }}
-                >
-                  {campo.rotulo}
-                </span>
-                <button
-                  type="button"
-                  className={sacudindo === campo.id ? 'pz-est-sacudir' : undefined}
-                  aria-label={
-                    preenchido
-                      ? `${campo.rotulo}: ${texto}`
-                      : `Colocar o fragmento selecionado em ${campo.rotulo}`
-                  }
-                  disabled={preenchido || selecionado === null}
-                  onClick={() => clicarCampo(campo.id)}
-                  style={estiloCampo(preenchido)}
-                >
-                  {texto ?? ''}
-                </button>
-              </div>
-            );
-          })}
+          <ul
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: ESPACO_TRECHO,
+            }}
+          >
+            {def.fragmentos.map((fragmento) => {
+              const colocado = usados.has(fragmento.id);
+              const ativo = estado.selecionado === fragmento.id;
+              return (
+                <li key={fragmento.id} style={{ height: ALTURA_TRECHO }}>
+                  <button
+                    type="button"
+                    aria-label={`Trecho: ${fragmento.texto}${colocado ? ' (já usado)' : ''}`}
+                    aria-pressed={ativo}
+                    disabled={colocado}
+                    onClick={() => despachar({ tipo: 'clicarTrecho', id: fragmento.id })}
+                    style={estiloCaixaClicavel({
+                      largura: LARGURA_TRECHOS,
+                      altura: ALTURA_TRECHO,
+                      aceso: false,
+                      selecionado: ativo,
+                      habilitado: !colocado,
+                      apagado: colocado,
+                    })}
+                  >
+                    {fragmento.texto}
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+
+        <div style={{ width: LARGURA_CAMPOS }}>
+          <span
+            style={{
+              ...estiloRotuloDeCampo(LARGURA_CAMPOS),
+              height: ALTURA_CABECA,
+              textAlign: 'left',
+            }}
+          >
+            A proposta
+          </span>
+
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: ESPACO_CAMPO,
+            }}
+          >
+            {def.campos.map((campo) => {
+              const fragId = estado.colocados[campo.id];
+              const texto = fragId === undefined ? undefined : textoPorFragmento.get(fragId);
+              const preenchido = texto !== undefined;
+              const habilitado = !preenchido && estado.selecionado !== null;
+              return (
+                <div key={campo.id} style={{ textAlign: 'left' }}>
+                  <span
+                    style={{
+                      ...estiloRotuloDeCampo(LARGURA_CAMPOS),
+                      height: ALTURA_ROTULO,
+                      marginBottom: espaco.xs,
+                    }}
+                  >
+                    {campo.rotulo}
+                  </span>
+                  <button
+                    type="button"
+                    className={estado.sacudindo === campo.id ? 'pz-est-sacudir' : undefined}
+                    aria-label={
+                      preenchido
+                        ? `${campo.rotulo}: ${texto}`
+                        : `Colocar o trecho escolhido em ${campo.rotulo}`
+                    }
+                    disabled={!habilitado}
+                    onClick={() => despachar({ tipo: 'clicarCampo', id: campo.id })}
+                    style={{
+                      ...estiloCaixaClicavel({
+                        largura: LARGURA_CAMPOS,
+                        altura: ALTURA_CAMPO,
+                        aceso: preenchido,
+                        selecionado: habilitado,
+                        habilitado,
+                        tracejado: !preenchido,
+                      }),
+                      // Recusou: a borda vira cor de atenção junto com a
+                      // sacudida e com o texto. Três sinais para o mesmo fato,
+                      // porque um só não sobrevive à compressão de vídeo.
+                      borderColor:
+                        estado.sacudindo === campo.id ? cores.atencao : undefined,
+                    }}
+                  >
+                    {texto ?? ''}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
-
-      <p
-        aria-live="polite"
-        style={{
-          maxWidth: 1400,
-          minHeight: tipografia.tamanhos.rotulo * 2,
-          margin: `${espaco.xl}px auto 0`,
-          fontSize: tipografia.tamanhos.rotulo,
-          fontWeight: tipografia.pesos.forte,
-          lineHeight: tipografia.alturaLinha.compacta,
-          color: cores.destaque,
-          opacity: aviso ? 1 : 0,
-          transition: `opacity ${duracao.curta}ms ${easing.suave}`,
-        }}
-      >
-        {aviso ?? ''}
-      </p>
-    </div>
+    </MolduraDePuzzle>
   );
-}
-
-function estiloCampo(preenchido: boolean): CSSProperties {
-  return {
-    width: '100%',
-    minHeight: ALTURA_CAMPO,
-    padding: `${espaco.md}px ${espaco.lg}px`,
-    display: 'flex',
-    alignItems: 'center',
-    textAlign: 'left',
-    fontSize: tipografia.tamanhos.corpo,
-    fontWeight: tipografia.pesos.forte,
-    lineHeight: tipografia.alturaLinha.compacta,
-    color: preenchido ? cores.textoInverso : cores.textoApoio,
-    background: preenchido ? cores.destaque : cores.caixa,
-    border: `${borda.media}px ${preenchido ? 'solid' : 'dashed'} ${
-      preenchido ? cores.destaque : cores.contorno
-    }`,
-    borderRadius: raio.md,
-    cursor: preenchido ? 'default' : 'pointer',
-    transition: `background ${duracao.curta}ms ${easing.suave}, color ${duracao.curta}ms ${easing.suave}`,
-  };
 }
 
 export default Estruturar;

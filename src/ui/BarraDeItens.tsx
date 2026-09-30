@@ -4,31 +4,82 @@
  * CRÍTICO: itens tardios NÃO recebem nenhuma diferenciação. Nem cor, nem
  * moldura, nem ordem, nem área separada, nem tooltip. Este componente NÃO LÊ
  * o campo `tardio` em nenhuma hipótese — qualquer marcação aqui anunciaria o
- * clímax do Bloco 5 uma hora antes dele acontecer.
+ * clímax do bloco final uma hora antes dele acontecer.
  *
  * O peso visual é deliberadamente "de objeto": ícone + moldura. O painel de
  * skills é o oposto, de propósito.
+ *
+ * A DESCRIÇÃO DE ITEM AGORA FECHA (ADR-013).
+ *
+ * O que estava errado: `descricaoDe` era estado local escrito num lugar e
+ * apagado SÓ quando o item saía da barra. Sobrevivia a troca de cena, ida ao
+ * mapa, diálogo e puzzle — o bloco inteiro. E como ficava em `zIndex 20` contra
+ * o diálogo em 30, ela se escondia durante a fala e REAPARECIA depois, que era
+ * exatamente o que dava a sensação de ter grudado na tela. O `<p>` não era botão
+ * e não havia como fechá-lo.
+ *
+ * Agora fecha por três caminhos: clique no mesmo item, clique em qualquer outra
+ * coisa, e sozinha depois de alguns segundos. SEM BOTÃO X — alvo pequeno ao vivo
+ * é armadilha, e um X num canto seria o alvo mais apertado da tela.
+ *
+ * O efeito colateral que existia junto também foi corrigido: o mesmo `onClick`
+ * chama `selecionarItem`, que ALTERNA, e antes chamava `setDescricaoDe`, que era
+ * idempotente. Clicar duas vezes desselecionava o item e mantinha a descrição —
+ * dois estados para o mesmo gesto, divergindo. Agora os dois alternam juntos.
  */
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ITENS } from '../domain/content';
 import type { Item, ItemId } from '../domain/types';
 import { assetDoItem } from '../assets/manifest';
 import { seletores, useJogo } from '../store/jogo';
 import {
   alvo,
+  barra,
   borda,
   camada,
   cores,
   duracao,
   easing,
   espaco,
+  espera,
+  overlay,
   raio,
   tipografia,
 } from '../styles/tokens';
 import { Imagem } from './Imagem';
 
-const LARGURA_ITEM = 210;
-const LADO_ICONE = 88;
+/** O que pode fechar (ou trocar) a descrição na tela. */
+export type EventoDeDescricao =
+  | { tipo: 'clique-item'; itemId: ItemId }
+  | { tipo: 'clique-fora' }
+  | { tipo: 'tempo' }
+  | { tipo: 'itens-mudaram'; itens: readonly ItemId[] };
+
+/**
+ * Qual descrição fica na tela depois de um evento. Pura, e é onde mora a regra
+ * inteira dos três caminhos de fechamento.
+ *
+ * Exportada porque é o que o teste consegue exercitar: a suíte roda sem DOM,
+ * então não há como clicar de verdade — e o defeito que isto conserta era
+ * justamente comportamento ao longo do tempo, que markup nenhum revela.
+ */
+export function proximaDescricao(
+  atual: ItemId | null,
+  evento: EventoDeDescricao,
+): ItemId | null {
+  switch (evento.tipo) {
+    // Mesmo item fecha; item diferente troca. Um clique, um estado.
+    case 'clique-item':
+      return atual === evento.itemId ? null : evento.itemId;
+    case 'clique-fora':
+      return null;
+    case 'tempo':
+      return null;
+    // Item consumido no meio da leitura não deixa descrição órfã na tela.
+    case 'itens-mudaram':
+      return atual !== null && evento.itens.includes(atual) ? atual : null;
+  }
+}
 
 export function BarraDeItens(): JSX.Element {
   const itens = useJogo(seletores.itensNaBarra);
@@ -36,11 +87,52 @@ export function BarraDeItens(): JSX.Element {
   const selecionarItem = useJogo((s) => s.selecionarItem);
 
   const [descricaoDe, setDescricaoDe] = useState<ItemId | null>(null);
+  /** A região que NÃO conta como "clicar em outra coisa". */
+  const regiaoDaBarra = useRef<HTMLElement | null>(null);
 
-  // Item que saiu da barra não deixa descrição órfã na tela.
+  // Caminho extra, que já existia: item que saiu da barra.
   useEffect(() => {
-    if (descricaoDe !== null && !itens.includes(descricaoDe)) setDescricaoDe(null);
-  }, [itens, descricaoDe]);
+    setDescricaoDe((atual) => proximaDescricao(atual, { tipo: 'itens-mudaram', itens }));
+  }, [itens]);
+
+  /**
+   * Caminho 1: alguns segundos e ela sai.
+   *
+   * O temporizador é rearmado a cada troca de item porque a dependência é o
+   * item mostrado: sem isso, abrir a descrição de um segundo item herdaria o
+   * tempo restante do primeiro e a segunda leitura duraria menos que a primeira.
+   */
+  useEffect(() => {
+    if (descricaoDe === null) return undefined;
+    const id = window.setTimeout(
+      () => setDescricaoDe((atual) => proximaDescricao(atual, { tipo: 'tempo' })),
+      espera.descricaoDeItemMs,
+    );
+    return () => window.clearTimeout(id);
+  }, [descricaoDe]);
+
+  /**
+   * Caminho 2: clique em qualquer outra coisa.
+   *
+   * `pointerdown` na fase de captura, e não `click`: o clique que abre um
+   * diálogo ou um puzzle monta um overlay, e nesse caso o `click` pode nunca
+   * chegar ao topo com o alvo original. `pointerdown` acontece antes de
+   * qualquer coisa mudar de lugar.
+   *
+   * A fronteira é a própria barra: clicar num item é o caminho 3 e já foi
+   * tratado no `onClick`; qualquer ponto fora dela — cenário, hotspot, botão de
+   * voltar, e a própria descrição — fecha.
+   */
+  useEffect(() => {
+    if (descricaoDe === null) return undefined;
+    const aoApontar = (evento: PointerEvent): void => {
+      const destino = evento.target;
+      if (destino instanceof Node && regiaoDaBarra.current?.contains(destino)) return;
+      setDescricaoDe((atual) => proximaDescricao(atual, { tipo: 'clique-fora' }));
+    };
+    window.addEventListener('pointerdown', aoApontar, true);
+    return () => window.removeEventListener('pointerdown', aoApontar, true);
+  }, [descricaoDe]);
 
   const descricao: Item | undefined = descricaoDe === null ? undefined : ITENS[descricaoDe];
 
@@ -52,8 +144,11 @@ export function BarraDeItens(): JSX.Element {
           style={{
             position: 'absolute',
             left: espaco.margem,
-            bottom: 210,
-            maxWidth: 1180,
+            // Acima da barra E da linha de nome do hotspot: as duas convivem na
+            // tela, e empilhar a descrição direto sobre a barra fazia a legenda
+            // do rodapé passar por baixo dela.
+            bottom: overlay.barraDeItens + overlay.linhaDeFoco + espaco.sm,
+            maxWidth: barra.larguraDaDescricao,
             zIndex: camada.overlayPersistente,
             background: cores.caixa,
             border: `${borda.media}px solid ${cores.contorno}`,
@@ -69,13 +164,14 @@ export function BarraDeItens(): JSX.Element {
       ) : null}
 
       <section
+        ref={regiaoDaBarra}
         aria-label="Itens"
         style={{
           position: 'absolute',
           left: 0,
           right: 0,
           bottom: 0,
-          minHeight: 190,
+          minHeight: overlay.barraDeItens,
           zIndex: camada.overlayPersistente,
           display: 'flex',
           alignItems: 'center',
@@ -88,7 +184,7 @@ export function BarraDeItens(): JSX.Element {
         <h2
           style={{
             flex: '0 0 auto',
-            width: 120,
+            width: barra.larguraDoRotulo,
             fontSize: tipografia.tamanhos.apoio,
             fontWeight: tipografia.pesos.maximo,
             letterSpacing: tipografia.espacamento.largo,
@@ -112,7 +208,11 @@ export function BarraDeItens(): JSX.Element {
                   aria-pressed={ativo}
                   aria-label={`${item.nome}. ${item.descricao}`}
                   onClick={() => {
-                    setDescricaoDe(id);
+                    // Caminho 3, e os dois alternam JUNTOS: seleção e descrição
+                    // são o mesmo gesto, e antes divergiam no segundo clique.
+                    setDescricaoDe((atual) =>
+                      proximaDescricao(atual, { tipo: 'clique-item', itemId: id }),
+                    );
                     selecionarItem(id);
                   }}
                   style={{
@@ -120,8 +220,8 @@ export function BarraDeItens(): JSX.Element {
                     flexDirection: 'column',
                     alignItems: 'center',
                     gap: espaco.xs,
-                    width: LARGURA_ITEM,
-                    minHeight: alvo.confortavel + LADO_ICONE / 2,
+                    width: barra.item.largura,
+                    minHeight: alvo.confortavel + barra.icone / 2,
                     padding: espaco.sm,
                     background: ativo ? cores.destaque : cores.fundoElevado,
                     color: ativo ? cores.textoInverso : cores.texto,
@@ -136,8 +236,8 @@ export function BarraDeItens(): JSX.Element {
                   <Imagem
                     id={assetDoItem(id)}
                     rotulo={item.nome}
-                    largura={LADO_ICONE}
-                    altura={LADO_ICONE}
+                    largura={barra.icone}
+                    altura={barra.icone}
                     mostrarRotulo={false}
                     decorativo
                   />

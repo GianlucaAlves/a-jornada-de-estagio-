@@ -17,6 +17,7 @@ import { assetDoCenario, assetDoSprite } from '../assets/manifest';
 import { useJogo } from '../store/jogo';
 import {
   CANVAS,
+  arte,
   borda,
   camada,
   cores,
@@ -264,8 +265,8 @@ export function PausaBloco4(): JSX.Element {
         <Imagem
           id={assetDoSprite(sprite)}
           rotulo=""
-          largura={260}
-          altura={520}
+          largura={arte.personagem.largura}
+          altura={arte.personagem.altura}
           decorativo
           mostrarRotulo={false}
           style={{ width: '100%', height: '100%' }}

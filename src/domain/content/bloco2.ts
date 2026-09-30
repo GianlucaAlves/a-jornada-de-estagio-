@@ -1,20 +1,45 @@
 /**
- * BLOCO 2 — A REALIDADE DO MERCADO
+ * FASE 2 — aprendizado contínuo e planejamento (apresenta: Heloisa).
  *
- * Duas cenas no mesmo dia: Cafezinho → Sala de Treinamento.
+ * O LAÇO É CAFEZINHO → ESCRITÓRIO → CAFEZINHO (ADR-032). Conselho se recebe no
+ * café, trabalho se faz na mesa, e a fase fecha onde abriu. O deslocamento não
+ * custa arte nenhuma — os dois lugares já existem — e quebra o ritmo de uma
+ * fase que carrega dois assuntos e dois puzzles.
  *
- * A Sala de Treinamento não é alcançável antes da conversa com a Bianca, e o
- * portão é o `destravarLugar` do diálogo dela — não gating de hotspot. O slot
- * do mapa fica silhuetado até a indicação de trilha existir.
+ * DOIS ASSUNTOS, UM GANCHO CADA. `associar` serve o aprendizado contínuo (as
+ * lacunas dela ligadas às trilhas, no notebook da Bianca, no café) e
+ * `sequenciar` serve o planejamento (a semana dela, na mesa dela). O
+ * `sequenciar` veio da fase 3 (ADR-007) porque "priorizar por impacto no time" é
+ * literalmente um problema de ordenação.
  *
- * O beat do Cartão do Rafael (`aceitaItem`) é deliberado: o item tardio nº 1
- * não serve pra nada agora, e a piada é o jeito de dizer isso sem dizer. Ele
- * NÃO é consumido — precisa chegar inteiro no Bloco 5.
+ * O `associar` FICA NO CAFÉ, e isso é decisão, não descuido. A spec 01 imaginava
+ * os dois puzzles no Escritório; a suíte da store (que não é minha para editar)
+ * afirma que o hotspot que abre `associar` é alcançável entrando no Cafezinho, e
+ * a leitura do café é melhor de qualquer forma: a Bianca abre o notebook no
+ * balcão e a conversa vira lista ali, na frente dela. O trabalho que exige mesa
+ * — ordenar a própria semana — é o que fica no Escritório.
  *
- * Ids de hotspot: `hotspotsFeitos` é uma lista GLOBAL que a store não limpa na
- * troca de bloco. Por isso os ids daqui são sufixados por cena (`-cafe`,
- * `-trilha`): um id repetido num hotspot `umaVezSo` de outro bloco já contaria
- * como acionado e viraria clique morto no palco.
+ * A BIANCA É O CORAÇÃO DA FASE. Ela é formada em Letras e trabalha com
+ * tecnologia: é a ÚNICA exceção autorizada ao expurgo de vocabulário (ADR-027),
+ * porque a frase depende do contraste entre as duas áreas. Aqui ela só PLANTA.
+ * Ela volta na fase 5 para falar de pivotar, e antecipar isso agora queima o
+ * beat de lá — então nada nas falas dela sugere que essa conversa continua.
+ *
+ * O TERCEIRO PILAR DA HELOISA é o gancho do `sequenciar`: negociar prazo com
+ * transparência quando cai uma demanda de última hora e há prova na faculdade.
+ * Ele é ENCENADO em duas peças e nunca explicado — a narração do monitor põe as
+ * duas coisas na mesma tela, e a segunda linha do puzzle é avisar a liderança.
+ * A escolha certa é a ordem; quem nomeia a lição é quem apresenta.
+ *
+ * O FECHO É GATEADO PELO CERTIFICADO, não pelo puzzle: o Rafael só tem conversa
+ * quando ela volta ao café com a trilha concluída na mão. Sem esse gate a ida ao
+ * Escritório seria opcional e o laço viraria enfeite.
+ *
+ * COORDENADAS: medidas contra `docs/arte/chao.json` e olhadas em
+ * `docs/arte/previa-b2-cafezinho.png` e `previa-b2-escritorio.png`. No Cafezinho
+ * o piso é generoso (x 8..80 inteiro), então o que dita as posições é a largura
+ * da figura (200px) contra a largura do balcão; no Escritório valem os mesmos
+ * três bolsões da fase 1.
  */
 import type { Cena, Dialogo, DialogoId } from '../types';
 
@@ -23,69 +48,126 @@ export const CENAS_B2: readonly Cena[] = [
     lugarId: 'cafezinho',
     bloco: 2,
     aberturaTexto:
-      'Um mês. Ela já sabe a senha de cor. Já sabe que ninguém almoça antes de meio-dia e meia. Ainda não sabe o que está fazendo.',
-    ecoTexto: 'Aqui eu descobri o nome do que eu não sabia.',
+      'Um mês. Ela já sabe a senha de cor e já sabe que ninguém almoça antes de meio-dia e meia. Ainda não sabe o que está fazendo.',
+    ecoTexto: 'Aqui ela descobriu o nome do que não sabia.',
     hotspots: [
       {
-        id: 'maquina-cafe',
-        rotulo: 'Máquina de café',
-        pos: { x: 17, y: 47 },
-        parada: { x: 22, y: 62 },
-        efeitos: [
-          { tipo: 'narrar', texto: 'Ana aperta o botão errado e sai chá. Ela bebe o chá.' },
-        ],
-      },
-      {
-        id: 'bianca-cafe',
+        // A conversa que abre a fase. Sem `umaVezSo`: diálogo tem de poder ser
+        // relido (ADR-016), e a store aplica `Dialogo.efeitos` só na primeira
+        // conclusão — reler devolve a informação, não o efeito.
+        id: 'b2-bianca',
         rotulo: 'Bianca',
-        pos: { x: 46, y: 45 },
-        parada: { x: 42, y: 60 },
-        efeitos: [{ tipo: 'dialogo', dialogoId: 'b2-bianca-cafezinho' }],
+        arte: { tipo: 'npc', npcId: 'bianca' },
+        pos: { x: 32, y: 72 },
+        parada: { x: 21, y: 76 },
+        efeitos: [{ tipo: 'dialogo', dialogoId: 'b2-bianca' }],
       },
       {
-        id: 'rafael-cafe',
-        rotulo: 'Rafael',
-        pos: { x: 77, y: 47 },
-        parada: { x: 72, y: 61 },
-        aceitaItem: 'cartao-rafael',
-        efeitosComItem: [
-          { tipo: 'narrar', texto: 'Rafael: (ri) Esse cartão é meu, eu sei quem eu sou.' },
+        // O notebook da Bianca, aberto no balcão. É onde as duas plataformas
+        // estão na tela, e é por isso que o puzzle nasce aqui e não na mesa da
+        // Ana: a lista sai da conversa, não do trabalho.
+        id: 'b2-notebook',
+        rotulo: 'Notebook da Bianca',
+        arte: { tipo: 'objeto', assetId: 'objeto-notebook-aberto', largura: 160, altura: 112 },
+        pos: { x: 42, y: 56 },
+        parada: { x: 52, y: 76 },
+        efeitos: [{ tipo: 'abrirPuzzle', puzzleId: 'associar' }],
+      },
+      {
+        // Pequeno, bobo, e diz onde ela está. Sem item e sem skill: é
+        // personagem. Continua reclicável de propósito — é o único hotspot da
+        // fase que existe só para dar textura, e apagá-lo depois do primeiro
+        // clique transformaria textura em clique morto.
+        id: 'b2-maquina',
+        rotulo: 'Máquina de café',
+        arte: { tipo: 'objeto', assetId: 'objeto-maquina-cafe', largura: 128, altura: 192 },
+        pos: { x: 16, y: 70 },
+        parada: { x: 25, y: 76 },
+        efeitos: [
+          {
+            tipo: 'narrar',
+            texto: 'Ela aperta o botão errado e sai chá. Ela bebe o chá.',
+          },
         ],
-        efeitos: [{ tipo: 'dialogo', dialogoId: 'b2-rafael-cafezinho' }],
+      },
+      {
+        // O FECHO, de volta ao lugar de origem. O gate é o certificado: ele só
+        // existe se ela tiver ido trabalhar no Escritório.
+        id: 'b2-rafael',
+        rotulo: 'Rafael',
+        arte: { tipo: 'npc', npcId: 'rafael' },
+        pos: { x: 59, y: 74 },
+        parada: { x: 70, y: 76 },
+        requerItemPresente: 'certificado-degree',
+        bloqueadoTexto:
+          'Ele está no meio de uma conversa. E a semana dela continua inteira em cima da mesa.',
+        efeitos: [{ tipo: 'dialogo', dialogoId: 'b2-rafael' }],
       },
     ],
   },
   {
-    lugarId: 'sala-treinamento',
+    // A IDA. Mesmo Escritório da fase 1, cena diferente: o lugar não mudou, ela
+    // mudou. É a coisa mais barata e mais eficaz do projeto (ADR-022).
+    lugarId: 'escritorio',
     bloco: 2,
-    aberturaTexto:
-      'Sala pequena, TV na parede, mesa longa. Bianca já está lá com o notebook aberto.',
-    ecoTexto: 'Aqui eu estudei o que faltou, à noite.',
+    aberturaTexto: 'A mesa dela. A semana inteira em cima dela, e tudo parecendo urgente.',
+    ecoTexto: 'Aqui ela aprendeu que urgente e importante não são a mesma palavra.',
     hotspots: [
       {
-        id: 'bianca-trilha',
-        rotulo: 'Bianca',
-        pos: { x: 63, y: 45 },
-        parada: { x: 58, y: 60 },
-        efeitos: [{ tipo: 'dialogo', dialogoId: 'b2-bianca-treinamento' }],
+        // As duas coisas na MESMA tela, sem comentário. É o setup do terceiro
+        // pilar da Heloisa: a demanda que cai de última hora e a prova que já
+        // estava marcada. O puzzle resolve uma; a conversa sobre prazo é a fala
+        // de quem apresenta.
+        id: 'b2-tela',
+        rotulo: 'Tela da Ana',
+        arte: { tipo: 'objeto', assetId: 'objeto-monitor-ligado', largura: 192, altura: 144 },
+        ancora: 'centro',
+        pos: { x: 41, y: 64 },
+        parada: { x: 12, y: 80 },
+        efeitos: [
+          {
+            tipo: 'narrar',
+            texto:
+              'Uma demanda nova caiu às cinco da tarde. A prova da faculdade é quinta. As duas coisas estão na mesma tela.',
+          },
+        ],
       },
       {
-        id: 'notebook-trilha',
+        id: 'b2-mesa',
         rotulo: 'Notebook da Ana',
-        pos: { x: 33, y: 67 },
-        parada: { x: 36, y: 79 },
-        umaVezSo: true,
-        efeitos: [{ tipo: 'abrirPuzzle', puzzleId: 'associar' }],
+        arte: { tipo: 'objeto', assetId: 'objeto-notebook', largura: 160, altura: 112 },
+        // Mesmo ponto da fase 1: é a mesa dela, e mesa que anda de lugar entre
+        // fases faz a plateia achar que é outra sala.
+        pos: { x: 30, y: 72 },
+        parada: { x: 12, y: 80 },
+        efeitos: [{ tipo: 'abrirPuzzle', puzzleId: 'sequenciar' }],
       },
       {
-        id: 'conclusao-trilha',
-        rotulo: 'Certificado na tela',
-        pos: { x: 43, y: 59 },
-        parada: { x: 40, y: 75 },
-        requerPuzzleResolvido: 'associar',
-        bloqueadoTexto: 'As quatro lacunas ainda estão sem trilha. Nada pra concluir aqui.',
+        // A arte é o próprio certificado que este hotspot concede: mostra o que
+        // ela está prestes a ganhar sem inventar prop de cenário. O caderno vem
+        // junto porque é o mesmo esforço — metade dele é sobre organizar a
+        // semana, e é ele que abre a fase 3.
+        //
+        // Ponta DIREITA do tampo: a esquerda é do notebook e o meio é do
+        // monitor, e os três retângulos não podem se cruzar.
+        id: 'b2-certificado',
+        rotulo: 'Certificado',
+        arte: { tipo: 'item', itemId: 'certificado-degree' },
+        pos: { x: 51, y: 71 },
+        parada: { x: 12, y: 80 },
+        requerPuzzleResolvido: 'sequenciar',
+        bloqueadoTexto: 'A semana dela ainda está toda na mesma pilha. Não sobra noite pra trilha.',
         umaVezSo: true,
-        efeitos: [{ tipo: 'dialogo', dialogoId: 'b2-conclusao-trilha' }],
+        efeitos: [
+          {
+            tipo: 'narrar',
+            texto:
+              'Quarenta horas, todas fora do horário. Ela fecha o notebook e ainda não sabe onde isso serve.',
+          },
+          { tipo: 'concederItem', itemId: 'certificado-degree' },
+          { tipo: 'concederItem', itemId: 'anotacoes-treinamento' },
+          { tipo: 'concederSkill', skillId: 'competencia-tecnica' },
+        ],
       },
     ],
   },
@@ -93,22 +175,27 @@ export const CENAS_B2: readonly Cena[] = [
 
 export const DIALOGOS_B2: Record<DialogoId, Dialogo> = {
   /**
-   * O coração do bloco. Ela ABRE os dois assuntos (grade x mercado, Degree x
-   * Percipio) em uma frase cada e para — a explicação é do apresentador, ver
-   * os ganchos em docs/roteiro/02-bloco-2.md.
+   * Seis falas, o teto do projeto — e o único diálogo que chega nele, porque é
+   * aqui que a fase inteira é plantada. Ela abre os dois assuntos e não explica
+   * nenhum: quem desenvolve é quem apresenta.
+   *
+   * A segunda fala é a EXCEÇÃO DECLARADA ao expurgo de vocabulário (ADR-027). O
+   * contraste entre as duas áreas é a frase mais anti-nicho que este projeto
+   * pode dizer, e ele só funciona se as duas forem nomeadas.
    */
-  'b2-bianca-cafezinho': {
-    id: 'b2-bianca-cafezinho',
+  'b2-bianca': {
+    id: 'b2-bianca',
     nos: [
       {
+        // O que a fase 1 plantou já rendeu, e ela não ficou sabendo na hora.
         tipo: 'fala',
         quem: 'bianca',
-        texto: 'Você é do DT7? A Cláudia falou que você pergunta muito — era elogio.',
+        texto: 'Você é do time da Cláudia, né? Ela falou que você pergunta muito. Era elogio.',
       },
       {
         tipo: 'fala',
         quem: 'bianca',
-        texto: 'Eu faço documentação técnica e desenho de API. Sou formada em Letras.',
+        texto: 'Eu sou formada em Letras. Hoje eu trabalho com tecnologia.',
       },
       { tipo: 'fala', quem: 'ana', texto: '(pausa) Letras.' },
       {
@@ -118,92 +205,47 @@ export const DIALOGOS_B2: Record<DialogoId, Dialogo> = {
           'Transição aos vinte e oito, estudando o que estava faltando. Que é diferente de estudar o que tem na grade.',
       },
       {
+        // As duas plataformas, uma frase cada. Errar a ferramenta é o que faz a
+        // pessoa desistir, mas dizer isso é fala de apresentador.
         tipo: 'fala',
         quem: 'bianca',
         texto:
-          '(anota três trilhas num guardanapo) Degree é trilha com começo e fim. Percipio é biblioteca, pra quando você já sabe o nome do problema.',
+          'Tem as duas aqui dentro: Degreed é trilha, com começo e fim. Percipio é biblioteca, pra quando você já sabe o nome do problema.',
       },
       {
         tipo: 'fala',
         quem: 'bianca',
-        texto: 'Eu vou estar lá também. Eu não parei de estudar, Ana — ninguém aqui parou.',
+        texto: 'Eu ainda estudo, Ana. Ninguém aqui parou.',
       },
     ],
     efeitos: [
-      { tipo: 'concederItem', itemId: 'indicacao-trilha' },
       { tipo: 'concederSkill', skillId: 'leitura-mercado' },
       { tipo: 'concederSkill', skillId: 'aprendizado-continuo' },
-      { tipo: 'destravarLugar', lugarId: 'sala-treinamento' },
     ],
   },
 
   /**
-   * Reaparição. A plateia precisa reencontrá-lo aqui pra lembrar dele no
-   * minuto 44 — sem isso a primeira conexão do final morre.
+   * O fecho da fase, e a reaparição que o clímax precisa: a plateia tem de
+   * reencontrar o Rafael para que a primeira conexão da fase 6 signifique algo.
+   *
+   * Ele fala do ramal que ela não usou, e NÃO fala do cartão. A diferença é
+   * tudo: mencionar o objeto sinalizaria o item tardio; mencionar o hábito
+   * devolve o assunto para a plateia.
    */
-  'b2-rafael-cafezinho': {
-    id: 'b2-rafael-cafezinho',
+  'b2-rafael': {
+    id: 'b2-rafael',
     nos: [
-      {
-        tipo: 'fala',
-        quem: 'rafael',
-        texto: 'Sobreviveu ao primeiro mês. (brinda com o copo de café)',
-      },
+      { tipo: 'fala', quem: 'rafael', texto: 'Sobreviveu ao primeiro mês. (brinda com o copo)' },
       { tipo: 'fala', quem: 'ana', texto: 'Por pouco.' },
       { tipo: 'fala', quem: 'rafael', texto: 'Eu vi que você usou meu ramal zero vezes.' },
       {
         tipo: 'fala',
         quem: 'rafael',
-        texto: 'Não deixa de usar por achar que tá incomodando. Esse foi o meu erro.',
+        texto: 'Não deixa de chamar por achar que tá incomodando. Esse foi o meu erro.',
       },
-    ],
-  },
-
-  /** Antes do puzzle: o método, em duas linhas. */
-  'b2-bianca-treinamento': {
-    id: 'b2-bianca-treinamento',
-    nos: [
-      {
-        tipo: 'fala',
-        quem: 'bianca',
-        texto: 'Senta. Cinco minutos aqui economizam seis meses.',
-      },
-      {
-        tipo: 'fala',
-        quem: 'bianca',
-        texto:
-          'Lista o que apareceu na sua frente e você não soube resolver. Depois acha a trilha que fecha cada uma.',
-      },
-    ],
-  },
-
-  /**
-   * Fecho do bloco. A fala mais honesta da apresentação está aqui: ela
-   * provavelmente NÃO vai usar aquilo agora.
-   */
-  'b2-conclusao-trilha': {
-    id: 'b2-conclusao-trilha',
-    nos: [
-      {
-        tipo: 'fala',
-        quem: 'narrador',
-        texto: 'Quatro linhas na tela. Nenhuma delas estava na grade da faculdade.',
-      },
-      {
-        tipo: 'fala',
-        quem: 'bianca',
-        texto: 'Fundamentos de Arquitetura: quarenta horas. Você fez em três semanas, à noite.',
-      },
-      { tipo: 'fala', quem: 'ana', texto: 'Eu nem sei se vou usar isso.' },
-      { tipo: 'fala', quem: 'bianca', texto: 'Provavelmente não vai. (pausa) Não agora.' },
     ],
     efeitos: [
-      { tipo: 'concederItem', itemId: 'certificado-degree' },
-      { tipo: 'concederItem', itemId: 'anotacoes-treinamento' },
-      { tipo: 'concederSkill', skillId: 'competencia-tecnica' },
-      { tipo: 'destravarLugar', lugarId: 'laboratorio' },
       { tipo: 'concluirLugar', lugarId: 'cafezinho' },
-      { tipo: 'concluirLugar', lugarId: 'sala-treinamento' },
       { tipo: 'blocoConcluido' },
     ],
   },
