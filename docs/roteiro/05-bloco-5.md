@@ -20,19 +20,19 @@
 
 ## A regra desta fase, antes de qualquer fala
 
-**O jogo nunca afirma nem prevê o desfecho** (ADR-028). Ela não sabe se fica, e
-por não saber, poderia ser que não fosse.
+**Ana quer ser efetivada; o contrato está perto do fim e a decisão ainda não
+chegou.** A dúvida dela é em qual área quer construir a carreira, não se deseja
+continuar na empresa.
 
-E a fase **pensa em voz alta** o que acontece nas duas hipóteses. Isso é novo na
-v2.1, e é o pedido do dono: *"faltou a reflexão na fase 5 sobre a possibilidade
-de não ser efetivado quando Ana ainda não sabe o que vai acontecer"*.
+E a fase reconhece que uma decisão de contratação pode depender de fatores fora
+do controle dela. Falta de vaga é uma hipótese, não o resultado da história.
 
 A linha entre as duas coisas é fina, e quem apresenta pode apagá-la sem querer:
 
 | ❌ Não diga | ✅ Diga |
 |---|---|
-| "Ela vai ser efetivada, vocês vão ver" | "Ninguém falou nada com ela ainda" |
-| "Se não der, foi bom mesmo assim" | "O que ela aprendeu a fazer é dela nas duas hipóteses" |
+| "Ela não sabe se quer ficar" | "Ela quer ser efetivada e ainda não recebeu a decisão" |
+| "Se não der, foi bom mesmo assim" | "Ela aprendeu, entregou e tomou iniciativa" |
 | "Spoiler: dá tudo certo" | *(silêncio — a fase 6 dá a notícia)* |
 
 > ⚠️ **Prometer o final aqui destrói a fase 6**, que é inteira a notícia e o
@@ -52,7 +52,7 @@ time dela.
 |---|---|---|
 | **Caderno dela** | o motivo de abrir o painel de skills | — |
 | **Grade do próximo semestre** | folha impressa, a pergunta da fase | — |
-| **Bianca** *(Documentação de produto)* | a conversa, e o fecho | exige os dois acima |
+| **Bianca** *(Documentação de produto)* | conversa sobre o contrato na chegada e fecho depois da reflexão | a conversa final exige caderno e grade |
 
 > 💡 **Gancho de abertura:** o lugar já é argumento. *"Ela não chamou ninguém pra
 > mesa dela. Ela levantou, atravessou o prédio e pediu meia hora de uma pessoa de
@@ -60,20 +60,41 @@ time dela.
 
 ## Abertura
 
-> *Dois anos. O contrato fecha em três semanas e ninguém falou nada sobre isso.
-> Ela pediu meia hora com alguém de outro time, e atravessou o prédio para ter.*
+> *Dois anos. O contrato fecha em três semanas. Ana quer ser efetivada, mas ainda
+> não sabe se vai acontecer. Ela também pensa em que área quer construir a carreira.*
 
 > ⚠️ **"Ninguém falou nada sobre isso" é o eixo da fase.** Não conserte esse
 > silêncio com uma previsão.
 
 ---
 
-## 1. Caderno dela — e o painel de skills
+## 1. Bianca — contrato e direção
 
-> *Ela abre uma página nova e escreve em cima: o que eu sei fazer hoje. A lista
-> sai maior do que ela esperava, e nenhuma linha dela estava no plano.*
+Na chegada, Ana conversa com Bianca sobre o fim do contrato. Ela quer ser
+efetivada e não sabe se a decisão virá; também percebe que essa resposta não
+decide sozinha em que área quer crescer. A conversa termina abrindo espaço para
+olhar as próprias experiências, sem prever o resultado.
 
-**→ Abra o painel de skills e percorra as nove, uma por uma.** É isto o
+> **Bianca:** O contrato está perto do fim. Como você está pensando nisso?
+>
+> **Ana:** Quero ser efetivada. Ainda não sei se vai acontecer, e não quero
+> fingir que isso não me preocupa.
+>
+> **Bianca:** Faz sentido. E, além da vaga, você já começou a pensar em que tipo
+> de trabalho quer fazer?
+>
+> **Ana:** É outra pergunta. Quero olhar para o que aprendi e para as tarefas de
+> que gostei antes de decidir a área.
+
+---
+
+## 2. Caderno dela — e o painel de skills
+
+> *Ela abre uma página nova e escreve: o que sei fazer hoje, do que me orgulho e
+> o que ainda quero aprender. A lista sai maior do que esperava.*
+
+Ao entrar nesta fase, as descrições do painel ficam fechadas. Ao abrir o caderno,
+o painel expande a última skill e convida a percorrer as nove, uma por uma. É isto o
 "gameplay" desta fase: não há puzzle, e a revisão do estágio inteiro é a pessoa
 clicando cada skill enquanto fala.
 
@@ -87,7 +108,7 @@ clicando cada skill enquanto fala.
 
 ---
 
-## 2. Grade do próximo semestre — a pergunta fica aberta
+## 3. Grade do próximo semestre — a pergunta fica aberta
 
 > *A grade do próximo semestre, impressa e dobrada no meio. Ela reconhece três
 > matérias pelo nome. Nenhuma das três é o que ela faz todo dia.*
@@ -102,7 +123,7 @@ clicando cada skill enquanto fala.
 
 ---
 
-## 3. Bianca (Documentação de produto) — a fala do pivô
+## 4. Bianca (Documentação de produto) — a fala do pivô
 
 Sem os dois beats anteriores: *"Bianca está terminando uma coisa. Ela pediu meia
 hora, e a meia hora é pra conversar — não pra chegar sem pergunta."*
@@ -111,26 +132,22 @@ Com os dois, seis falas:
 
 > **Bianca:** Você está com cara de quem está fazendo uma conta que não fecha.
 >
-> **Ana:** Eu não sei se eu fico. E não sei se é isso que eu quero fazer.
+> **Ana:** Meu contrato está acabando. Eu quero ser efetivada, mas ainda não sei se vai acontecer.
 >
-> **Ana:** **Se eu ficar, eu já sei onde eu sento na segunda. Se não ficar, eu
-> saio com esse caderno e sem saber o que ele vale lá fora.**
+> **Ana:** Aprendi muito aqui. Estou pensando se quero continuar nessa área ou conhecer outra dentro da empresa.
 >
-> **Bianca:** Eu desenho API e escrevo documentação técnica. Sou formada em
-> Letras.
+> **Bianca:** Sou formada em Letras e trabalho com documentação. Nem sabia que esse caminho existia; demorei para parar de chamar a mudança de desvio.
 >
-> **Bianca:** Eu nem sabia que isso existia. Levei um tempo pra parar de chamar
-> isso de desvio.
+> **Bianca:** Você aprendeu, entregou e tomou iniciativa. A gente viu isso.
 >
-> **Bianca:** **O que você aprendeu a fazer aqui é seu. Isso não fica com a
-> empresa.**
+> **Bianca:** Se a vaga não vier, não apaga o que você fez. Às vezes não há vaga no time, e isso não está nas suas mãos. O que você aprendeu é seu.
+>
 
 **→ Ganha skill: Plano de futuro**
 **→ Fecha a fase.**
 
-> ⚠️ **PARE no terceiro clique** — na fala em negrito da Ana. É o beat mais
-> importante desta fase e o único momento da apresentação inteira em que as duas
-> hipóteses ficam na tela ao mesmo tempo. Deixe ler.
+> ⚠️ A conversa final conclui a fase. Deixe a fala sobre o percurso de Bianca e
+> o reconhecimento do trabalho de Ana respirarem antes de avançar.
 
 > 💡 **Gancho de fala, e é aqui que a lição mora — é sua, não do jogo:**
 >
@@ -158,8 +175,8 @@ Com os dois, seis falas:
 
 ## Fecho do bloco
 
-> *Ela não sabe se fica.*
-> *Sabe o que leva se não ficar.*
+> *Ela quer ficar. Ainda não sabe se vai poder.*
+> *E começa a escolher onde quer crescer.*
 
 > 💡 **Gancho de fecho:** as duas frases do fecho são a fase inteira, e a segunda
 > não é consolo — é inventário. *"Ela não está em paz com a incerteza. Ela só não
@@ -180,7 +197,7 @@ Com os dois, seis falas:
 | NPCs | Bianca |
 | Puzzle | nenhum — **o painel de skills é a mecânica** |
 | Laço | abre e fecha em Outra área |
-| Porta | Bianca exige Caderno **e** Grade |
+| Porta | Bianca fecha o bloco depois do Caderno **e** da Grade |
 | Requisito de fala | parar no nó 3 e deixar as duas hipóteses na tela |
 
 ---
@@ -396,17 +413,19 @@ Sustentar por 5 segundos. Sem texto. Sem movimento.
 
 ### 5. As três perguntas
 
-O mapa e os personagens desaparecem. Fundo escuro. Uma pergunta por vez, disparada por clique do apresentador. Fonte grande, centralizada.
+Depois da festa, a tela retorna ao Escritório com Ana trabalhando. Uma pergunta
+por vez aparece numa área de leitura ao lado dela, avançada por clique do
+apresentador. Ao fim, as três ficam juntas sobre o cenário.
 
-> **O que fizemos para estar aqui?**
-
-*(clique)*
-
-> **O que gostaríamos de ouvir?**
+> **Que contribuição sua merece ser conhecida — e como você contaria essa história?**
 
 *(clique)*
 
-> **O que podemos levar de transformação?**
+> **Em que área você quer crescer, e qual próximo passo pode experimentar?**
+
+*(clique)*
+
+> **Se uma oportunidade não vier, o que depende de você e o que você leva dessa experiência?**
 
 *(clique)*
 

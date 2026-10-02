@@ -222,7 +222,7 @@ export const MENSAGEM_GENERICA =
 
 /** Fecho da fase 6. Uma por clique, e depois silêncio. */
 export const PERGUNTAS_FINAIS: readonly string[] = [
-  'O que fizemos para estar aqui?',
-  'O que gostaríamos de ouvir?',
-  'O que podemos levar de transformação?',
+  'Que contribuição sua merece ser conhecida — e como você contaria essa história?',
+  'Em que área você quer crescer, e qual próximo passo pode experimentar?',
+  'Se uma oportunidade não vier, o que depende de você e o que você leva dessa experiência?',
 ];

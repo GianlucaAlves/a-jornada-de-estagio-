@@ -129,6 +129,16 @@ export function aberturaAoConquistar(skills: readonly SkillId[]): SkillId | null
   return skills.length === 0 ? null : (skills[skills.length - 1] ?? null);
 }
 
+/** Na fase 5, o caderno é o gesto que abre a retrospectiva de skills. */
+export function aberturaNaFase(
+  bloco: number,
+  cadernoVisto: boolean,
+  skills: readonly SkillId[],
+): SkillId | null {
+  if (bloco === 5 && !cadernoVisto) return null;
+  return aberturaAoConquistar(skills);
+}
+
 // ------------------------------------------------------------------ componente
 
 export interface PropsPainelDeSkills {
@@ -266,6 +276,9 @@ export function PainelDeSkills(): JSX.Element | null {
    * deixou de ser só desperdício: o efeito abaixo depende do TAMANHO da lista.
    */
   const ids = useJogo((s) => s.skills);
+  const bloco = useJogo((s) => s.bloco);
+  const hotspotsFeitos = useJogo((s) => s.hotspotsFeitos);
+  const cadernoVisto = hotspotsFeitos.includes('b5-caderno');
   const [aberta, setAberta] = useState<SkillId | null>(null);
 
   /**
@@ -275,12 +288,12 @@ export function PainelDeSkills(): JSX.Element | null {
    * concede uma skill ou quando uma fase é montada — nunca em re-render. É por
    * isso que o seletor acima devolve `s.skills` cru: se devolvesse array novo a
    * cada leitura, este efeito rodaria em todo clique do jogo e reabriria a
-   * última skill por cima da que a pessoa estava lendo. Na fase 5, onde o painel
-   * É a mecânica, isso seria o defeito principal da fase.
+   * última skill por cima da que a pessoa estava lendo. A exceção deliberada é
+   * abrir a retrospectiva quando Ana consulta o caderno na fase 5.
    */
   useEffect(() => {
-    setAberta(aberturaAoConquistar(ids));
-  }, [ids]);
+    setAberta(aberturaNaFase(bloco, cadernoVisto, ids));
+  }, [ids, bloco, cadernoVisto]);
 
   const skills: Skill[] = ids.map((id) => SKILLS[id]);
 

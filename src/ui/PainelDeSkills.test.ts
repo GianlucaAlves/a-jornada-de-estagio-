@@ -30,6 +30,7 @@ import {
   PASSO_DA_LINHA,
   PRIMEIRA_LINHA_Y,
   PainelDeSkillsVisual,
+  aberturaNaFase,
   aberturaAoConquistar,
   proximaAberta,
 } from './PainelDeSkills';
@@ -122,6 +123,14 @@ describe('orçamento vertical do painel: as nove skills cabem', () => {
     expect(GEOMETRIA_DO_PAINEL.cabecalho.fonte).toBeGreaterThanOrEqual(tipografia.minimo);
     expect(GEOMETRIA_DO_PAINEL.linha.fonte).toBeGreaterThanOrEqual(tipografia.minimo);
     expect(GEOMETRIA_DO_PAINEL.texto.fonte).toBeGreaterThanOrEqual(tipografia.minimo);
+  });
+});
+
+describe('a retrospectiva da fase 5 começa no caderno', () => {
+  it('mantém as descrições fechadas até Ana abrir o caderno', () => {
+    expect(aberturaNaFase(5, false, IDS)).toBeNull();
+    expect(aberturaNaFase(5, true, IDS)).toBe(IDS[IDS.length - 1]);
+    expect(aberturaNaFase(4, false, IDS)).toBe(IDS[IDS.length - 1]);
   });
 });
 

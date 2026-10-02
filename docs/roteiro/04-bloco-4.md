@@ -11,35 +11,32 @@
 
 ## Estado da cena
 
-Sala de reuniões vestida de evento. Na parede, a tela grande. Na faixa das
-cadeiras, de costas para quem assiste, a **plateia** sentada. À direita da
-cabeceira, o **atril**. A Cláudia à esquerda, atrás da mesa. A Bianca na porta,
-que fica aberta desde o primeiro quadro — ela não está na reunião.
+Sala de reuniões vestida de evento. A mesa foi retirada para liberar o palco e
+a plateia sentada. Na parede, a tela grande; na frente, o atril. Marcos prepara
+Ana antes da reunião; Cláudia e Bianca entram como etapas posteriores, sem
+aparecer junto da plateia no momento da apresentação.
 
-**Cinco hotspots:** A plateia · Tela da sala *(abre o puzzle)* · Apresentar para
-a sala · Cláudia · Bianca
+**Seis hotspots:** Marcos · A plateia · Tela da sala *(abre o puzzle)* ·
+Apresentar para a sala · Cláudia · Bianca
 
 ---
 
 ## Ordem dos cliques — leia antes de subir no palco
 
-A cadeia é presa por porta em quase tudo, **menos num ponto**, e esse ponto é
-seu:
+A ordem é presa por portas. A preparação de Marcos libera a plateia e o puzzle;
+ambos precisam acontecer antes de Ana apresentar:
 
 | # | Clique | Porta |
 |---|---|---|
-| 1 | **A plateia** | nenhuma — está aberto desde o começo |
-| 2 | **Tela da sala** | nenhuma |
-| 3 | **Apresentar para a sala** | exige o puzzle resolvido |
-| 4 | **Cláudia** | exige o 3 feito |
-| 5 | **Bianca** | exige a Cláudia feita |
+| 1 | **Marcos** | preparação antes da reunião |
+| 2 | **A plateia** | exige Marcos |
+| 3 | **Tela da sala** | exige Marcos; abre o puzzle |
+| 4 | **Apresentar para a sala** | exige puzzle e plateia |
+| 5 | **Cláudia** | exige apresentação e pausa concluídas |
+| 6 | **Bianca** | exige Cláudia |
 
-> ⚠️ **"A plateia" não é obrigatório pelo sistema, e devia ser.** Clique nele
-> **imediatamente antes** de "Apresentar para a sala": é a linha que diz que a
-> sala está ouvindo, e é contra ela que o silêncio da PAUSA tem peso. O beat é
-> **relível** de propósito — se você já clicou por curiosidade no começo da cena,
-> clique de novo na hora certa. O motivo de não haver porta ali está registrado
-> no cabeçalho de `src/domain/content/bloco4.ts`.
+> Clique em **Marcos** antes dos demais hotspots. A conversa prepara a história
+> que Ana vai contar; a plateia e a tela liberam a reunião em seguida.
 
 ---
 
@@ -51,7 +48,19 @@ seu:
 
 ---
 
-## 1. A plateia
+## 1. Marcos — antes da reunião
+
+Marcos ajuda Ana a organizar o que vai contar. A conversa introduz Situação,
+Tarefa, Ação e Resultado; falar do próprio trabalho é dar clareza à contribuição.
+Ele lembra que LinkedIn pode levar a história a quem não estava na sala e que
+ela só deve compartilhar informação pública.
+
+> 💡 **Gancho de fala:** STAR dá uma ordem para contar uma realização. Use o caso
+> da fase 3 e peça à plateia que perceba a diferença entre a ação e o impacto.
+
+---
+
+## 2. A plateia
 
 Clique. Na tela: gente sentada, de costas, virada para a frente.
 
@@ -67,7 +76,7 @@ Clique. Na tela: gente sentada, de costas, virada para a frente.
 
 ---
 
-## 2. PUZZLE — Montar
+## 3. PUZZLE — Montar
 
 **Rótulo na tela:** *Uma página para o gestor*
 **Instrução:** *Quatro campos, quatro peças. Cada peça pertence a um campo.*
@@ -75,28 +84,26 @@ Clique. Na tela: gente sentada, de costas, virada para a frente.
 | Campo | Peça |
 |---|---|
 | Situação | A conferência dos lotes só era digitada no fim do turno. |
-| O que eu fiz | Passei a conferência para a planilha compartilhada, na hora. |
+| Tarefa | Garantir que as pendências chegassem claras ao turno seguinte. |
+| Ação | Passei a conferência para a planilha compartilhada, na hora. |
 | Resultado | O turno seguinte já começa sabendo o que ficou pendente. |
-| Próximo passo | Vale testar o mesmo formato nas outras duas linhas. |
 
 Deliberadamente o mais **satisfatório** dos cinco: peça na casa errada é
 recusada com aviso, e encaixar as quatro fecha a página. A plateia tem de sentir
 competência — **a PAUSA só funciona se resolver isto tiver sido gostoso.**
 
 > 💡 **Gancho de fala:** é o mesmo caso da fase 3, contado para cima. Situação,
-> o que eu fiz, resultado, próximo passo. Quatro linhas. É isso que falta na
-> maior parte do trabalho bom que ninguém vê.
+> tarefa, ação e resultado deixam claro o que era responsabilidade dela e o que
+> mudou com o trabalho.
 
 ---
 
-## 3. Apresentar para a sala
+## 4. Apresentar para a sala
 
-Clique no **atril**. A Ana caminha até ele e fica de pé ao lado. No quadro há, ao
-mesmo tempo: a página no telão, o atril, a Ana de pé e a plateia sentada
-olhando para a frente.
-
-E o sistema **não devolve nada**. Ela recebe o crachá do evento em silêncio, sem
-aviso, sem texto.
+Clique no **atril**. A Ana caminha até ele; a página montada continua no telão e
+a plateia permanece sentada, voltada para a frente. Ela explica o que mudou para
+o turno seguinte e propõe testar o formato em outras linhas. Avance pelas duas
+falas; ao terminar, o crachá é concedido e começa a pausa silenciosa.
 
 > ⚠️ Era aqui que estava o defeito da versão anterior: o botão de apresentar era
 > o **crachá** — a recompensa fazendo papel do gesto —, flutuando sobre a mesa.
@@ -105,7 +112,7 @@ aviso, sem texto.
 
 ---
 
-## 4. A PAUSA — especificação mecânica
+## 5. A PAUSA — especificação mecânica
 
 **Isto não é uma sugestão de direção. É um requisito.**
 
@@ -131,7 +138,7 @@ momento.
 
 ---
 
-## 5. O momento com a plateia
+## 6. O momento com a plateia
 
 Única quebra de quarta parede aprovada da apresentação. Vire-se para a câmera:
 
@@ -145,7 +152,7 @@ Retórica. ~15 segundos. Nada é esperado do sistema, ninguém precisa responder
 
 ---
 
-## 6. Cláudia — a que não comentou
+## 7. Cláudia — a que não comentou
 
 Ela é a única que ainda não saiu de quadro.
 
@@ -171,7 +178,7 @@ E sai.
 
 ---
 
-## 7. Bianca — a virada
+## 8. Bianca — a virada
 
 Ela aparece na porta. Não estava na reunião. **Seis linhas, e ela para.** Ela não
 ensina nada aqui — ela vira a mesa e sai do caminho.
@@ -202,11 +209,11 @@ ensina nada aqui — ela vira a mesa e sai do caminho.
 
 ---
 
-## 8. Aprender a comunicar — **fala do apresentador**
+## 9. Aprender a comunicar — **fala do apresentador**
 
-A Bianca plantou; quem desenvolve é você. O sistema acende `Visibilidade` no
-painel **sem nenhuma linha de NPC que a explique** — a explicação é ao vivo.
-Enumere aqui, olhando pro painel que acabou de acender:
+Marcos introduz como tornar uma contribuição clara; a apresentação pratica isso,
+e você desenvolve a conversa com a plateia enquanto a skill `Visibilidade`
+permanece acesa no painel:
 
 > 💡 **Gancho de fala — três coisas, e nenhuma delas é se vender:**
 >
@@ -241,14 +248,14 @@ Enumere aqui, olhando pro painel que acabou de acender:
 
 | Elemento | Status |
 |---|---|
-| Itens ganhos | **Crachá Innovation** — concedido em silêncio, sem aviso nenhum |
+| Itens ganhos | **Crachá Innovation** — concedido ao fim da fala de apresentação |
 | Skills ganhas | **Visibilidade** |
 | Lugares destravados | nenhum |
-| NPCs | Cláudia, Bianca |
+| NPCs | Marcos, Cláudia, Bianca |
 | Puzzle | Montar 4 peças *(o mais satisfatório)* |
 | Requisito especial | **PAUSA de ~8s sem feedback** + quebra de quarta parede |
 | Callback | par nº 3 do puzzle de associar, do Bloco 2 |
-| Carga do tema | as três lições de comunicação são **fala do apresentador** (§8) |
+| Carga do tema | preparação STAR/LinkedIn com Marcos; desenvolvimento ao vivo (§8) |
 
 ---
 

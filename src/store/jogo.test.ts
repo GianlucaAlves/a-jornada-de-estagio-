@@ -123,6 +123,23 @@ function hotspotQueAbre(bloco: BlocoId, puzzleId: PuzzleId): Hotspot {
   throw new Error(`nenhum hotspot da fase ${bloco} abre '${puzzleId}'`);
 }
 
+/** A preparação de Marcos abre os próximos beats da reunião antes do puzzle. */
+function prepararReuniaoDoBloco4(): void {
+  if (j().narracao !== null) j().fecharNarracao();
+  const marcos = cenasDaFase(4)
+    .flatMap((cena) => cena.hotspots)
+    .find((hotspot) => hotspot.id === 'b4-marcos');
+  if (!marcos) throw new Error('a fase 4 precisa da conversa de preparação com Marcos');
+  j().clicarHotspot(marcos.id);
+  concluirDialogo();
+  const plateia = cenasDaFase(4)
+    .flatMap((cena) => cena.hotspots)
+    .find((hotspot) => hotspot.id === 'b4-plateia');
+  if (!plateia) throw new Error('a fase 4 precisa do beat da plateia');
+  j().clicarHotspot(plateia.id);
+  j().fecharNarracao();
+}
+
 /**
  * Avança o diálogo ativo até ele terminar, clicando um nó por vez.
  *
@@ -996,6 +1013,7 @@ describe('saída do palco com interação em curso', () => {
   it('recusa sair com puzzle aberto, e libera depois de resolvido', () => {
     j().entrarNoBloco(4);
     j().entrarNoLugar('sala-reunioes');
+    prepararReuniaoDoBloco4();
     const abre = hotspotQueAbre(4, 'montar');
     j().clicarHotspot(abre.id);
     expect(j().puzzleAberto).toBe('montar');
@@ -1017,6 +1035,7 @@ describe('saída do palco com interação em curso', () => {
   it('fecharPuzzle libera a saída para o mapa que estava recusada', () => {
     j().entrarNoBloco(4);
     j().entrarNoLugar('sala-reunioes');
+    prepararReuniaoDoBloco4();
     j().clicarHotspot(hotspotQueAbre(4, 'montar').id);
     j().voltarAoMapa();
     expect(j().tela.tipo).toBe('cena');
@@ -1031,20 +1050,28 @@ describe('saída do palco com interação em curso', () => {
     jogarFase(4);
     // A pausa já foi concluída por `jogarFase`; refaz o estado à mão.
     j().reiniciar();
+    instalarArmazenamento();
     j().entrarNoBloco(4);
     j().entrarNoLugar('sala-reunioes');
     // A abertura da cena deixa narração na tela, e ela não tem nada a ver com a
     // PAUSA: dispensar antes é o que torna a asserção de silêncio honesta.
     j().fecharNarracao();
+    prepararReuniaoDoBloco4();
     j().clicarHotspot(hotspotQueAbre(4, 'montar').id);
     j().resolverPuzzle('montar');
     const cena = acharCena('sala-reunioes', 4);
-    const queInicia = cena?.hotspots.find((h) =>
-      h.efeitos.some((e) => e.tipo === 'iniciarPausaBloco4'),
-    );
-    expect(queInicia, 'a fase 4 precisa do hotspot que dispara a PAUSA').toBeDefined();
-    if (!queInicia) return;
-    j().clicarHotspot(queInicia.id);
+    const apresentar = cena?.hotspots.find((h) => h.id === 'b4-entrega');
+    expect(apresentar, 'a fase 4 precisa do hotspot de apresentação').toBeDefined();
+    if (!apresentar) return;
+    j().clicarHotspot(apresentar.id);
+    expect(j().pausaBloco4).not.toBe('rodando');
+    // Diálogo em andamento não é persistido; ao retomar, o atril precisa
+    // continuar disponível para repetir a fala e só então disparar a pausa.
+    j().continuar();
+    expect(j().dialogoAtivo).toBeNull();
+    j().clicarHotspot(apresentar.id);
+    expect(j().dialogoAtivo?.dialogoId).toBe('b4-apresentacao');
+    concluirDialogo();
     expect(j().pausaBloco4).toBe('rodando');
 
     // O SILÊNCIO É O REQUISITO: nem narração, nem diálogo, nem skill.
@@ -1054,13 +1081,20 @@ describe('saída do palco com interação em curso', () => {
     j().voltarAoMapa();
     expect(j().tela.tipo).toBe('cena');
     // Durante a pausa o palco não responde a clique nenhum.
-    const outro = cena?.hotspots.find((h) => h.id !== queInicia.id);
+    const outro = cena?.hotspots.find((h) => h.id !== apresentar.id);
     if (outro) {
       j().clicarHotspot(outro.id);
       expect(j().dialogoAtivo).toBeNull();
     }
 
     j().concluirPausaBloco4();
+    const crachaDepoisDaPrimeiraApresentacao = j().itens['cracha-innovation'];
+    j().clicarHotspot(apresentar.id);
+    expect(j().dialogoAtivo?.dialogoId).toBe('b4-apresentacao');
+    concluirDialogo();
+    expect(j().pausaBloco4).toBe('concluida');
+    expect(j().itens['cracha-innovation']).toBe(crachaDepoisDaPrimeiraApresentacao);
+
     j().voltarAoMapa();
     expect(j().tela).toEqual({ tipo: 'mapa' });
   });

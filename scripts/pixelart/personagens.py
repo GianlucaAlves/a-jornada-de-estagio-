@@ -52,6 +52,7 @@ from .nucleo import (
     verificar_sprite,
 )
 from .paleta import CONTORNO, VAZIO
+from .props import MADEIRA, NEUTRO
 
 # --------------------------------------------------------------- geometria
 
@@ -827,7 +828,46 @@ ANA_FUTURA = _ana(
     linhas_vao=(23, 38),
 )
 
-ANAS: tuple[Corpo, ...] = (ANA_ENCOLHIDA, ANA_NEUTRA, ANA_CONFIANTE, ANA_FUTURA)
+def _mesa_de_trabalho(g: Grade, c: Corpo) -> None:
+    """Põe a Ana num posto: mãos no teclado e mesa cobrindo a pose em pé.
+
+    A arte continua na mesma caixa e no mesmo eixo dos sprites de cena. O tampo
+    cobre pernas e quadril porque a tela de encerramento precisa mostrar uma
+    ação de trabalho, não uma Ana em pé diante de um escritório genérico.
+    """
+    g.retangulo(2, 49, 46, 3, MADEIRA[4])
+    g.linha_h(2, 49, 46, MADEIRA[5])
+    g.retangulo(2, 52, 46, 4, MADEIRA[2])
+    g.linha_h(2, 52, 46, MADEIRA[5])
+    g.retangulo(5, 56, 4, 24, MADEIRA[1])
+    g.retangulo(41, 56, 4, 24, MADEIRA[1])
+    g.retangulo(20, 50, 12, 3, NEUTRO[1])
+    for px in (22, 25, 28):
+        g.ponto(px, 51, NEUTRO[4])
+
+    pele, sombra, _ = _PELES[c.pele]
+    manga = c.roupa[1]
+    g.retangulo(16, 44, 6, 3, manga)
+    g.retangulo(28, 44, 6, 3, manga)
+    g.retangulo(19, 46, 5, 3, pele)
+    g.retangulo(26, 46, 5, 3, pele)
+    g.linha_h(20, 48, 4, sombra)
+    g.linha_h(26, 48, 4, sombra)
+
+
+ANA_TRABALHANDO = replace(ANA_NEUTRA, nome="ana-trabalhando", extra=_mesa_de_trabalho)
+ANA_FUTURA_TRABALHANDO = replace(
+    ANA_FUTURA, nome="ana-futura-trabalhando", extra=_mesa_de_trabalho
+)
+
+ANAS: tuple[Corpo, ...] = (
+    ANA_ENCOLHIDA,
+    ANA_NEUTRA,
+    ANA_CONFIANTE,
+    ANA_FUTURA,
+    ANA_TRABALHANDO,
+    ANA_FUTURA_TRABALHANDO,
+)
 
 
 def _alongar_braco(segs: Segmentos, delta: int) -> Segmentos:

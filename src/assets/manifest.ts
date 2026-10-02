@@ -53,6 +53,8 @@ export const MANIFEST: Record<string, string> = {
   'ana-neutra': `${RAIZ}/protagonista/ana-neutra.png`,
   'ana-confiante': `${RAIZ}/protagonista/ana-confiante.png`,
   'ana-futura': `${RAIZ}/protagonista/ana-futura.png`,
+  'ana-trabalhando': `${RAIZ}/protagonista/ana-trabalhando.png`,
+  'ana-futura-trabalhando': `${RAIZ}/protagonista/ana-futura-trabalhando.png`,
 
   // ------------------------------------------------ elenco fixo (5 NPCs)
   'npc-rafael': `${RAIZ}/npcs/rafael.png`,
@@ -126,6 +128,13 @@ export const MANIFEST: Record<string, string> = {
   'objeto-esteira': `${RAIZ}/objetos/esteira.png`,
   /** Painel de processo da linha: é nele que a etapa lenta fica visível. */
   'objeto-painel-processo': `${RAIZ}/objetos/painel-processo.png`,
+  /** Rádio telecom em deslocamento sobre a esteira da fase 3. */
+  'objeto-radio-telecom': `${RAIZ}/objetos/radio-telecom.png`,
+  /** Carcaça aberta; alterna com unidades montadas para mostrar etapas da produção. */
+  'objeto-radio-telecom-aberto': `${RAIZ}/objetos/radio-telecom-aberto.png`,
+  /** Poses do mesmo braço: base fixa e alcance sobre a esteira. */
+  'objeto-braco-robotico': `${RAIZ}/objetos/braco-robotico.png`,
+  'objeto-braco-robotico-estendido': `${RAIZ}/objetos/braco-robotico-estendido.png`,
 
   // ------------------------------------------------- refinamento da v2.1
   // Estes quatro nascem de defeitos vistos NA TELA, não de escopo novo.

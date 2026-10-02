@@ -1951,7 +1951,11 @@ def radio_de_telecom(largura: int = 12, altura: int = 20, *, montado: bool = Tru
     """
     g = Grade(largura, altura)
     corpo = altura - 5
-    g.caixa_com_volume(1, 0, largura - 2, corpo, NEUTRO[:5])
+    # A antena curta e o visor no painel inferior diferenciam o transceptor de
+    # uma caixa genérica quando a unidade passa pela esteira em escala 4x.
+    g.linha_v(3, 0, 2, "5")
+    g.ponto(3, 0, "6")
+    g.caixa_com_volume(1, 1, largura - 2, corpo, NEUTRO[:5])
     # aletas só nos dois terços de cima: é o que dá topo e base à peça
     aletas = max(3, (corpo * 2) // 3)
     for x in range(2, largura - 2, 2):
@@ -1967,6 +1971,9 @@ def radio_de_telecom(largura: int = 12, altura: int = 20, *, montado: bool = Tru
     g.ponto(largura - 1, 4, "4")
 
     if montado:
+        g.retangulo(3, aletas + 2, 4, 2, "2")
+        g.linha_h(3, aletas + 2, 4, "5")
+        g.ponto(4, aletas + 3, TELA[3])
         g.retangulo(2, corpo - 3, largura - 4, 3, "1")  # placa de conectores
         g.linha_h(2, corpo - 3, largura - 4, "3")
         for i in range((largura - 6) // 3 + 1):

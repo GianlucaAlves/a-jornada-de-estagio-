@@ -21,10 +21,10 @@ import { CENAS } from '../domain/content';
 import type { Cena, Hotspot } from '../domain/types';
 import { CANVAS, alvo } from '../styles/tokens';
 import {
-  POSICAO_DE_ENTRADA,
   dentroDoCanvas,
   faixaQueCobre,
   folgaDeAlvo,
+  posicaoDeEntrada,
   intersectam,
   retanguloDaProtagonista,
   retanguloDoHotspot,
@@ -121,13 +121,17 @@ describe('geometria dos hotspots em cena', () => {
    * olhar.
    */
   it('a posição de entrada não nasce sobre nenhum hotspot', () => {
-    const dela = retanguloDaProtagonista(POSICAO_DE_ENTRADA);
-    expect(dentroDoCanvas(dela)).toBe(true);
-    expect(faixaQueCobre(dela)).toBeNull();
-
-    const colisoes = TODOS.filter(({ hotspot }) =>
-      intersectam(dela, retanguloDoHotspot(hotspot)),
-    ).map(({ cena, hotspot }) => `${nomeDaCena(cena)} '${hotspot.id}'`);
+    const colisoes: string[] = [];
+    for (const cena of CENAS) {
+      const dela = retanguloDaProtagonista(posicaoDeEntrada(cena));
+      expect(dentroDoCanvas(dela), nomeDaCena(cena)).toBe(true);
+      expect(faixaQueCobre(dela), nomeDaCena(cena)).toBeNull();
+      for (const hotspot of cena.hotspots) {
+        if (intersectam(dela, retanguloDoHotspot(hotspot))) {
+          colisoes.push(`${nomeDaCena(cena)} '${hotspot.id}'`);
+        }
+      }
+    }
     expect(colisoes).toEqual([]);
   });
 

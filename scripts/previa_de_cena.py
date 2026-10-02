@@ -171,6 +171,19 @@ def main() -> int:
             continue
         g = fundo.clone()
 
+        # Camadas de CSS da esteira e dos robÃ´s ganham um quadro estÃ¡tico na
+        # prÃ©via para conferir apoio e colisÃ£o com o cenÃ¡rio real.
+        if lugar == "linha-producao" and bloco == 3:
+            repouso = cat.get("braco-robotico")
+            radios = ("radio-telecom", "radio-telecom-aberto", "radio-telecom")
+            for esquerda, ident in zip((108, 184, 260), radios):
+                radio = cat.get(ident)
+                if radio is not None:
+                    g.colar_base(esquerda + radio.largura // 2, 145, radio)
+            if repouso is not None:
+                for centro in (134, 216):
+                    g.colar_base(centro, 142, repouso)
+
         # arte dos hotspots primeiro: a Ana entra por cima, como na cena real
         for h in hotspots:
             tipo, ident = h["tipo"], h["ident"]

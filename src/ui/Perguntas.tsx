@@ -12,8 +12,10 @@
  */
 import { useEffect, useRef, useState } from 'react';
 import { PERGUNTAS_FINAIS } from '../domain/content';
+import { assetDoCenario, assetDoSprite } from '../assets/manifest';
 import { useJogo } from '../store/jogo';
-import { camada, cores, espaco, tipografia } from '../styles/tokens';
+import { CANVAS, borda, camada, cores, espaco, raio, tipografia } from '../styles/tokens';
+import { Imagem } from './Imagem';
 
 /**
  * Trava de entrada da camada — mesmo conceito do `travar()` em Revelacao.tsx.
@@ -68,16 +70,55 @@ export function Perguntas(): JSX.Element {
         padding: `0 ${espaco.xxl}px`,
       }}
     >
+      <Imagem
+        id={assetDoCenario('escritorio')}
+        rotulo="Escritório"
+        largura={1920}
+        altura={1080}
+        decorativo
+        mostrarRotulo={false}
+        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}
+      />
+      <div aria-hidden="true" style={{ position: 'absolute', inset: 0, background: cores.veuLeve }} />
+      <Imagem
+        id={assetDoSprite('ana-futura-trabalhando')}
+        rotulo="Ana no escritório"
+        largura={400}
+        altura={672}
+        decorativo
+        mostrarRotulo={false}
+        style={{ position: 'absolute', right: 80, bottom: 0 }}
+      />
+      <div
+        style={{
+          position: 'relative',
+          zIndex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: espaco.xxl,
+          width: '100%',
+          height: '100%',
+          padding: `0 ${espaco.xxl}px`,
+          paddingRight: CANVAS.largura * 0.28,
+        }}
+      >
       {perguntas.map((pergunta, indice) => (
         <p
           key={indice}
           className="jogo-aparecer"
           style={{
             textAlign: 'center',
-            fontSize: tipografia.tamanhos.grande,
+            fontSize: tipografia.tamanhos.subtitulo,
             fontWeight: tipografia.pesos.maximo,
             lineHeight: tipografia.alturaLinha.compacta,
             color: cores.texto,
+            width: '100%',
+            padding: espaco.lg,
+            background: cores.caixa,
+            border: `${borda.grossa}px solid ${cores.contorno}`,
+            borderRadius: raio.md,
           }}
         >
           {pergunta}
@@ -108,6 +149,7 @@ export function Perguntas(): JSX.Element {
           }}
         />
       ) : null}
+      </div>
     </div>
   );
 }

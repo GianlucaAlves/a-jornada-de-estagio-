@@ -27,6 +27,7 @@ import {
   duracao,
   easing,
   espaco,
+  movimento,
   raio,
   tipografia,
 } from '../styles/tokens';
@@ -36,7 +37,7 @@ import { LinhaDeFoco } from './LinhaDeFoco';
 import { Protagonista } from './Protagonista';
 import type { ComandoDeMovimento } from './Protagonista';
 import { SpriteAnimado, atrasoDoId } from './SpriteAnimado';
-import { POSICAO_DE_ENTRADA, folgaDeAlvo, tamanhoDaArte } from './geometriaDeCena';
+import { folgaDeAlvo, posicaoDeEntrada, tamanhoDaArte } from './geometriaDeCena';
 
 /**
  * Hotspot `umaVezSo` já acionado: a store devolve silêncio, então o botão seria
@@ -115,11 +116,13 @@ export function Cena(): JSX.Element | null {
   const pausaBloco4 = useJogo((s) => s.pausaBloco4);
   const lugares = useJogo((s) => s.lugares);
   const hotspotsFeitos = useJogo((s) => s.hotspotsFeitos);
+  const dialogosConcluidos = useJogo((s) => s.dialogosConcluidos);
 
   const lugarId = tela.tipo === 'cena' ? tela.lugarId : null;
+  const entrada = posicaoDeEntrada(cena ?? null);
 
   const [comando, setComando] = useState<ComandoDeMovimento>({
-    alvo: POSICAO_DE_ENTRADA,
+    alvo: entrada,
     instantaneo: true,
     seq: 0,
   });
@@ -135,8 +138,8 @@ export function Cena(): JSX.Element | null {
     setPendente(null);
     setMovendo(false);
     setEmFoco(null);
-    setComando((c) => ({ alvo: POSICAO_DE_ENTRADA, instantaneo: true, seq: c.seq + 1 }));
-  }, [lugarId]);
+    setComando((c) => ({ alvo: entrada, instantaneo: true, seq: c.seq + 1 }));
+  }, [lugarId, cena?.bloco]);
 
   if (lugarId === null) return null;
 
@@ -153,6 +156,31 @@ export function Cena(): JSX.Element | null {
    * `narracao`, posta por `entrarNoLugar`) + botão de voltar.
    */
   const lugarConcluido = lugares[lugarId] === 'concluido';
+  const hotspotsVisiveis = cena?.hotspots.filter((hotspot) => {
+    if (lugarId === 'outra-area' && cena?.bloco === 5) {
+      if (hotspot.id === 'b5-bianca-inicial') return !hotspotsFeitos.includes('b5-bianca-inicial');
+      if (hotspot.id === 'b5-bianca') {
+        return hotspotsFeitos.includes('b5-caderno') && hotspotsFeitos.includes('b5-grade');
+      }
+    }
+    if (lugarId !== 'sala-reunioes' || cena?.bloco !== 4) return true;
+    // A sequência também organiza a sala: a plateia sai no silêncio, e cada
+    // conversa seguinte traz só quem ainda está presente naquele momento.
+    if (hotspot.id === 'b4-marcos') return !hotspotsFeitos.includes('b4-marcos');
+    if (hotspot.id === 'b4-plateia') {
+      return pausaBloco4 !== 'rodando' && !hotspotsFeitos.includes('b4-entrega');
+    }
+    if (hotspot.id === 'b4-claudia') {
+      return (
+        pausaBloco4 !== 'rodando' &&
+        hotspotsFeitos.includes('b4-entrega') &&
+        dialogosConcluidos.includes('b4-apresentacao') &&
+        !hotspotsFeitos.includes('b4-claudia')
+      );
+    }
+    if (hotspot.id === 'b4-bianca') return hotspotsFeitos.includes('b4-claudia');
+    return true;
+  });
 
   /**
    * Saída recusada pela store enquanto há diálogo, puzzle ou a pausa do Bloco 4.
@@ -221,6 +249,130 @@ export function Cena(): JSX.Element | null {
         style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}
       />
 
+      {dialogoAtivo?.dialogoId === 'b4-apresentacao' ? (
+        <div
+          aria-label="Resumo da apresentação de Ana: situação, tarefa, ação e resultado"
+          style={{
+            position: 'absolute',
+            left: '41.5%',
+            top: '22.5%',
+            width: '17%',
+            height: '18%',
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            alignContent: 'center',
+            gap: espaco.xs,
+            padding: espaco.sm,
+            background: cores.painel,
+            color: cores.texto,
+            border: `3px solid ${cores.contorno}`,
+            zIndex: camada.cenario + 2,
+            pointerEvents: 'none',
+          }}
+        >
+          {[
+            ['Situação', 'Fila no fim do turno'],
+            ['Tarefa', 'Avisar próximo turno'],
+            ['Ação', 'Planilha atualizada'],
+            ['Resultado', 'Pendências em tempo'],
+          ].map(([rotulo, resumo]) => (
+            <div key={rotulo} style={{ fontSize: tipografia.tamanhos.minimo, lineHeight: 1.15 }}>
+              <strong>{rotulo}</strong>
+              <br />
+              {resumo}
+            </div>
+          ))}
+        </div>
+      ) : null}
+
+      {lugarId === 'linha-producao' && cena?.bloco === 3 ? (
+        <div
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            left: 48 * 4,
+            top: 145 * 4 - 96,
+            width: 248 * 4,
+            height: 96,
+            overflow: 'hidden',
+            pointerEvents: 'none',
+            zIndex: camada.cenario + 1,
+          }}
+        >
+          <div
+            className="jogo-esteira"
+            style={{
+              position: 'absolute',
+              left: -64,
+              top: 0,
+              display: 'flex',
+              gap: movimento.esteira - 64,
+              animationDuration: `${duracao.esteira}ms`,
+              ['--jogo-esteira-fim' as string]: `${movimento.esteira}px`,
+            }}
+          >
+            {Array.from({ length: 7 }, (_, unidade) => (
+              <Imagem
+                key={unidade}
+                id={unidade % 2 === 0 ? 'objeto-radio-telecom' : 'objeto-radio-telecom-aberto'}
+                rotulo={unidade % 2 === 0 ? 'Rádio montado' : 'Rádio em montagem'}
+                largura={64}
+                altura={96}
+                decorativo
+                mostrarRotulo={false}
+              />
+            ))}
+          </div>
+        </div>
+      ) : null}
+
+      {lugarId === 'linha-producao' && cena?.bloco === 3
+        ? ([134, 216] as const).map((centro, indice) => {
+            const atraso = indice === 0 ? 0 : -duracao.cicloRobotico / 2;
+            const estilo = {
+              position: 'absolute' as const,
+              left: centro * 4 - 48,
+              top: (142 - 50) * 4,
+              pointerEvents: 'none' as const,
+              zIndex: camada.cenario + 2,
+            };
+            return (
+              <div key={centro} aria-hidden="true" style={estilo}>
+                <Imagem
+                  id="objeto-braco-robotico"
+                  rotulo="Braço robótico em repouso"
+                  largura={96}
+                  altura={200}
+                  decorativo
+                  mostrarRotulo={false}
+                  className="jogo-robo-repouso"
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    animationDuration: `${duracao.cicloRobotico}ms`,
+                    animationDelay: `${atraso}ms`,
+                  }}
+                />
+                <Imagem
+                  id="objeto-braco-robotico-estendido"
+                  rotulo="Braço robótico trabalhando"
+                  largura={96}
+                  altura={200}
+                  decorativo
+                  mostrarRotulo={false}
+                  className="jogo-robo-alcance"
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    animationDuration: `${duracao.cicloRobotico}ms`,
+                    animationDelay: `${atraso}ms`,
+                  }}
+                />
+              </div>
+            );
+          })
+        : null}
+
       <h1
         style={{
           position: 'absolute',
@@ -261,7 +413,7 @@ export function Cena(): JSX.Element | null {
 
       {lugarConcluido
         ? null
-        : cena?.hotspots.map((hotspot) => {
+        : hotspotsVisiveis?.map((hotspot) => {
             const ancora = hotspot.ancora ?? 'base';
             const folga = folgaDeAlvo(tamanhoDaArte(hotspot.arte));
 

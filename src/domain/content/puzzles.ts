@@ -217,9 +217,9 @@ export const PUZZLES: Record<PuzzleId, PuzzleDef> = {
     textoErro: 'Essa peça não é desse campo.',
     campos: [
       { id: 'situacao', rotulo: 'Situação' },
-      { id: 'acao', rotulo: 'O que eu fiz' },
+      { id: 'tarefa', rotulo: 'Tarefa' },
+      { id: 'acao', rotulo: 'Ação' },
       { id: 'resultado', rotulo: 'Resultado' },
-      { id: 'proximo', rotulo: 'Próximo passo' },
     ],
     pecas: [
       {
@@ -228,9 +228,9 @@ export const PUZZLES: Record<PuzzleId, PuzzleDef> = {
         campo: 'situacao',
       },
       {
-        id: 'peca-acao',
-        texto: 'Passei a conferência para a planilha compartilhada, na hora.',
-        campo: 'acao',
+        id: 'peca-tarefa',
+        texto: 'Garantir que as pendências chegassem claras ao turno seguinte.',
+        campo: 'tarefa',
       },
       {
         id: 'peca-resultado',
@@ -238,9 +238,9 @@ export const PUZZLES: Record<PuzzleId, PuzzleDef> = {
         campo: 'resultado',
       },
       {
-        id: 'peca-proximo',
-        texto: 'Vale testar o mesmo formato nas outras duas linhas.',
-        campo: 'proximo',
+        id: 'peca-acao',
+        texto: 'Passei a conferência para a planilha compartilhada, na hora.',
+        campo: 'acao',
       },
     ],
   },

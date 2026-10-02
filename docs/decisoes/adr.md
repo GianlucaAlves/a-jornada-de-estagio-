@@ -596,6 +596,39 @@ fariam a fase mais carregada do jogo parecer longa e parada. O deslocamento
 quebra o ritmo sem custar arte, e está narrativamente certo: conselho se recebe
 no café, trabalho se faz na mesa.
 
+---
+
+## ADR-033 — As cenas v2.2 mostram apoio, sequência e trabalho em andamento
+
+**Decisão.** As cenas revisadas combinam composição de cenário e conteúdo
+interativo: os objetos ocupam superfícies compatíveis, o elenco entra quando a
+sequência narrativa pede e as camadas de ambiente são integradas pela UI. Na
+fase 3, rádios atravessam a esteira enquanto dois braços alternam repouso e
+alcance. Na fase 4, a plateia ocupa a sala antes da apresentação e sai quando a
+pausa começa.
+
+**Apresentação.** Marcos prepara Ana sobre clareza, STAR e compartilhamento
+público no LinkedIn. O puzzle usa Situação, Tarefa, Ação e Resultado; ao
+concluir, Ana apresenta com o resumo visível na tela e o clique final inicia a
+pausa.
+
+**Fase 5.** Bianca conversa com Ana na chegada sobre o contrato que termina e o
+desejo de efetivação. Depois de rever o caderno e a grade, a conversa final
+separa a possibilidade de uma vaga da escolha de área. Mudar de carreira é
+apresentado como caminho legítimo; a falta hipotética de vaga não apaga o que
+Ana aprendeu e entregou.
+
+O caderno abre a última skill no painel e inicia a retrospectiva; antes desse
+gesto, as descrições ficam recolhidas para que a interação tenha um começo claro.
+
+**Fecho visual.** A abertura e as perguntas finais usam o Escritório como fundo
+e uma pose de Ana trabalhando. As perguntas mantêm os temas de visibilidade,
+direção de carreira e fatores fora do controle individual.
+
+**Verificação.** Typecheck, suíte completa, exportação de chão e prévias de
+cena foram executados. O ciclo animado e as transições precisam de conferência
+no navegador, pois as prévias do pipeline são estáticas.
+
 
 
 

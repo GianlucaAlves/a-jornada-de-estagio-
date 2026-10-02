@@ -123,7 +123,12 @@ export const duracao = {
   media: 800,
   longa: 1000,
   maxima: 1200,
+  esteira: 8000,
+  cicloRobotico: 4000,
 } as const;
+
+/** Medidas do ciclo contínuo de produção, em px de canvas. */
+export const movimento = { esteira: 304 } as const;
 
 /** Sombras sólidas e deslocadas. Sem desfoque difuso, sem gradiente. */
 export const sombra = {

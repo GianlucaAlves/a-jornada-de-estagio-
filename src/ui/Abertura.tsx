@@ -28,6 +28,8 @@ import { BLOCOS } from '../domain/content';
 import { NOME_PROTAGONISTA } from '../domain/types';
 import type { BlocoId } from '../domain/types';
 import { progressoSalvo, useJogo } from '../store/jogo';
+import { assetDoCenario, assetDoSprite } from '../assets/manifest';
+import { Imagem } from './Imagem';
 import {
   CANVAS,
   alvo,
@@ -119,12 +121,36 @@ export function Abertura({ aoEntrar }: PropsAbertura): JSX.Element {
         justifyContent: 'center',
         gap: espaco.xxl,
         padding: espaco.margem,
-        // Opaca: nada do jogo pode aparecer por trás da escolha.
+        // O fundo próprio cobre o save, enquanto o escritório dá contexto à história.
         background: cores.fundo,
       }}
     >
+      <Imagem
+        id={assetDoCenario('escritorio')}
+        rotulo="Escritório de Ana"
+        largura={CANVAS.largura}
+        altura={CANVAS.altura}
+        decorativo
+        mostrarRotulo={false}
+        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', zIndex: 0 }}
+      />
+      <Imagem
+        id={assetDoSprite('ana-trabalhando')}
+        rotulo="Ana no escritório"
+        largura={360}
+        altura={604}
+        decorativo
+        mostrarRotulo={false}
+        style={{ position: 'absolute', left: '25%', bottom: 0, zIndex: 0 }}
+      />
+      <div
+        aria-hidden="true"
+        style={{ position: 'absolute', inset: 0, background: cores.veuLeve, zIndex: 0 }}
+      />
       <h1
         style={{
+          position: 'relative',
+          zIndex: 1,
           fontSize: tipografia.tamanhos.titulo,
           fontWeight: tipografia.pesos.maximo,
           lineHeight: tipografia.alturaLinha.compacta,
@@ -140,6 +166,8 @@ export function Abertura({ aoEntrar }: PropsAbertura): JSX.Element {
         <div
           className="jogo-caixa"
           style={{
+            position: 'relative',
+            zIndex: 1,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -204,6 +232,8 @@ export function Abertura({ aoEntrar }: PropsAbertura): JSX.Element {
           aria-label="Começar"
           onClick={comecarDoInicio}
           style={{
+            position: 'relative',
+            zIndex: 1,
             minWidth: alvo.botaoLargo,
             background: cores.acao,
             color: cores.textoInverso,

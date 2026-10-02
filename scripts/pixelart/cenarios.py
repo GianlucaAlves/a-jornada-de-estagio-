@@ -1142,18 +1142,11 @@ def linha_producao() -> Grade:
     # três cabines automáticas, iguais de propósito
     for cx in (92, 176, 258):
         _assentar(g, cx, 142, props.celula_de_processo(52, 40), sombra=False)
-    # dois robôs nos vãos entre as cabines, em poses diferentes: dois robôs na
-    # mesma pose numa fila curta denunciam a repetição na hora
-    _assentar(g, 134, 142, props.braco_robotico(46), sombra=False)
-    _assentar(g, 216, 142, props.braco_robotico(46, estendido=True), sombra=False)
+    # Os braços são camadas próprias: a UI alterna duas poses sem redesenhar a
+    # cena inteira, e a base permanece fixa sobre a linha.
 
-    # Rádios andando na lona: TRÊS, bem separados. Eram sete, igualmente
-    # espaçados ao longo dos 400px, e o efeito na imagem foi uma CERCA DE RIPAS
-    # atravessando a cena — dentro da qual a fila acumulada desaparecia. Fluxo que
-    # anda é espaçado; fluxo que parou é encostado. A diferença entre os dois
-    # espaçamentos é o que desenha o gargalo.
-    for x in (64, 132, 220):
-        _assentar(g, x, 145, props.radio_de_telecom(12, 20), sombra=False)
+    # As unidades em movimento também são camadas próprias para que sua posição
+    # tenha uma única fonte de verdade. A fila parada do gargalo segue pintada.
     # ...e a FILA no trecho de roletes: seis encostados em duas camadas, um deles
     # ainda aberto. Engarrafamento é a imagem universal de gargalo.
     for x in (302, 315, 328, 341, 354, 367):
@@ -1561,10 +1554,7 @@ def sala_reunioes() -> Grade:
     # `entrega` guardava um crachá de 24x24 e passa a guardar o atril, que tem
     # 36x56 px de arte. A papelada e a garrafa recuaram para a esquerda e o
     # material de credenciamento para a direita.
-    _assentar(g, 240, 156, props.armario_baixo(140, 30, props.MADEIRA))
-    _assentar(g, 182, 126, props.vaso_planta_baixa(20), sombra=False)
-    _assentar(g, 198, 126, props.garrafa_agua(14), sombra=False)
-    _assentar(g, 210, 126, props.pilha_de_papel(11, 6), sombra=False)
+    # A base larga saiu do palco para liberar a faixa da plateia.
     # O `suporte_de_tv` SAIU daqui (estava em x 232..248, y 110..118). Ele cai
     # inteiro dentro do retângulo do atril, e suporte metade coberto por um
     # objeto lê como TV flutuando — que é a classe de defeito que a prévia já
@@ -1574,7 +1564,7 @@ def sala_reunioes() -> Grade:
     # Sombra de contato do atril, em y=167 e não 168: 168 é a primeira fila do
     # TAMPO da mesa grande, e sombra pintada ali assenta o atril em cima da mesa
     # em vez de no piso atrás dela. 167 é a última fila de piso daquela coluna.
-    props.sombra_de_contato(g, 240, 167, 40)
+    props.sombra_de_contato(g, 296, 167, 40)
 
     # Cadeiras ao fundo, e agora são QUATRO: a do meio saiu de x=240 (caía dentro
     # do retângulo do atril, e cadeira pintada atrás de um objeto cuja base está
@@ -1592,13 +1582,7 @@ def sala_reunioes() -> Grade:
 
     # --- mesa grande. Tampo 168..216; x 326..366 fica VAZIO para o `notebook`,
     # cuja base o conteúdo declara em y=200.
-    _assentar(g, 240, 228, props.mesa_de_reuniao(300, 60))
-    _assentar(g, 140, 190, props.notebook(28, 20, "desktop"), sombra=False)
-    _assentar(g, 188, 186, props.caneca(props.NEUTRO[6]), sombra=False)
-    _assentar(g, 212, 184, props.telefone(15, 8), sombra=False)
-    _assentar(g, 268, 198, props.pilha_de_papel(14, 8), sombra=False)
-    props.reflexo_de_tela(g, 126, 192, 34, 3, props.TELA[1])
-    props.sombra_de_contato(g, 346, 200, 44)  # sombra do objeto interativo
+    # A mesa saiu porque escondia a plateia e ocupava a faixa de circulação.
     # A PASTA VERMELHA QUE FICAVA AQUI SAIU. A bíblia §3 dá UM acento vermelho
     # por cena e ele passou para a faixa do evento, que é 300px de largura e
     # nomeia o lugar. Dois vermelhos — um na faixa e um de 22x6 na mesa —
@@ -1637,8 +1621,6 @@ def sala_reunioes() -> Grade:
     for px in (348, 404, 82, 122):
         g.colar(px, 16, props.projetor(18, 10))
     # material de credenciamento na credência, na faixa livre do tampo (x 266..310)
-    _assentar(g, 274, 126, props.pilha_de_papel(18, 10), sombra=False)
-    _assentar(g, 296, 126, props.copos(3), sombra=False)
 
     # --- FRENTE: a plateia em cadeira vazia, cortada pela borda inferior.
     # Substitui os dois encostos soltos que ficavam em x 76..180 e 300..404 e
@@ -1890,12 +1872,16 @@ CAIXAS_DE_OBJETO: dict[str, tuple[int, int]] = {
     #   objeto-atril   -> largura: 144, altura: 224
     #   objeto-plateia -> largura: 800, altura: 192
     "atril": (36, 56),
-    "plateia": (200, 48),
+    "plateia": (92, 48),
     # ACHADO, NÃO ESCOPO: `objeto-painel-processo` está no manifest e é usado por
     # `bloco3.ts` com 192x144, mas nunca foi gerado — o hotspot da Linha de
     # Produção caía no placeholder rotulado, e em silêncio, porque a cadeia de
     # fallback de `Imagem.tsx` não quebra. Ver `props.painel_de_processo`.
     "painel-processo": (48, 36),
+    "radio-telecom": (16, 24),
+    "radio-telecom-aberto": (16, 24),
+    "braco-robotico": (24, 50),
+    "braco-robotico-estendido": (24, 50),
 }
 
 
@@ -1958,8 +1944,12 @@ def _objetos() -> list[tuple[str, Grade]]:
         _objeto("caderno", props.caderno_aberto(36, 22)),
         _objeto("grade-curricular", props.grade_impressa(42, 28)),
         _objeto("atril", props.atril(32, 52)),
-        _objeto("plateia", props.plateia(196, 44)),
+        _objeto("plateia", props.plateia(90, 44, pessoas=3)),
         _objeto("painel-processo", props.painel_de_processo(44, 32)),
+        _objeto("radio-telecom", props.radio_de_telecom(16, 24)),
+        _objeto("radio-telecom-aberto", props.radio_de_telecom(16, 24, montado=False)),
+        _objeto("braco-robotico", props.braco_robotico(46)),
+        _objeto("braco-robotico-estendido", props.braco_robotico(46, estendido=True)),
     ]
 
 

@@ -151,12 +151,15 @@ describe('a página se monta e avisa que fechou', () => {
    * distribuição trocada também "completa". Aqui ela não pode nem começar.
    */
   it('a ordem trocada NÃO completa o puzzle', () => {
-    const pecas = [...def.pecas];
     const campos = def.campos.map((c) => c.id);
     let estado = estadoInicialMontar();
-    pecas.forEach((peca, i) => {
-      // Desloca uma casa: toda peça cai na casa da peça seguinte.
-      const casa = campos[(i + 1) % campos.length];
+    const deslocamento = [1, 2, 3].find((passos) =>
+      def.pecas.every((peca, i) => peca.campo !== campos[(i + passos) % campos.length]),
+    );
+    expect(deslocamento, 'o conteúdo precisa permitir uma distribuição totalmente errada').toBeDefined();
+    def.pecas.forEach((peca, i) => {
+      // Escolhe uma rotação sem nenhuma combinação correta, mesmo se a ordem visual mudar.
+      const casa = campos[(i + (deslocamento ?? 1)) % campos.length];
       if (casa === undefined) return;
       estado = tocar(
         estado,

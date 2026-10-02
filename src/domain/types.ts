@@ -396,7 +396,13 @@ export interface Bloco {
 
 // ---------------------------------------------------------------- protagonista
 
-export type SpriteId = 'ana-encolhida' | 'ana-neutra' | 'ana-confiante' | 'ana-futura';
+export type SpriteId =
+  | 'ana-encolhida'
+  | 'ana-neutra'
+  | 'ana-confiante'
+  | 'ana-futura'
+  | 'ana-trabalhando'
+  | 'ana-futura-trabalhando';
 
 // ---------------------------------------------------------------- revelação
 

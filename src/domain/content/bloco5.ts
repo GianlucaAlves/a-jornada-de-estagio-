@@ -106,10 +106,19 @@ export const CENAS_B5: readonly Cena[] = [
     lugarId: 'outra-area',
     bloco: 5,
     aberturaTexto:
-      'Dois anos. O contrato fecha em três semanas e ninguém falou nada sobre isso. ' +
-      'Ela pediu meia hora com alguém de outro time, e atravessou o prédio para ter.',
-    ecoTexto: 'Aqui ela contou o que aprendeu, e a lista era mais comprida do que ela lembrava.',
+      'Dois anos. O contrato fecha em três semanas. Ana quer ser efetivada, mas ainda não sabe se vai acontecer. ' +
+      'Ela também está pensando em que área quer construir a carreira.',
+    ecoTexto: 'Ana reconheceu o que aprendeu e começou a pensar no próximo passo da carreira.',
     hotspots: [
+      {
+        /** Bianca acolhe a incerteza sem decidir por Ana nem antecipar a vaga. */
+        id: 'b5-bianca-inicial',
+        rotulo: 'Bianca',
+        arte: { tipo: 'npc', npcId: 'bianca' },
+        pos: { x: 30, y: 70 },
+        parada: { x: 18, y: 76 },
+        efeitos: [{ tipo: 'dialogo', dialogoId: 'b5-contrato' }],
+      },
       {
         /**
          * O motivo de abrir o painel. A narração NÃO lista as skills: listar
@@ -146,8 +155,8 @@ export const CENAS_B5: readonly Cena[] = [
           {
             tipo: 'narrar',
             texto:
-              'Ela abre uma página nova e escreve em cima: o que eu sei fazer hoje. ' +
-              'A lista sai maior do que ela esperava, e nenhuma linha dela estava no plano.',
+              'Ela abre uma página nova e escreve: o que eu sei fazer hoje, do que me orgulho e o que ainda quero aprender. ' +
+              'A lista sai maior do que ela esperava. Cada linha lembra uma coisa que ela fez por conta própria.',
           },
         ],
       },
@@ -193,8 +202,8 @@ export const CENAS_B5: readonly Cena[] = [
           {
             tipo: 'narrar',
             texto:
-              'A grade do próximo semestre, impressa e dobrada no meio. ' +
-              'Ela reconhece três matérias pelo nome. Nenhuma das três é o que ela faz todo dia.',
+              'A grade do próximo semestre está impressa e dobrada no meio. Ela reconhece matérias, mas pensa nas tarefas de que mais gostou neste estágio. ' +
+              'Continuar na empresa e escolher uma área são perguntas diferentes.',
           },
         ],
       },
@@ -225,7 +234,7 @@ export const CENAS_B5: readonly Cena[] = [
         parada: { x: 32, y: 74 },
         requerHotspotsFeitos: ['b5-caderno', 'b5-grade'],
         bloqueadoTexto:
-          'Bianca está terminando uma coisa. Ela pediu meia hora, e a meia hora é pra conversar — não pra chegar sem pergunta.',
+          'Bianca combinou de conversar depois que Ana olhasse o caderno e a grade.',
         efeitos: [{ tipo: 'dialogo', dialogoId: 'b5-pivo' }],
       },
     ],
@@ -233,13 +242,21 @@ export const CENAS_B5: readonly Cena[] = [
 ];
 
 export const DIALOGOS_B5: Record<DialogoId, Dialogo> = {
+  'b5-contrato': {
+    id: 'b5-contrato',
+    nos: [
+      { tipo: 'fala', quem: 'bianca', texto: 'O contrato está perto do fim. Como você está pensando nisso?' },
+      { tipo: 'fala', quem: 'ana', texto: 'Quero ser efetivada. Ainda não sei se vai acontecer, e não quero fingir que isso não me preocupa.' },
+      { tipo: 'fala', quem: 'bianca', texto: 'Faz sentido. E, além da vaga, você já começou a pensar em que tipo de trabalho quer fazer?' },
+      { tipo: 'fala', quem: 'ana', texto: 'É outra pergunta. Quero olhar para o que aprendi e para as tarefas de que gostei antes de decidir a área.' },
+    ],
+  },
   /**
    * A FALA DO PIVÔ (ADR-027, ADR-028). Seis nós, e cada um está no limite de
    * alguma regra do projeto — vale ler as cinco que governam este diálogo:
    *
-   * 1. O nó 2 diz a incerteza como NÃO SABER, nunca como previsão. "Eu não sei
-   *    se eu fico" é honesto; "eu acho que não vou ficar" seria o jogo afirmando
-   *    o desfecho, e mataria a fase 6.
+   * 1. Ana quer ser efetivada. O que ela não sabe é se a decisão virá a tempo
+   *    do fim do contrato; a dúvida de carreira é sobre a área em que quer atuar.
    * 2. O NÓ 3 É O PASSO DO MEIO, e ele FALTAVA (v2.1). Sem ele a fase ia de "não
    *    sei se fico" direto para "o que você aprendeu é seu", e a plateia nunca
    *    via a Ana pensar no que acontece se a efetivação não vier — que é o
@@ -261,12 +278,8 @@ export const DIALOGOS_B5: Record<DialogoId, Dialogo> = {
    *    palavra por palavra: a Ana não sabe o que a lista dela vale fora daqui, e
    *    a resposta é que a lista é dela em qualquer um dos dois cenários.
    *
-   * O QUE ESTE DIÁLOGO PERDEU PARA CABER: a pergunta da Ana "E era isso que você
-   * queria?", que era o nó 4 até a v2.1. O teto é de seis nós (o NPC planta, o
-   * apresentador desenvolve — integridade.test.ts cobra), e entre aquela
-   * pergunta e a reflexão sobre as duas hipóteses a reflexão vale mais. O nó 5
-   * continua de pé sem ela: "isso" aponta para o trabalho que a Bianca acabou de
-   * descrever no nó 4, não para uma pergunta da Ana.
+   * O diálogo dá espaço ao desejo de efetivação, às dúvidas de carreira e a
+   * fatores de contratação externos sem prever a resposta que chega na fase 6.
    *
    * A LIÇÃO NÃO ESTÁ AQUI. Que pivotar não é erro, que a experiência adquirida é
    * o que mais importa, e o que fazer com isso na segunda-feira — tudo isso é
@@ -283,29 +296,28 @@ export const DIALOGOS_B5: Record<DialogoId, Dialogo> = {
       {
         tipo: 'fala',
         quem: 'ana',
-        texto: 'Eu não sei se eu fico. E não sei se é isso que eu quero fazer.',
+        texto: 'Meu contrato está acabando. Eu quero ser efetivada, mas ainda não sei se vai acontecer.',
       },
       {
         tipo: 'fala',
         quem: 'ana',
         texto:
-          'Se eu ficar, eu já sei onde eu sento na segunda. ' +
-          'Se não ficar, eu saio com esse caderno e sem saber o que ele vale lá fora.',
+          'Aprendi muito aqui. Estou pensando se quero continuar nessa área ou conhecer outra dentro da empresa.',
       },
       {
         tipo: 'fala',
         quem: 'bianca',
-        texto: 'Eu desenho API e escrevo documentação técnica. Sou formada em Letras.',
+        texto: 'Sou formada em Letras e trabalho com documentação. Nem sabia que esse caminho existia; demorei para parar de chamar a mudança de desvio.',
       },
       {
         tipo: 'fala',
         quem: 'bianca',
-        texto: 'Eu nem sabia que isso existia. Levei um tempo pra parar de chamar isso de desvio.',
+        texto: 'Você aprendeu, entregou e tomou iniciativa. A gente viu isso.',
       },
       {
         tipo: 'fala',
         quem: 'bianca',
-        texto: 'O que você aprendeu a fazer aqui é seu. Isso não fica com a empresa.',
+        texto: 'Se a vaga não vier, não apaga o que você fez. Às vezes não há vaga no time, e isso não está nas suas mãos. O que você aprendeu é seu.',
       },
     ],
     efeitos: [

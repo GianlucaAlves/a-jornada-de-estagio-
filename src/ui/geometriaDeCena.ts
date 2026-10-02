@@ -12,7 +12,7 @@
  * cobrindo o outro significa NPC invisível — e NPC invisível é a regressão que
  * esta frente existe para consertar.
  */
-import type { ArteDeHotspot, Hotspot, Ponto } from '../domain/types';
+import type { ArteDeHotspot, Cena, Hotspot, Ponto } from '../domain/types';
 import { CANVAS, alvo, arte, espaco, overlay } from '../styles/tokens';
 
 export interface Retangulo {
@@ -36,6 +36,17 @@ export interface Tamanho {
  * plateia, porque quem ensaia já clicou antes de olhar.
  */
 export const POSICAO_DE_ENTRADA: Ponto = { x: 6, y: 76 };
+
+/**
+ * A Sala de Reuniões abre junto ao palco: a porta fica livre para Bianca e
+ * Marcos consegue orientar Ana sem ela nascer sobre alguém na entrada comum.
+ */
+export function posicaoDeEntrada(cena: Pick<Cena, 'lugarId' | 'bloco'> | null): Ponto {
+  if (cena?.lugarId === 'sala-reunioes' && cena.bloco === 4) {
+    return { x: 65.5, y: 62 };
+  }
+  return POSICAO_DE_ENTRADA;
+}
 
 /** % do canvas → px de canvas. Conteúdo fala em %, a tela fala em px. */
 export function paraPx(pos: Ponto): Ponto {

@@ -322,6 +322,47 @@ button {
   animation-iteration-count: infinite;
 }
 
+/* A esteira move unidades em passos lentos: o rádio acompanha a máquina sem
+   competir com a conversa ou parecer uma partícula de destaque. */
+@keyframes jogo-esteira {
+  from { transform: translateX(0); }
+  to { transform: translateX(var(--jogo-esteira-fim, 0)); }
+}
+
+.jogo-esteira {
+  animation-name: jogo-esteira;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+/* As duas poses preservam a base do braço; a troca em degraus mantém a grade
+   pixelada e sincroniza o alcance com a passagem das unidades. */
+@keyframes jogo-robo-repouso {
+  0%, 44%, 100% { opacity: 1; }
+  50%, 94% { opacity: 0; }
+}
+
+@keyframes jogo-robo-alcance {
+  0%, 44%, 100% { opacity: 0; }
+  50%, 94% { opacity: 1; }
+}
+
+.jogo-robo-repouso,
+.jogo-robo-alcance {
+  animation-timing-function: steps(1, end);
+  animation-iteration-count: infinite;
+}
+
+.jogo-robo-repouso {
+  opacity: 1;
+  animation-name: jogo-robo-repouso;
+}
+
+.jogo-robo-alcance {
+  opacity: 0;
+  animation-name: jogo-robo-alcance;
+}
+
 /* Pulso de atenção para o cursor de item selecionado. Amplo e lento. */
 @keyframes jogo-pulso {
   0%,
@@ -348,6 +389,15 @@ button {
   .jogo-tira-4,
   .jogo-respira,
   .jogo-anda {
+    animation: none;
+  }
+
+  .jogo-esteira {
+    animation: none;
+  }
+
+  .jogo-robo-repouso,
+  .jogo-robo-alcance {
     animation: none;
   }
 
