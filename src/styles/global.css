@@ -363,6 +363,38 @@ button {
   animation-name: jogo-robo-alcance;
 }
 
+/* O vapor acompanha a caneca do balcão; a pausa longa impede que pareça alerta. */
+@keyframes jogo-vapor {
+  0%, 100% { opacity: 0.25; transform: translateY(0); }
+  50% { opacity: 0.9; transform: translateY(var(--jogo-vapor-subida)); }
+}
+
+/* A recompensa sobe para cima da cabeça e repousa lá até o avanço manual. */
+@keyframes jogo-item-erguido {
+  from { transform: translateY(120px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.jogo-item-erguido {
+  animation-name: jogo-item-erguido;
+  animation-timing-function: steps(5, end);
+  animation-fill-mode: both;
+}
+
+.jogo-vapor span {
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+/* Duas poses alternam com pausas diferentes; ninguém do fundo recebe clique. */
+.jogo-figurante-base {
+  animation: jogo-robo-repouso steps(1, end) infinite;
+}
+
+.jogo-figurante-gesto {
+  animation: jogo-robo-alcance steps(1, end) infinite;
+}
+
 /* Pulso de atenção para o cursor de item selecionado. Amplo e lento. */
 @keyframes jogo-pulso {
   0%,
@@ -397,7 +429,11 @@ button {
   }
 
   .jogo-robo-repouso,
-  .jogo-robo-alcance {
+  .jogo-robo-alcance,
+  .jogo-figurante-base,
+  .jogo-figurante-gesto,
+  .jogo-item-erguido,
+  .jogo-vapor span {
     animation: none;
   }
 

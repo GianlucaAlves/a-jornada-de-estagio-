@@ -23,6 +23,7 @@ import { Mapa } from './ui/Mapa';
 import { CartaoDeTransicao } from './ui/CartaoDeTransicao';
 import { Dialogo } from './ui/Dialogo';
 import { Narracao } from './ui/Narracao';
+import { ItemRecebido } from './ui/ItemRecebido';
 import { BarraDeItens } from './ui/BarraDeItens';
 import { PainelDeSkills } from './ui/PainelDeSkills';
 import { PausaBloco4 } from './ui/PausaBloco4';
@@ -113,6 +114,7 @@ export function App(): JSX.Element {
 
       <Dialogo />
       <Narracao />
+      <ItemRecebido />
 
       {/* Puzzle: overlay opaco e modal, acima dos overlays persistentes e
           abaixo da pausa da fase 4. Dirigido por `puzzleAberto` na store. */}

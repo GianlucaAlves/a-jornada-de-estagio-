@@ -25,6 +25,7 @@ import { assetDoSprite } from '../assets/manifest';
 import { useJogo } from '../store/jogo';
 import { CANVAS, arte, camada, easing, limitarDuracao } from '../styles/tokens';
 import { SpriteAnimado } from './SpriteAnimado';
+import { Imagem } from './Imagem';
 
 /**
  * Uma ordem de movimento. `seq` existe para que a mesma coordenada possa ser
@@ -43,6 +44,7 @@ export interface PropsProtagonista {
   onChegar?: () => void;
   /** Sobrepõe o sprite da store (usado por telas de fecho). */
   sprite?: SpriteId;
+  apresentando?: boolean;
   altura?: number;
   largura?: number;
 }
@@ -61,6 +63,7 @@ export function Protagonista({
   comando,
   onChegar,
   sprite,
+  apresentando = false,
   altura = arte.personagem.altura,
   largura = arte.personagem.largura,
 }: PropsProtagonista): JSX.Element {
@@ -130,13 +133,17 @@ export function Protagonista({
     >
       {/* O ciclo de quadros vive num nó interno: o transform de deslocamento
           fica livre, e a animação do sprite não briga com ele. */}
-      <SpriteAnimado
-        id={assetDoSprite(spriteAtivo)}
-        rotulo={NOME_PROTAGONISTA}
-        largura={largura}
-        altura={altura}
-        estado={movendo ? 'andando' : 'parado'}
-      />
+      {apresentando && !movendo ? (
+        <Imagem id="ana-apresentando" rotulo={NOME_PROTAGONISTA} largura={largura} altura={altura} />
+      ) : (
+        <SpriteAnimado
+          id={assetDoSprite(spriteAtivo)}
+          rotulo={NOME_PROTAGONISTA}
+          largura={largura}
+          altura={altura}
+          estado={movendo ? 'andando' : 'parado'}
+        />
+      )}
     </div>
   );
 }

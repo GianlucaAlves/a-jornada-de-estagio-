@@ -334,6 +334,7 @@ export const camada = {
   dialogo: 30,
   narracao: 40,
   cartao: 50,
+  itemRecebido: 55,
   pausa: 60,
   /**
    * A tela de abertura fica ACIMA de tudo (ADR-018). Ela é a porta de entrada e

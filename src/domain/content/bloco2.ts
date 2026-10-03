@@ -121,9 +121,9 @@ export const CENAS_B2: readonly Cena[] = [
         id: 'b2-tela',
         rotulo: 'Tela da Ana',
         arte: { tipo: 'objeto', assetId: 'objeto-monitor-ligado', largura: 192, altura: 144 },
-        ancora: 'centro',
-        pos: { x: 41, y: 64 },
+        pos: { x: 44.2, y: 65.2 },
         parada: { x: 12, y: 80 },
+        ancora: 'centro',
         efeitos: [
           {
             tipo: 'narrar',
@@ -138,36 +138,9 @@ export const CENAS_B2: readonly Cena[] = [
         arte: { tipo: 'objeto', assetId: 'objeto-notebook', largura: 160, altura: 112 },
         // Mesmo ponto da fase 1: é a mesa dela, e mesa que anda de lugar entre
         // fases faz a plateia achar que é outra sala.
-        pos: { x: 30, y: 72 },
+        pos: { x: 24.2, y: 72 },
         parada: { x: 12, y: 80 },
         efeitos: [{ tipo: 'abrirPuzzle', puzzleId: 'sequenciar' }],
-      },
-      {
-        // A arte é o próprio certificado que este hotspot concede: mostra o que
-        // ela está prestes a ganhar sem inventar prop de cenário. O caderno vem
-        // junto porque é o mesmo esforço — metade dele é sobre organizar a
-        // semana, e é ele que abre a fase 3.
-        //
-        // Ponta DIREITA do tampo: a esquerda é do notebook e o meio é do
-        // monitor, e os três retângulos não podem se cruzar.
-        id: 'b2-certificado',
-        rotulo: 'Certificado',
-        arte: { tipo: 'item', itemId: 'certificado-degree' },
-        pos: { x: 51, y: 71 },
-        parada: { x: 12, y: 80 },
-        requerPuzzleResolvido: 'sequenciar',
-        bloqueadoTexto: 'A semana dela ainda está toda na mesma pilha. Não sobra noite pra trilha.',
-        umaVezSo: true,
-        efeitos: [
-          {
-            tipo: 'narrar',
-            texto:
-              'Quarenta horas, todas fora do horário. Ela fecha o notebook e ainda não sabe onde isso serve.',
-          },
-          { tipo: 'concederItem', itemId: 'certificado-degree' },
-          { tipo: 'concederItem', itemId: 'anotacoes-treinamento' },
-          { tipo: 'concederSkill', skillId: 'competencia-tecnica' },
-        ],
       },
     ],
   },
@@ -197,7 +170,7 @@ export const DIALOGOS_B2: Record<DialogoId, Dialogo> = {
         quem: 'bianca',
         texto: 'Eu sou formada em Letras. Hoje eu trabalho com tecnologia.',
       },
-      { tipo: 'fala', quem: 'ana', texto: '(pausa) Letras.' },
+      { tipo: 'fala', quem: 'ana', texto: 'Letras? Eu estava escolhendo trilha pelo nome da faculdade, sem olhar para o trabalho que tenho aqui.' },
       {
         tipo: 'fala',
         quem: 'bianca',
@@ -215,7 +188,7 @@ export const DIALOGOS_B2: Record<DialogoId, Dialogo> = {
       {
         tipo: 'fala',
         quem: 'bianca',
-        texto: 'Eu ainda estudo, Ana. Ninguém aqui parou.',
+        texto: 'Eu ainda estudo, Ana. Semana passada passei a tarde tentando explicar uma coisa em duas páginas. Ainda não consegui.',
       },
     ],
     efeitos: [
@@ -237,6 +210,8 @@ export const DIALOGOS_B2: Record<DialogoId, Dialogo> = {
     nos: [
       { tipo: 'fala', quem: 'rafael', texto: 'Sobreviveu ao primeiro mês. (brinda com o copo)' },
       { tipo: 'fala', quem: 'ana', texto: 'Por pouco.' },
+      { tipo: 'fala', quem: 'ana', texto: 'Gostei de organizar a semana. Só precisei avisar cedo que a demanda nova caiu no dia da minha prova.' },
+      { tipo: 'fala', quem: 'rafael', texto: 'Melhor avisar na terça do que pedir desculpa na sexta.' },
       { tipo: 'fala', quem: 'rafael', texto: 'Eu vi que você usou meu ramal zero vezes.' },
       {
         tipo: 'fala',

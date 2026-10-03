@@ -21,10 +21,9 @@
  * AS QUATRO CONEXÕES NÃO ESTÃO NESTE ARQUIVO, e isso é de propósito: elas vivem
  * em `conexoes.ts`, uma por clique do apresentador, e o texto de cada uma É a
  * fala da Cláudia continuando — cada conexão é uma razão, dita e desenhada ao
- * mesmo tempo. O que este arquivo escreve é a fala que as ENTREGA: o nó 5 de
- * `b6-noticia` ("três lugares e um motivo") é a espinha do clímax inteiro, porque
- * é ele que anuncia a forma três-portas-mais-um-motivo sem explicar a moral, e o
- * nó 6 é o que passa a palavra para o mapa.
+ * mesmo tempo. A conversa abre com um exemplo concreto: o time de produto
+ * precisava de alguém para organizar a documentação. A fala seguinte leva a
+ * plateia ao mapa, que mostra os outros caminhos sem uma frase de efeito.
  *
  * ┌──────────────────────────────────────────────────────────────────────────┐
  * │ PENDÊNCIA DECLARADA — A FESTA SÓ PODE SER JOGADA ANTES DAS CONEXÕES.      │
@@ -197,12 +196,9 @@ export const DIALOGOS_B6: Record<DialogoId, Dialogo> = {
    * pergunta as tenha pedido. Não pode ser cortada nem parafraseada — a plateia
    * precisa carregar o número "três" até o mapa.
    *
-   * Nó 5 — A ESPINHA. "Três lugares e um motivo" declara a forma do clímax:
-   * três portas que se apagam e um motivo que fica aceso. Repare no que ela NÃO
-   * diz: que as portas abriram para muita gente e que ela foi escolhida pelo
-   * domingo à noite em que escreveu cinco páginas que ninguém pediu. Isso é fala
-   * do apresentador (docs/roteiro/06-bloco-6.md), e é a razão de existir da
-   * apresentação — pôr na boca da Cláudia seria roubar o palco de quem apresenta.
+   * Nó 5 — PRIMEIRO CAMINHO. Cláudia dá um motivo reconhecível para a indicação:
+   * o time de produto precisava de alguém para organizar a documentação. As
+   * outras conexões ficam para o mapa, não para um resumo em forma de slogan.
    *
    * Nó 6 — passa a palavra para o mapa. As quatro conexões que vêm depois são
    * esta fala continuando: ela diz de onde veio cada um, e o mapa desenha.
@@ -225,7 +221,7 @@ export const DIALOGOS_B6: Record<DialogoId, Dialogo> = {
       {
         tipo: 'fala',
         quem: 'claudia',
-        texto: 'Três lugares e um motivo. Os três abriram a porta. O motivo é por que era você.',
+        texto: 'O time de produto precisava de alguém para organizar a documentação. Foi assim que seu nome chegou até lá.',
       },
       { tipo: 'fala', quem: 'claudia', texto: 'Vem cá. Eu te mostro de onde veio cada um.' },
     ],
@@ -277,7 +273,7 @@ export const DIALOGOS_B6: Record<DialogoId, Dialogo> = {
         quem: 'bianca',
         texto: 'Eu te disse que dava pra mudar de ideia no meio do caminho.',
       },
-      { tipo: 'fala', quem: 'ana', texto: 'Mudei umas quatro vezes. Só não mudei de lugar.' },
+      { tipo: 'fala', quem: 'ana', texto: 'Eu achava que gostava da planilha. Gostei mesmo foi de fazer a informação chegar a quem precisava dela.' },
     ],
   },
 
@@ -290,7 +286,7 @@ export const DIALOGOS_B6: Record<DialogoId, Dialogo> = {
         quem: 'marcos',
         texto: 'Ano que vem você apresenta de novo? Do outro lado da mesa.',
       },
-      { tipo: 'fala', quem: 'ana', texto: 'Pode ser.' },
+      { tipo: 'fala', quem: 'ana', texto: 'Pode ser. Da próxima vez quero trazer um projeto desde o começo.' },
     ],
   },
 

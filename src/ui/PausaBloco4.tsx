@@ -1,64 +1,19 @@
 /**
- * A pausa do Bloco 4.
+ * Pausa silenciosa depois da apresentação.
  *
- * Requisito mecânico, não direção artística: ao completar o puzzle de montar,
- * o sistema NÃO produz feedback nenhum. Sequência de ~8 segundos — Ana se vira
- * e espera; um NPC olha o celular; a líder fecha o notebook; as cadeiras
- * esvaziam; a sala fica vazia com o diagrama aceso ao fundo.
- *
- * SEM texto, SEM som, SEM item, SEM skill, SEM celebração de qualquer tipo.
- * Qualquer animação de comemoração aqui destrói o bloco.
- *
- * O avanço é manual e indefinido: o apresentador pode esticar o silêncio o
- * quanto quiser. `concluirPausaBloco4` só é chamado no clique dele.
+ * O cenário e os apoios repetem a composição de Cena.tsx nas mesmas
+ * coordenadas. A plateia sai em três tempos e Ana recua um passo; reconstruir
+ * sala, mesa ou projetor com retângulos fazia a geometria saltar no silêncio.
  */
 import { useEffect, useRef, useState } from 'react';
 import { assetDoCenario, assetDoSprite } from '../assets/manifest';
 import { useJogo } from '../store/jogo';
-import {
-  CANVAS,
-  arte,
-  borda,
-  camada,
-  cores,
-  duracao,
-  easing,
-  raio,
-} from '../styles/tokens';
+import { CANVAS, arte, camada, duracao, easing } from '../styles/tokens';
 import { Imagem } from './Imagem';
+import { QuadroSTAR } from './QuadroSTAR';
 
-/** Marcas da sequência, em ms a partir da entrada. Total ~8s com o último fade. */
-const MARCAS: readonly number[] = [
-  600, // 1 — Ana se vira e espera
-  2200, // 2 — um NPC olha o celular
-  3800, // 3 — a líder fecha o notebook
-  5400, // 4 — as cadeiras esvaziam
-  7000, // 5 — sala vazia
-];
-
-/**
- * Trava do avanço — mesmo conceito do `travar()` em Revelacao.tsx.
- *
- * O botão de conclusão é uma camada `inset: 0` que monta junto com a pausa: o
- * segundo clique de um duplo-clique no hotspot `entrega` cai aqui e encerra a
- * pausa antes de ela ser vista. E é IRRECUPERÁVEL — `entrega` é umaVezSo e
- * `concluirPausaBloco4` só age no estado 'rodando'.
- *
- * ESCOLHA: travar até a sequência visual terminar, não apenas por ~400ms na
- * montagem. Uma trava curta resolveria só o duplo-clique; qualquer clique
- * nervoso dentro dos 8 segundos de silêncio mataria o momento do mesmo jeito, e
- * este é o momento mais importante do Bloco 4. Travar até o fim não tira
- * controle de ninguém: o avanço continua manual e indefinido — o apresentador
- * pode esticar o silêncio o quanto quiser, só não pode antecipá-lo.
- */
+const MARCAS: readonly number[] = [600, 2200, 3800, 5400, 7000];
 const ESPERA_DO_AVANCO_MS = (MARCAS[MARCAS.length - 1] ?? 0) + duracao.maxima;
-
-/** Silhuetas em volta da mesa. Coordenadas em px de canvas. */
-const LUGARES_A_MESA: readonly { x: number; y: number }[] = [
-  { x: 760, y: 520 },
-  { x: 1010, y: 500 },
-  { x: 1260, y: 520 },
-];
 
 export function PausaBloco4(): JSX.Element {
   const concluirPausaBloco4 = useJogo((s) => s.concluirPausaBloco4);
@@ -74,33 +29,19 @@ export function PausaBloco4(): JSX.Element {
     [],
   );
 
-  function travar(espera: number): void {
-    setTravado(true);
-    const id = window.setTimeout(() => setTravado(false), espera);
-    temporizadores.current.push(id);
-  }
-
-  // A trava cobre a montagem E toda a sequência de ~8s.
   useEffect(() => {
-    travar(ESPERA_DO_AVANCO_MS);
-  }, []);
-
-  useEffect(() => {
+    const liberar = window.setTimeout(() => setTravado(false), ESPERA_DO_AVANCO_MS);
+    temporizadores.current.push(liberar);
     const marcas = MARCAS.map((ms, indice) =>
       window.setTimeout(() => setEtapa(indice + 1), ms),
     );
     return () => {
-      for (const t of marcas) window.clearTimeout(t);
+      window.clearTimeout(liberar);
+      for (const id of marcas) window.clearTimeout(id);
     };
   }, []);
 
-  const virada = etapa >= 1;
-  const celularAceso = etapa >= 2 && etapa < 4;
-  const notebookFechado = etapa >= 3;
-  const mesaVazia = etapa >= 4;
-  const salaVazia = etapa >= 5;
-
-  const transicaoLenta = `opacity ${duracao.maxima}ms ${easing.suave}, transform ${duracao.maxima}ms ${easing.suave}`;
+  const transicao = `opacity ${duracao.maxima}ms ${easing.suave}, transform ${duracao.maxima}ms ${easing.suave}`;
 
   return (
     <div
@@ -111,7 +52,6 @@ export function PausaBloco4(): JSX.Element {
         height: CANVAS.altura,
         zIndex: camada.pausa,
         overflow: 'hidden',
-        background: cores.fundo,
       }}
     >
       <Imagem
@@ -124,142 +64,53 @@ export function PausaBloco4(): JSX.Element {
         style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}
       />
 
-      {/* Véu plano: a sala esvazia de luz junto com as pessoas. */}
-      <div
-        aria-hidden
-        style={{
-          position: 'absolute',
-          inset: 0,
-          background: cores.veuLeve,
-          opacity: salaVazia ? 1 : 0.7,
-          transition: transicaoLenta,
-        }}
-      />
+      <div aria-hidden="true" style={{ position: 'absolute', left: '53%', top: '82.4%', transform: 'translate(-50%, -100%)' }}>
+        <Imagem id="objeto-plateia-vazia" rotulo="" largura={936} altura={216} decorativo mostrarRotulo={false} />
+      </div>
 
-      {/* O diagrama montado, aceso ao fundo. Fica quando todo o resto sai. */}
-      <div
-        aria-hidden
-        style={{
-          position: 'absolute',
-          left: 1420,
-          top: 180,
-          width: 360,
-          height: 240,
-          border: `${borda.maxima}px solid ${cores.acao}`,
-          borderRadius: raio.md,
-          background: cores.fundoElevado,
-          opacity: salaVazia ? 1 : 0.85,
-          transition: transicaoLenta,
-        }}
-      />
-
-      {/* Mesa. Forma cheia, sem detalhe fino. */}
-      <div
-        aria-hidden
-        style={{
-          position: 'absolute',
-          left: 620,
-          top: 600,
-          width: 800,
-          height: 150,
-          background: cores.silhueta,
-          border: `${borda.grossa}px solid ${cores.silhuetaContorno}`,
-          borderRadius: raio.lg,
-        }}
-      />
-
-      {/* Notebook da líder: fecha e fica fechado. */}
-      <div
-        aria-hidden
-        style={{
-          position: 'absolute',
-          left: 1180,
-          top: notebookFechado ? 586 : 520,
-          width: 150,
-          height: notebookFechado ? 18 : 84,
-          background: cores.fundoElevado,
-          border: `${borda.media}px solid ${cores.silhuetaContorno}`,
-          borderRadius: raio.sm,
-          transition: `top ${duracao.longa}ms ${easing.suave}, height ${duracao.longa}ms ${easing.suave}`,
-        }}
-      />
-
-      {/* Cadeiras e quem está nelas. As pessoas saem; as cadeiras ficam. */}
-      {LUGARES_A_MESA.map((lugar, indice) => (
-        <div key={`lugar-${String(indice)}`} aria-hidden>
-          <div
-            style={{
-              position: 'absolute',
-              left: lugar.x - 55,
-              top: lugar.y + 120,
-              width: 110,
-              height: 90,
-              background: cores.silhueta,
-              border: `${borda.media}px solid ${cores.silhuetaContorno}`,
-              borderRadius: raio.sm,
-            }}
-          />
-          <div
-            style={{
-              position: 'absolute',
-              left: lugar.x - 60,
-              top: lugar.y,
-              width: 120,
-              height: 170,
-              background: cores.silhueta,
-              border: `${borda.grossa}px solid ${cores.silhuetaContorno}`,
-              borderRadius: `${raio.redondo}px ${raio.redondo}px ${raio.md}px ${raio.md}px`,
-              opacity: mesaVazia ? 0 : 1,
-              transition: transicaoLenta,
-            }}
-          />
+      {/* Os três apoios mantêm os mesmos pontos de contato da cena interativa. */}
+      <div style={{ position: 'absolute', left: '50%', top: '30%', transform: 'translate(-50%, -50%)' }}>
+        <Imagem id="objeto-tv-grande" rotulo="" largura={384} altura={240} decorativo mostrarRotulo={false} />
+      </div>
+      <QuadroSTAR />
+      <div style={{ position: 'absolute', left: '74%', top: '61%', transform: 'translate(-50%, -100%)' }}>
+        <Imagem id="objeto-atril" rotulo="" largura={80} altura={160} decorativo mostrarRotulo={false} />
+      </div>
+      {([0, 1, 2] as const).flatMap((indice) => ([
+        { id: 'objeto-plateia', topo: '75%', altura: 136 },
+        { id: 'objeto-plateia-frente', topo: '82.4%', altura: 216 },
+      ] as const).map((fileira) => (
+        <div
+          key={`${indice}-${fileira.id}`}
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            left: '53%',
+            top: fileira.topo,
+            width: 936,
+            height: fileira.altura,
+            clipPath: `inset(0 ${((2 - indice) / 3) * 100}% 0 ${(indice / 3) * 100}%)`,
+            transform: etapa >= indice + 2
+              ? `translate(-50%, -100%) translate(${(indice - 1) * 24}px, -24px)`
+              : 'translate(-50%, -100%)',
+            opacity: etapa >= indice + 2 ? 0 : 1,
+            transition: transicao,
+          }}
+        >
+          <Imagem id={fileira.id} rotulo="" largura={936} altura={fileira.altura} decorativo mostrarRotulo={false} />
         </div>
-      ))}
+      )))}
 
-      {/* O celular de quem não está mais na reunião. */}
+      {/* Ana permanece no ponto de apresentação, voltada à sala até o fim. */}
       <div
-        aria-hidden
+        aria-hidden="true"
         style={{
           position: 'absolute',
-          left: 1000,
-          top: 560,
-          width: 46,
-          height: 74,
-          background: cores.acao,
-          borderRadius: raio.sm,
-          opacity: celularAceso ? 1 : 0,
-          transition: transicaoLenta,
-        }}
-      />
-
-      {/* A líder. Sai depois de todos. */}
-      <div
-        aria-hidden
-        style={{
-          position: 'absolute',
-          left: 1180,
-          top: 470,
-          width: 130,
-          height: 200,
-          background: cores.silhueta,
-          border: `${borda.grossa}px solid ${cores.silhuetaContorno}`,
-          borderRadius: `${raio.redondo}px ${raio.redondo}px ${raio.md}px ${raio.md}px`,
-          opacity: salaVazia ? 0 : 1,
-          transition: transicaoLenta,
-        }}
-      />
-
-      {/* Ana. Se vira e espera. Continua lá no fim. */}
-      <div
-        aria-hidden
-        style={{
-          position: 'absolute',
-          left: 330,
-          top: 470,
-          width: 260,
-          height: 520,
-          transform: virada ? 'scaleX(-1)' : 'scaleX(1)',
-          transition: `transform ${duracao.longa}ms ${easing.suave}`,
+          left: `calc(${etapa >= 1 ? 63 : 65}% - ${arte.personagem.largura / 2}px)`,
+          top: `calc(62% - ${arte.personagem.altura}px)`,
+          width: arte.personagem.largura,
+          height: arte.personagem.altura,
+          transition: `left ${duracao.longa}ms ${easing.suave}`,
         }}
       >
         <Imagem
@@ -273,15 +124,12 @@ export function PausaBloco4(): JSX.Element {
         />
       </div>
 
-      {/* Avanço manual e indefinido. Nenhum rótulo visível: a tela é silêncio.
-          Só aceita clique depois que a sequência inteira passou. */}
       <button
         type="button"
         aria-label="Continuar após a pausa"
         disabled={travado}
         onClick={() => {
-          if (travado) return;
-          concluirPausaBloco4();
+          if (!travado) concluirPausaBloco4();
         }}
         style={{
           position: 'absolute',

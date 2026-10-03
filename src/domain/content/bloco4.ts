@@ -5,7 +5,7 @@
  * Ordem: Marcos -> plateia e puzzle -> apresentação no atril -> pausa silenciosa
  * -> Cláudia -> Bianca. A cena oculta plateia e NPCs quando saem da narrativa;
  * `Cena.tsx` aplica essa composição usando os hotspots concluídos e o estado da
- * pausa. A conclusão da apresentação concede o crachá e inicia a pausa.
+ * pausa. A apresentação inicia a pausa; o crachá vem no reconhecimento de Cláudia.
  *
  * Coordenadas de personagens, plateia e atril foram revisadas com a prévia
  * composta e os testes de geometria. A sala foi aberta para reservar o palco.
@@ -58,12 +58,9 @@ export const CENAS_B4: readonly Cena[] = [
         /** O beat narrativo estabelece que a sala está ouvindo antes da fala de Ana. */
         id: 'b4-plateia',
         rotulo: 'A plateia',
-        arte: { tipo: 'objeto', assetId: 'objeto-plateia', largura: 368, altura: 192 },
-        /** Arte sentada e virada para o telão; a faixa do palco fica livre para Ana. */
-        pos: { x: 50, y: 62 },
-        // Ela olha a sala da cabeceira direita, entre a plateia (termina em
-        // 1152px) e o atril (começa em 1380,8px): é a única faixa em que a figura
-        // dela não cobre nenhum dos dois.
+        arte: { tipo: 'objeto', assetId: 'objeto-plateia', largura: 936, altura: 136 },
+        /** A fileira de trás dá um alvo livre; as nove pessoas seguem visíveis. */
+        pos: { x: 53, y: 75 },
         parada: { x: 66, y: 62 },
         requerHotspotsFeitos: ['b4-marcos'],
         bloqueadoTexto: 'A plateia ainda está se acomodando. Ana conversa com Marcos antes de começar.',
@@ -164,13 +161,12 @@ export const DIALOGOS_B4: Record<DialogoId, Dialogo> = {
   'b4-apresentacao': {
     id: 'b4-apresentacao',
     nos: [
-      { tipo: 'fala', quem: 'ana', texto: 'O turno seguinte já começa sabendo o que ficou pendente. Eu organizei a conferência para que a informação chegasse a tempo.' },
-      { tipo: 'fala', quem: 'ana', texto: 'Agora vale testar o mesmo formato nas outras linhas.' },
+      { tipo: 'fala', quem: 'ana', texto: 'Antes, a conferência dos lotes ficava no papel até o fim do turno. Quem chegava depois precisava perguntar o que tinha ficado pendente.' },
+      { tipo: 'fala', quem: 'ana', texto: 'Minha parte era fazer essas pendências chegarem claras ao turno seguinte.' },
+      { tipo: 'fala', quem: 'ana', texto: 'Passei a registrar a conferência na planilha compartilhada, na hora, e conferi o preenchimento com o pessoal da linha.' },
+      { tipo: 'fala', quem: 'ana', texto: 'Agora o outro turno já começa sabendo o que falta. Eu gosto de resolver essa passagem; ainda fico nervosa contando isso em voz alta.' },
     ],
-    efeitos: [
-      { tipo: 'concederItem', itemId: 'cracha-innovation' },
-      { tipo: 'iniciarPausaBloco4' },
-    ],
+    efeitos: [{ tipo: 'iniciarPausaBloco4' }],
   },
   /**
    * Três nós, e é tudo. Do ponto de vista dela houve feedback e direcionamento;
@@ -188,6 +184,7 @@ export const DIALOGOS_B4: Record<DialogoId, Dialogo> = {
         texto: 'Manda no canal do time depois, pra quem não estava aqui ver.',
       },
     ],
+    efeitos: [{ tipo: 'concederItem', itemId: 'cracha-innovation' }],
   },
 
   /**
@@ -217,7 +214,7 @@ export const DIALOGOS_B4: Record<DialogoId, Dialogo> = {
         texto:
           'Lembra a sua lista? "Falar numa reunião cheia de gente mais experiente."',
       },
-      { tipo: 'fala', quem: 'ana', texto: '(pausa) Eu nunca fiz essa trilha.' },
+      { tipo: 'fala', quem: 'ana', texto: 'Eu nunca fiz essa trilha. Falar aqui ainda deu trabalho.' },
       { tipo: 'fala', quem: 'bianca', texto: 'Não. Você fez as outras três.' },
     ],
     efeitos: [

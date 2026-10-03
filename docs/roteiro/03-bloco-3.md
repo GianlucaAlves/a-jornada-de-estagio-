@@ -45,7 +45,7 @@ Ao entrar no Escritório, mais tarde:
 >
 > **Tiago:** *(dá de ombros)* **Entrou no orçamento da rotina.**
 >
-> **Ana:** E o turno da noite começa sem saber o que ficou pendente.
+> **Ana:** Acho que gosto de descobrir onde a informação emperra. Se eu deixar isso só na minha cabeça, o turno da noite continua no escuro.
 >
 > **Tiago:** Começa. Ninguém pediu pra você olhar isso.
 >

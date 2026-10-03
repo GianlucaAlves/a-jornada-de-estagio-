@@ -40,27 +40,6 @@ function hotspotQueAbre(puzzleId: string): {
   throw new Error(`nenhum hotspot abre o puzzle '${puzzleId}'`);
 }
 
-/**
- * Acha a PORTA do puzzle: o hotspot que só responde depois dele resolvido. É
- * esse que a v1 orfanaria para sempre se houvesse botão de sair — a correção do
- * `abrirPuzzle` existe por causa dele.
- *
- * Procurado pelo conteúdo, em qualquer fase: se a frente de conteúdo mover a
- * porta de lugar, este teste acompanha em vez de reprovar.
- */
-function hotspotGateadoPor(
-  puzzleId: string,
-): { lugarId: LugarId; bloco: number; hotspot: Hotspot } | undefined {
-  for (const cena of CENAS) {
-    for (const h of cena.hotspots) {
-      if (h.requerPuzzleResolvido === puzzleId) {
-        return { lugarId: cena.lugarId, bloco: cena.bloco, hotspot: h };
-      }
-    }
-  }
-  return undefined;
-}
-
 beforeEach(() => {
   j().reiniciar();
 });
@@ -150,46 +129,21 @@ describe('sair e reabrir o sequenciar não trava a fase 2', () => {
     expect(j().puzzles.sequenciar).toBe('resolvido');
   });
 
-  /**
-   * O TESTE DE RAIO DE DANO, e ele é afirmado sobre o GATE, não sobre o fecho da
-   * fase.
-   *
-   * Afirmar `blocoConcluido` amarraria este arquivo à cadeia inteira que a frente
-   * de conteúdo está escrevendo agora — no momento em que escrevo, o fecho da
-   * fase 2 passou a ser gateado pelo certificado, que é gateado pelo puzzle, e o
-   * `blocoConcluido` mudou para os efeitos de um diálogo. Nada disso é meu, e
-   * cada mudança lá reprovaria aqui sem que houvesse defeito.
-   *
-   * O que é meu é a propriedade: depois de SAIR e VOLTAR, o hotspot que exige o
-   * puzzle deixa de estar bloqueado. É esse hotspot que a v1 orfanaria para
-   * sempre.
-   */
-  it('depois de sair e voltar, o hotspot que exige o puzzle destrava', () => {
-    const porta = hotspotGateadoPor('sequenciar');
-    expect(porta, 'nenhum hotspot exige o sequenciar resolvido').toBeDefined();
-    if (!porta) return;
-
-    j().entrarNoBloco(porta.bloco as 1 | 2 | 3 | 4 | 5 | 6);
-    j().entrarNoLugar(porta.lugarId);
-
-    // ANTES: bloqueado. O clique não entra e a narração explica por quê.
-    j().clicarHotspot(porta.hotspot.id);
-    expect(j().hotspotsFeitos).not.toContain(porta.hotspot.id);
-    if (porta.hotspot.bloqueadoTexto) {
-      expect(j().narracao).toBe(porta.hotspot.bloqueadoTexto);
-    }
-
-    // SAIR e VOLTAR no meio do caminho.
+  // Sair e voltar preserva o acerto: a recompensa só aparece na primeira
+  // resolução, mesmo que o apresentador reabra o puzzle para mostrar a solução.
+  it('sair e voltar ainda entrega a conquista no acerto, uma única vez', () => {
+    j().entrarNoBloco(bloco as 1 | 2 | 3 | 4 | 5 | 6);
     j().entrarNoLugar(lugarId as 'escritorio');
     j().clicarHotspot(hotspot.id);
     j().fecharPuzzle();
     j().clicarHotspot(hotspot.id);
     j().resolverPuzzle('sequenciar');
     expect(j().puzzles.sequenciar).toBe('resolvido');
-
-    // DEPOIS: o mesmo hotspot responde.
-    j().entrarNoLugar(porta.lugarId);
-    j().clicarHotspot(porta.hotspot.id);
-    expect(j().hotspotsFeitos).toContain(porta.hotspot.id);
+    expect(j().itens['certificado-degree']).toBe('presente');
+    expect(j().itens['anotacoes-treinamento']).toBe('presente');
+    expect(j().itensRecebidos).toEqual(['certificado-degree', 'anotacoes-treinamento']);
+    j().clicarHotspot(hotspot.id);
+    j().resolverPuzzle('sequenciar');
+    expect(j().itensRecebidos).toHaveLength(2);
   });
 });

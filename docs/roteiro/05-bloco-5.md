@@ -83,8 +83,8 @@ olhar as próprias experiências, sem prever o resultado.
 > **Bianca:** Faz sentido. E, além da vaga, você já começou a pensar em que tipo
 > de trabalho quer fazer?
 >
-> **Ana:** É outra pergunta. Quero olhar para o que aprendi e para as tarefas de
-> que gostei antes de decidir a área.
+> **Ana:** Na conferência gostei de organizar a informação. Na apresentação,
+> nem tanto de ficar na frente da sala. Quero entender essa diferença.
 
 ---
 
@@ -130,17 +130,17 @@ hora, e a meia hora é pra conversar — não pra chegar sem pergunta."*
 
 Com os dois, seis falas:
 
-> **Bianca:** Você está com cara de quem está fazendo uma conta que não fecha.
+> **Bianca:** Você circulou "passagem de turno" três vezes no caderno.
 >
-> **Ana:** Meu contrato está acabando. Eu quero ser efetivada, mas ainda não sei se vai acontecer.
+> **Ana:** Gostei de descobrir onde o dado parava. Ainda não sei se quero fazer isso nesta área ou em outra.
 >
-> **Ana:** Aprendi muito aqui. Estou pensando se quero continuar nessa área ou conhecer outra dentro da empresa.
+> **Ana:** Quero ser efetivada. Faltam três semanas e ninguém disse se há vaga. Estou tentando não misturar isso com a escolha da área.
 >
 > **Bianca:** Sou formada em Letras e trabalho com documentação. Nem sabia que esse caminho existia; demorei para parar de chamar a mudança de desvio.
 >
-> **Bianca:** Você aprendeu, entregou e tomou iniciativa. A gente viu isso.
+> **Bianca:** Eu vi você conversar com a linha, montar a conferência e depois explicar isso na reunião.
 >
-> **Bianca:** Se a vaga não vier, não apaga o que você fez. Às vezes não há vaga no time, e isso não está nas suas mãos. O que você aprendeu é seu.
+> **Bianca:** Se não abrir vaga, esses exemplos continuam sendo seus. Orçamento e espaço no time também entram nessa decisão.
 >
 
 **→ Ganha skill: Plano de futuro**
@@ -296,6 +296,10 @@ Chega uma mensagem. **Cinco falas no total** — o e-mail cabe em duas linhas:
 Ana não responde — ela olha a tela.
 
 > **Ana:** *(baixo)* Três lugares?
+
+Cláudia conta que o time de produto precisava de alguém para organizar a
+documentação e diz que vai mostrar as outras indicações no mapa. A conversa não
+antecipa a explicação completa: cada conexão aparece quando a plateia a percorre.
 
 > ⚠️ A linha dos **três lugares** é o setup das três primeiras conexões da revelação. Ela não pode ser cortada nem parafraseada: a plateia precisa carregar o número "três" até o mapa.
 

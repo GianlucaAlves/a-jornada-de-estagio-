@@ -102,9 +102,11 @@ export const CENAS_B1: readonly Cena[] = [
         arte: { tipo: 'objeto', assetId: 'objeto-monitor-ligado', largura: 192, altura: 144 },
         // Coisa de mesa: ancorado pelo centro para a base cair na aresta do
         // tampo. Ancorado pela base ele flutua — foi visto na prévia.
-        ancora: 'centro',
-        pos: { x: 41, y: 64 },
+        pos: { x: 40, y: 65.2 },
         parada: { x: 12, y: 80 },
+        // O centro mantém a base do monitor no tampo; a prévia também lê a âncora
+        // abaixo da parada para compor a mesma geometria que a interface.
+        ancora: 'centro',
         requerPuzzleResolvido: 'senha',
         bloqueadoTexto: 'A tela de login continua ali, esperando os três campos.',
         // `umaVezSo` NÃO é por causa do puzzle (ver `b1-notebook`): é para o
@@ -144,6 +146,7 @@ export const DIALOGOS_B1: Record<DialogoId, Dialogo> = {
         texto: 'Ah, a nova! A senha do primeiro acesso tá no e-mail de boas-vindas.',
       },
       { tipo: 'fala', quem: 'ana', texto: 'Eu não consigo abrir o e-mail sem a senha.' },
+      { tipo: 'fala', quem: 'ana', texto: 'Fiquei parada ali porque achei que perguntar no primeiro dia ia parecer falta de preparo.' },
       // A piada seca é o beat inteiro. Ele não se desculpa e não resolve: ele
       // reconhece e segue. É o ritmo normal de quem já está dentro.
       { tipo: 'fala', quem: 'tiago', texto: '(pausa) É. Todo mundo cai nessa.' },
@@ -158,7 +161,7 @@ export const DIALOGOS_B1: Record<DialogoId, Dialogo> = {
       {
         tipo: 'fala',
         quem: 'tiago',
-        texto: 'E o fim é o dia que você entrou. (volta pro que estava fazendo) Ninguém chega sabendo.',
+        texto: 'E o fim é o dia que você entrou. (volta pro que estava fazendo) Eu também demorei até decorar onde abria chamado.',
       },
     ],
     // Ela perguntou. É a primeira coisa que ela faz sozinha no dia.
@@ -219,7 +222,7 @@ export const DIALOGOS_B1: Record<DialogoId, Dialogo> = {
       {
         tipo: 'fala',
         quem: 'rafael',
-        texto: 'Primeiro dia é sobre conhecer gente. Produzir é de amanhã em diante.',
+        texto: 'Amanhã você produz. Hoje já sabe onde ficam três ramais. Eu levei uma semana.',
       },
     ],
     efeitos: [{ tipo: 'concederItem', itemId: 'cartao-rafael' }],

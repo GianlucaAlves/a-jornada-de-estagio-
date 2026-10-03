@@ -47,7 +47,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from pathlib import Path
 
-from . import props
+from . import props, personagens
 from .nucleo import (
     CENA,
     Grade,
@@ -388,6 +388,9 @@ def escritorio() -> Grade:
     _assentar(g, 452, 182, props.armario_baixo(56, 30, props.NEUTRO))
     _assentar(g, 452, 152, props.vaso_planta_baixa(22), sombra=False)
 
+    # Colega no posto do fundo: a mesa esconde o corpo e as duas telas ficam
+    # visivelmente ao alcance de alguém, sem criar outro hotspot.
+    _assentar(g, 356, 178, personagens.figurante_cafe(variacao=0), sombra=False)
     # mesa do fundo sob a janela, com duas telas: a identidade "muitas telas"
     _assentar(g, 356, 198, props.mesa_de_trabalho(120, 36))
     _assentar(g, 324, 164, props.monitor(32, 26, "grafico"), sombra=False)
@@ -401,12 +404,14 @@ def escritorio() -> Grade:
 
     # --- mesa da Ana. Tampo em y=194; x 92..140 fica VAZIO para o notebook.
     _assentar(g, 170, 230, props.mesa_de_trabalho(150, 36))
-    _assentar(g, 208, 194, props.monitor(34, 28, "desktop"), sombra=False)
+    # O monitor clicável entra como camada do hotspot, exatamente sobre este
+    # retângulo reservado. Desenhá-lo também no fundo criava duas telas quase
+    # alinhadas, percebidas como uma tela torta quando a camada interativa abria.
     _assentar(g, 236, 194, props.luminaria_de_mesa(), sombra=False)
     props.poca_de_luz(g, 232, 192, 22, 4, quente="r")
     props.reflexo_de_tela(g, 192, 197, 34, 3, props.TELA[1])
     # ACENTO VERMELHO da cena, e o único: caneca FORA do retângulo do notebook
-    _assentar(g, 150, 194, props.caneca(props.VERMELHO[3], vapor=True), sombra=False)
+    _assentar(g, 178, 194, props.caneca(props.VERMELHO[3], vapor=True), sombra=False)
     # Sombra de contato DO OBJETO INTERATIVO. O sprite dele é PNG transparente
     # que a UI põe sobre qualquer fundo, então não pode trazer sombra própria —
     # ela mora aqui, no tampo, na posição exata que o hotspot declara. Sem isso o
@@ -581,6 +586,11 @@ def cafezinho(*, festa: bool = False) -> Grade:
         # janela deixou de ser a fonte. Elipse muito larga e muito baixa de
         # propósito — é luz somada de várias fontes, não uma lâmpada.
         props.poca_de_luz(g, 240, 226, 250, 36, quente="q", passos=1)
+
+    # Uma pessoa serve café atrás do balcão. A bancada entra depois e cobre a
+    # parte inferior do corpo; o copo e a máquina ficam ao alcance da mão.
+    if not festa:
+        _assentar(g, 105, 190, personagens.figurante_cafe(variacao=1, gesto=True), sombra=False)
 
     # --- balcão. A frente de interação moveu `maquina-cafe` para (77,189), que é
     # CHÃO e não bancada: o retângulo x 57..97 / y 141..189 ficou reservado e o
@@ -1075,7 +1085,8 @@ def linha_producao() -> Grade:
         _assentar(g, cx, 58, props.luminaria_industrial(22, quente=quente), sombra=False)
         _halo(g, cx, 74, 20, 15)
 
-    g.colar(120, 64, props.tv_de_parede(48, 32, "grafico"))  # painel de produção
+    # A área 120..168 × 64..100 fica reservada ao hotspot `b3-monitor`, que
+    # recebe o painel industrial nesta mesma posição, sem segundo quadro atrás.
     # Painéis elétricos no lugar do cartaz que estava aqui. O cartaz era um
     # retângulo quase branco de 26x34 colado exatamente acima da campânula quente,
     # e na imagem ele era o objeto MAIS CLARO da parede: roubava o olho justo do
@@ -1403,6 +1414,7 @@ def outra_area() -> Grade:
     # notebook fechado lê como balcão; o mesmo tampo com dois biombos de
     # bancada, três monitores e duas cadeiras lê como dois postos de trabalho —
     # e "posto de trabalho de verdade" era o que faltava.
+    _assentar(g, 354, 171, personagens.figurante_cafe(variacao=2), sombra=False)
     _assentar(g, 300, 170, props.mesa_de_reuniao(196, 40, props.MADEIRA))
     # O tampo tem 196x28 e saiu como uma LAJE marrom no meio da imagem: os três
     # veios que `mesa_de_reuniao` desenha não bastam nessa largura. Duas passadas
@@ -1575,8 +1587,8 @@ def sala_reunioes() -> Grade:
     # paradas de `bloco4.ts` em 65%, 66% e 70% caem nessas colunas, onde a faixa
     # de piso tem 7 a 16 linhas entre o rodapé e a mesa. Uma cadeira ali reduz a
     # corrida de piso e reprova três paradas de uma vez.
-    for cx in (148, 200, 284, 332):
-        _assentar(g, cx, 178, props.cadeira_escritorio())
+    # A fileira antiga aparecia entre Ana e o telão e parecia uma segunda
+    # plateia vazia. Dois assentos laterais bastam para localizar a sala.
     for cx, esp in ((104, False), (386, True)):
         _assentar(g, cx, 202, props.cadeira_escritorio(perfil=True), espelhar=esp)
 
@@ -1608,41 +1620,21 @@ def sala_reunioes() -> Grade:
     # Fileira de pôsteres de projeto sob a janela: é a faixa de parede que sobrou
     # (x 330..430 entre a base da janela em y=96 e o rodapé em 152) e é a única da
     # cena que não colide com os três retângulos reservados.
-    for i, px in enumerate((336, 370, 404)):
-        g.colar(px, 104, props.cartaz(26, 38, acento=(props.TELA[3], props.VERDE[3], props.LUZ[3])[i]))
+    g.colar(370, 104, props.cartaz(26, 38, acento=props.VERDE[3]))
     # SESSÃO DE PÔSTERES NO VIDRO DA ESQUERDA. Pôster colado em divisória de
     # vidro é literalmente o que se vê num evento de pôsteres, e é o único lugar
     # da metade esquerda onde cabe algo: a porta ocupa x 15..53 e o vidro vai de
     # 64 a 172, todo acima da linha do piso. Custo zero em geometria de chão.
-    for i, px in enumerate((78, 118)):
-        g.colar(px, 56, props.cartaz(28, 38, acento=(props.LUZ[3], props.TELA[3])[i]))
+    g.colar(118, 56, props.cartaz(28, 38, acento=props.TELA[3]))
     # Quatro spots de trilho, dois por parede de pôster. Sem a consequência na
     # parede o spot é uma caixinha no teto — mesma lógica da poça no chão.
-    for px in (348, 404, 82, 122):
+    for px in (370, 122):
         g.colar(px, 16, props.projetor(18, 10))
     # material de credenciamento na credência, na faixa livre do tampo (x 266..310)
 
-    # --- FRENTE: a plateia em cadeira vazia, cortada pela borda inferior.
-    # Substitui os dois encostos soltos que ficavam em x 76..180 e 300..404 e
-    # liam como duas tarjas preta nos cantos. Ver `props.fileira_de_assentos`
-    # para o motivo de o bloco ser opaco em toda a largura: é o mapa de chão que
-    # exige, não a arte.
-    #
-    # UM passo de rampa, e não dois, e isto é correção de OLHAR. Com `_escurecer`
-    # de 2 passos a fila virou exatamente o defeito que ela existe para consertar:
-    # a rampa azul tem 5 casas, o prop já usa a mais escura (`a`) na fila de trás,
-    # e dois passos empurram o corpo do assento (`c`) e o realce (`d`) para `a` e
-    # `b` — todo o primeiro plano colapsa em dois tons quase iguais e sai uma
-    # TARJA PRETA de 1920px. Um passo mantém a separação entre fila da frente e
-    # fila de trás, que é o que desenha a silhueta.
-    #
-    # E NÃO SE APLICA `_aresta_de_luz` AQUI. Ela acende o primeiro pixel opaco de
-    # cada coluna, e entre x 90 e 390 esse pixel é a ARESTA DA MESA (que ocupa
-    # y 216..228), não o encosto — o realce iria para o lugar errado e a mesa
-    # ganharia um fio branco atravessando a imagem. O realce de topo desta fila já
-    # vem desenhado no próprio prop, na altura certa de cada encosto.
-    _assentar(g, 240, 270, props.fileira_de_assentos(480, 54, assentos=6), sombra=False)
-    _escurecer(g, 0, 226, LARGURA, 44, 1)
+    # A plateia e suas cadeiras são camadas da UI, não pixels do cenário. Assim
+    # o piso continua legível, e as cadeiras permanecem quando as pessoas saem.
+    # A faixa opaca antiga escondia toda a frente como uma parede preta.
     _vinheta(g)
     return g
 
@@ -1824,6 +1816,42 @@ def mapa() -> Grade:
     g.linha_h(30, 242, 420, "3")
     props.poca_de_luz(g, 241, 248, 52, 16, quente="x")
     props.sombra_de_contato(g, 240, 248, 420, altura=2, forca=1)
+
+    # A fachada não explicava por que havia cartões de lugares sobre ela. A
+    # planta abaixo assume o primeiro plano: corredor central e cinco alas
+    # distinguíveis continuam legíveis nas frestas entre os cartões opacos.
+    g.retangulo(0, 0, LARGURA, ALTURA, "2")
+    props.parede_pintada(g, 0, ALTURA, "23232", sujeira=False)
+    g.retangulo(20, 108, 440, 54, "4")
+    g.linha_h(20, 108, 440, "5")
+    g.linha_h(20, 161, 440, "1")
+    g.retangulo(214, 18, 52, 234, "4")
+    g.linha_v(214, 18, 234, "5")
+    g.linha_v(265, 18, 234, "1")
+    for y in range(120, 158, 10):
+        g.retangulo(224, y, 32, 3, "5")
+
+    salas = ((22, 22, 174, 76), (284, 22, 174, 76),
+             (22, 178, 174, 70), (284, 178, 174, 70),
+             (174, 178, 132, 70))
+    for x, y, largura, altura in salas:
+        g.retangulo(x, y, largura, altura, "3")
+        g.retangulo(x + 4, y + 4, largura - 8, altura - 8, "2")
+        g.moldura(x, y, largura, altura, "5")
+    # Mesas, balcão e mesa de reunião dão leitura de escritório sem competir
+    # com os cartões de lugar que a interface posiciona por cima.
+    for x in (40, 94, 302, 356):
+        g.retangulo(x, 40, 34, 20, "5")
+        g.linha_h(x + 4, 44, 18, "u")
+        g.retangulo(x + 10, 62, 12, 8, "1")
+    g.retangulo(40, 194, 62, 18, "5")
+    g.retangulo(44, 197, 12, 9, "u")
+    g.retangulo(310, 196, 112, 24, "5")
+    for x in (322, 356, 390):
+        g.retangulo(x, 186, 12, 8, "1")
+        g.retangulo(x, 222, 12, 8, "1")
+    g.retangulo(186, 194, 108, 18, "5")
+    g.linha_h(194, 198, 92, "u")
     _vinheta(g)
     return g
 
@@ -1870,9 +1898,15 @@ CAIXAS_DE_OBJETO: dict[str, tuple[int, int]] = {
     # Os dois da fase 4 são novos e não têm caixa herdada. Estes são os números
     # que a frente de interação precisa declarar em `bloco4.ts`:
     #   objeto-atril   -> largura: 144, altura: 224
-    #   objeto-plateia -> largura: 800, altura: 192
+    #   objeto-plateia -> largura: 936, altura: 136 (fileira clicável)
     "atril": (36, 56),
-    "plateia": (92, 48),
+    "plateia": (234, 34),
+    "plateia-frente": (234, 54),
+    "plateia-vazia": (234, 54),
+    "figurante-cafe-1": (50, 84),
+    "figurante-cafe-1-gesto": (50, 84),
+    "figurante-cafe-2": (50, 84),
+    "figurante-cafe-2-gesto": (50, 84),
     # ACHADO, NÃO ESCOPO: `objeto-painel-processo` está no manifest e é usado por
     # `bloco3.ts` com 192x144, mas nunca foi gerado — o hotspot da Linha de
     # Produção caía no placeholder rotulado, e em silêncio, porque a cadeia de
@@ -1944,7 +1978,13 @@ def _objetos() -> list[tuple[str, Grade]]:
         _objeto("caderno", props.caderno_aberto(36, 22)),
         _objeto("grade-curricular", props.grade_impressa(42, 28)),
         _objeto("atril", props.atril(32, 52)),
-        _objeto("plateia", props.plateia(90, 44, pessoas=3)),
+        _objeto("plateia", props.plateia(altura=32, fileira="tras")),
+        _objeto("plateia-frente", props.plateia(fileira="frente")),
+        _objeto("plateia-vazia", props.plateia(ocupada=False)),
+        _objeto("figurante-cafe-1", personagens.figurante_cafe(variacao=0)),
+        _objeto("figurante-cafe-1-gesto", personagens.figurante_cafe(variacao=0, gesto=True)),
+        _objeto("figurante-cafe-2", personagens.figurante_cafe(variacao=2)),
+        _objeto("figurante-cafe-2-gesto", personagens.figurante_cafe(variacao=2, gesto=True)),
         _objeto("painel-processo", props.painel_de_processo(44, 32)),
         _objeto("radio-telecom", props.radio_de_telecom(16, 24)),
         _objeto("radio-telecom-aberto", props.radio_de_telecom(16, 24, montado=False)),

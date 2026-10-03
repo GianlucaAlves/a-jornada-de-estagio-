@@ -65,6 +65,8 @@ Escolha óbvia, e ele resolve só um terço.
 > **Tiago:** Ah, a nova! A senha do primeiro acesso tá no e-mail de boas-vindas.
 >
 > **Ana:** Eu não consigo abrir o e-mail sem a senha.
+
+> **Ana:** Fiquei parada ali porque achei que perguntar no primeiro dia ia parecer falta de preparo.
 >
 > **Tiago:** *(pausa)* É. Todo mundo cai nessa.
 >
@@ -72,7 +74,7 @@ Escolha óbvia, e ele resolve só um terço.
 > meio é o número do teu time, isso é com a Cláudia.
 >
 > **Tiago:** E o fim é o dia que você entrou. *(volta pro que estava fazendo)*
-> Ninguém chega sabendo.
+> Eu também demorei até decorar onde abria chamado.
 
 **→ Campo 1: `NOVO`**
 **→ Ganha skill: Coragem de perguntar**
@@ -125,7 +127,7 @@ verdade, e a diferença tem que ser sentida.
 > **Rafael:** *(escreve o ramal atrás de um cartão)* Qualquer coisa que travar, me
 > chama. Sério.
 >
-> **Rafael:** Primeiro dia é sobre conhecer gente. Produzir é de amanhã em diante.
+> **Rafael:** Amanhã você produz. Hoje já sabe onde ficam três ramais. Eu levei uma semana.
 
 **→ Campo 3: `03`**
 **→ Ganha: Cartão do Rafael**

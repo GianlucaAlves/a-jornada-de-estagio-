@@ -22,6 +22,7 @@ import { assetDaArteDeHotspot, assetDoCenario } from '../assets/manifest';
 import { seletores, useJogo } from '../store/jogo';
 import {
   CANVAS,
+  arte,
   camada,
   cores,
   duracao,
@@ -35,6 +36,7 @@ import { Imagem } from './Imagem';
 import { Posicionado } from './Canvas';
 import { LinhaDeFoco } from './LinhaDeFoco';
 import { Protagonista } from './Protagonista';
+import { QuadroSTAR } from './QuadroSTAR';
 import type { ComandoDeMovimento } from './Protagonista';
 import { SpriteAnimado, atrasoDoId } from './SpriteAnimado';
 import { folgaDeAlvo, posicaoDeEntrada, tamanhoDaArte } from './geometriaDeCena';
@@ -112,6 +114,7 @@ export function Cena(): JSX.Element | null {
   const dialogoAtivo = useJogo((s) => s.dialogoAtivo);
   const puzzleAberto = useJogo((s) => s.puzzleAberto);
   const narracao = useJogo((s) => s.narracao);
+  const itensRecebidos = useJogo((s) => s.itensRecebidos);
   const mensagemFalha = useJogo((s) => s.mensagemFalha);
   const pausaBloco4 = useJogo((s) => s.pausaBloco4);
   const lugares = useJogo((s) => s.lugares);
@@ -141,11 +144,26 @@ export function Cena(): JSX.Element | null {
     setComando((c) => ({ alvo: entrada, instantaneo: true, seq: c.seq + 1 }));
   }, [lugarId, cena?.bloco]);
 
+  useEffect(() => {
+    if (dialogoAtivo?.dialogoId !== 'b4-apresentacao') return;
+    // Cada passo do STAR desloca Ana entre atril e telão. A fala passa a ter
+    // ação visível, e o avanço manual mantém o ritmo nas mãos de quem apresenta.
+    const pontos = [
+      { x: 65, y: 62 },
+      { x: 59, y: 62 },
+      { x: 67, y: 62 },
+      { x: 61, y: 62 },
+    ];
+    const alvo = pontos[dialogoAtivo.indice] ?? { x: 65, y: 62 };
+    setPendente(null);
+    setComando((atual) => ({ alvo, instantaneo: false, seq: atual.seq + 1 }));
+  }, [dialogoAtivo?.dialogoId, dialogoAtivo?.indice]);
+
   if (lugarId === null) return null;
 
   const lugar: Lugar | undefined = LUGARES[lugarId];
   const bloqueado =
-    dialogoAtivo !== null || puzzleAberto !== null || narracao !== null || mensagemFalha !== null || pausaBloco4 === 'rodando';
+    dialogoAtivo !== null || puzzleAberto !== null || narracao !== null || mensagemFalha !== null || itensRecebidos.length > 0 || pausaBloco4 === 'rodando';
 
   /**
    * Lugar concluído NÃO renderiza hotspot nenhum.
@@ -249,41 +267,98 @@ export function Cena(): JSX.Element | null {
         style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}
       />
 
-      {dialogoAtivo?.dialogoId === 'b4-apresentacao' ? (
+      {lugarId === 'sala-reunioes' && cena?.bloco === 4 ? (
+        <>
+          <div aria-hidden="true" style={{ position: 'absolute', left: '53%', top: '82.4%', transform: 'translate(-50%, -100%)', pointerEvents: 'none', zIndex: camada.cenario + 1 }}>
+            <Imagem id="objeto-plateia-vazia" rotulo="" largura={936} altura={216} decorativo mostrarRotulo={false} />
+          </div>
+          {!hotspotsFeitos.includes('b4-entrega') ? (
+            <div aria-hidden="true" style={{ position: 'absolute', left: '53%', top: '82.4%', transform: 'translate(-50%, -100%)', pointerEvents: 'none', zIndex: camada.hotspot - 1 }}>
+              <Imagem id="objeto-plateia-frente" rotulo="" largura={936} altura={216} decorativo mostrarRotulo={false} />
+            </div>
+          ) : null}
+        </>
+      ) : null}
+
+      {lugarId === 'cafezinho' ? (
         <div
-          aria-label="Resumo da apresentação de Ana: situação, tarefa, ação e resultado"
+          aria-hidden="true"
+          className="jogo-vapor"
           style={{
             position: 'absolute',
-            left: '41.5%',
-            top: '22.5%',
-            width: '17%',
-            height: '18%',
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            alignContent: 'center',
-            gap: espaco.xs,
-            padding: espaco.sm,
-            background: cores.painel,
-            color: cores.texto,
-            border: `3px solid ${cores.contorno}`,
-            zIndex: camada.cenario + 2,
+            // A máquina fica em x=77 no cenário (escala 4); vapor no notebook
+            // do balcão parecia outro objeto flutuando.
+            left: '15.5%',
+            top: '47%',
+            width: 72,
+            height: 64,
             pointerEvents: 'none',
+            zIndex: camada.cenario + 1,
+            ['--jogo-vapor-subida' as string]: `${-espaco.sm}px`,
           }}
         >
-          {[
-            ['Situação', 'Fila no fim do turno'],
-            ['Tarefa', 'Avisar próximo turno'],
-            ['Ação', 'Planilha atualizada'],
-            ['Resultado', 'Pendências em tempo'],
-          ].map(([rotulo, resumo]) => (
-            <div key={rotulo} style={{ fontSize: tipografia.tamanhos.minimo, lineHeight: 1.15 }}>
-              <strong>{rotulo}</strong>
-              <br />
-              {resumo}
-            </div>
+          {[0, 1, 2].map((fio) => (
+            <span
+              key={fio}
+              style={{
+                position: 'absolute',
+                left: fio * 20,
+                top: 22,
+                width: 4,
+                height: 28,
+                background: cores.textoApoio,
+                animation: `jogo-vapor ${duracao.cicloRobotico}ms ease-in-out infinite`,
+                animationDelay: `${fio * -(duracao.cicloRobotico / 3)}ms`,
+              }}
+            />
           ))}
         </div>
       ) : null}
+
+      {lugarId === 'cafezinho' && cena?.bloco === 2
+        ? ([
+            { x: 320, numero: 1, atraso: 0 },
+            { x: 365, numero: 2, atraso: -duracao.cicloRobotico / 2 },
+          ] as const).map(({ x, numero, atraso }) => (
+            <div
+              key={numero}
+              aria-hidden="true"
+              style={{
+                position: 'absolute',
+                left: x * arte.escala - 100,
+                // A base fica acima da barra de itens; antes as pernas sumiam
+                // atrás da UI e as pessoas pareciam cortadas pelo sofá.
+                top: 135 * arte.escala,
+                width: 200,
+                height: 336,
+                pointerEvents: 'none',
+                zIndex: camada.cenario + 2,
+              }}
+            >
+              {(['', '-gesto'] as const).map((sufixo) => (
+                <Imagem
+                  key={sufixo}
+                  id={`objeto-figurante-cafe-${numero}${sufixo}`}
+                  rotulo="Colega no cafezinho"
+                  largura={200}
+                  altura={336}
+                  decorativo
+                  mostrarRotulo={false}
+                  className={sufixo ? 'jogo-figurante-gesto' : 'jogo-figurante-base'}
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    animationDuration: `${duracao.cicloRobotico}ms`,
+                    animationDelay: `${atraso}ms`,
+                    animationPlayState: dialogoAtivo !== null || puzzleAberto !== null ? 'paused' : 'running',
+                  }}
+                />
+              ))}
+            </div>
+          ))
+        : null}
+
+      {dialogoAtivo?.dialogoId === 'b4-apresentacao' ? <QuadroSTAR passo={dialogoAtivo.indice} /> : null}
 
       {lugarId === 'linha-producao' && cena?.bloco === 3 ? (
         <div
@@ -488,7 +563,7 @@ export function Cena(): JSX.Element | null {
             );
           })}
 
-      <Protagonista comando={comando} onChegar={aoChegar} />
+      <Protagonista comando={comando} onChegar={aoChegar} apresentando={dialogoAtivo?.dialogoId === 'b4-apresentacao' && dialogoAtivo.indice % 2 === 1} />
 
       {/* Uma linha, sempre no mesmo lugar, com o nome do que está sob o
           ponteiro. É o que substituiu os retângulos de texto. */}

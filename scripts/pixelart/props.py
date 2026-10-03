@@ -2954,77 +2954,52 @@ def atril(largura: int = 32, altura: int = 52) -> Grade:
     return g
 
 
-def plateia(largura: int = 196, altura: int = 46, *, pessoas: int = 5) -> Grade:
-    """Plateia sentada de costas, para PRIMEIRO PLANO cortado pela borda.
+def plateia(largura: int = 230, altura: int = 50, *, ocupada: bool = True, fileira: str = "toda") -> Grade:
+    """Nove espectadores em duas fileiras, vistos de costas para o palco.
 
-    Existe porque o texto de abertura da fase 4 promete *"a sala inteira é gente
-    apresentando"* e o cenário entregava uma sala vazia. Sala de evento sem
-    plateia não é sala de evento — é sala.
-
-    É plano de FRENTE, então é escura (bíblia §4.2) e cortada pela borda
-    inferior (§4.1). O que a faz ler apesar de escura é o REALCE DE ARESTA no
-    alto de cada cabeça e de cada ombro: a luz da sala vem de cima, então só o
-    topo pega luz, e é esse fio claro que desenha a silhueta. Escurecer sem
-    devolver aresta transforma primeiro plano em tarja preta — erro já cometido
-    e a razão de `_aresta_de_luz` existir em `cenarios.py`.
-
-    CINCO PESSOAS, NENHUMA IGUAL À OUTRA, e a variação é por SILHUETA antes de
-    cor (bíblia §5.4 aplicada a figurante): altura de cabeça desigual, volume de
-    cabelo diferente, largura de ombro diferente, e uma delas inclinada. Cinco
-    cabeças idênticas em fila leem como grade de pontos — é o mesmo defeito da
-    fachada do mapa e da cerca de rádios da linha de produção.
-
-    Os tons de pele percorrem as quatro famílias da paleta. Elenco de figurante
-    todo na mesma pele é a versão preguiçosa do mesmo NPC repintado, e aparece
-    tanto quanto no elenco nomeado.
+    Cadeiras e pessoas compartilham coordenadas. A versão vazia fica fixa sob o
+    hotspot: na pausa só a camada ocupada sai, sem levar cadeiras junto.
     """
     g = Grade(largura, altura)
-    proximo = serie(20250514)
-    passo = largura / pessoas
-    peles = ("S", "T", "k", "N", "l")
-    cabelos = ("P", "Q", "R", "U", "P")
-    roupas = (AZUL, NEUTRO[:5], MADEIRA[:4], AZUL, NEUTRO[:4])
+    lugares = [(23, 0), (69, 1), (115, 0), (161, 2), (207, 1),
+              (45, 4), (92, 3), (138, 4), (185, 3)]
+    peles = ("s", "t", "N", "k", "s", "N", "t", "k", "s")
+    cabelos = ("P", "R", "Q", "R", "P", "Q", "R", "P", "Q")
+    roupas = (AZUL, MADEIRA, VERDE, NEUTRO, AZUL, VERDE, NEUTRO, MADEIRA, AZUL)
 
-    for i in range(pessoas):
-        cx = round(passo * (i + 0.5)) + (proximo(3) - 1)
-        esc, med, cla = tons_de_volume(roupas[i % len(roupas)])
-        pele = peles[i % len(peles)]
-        cabelo = cabelos[i % len(cabelos)]
-        desce = proximo(4)  # cabeça mais alta ou mais baixa
-        r_cab = 6 + proximo(2)  # raio da cabeça
-        topo = 2 + desce
-        ombro_y = topo + r_cab * 2 + 2
-        meia = round(passo * 0.46) + proximo(3)
-
-        # ombros e costas, abrindo até a borda de baixo
-        for dy in range(ombro_y, altura):
-            t = (dy - ombro_y) / max(1, altura - ombro_y - 1)
-            w = max(2, round(meia * (0.42 + 0.58 * min(1.0, t * 1.9))))
-            g.linha_h(cx - w, dy, 2 * w + 1, med)
-            g.ponto(cx - w, dy, cla)
-            g.ponto(cx + w, dy, esc)
-        g.dither(cx - meia // 2, ombro_y + 4, meia, altura - ombro_y - 5, med, esc, "esparso")
-        # aresta de luz no ombro: sem ela a figura é uma mancha
-        w0 = max(2, round(meia * 0.42))
-        g.linha_h(cx - w0, ombro_y, 2 * w0 + 1, cla)
-
-        # nuca em tom de pele: 2px, e é o que separa cabeça de capuz
-        g.linha_h(cx - 2, ombro_y - 2, 5, pele)
-        g.linha_h(cx - 2, ombro_y - 1, 5, mais_escuro(pele))
-
-        # cabeça, com o cabelo cobrindo a parte de trás (é de costas)
-        _elipse(g, cx, topo + r_cab, r_cab, r_cab + 1, cabelo)
-        _elipse(g, cx - 1, topo + r_cab - 1, r_cab - 2, r_cab - 1, mais_claro(cabelo))
-        g.linha_h(cx - r_cab + 2, topo, 2 * r_cab - 3, mais_claro(cabelo, 2))
-        # orelha de um lado só: assimetria de 1px mata a cara de manequim
-        g.ponto(cx + r_cab - 1, topo + r_cab + 1, pele)
-        g.ponto(cx + r_cab - 1, topo + r_cab + 2, mais_escuro(pele))
-
-        # encosto do assento aparecendo entre as pessoas
-        if i < pessoas - 1:
-            bx = round(passo * (i + 1))
-            g.retangulo(bx - 3, altura - 14, 7, 14, esc)
-            g.linha_h(bx - 3, altura - 14, 7, med)
+    for i, (cx, variacao) in enumerate(lugares):
+        frente = i >= 5
+        if fileira == "tras" and frente or fileira == "frente" and not frente:
+            continue
+        y = 21 if frente else 1
+        largura_cadeira = 32 if frente else 29
+        esc, med, cla = tons_de_volume(roupas[i])
+        if not ocupada:
+            # Cadeiras ficam no fundo quando as figuras se levantam na pausa.
+            g.retangulo(cx - largura_cadeira // 2, y + 13, largura_cadeira, 10, "b")
+            g.linha_h(cx - largura_cadeira // 2, y + 13, largura_cadeira, "d")
+            g.retangulo(cx - 13, y + 23, 4, 5, "a")
+            g.retangulo(cx + 9, y + 23, 4, 5, "a")
+            g.linha_h(cx - 14, y + 28, 6, "2")
+            g.linha_h(cx + 8, y + 28, 6, "2")
+            continue
+        # O cabelo cobre a calota inteira; comprimento, volume e cor variam.
+        raio = (5, 6, 5, 5, 6)[variacao]
+        _elipse(g, cx, y + 6, raio + 1, 6, cabelos[i])
+        if i in (1, 5, 8):
+            g.retangulo(cx - raio, y + 7, raio * 2 + 1, 7, cabelos[i])
+        g.linha_h(cx - raio + 1, y + 1, raio * 2 - 1, mais_claro(cabelos[i]))
+        g.retangulo(cx - 2, y + 12, 5, 3, peles[i])
+        g.retangulo(cx - 10, y + 14, 21, 11, med)
+        g.linha_h(cx - 9, y + 14, 19, cla)
+        g.linha_v(cx - 10, y + 16, 8, esc)
+        g.linha_v(cx + 10, y + 16, 8, esc)
+        g.retangulo(cx - 14, y + 18, 4, 7, med)
+        g.retangulo(cx + 11, y + 18, 4, 7, med)
+        g.retangulo(cx - 7, y + 25, 5, 4, esc)
+        g.retangulo(cx + 3, y + 25, 5, 4, esc)
+        if i == 6:
+            g.linha_h(cx + 12, y + 22, 5, "7")
     return g
 
 

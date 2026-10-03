@@ -38,7 +38,7 @@ Seis falas. Ela **abre** os dois assuntos do bloco e não explica nenhum.
 >
 > **Bianca:** Eu sou formada em **Letras**. Hoje eu trabalho com **tecnologia**.
 >
-> **Ana:** *(pausa)* Letras.
+> **Ana:** Letras? Eu estava escolhendo trilha pelo nome da faculdade, sem olhar para o trabalho que tenho aqui.
 >
 > **Bianca:** Transição aos vinte e oito, estudando **o que estava faltando**. Que
 > é diferente de estudar o que tem na grade.
@@ -46,7 +46,7 @@ Seis falas. Ela **abre** os dois assuntos do bloco e não explica nenhum.
 > **Bianca:** Tem as duas aqui dentro: **Degreed** é trilha, com começo e fim.
 > **Percipio** é biblioteca, pra quando você já sabe o nome do problema.
 >
-> **Bianca:** Eu ainda estudo, Ana. Ninguém aqui parou.
+> **Bianca:** Eu ainda estudo, Ana. Semana passada passei a tarde tentando explicar uma coisa em duas páginas. Ainda não consegui.
 
 **→ Ganha skill: Leitura do que o trabalho pede**
 **→ Ganha skill: Aprendizado contínuo**
@@ -117,7 +117,7 @@ Mesmo cenário da fase 1. O lugar não mudou; ela mudou (ADR-022).
 
 > *A mesa dela. A semana inteira em cima dela, e tudo parecendo urgente.*
 
-**Hotspots:** Tela da Ana · Notebook da Ana · Certificado
+**Hotspots:** Tela da Ana · Notebook da Ana
 
 ## 1. Tela da Ana
 
@@ -150,12 +150,14 @@ o que destrava o trabalho do time.**
 > ninguém abre há um mês parecia trabalho, mas ninguém está esperando por ela.
 > **Urgente e importante não são a mesma palavra.**
 
-## 3. Certificado
+## 3. Acerto do puzzle e recebimento
 
-> *Quarenta horas, todas fora do horário. Ela fecha o notebook e ainda não sabe
-> onde isso serve.*
+Ao colocar as cinco tarefas na ordem certa, Ana recebe imediatamente o
+**Certificado de conclusão** e as **Anotações do treinamento**. Ela ergue cada
+item; o texto da conquista dá ao apresentador uma pergunta para desenvolver.
+O certificado não fica sobre a mesa como um novo alvo de clique.
 
-**→ Ganha: Certificado de conclusão** *(tardio, não sinalizar)*
+**→ Ganha: Certificado de conclusão**
 **→ Ganha: Anotações do treinamento** *(usado na fase 3)*
 **→ Ganha skill: Competência que ela foi buscar**
 
@@ -176,6 +178,10 @@ continua inteira em cima da mesa."*
 > **Rafael:** Sobreviveu ao primeiro mês. *(brinda com o copo)*
 >
 > **Ana:** Por pouco.
+
+> **Ana:** Gostei de organizar a semana. Só precisei avisar cedo que a demanda nova caiu no dia da minha prova.
+
+> **Rafael:** Melhor avisar na terça do que pedir desculpa na sexta.
 >
 > **Rafael:** Eu vi que você usou meu ramal zero vezes.
 >

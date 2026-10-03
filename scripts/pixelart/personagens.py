@@ -782,6 +782,44 @@ ANA_NEUTRA = _ana(
     braco=((23, 39, 16, 18),),
 )
 
+
+def _maos_do_item(g: Grade, c: Corpo) -> None:
+    """Mãos acima da cabeça; sem elas os braços erguidos seriam duas mangas."""
+    pele, sombra, _ = _PELES[c.pele]
+    for x in (14, 34):
+        g.retangulo(x, 10, 3, 5, pele)
+        g.linha_v(x + 2, 11, 4, sombra)
+
+
+# Quadro isolado da animação de conquista. Fica fora de ANAS porque uma pose de
+# recompensa não é estado narrativo nem precisa de retrato/caminhada próprios.
+ANA_RECEBENDO_ITEM = replace(
+    ANA_NEUTRA,
+    nome="ana-recebendo-item",
+    braco=((23, 27, 16, 18), (13, 22, 14, 16)),
+    braco_dir=((23, 27, 32, 34), (13, 22, 34, 36)),
+    mao=False,
+    extra=_maos_do_item,
+)
+
+
+def _mao_que_aponta(g: Grade, c: Corpo) -> None:
+    """A palma estendida separa o gesto de apontar da pose neutra."""
+    pele, sombra, _ = _PELES[c.pele]
+    g.retangulo(3, 24, 4, 3, pele)
+    g.linha_h(3, 26, 4, sombra)
+
+
+# Durante o STAR Ana indica o quadro à esquerda; a pose alterna com a caminhada.
+ANA_APRESENTANDO = replace(
+    ANA_NEUTRA,
+    nome="ana-apresentando",
+    braco=((23, 29, 16, 18), (24, 26, 7, 16)),
+    braco_dir=((23, 39, 32, 34),),
+    mao=False,
+    extra=_mao_que_aponta,
+)
+
 # CONFIANTE — ombro em 21px (x15..35), vão de 2px em x18..19. Cabeça 1px mais
 # alta e base aberta. O vão dobrado é a leitura de "braço solto do corpo".
 ANA_CONFIANTE = _ana(
@@ -1230,6 +1268,36 @@ MARCOS = Corpo(
 NPCS: tuple[Corpo, ...] = (RAFAEL, CLAUDIA, TIAGO, BIANCA, MARCOS)
 
 
+def _copo_do_figurante(g: Grade, c: Corpo) -> None:
+    """O copo na mão erguida torna a conversa visível sem balão de texto."""
+    pele, sombra, _ = _PELES[c.pele]
+    g.retangulo(33, 17, 4, 5, pele)
+    g.linha_v(36, 18, 4, sombra)
+    g.retangulo(32, 11, 6, 6, "7")
+    g.linha_h(32, 11, 6, "8")
+
+
+def figurante_cafe(*, variacao: int = 0, gesto: bool = False) -> Grade:
+    """Colegas de cenário com a mesma grade, rosto e contorno do elenco."""
+    bases = (
+        replace(BIANCA, nome="figurante-0", pele="media", cabelo="P",
+                luz_cabelo="Q", oculos=False, roupa=("e", "d", "c"),
+                calca=("5", "4", "3"), sapato=("8", "3", "5"), extra=None),
+        replace(RAFAEL, nome="figurante-1", pele="escura", cabelo="R",
+                luz_cabelo="Q", volume_cabelo=16, roupa=("h", "g", "f"),
+                calca=("5", "4", "3"), sapato=("8", "3", "5"), extra=None),
+        replace(RAFAEL, nome="figurante-2", pele="clara", cabelo="Q",
+                luz_cabelo="P", volume_cabelo=17, comprimento_cabelo=7,
+                roupa=("p", "o", "n"), calca=("e", "d", "c"),
+                sapato=("8", "3", "5"), extra=None),
+    )
+    corpo = bases[variacao % len(bases)]
+    if gesto:
+        corpo = replace(corpo, braco_dir=((24, 28, 32, 34), (18, 23, 33, 35)),
+                        mao=False, extra=_copo_do_figurante)
+    return _pronto(corpo)
+
+
 # --------------------------------------------------------------- animação
 # Emenda registrada na bíblia §6.1: a janela de 600–1200ms do spec vale para
 # transição e entrada de elemento, NÃO para taxa de quadro de sprite. O CSS que
@@ -1370,6 +1438,18 @@ def gerar(destino: Path) -> list[tuple[str, Grade]]:
             registrar(f"{c.nome}-andando q{i}", q)
 
         pecas.append((c.nome, parado))
+
+    recebendo = _pronto(ANA_RECEBENDO_ITEM)
+    registrar(ANA_RECEBENDO_ITEM.nome, recebendo)
+    escrever_sprite(destino / "ana-recebendo-item.png", recebendo)
+    pecas.append((ANA_RECEBENDO_ITEM.nome, recebendo))
+
+    apresentando = _pronto(ANA_APRESENTANDO)
+    # O braço aponta à esquerda: o eixo da CAIXA sai do centro de propósito;
+    # a base permanece alinhada com os outros sprites e ainda é validada.
+    avisos.extend(verificar_sprite(ANA_APRESENTANDO.nome, apresentando, chao=CHAO))
+    escrever_sprite(destino / "ana-apresentando.png", apresentando)
+    pecas.append((ANA_APRESENTANDO.nome, apresentando))
 
     for c in NPCS:
         parado = _pronto(c)

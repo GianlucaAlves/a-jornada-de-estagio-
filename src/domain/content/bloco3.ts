@@ -90,16 +90,16 @@ export const CENAS_B3: readonly Cena[] = [
         // hotspot mudo parece travamento quando projetado.
         //
         // Era `objeto-monitor-ligado` numa mesa do Escritório, ancorado pelo
-        // centro. Aqui é o painel de processo da própria linha, apoiado no chão
-        // à frente da esteira, então ancora pela BASE: âncora de centro faria a
-        // arte cravar metade na esteira e metade no ar.
+        // centro. Aqui fica fixado na parede sobre a célula de inspeção; o
+        // cenário reserva esse retângulo para o PNG, sem tela duplicada atrás.
         id: 'b3-monitor',
         rotulo: 'Números da linha',
         arte: { tipo: 'objeto', assetId: 'objeto-painel-processo', largura: 192, altura: 144 },
-        pos: { x: 40, y: 66 },
+        pos: { x: 30, y: 29.6 },
         // Ela para à DIREITA do painel: à esquerda ela encostaria no Tiago, que
         // continua em cena enquanto ela mexe no painel.
         parada: { x: 52, y: 72 },
+        ancora: 'centro',
         aceitaItem: 'anotacoes-treinamento',
         // Sem narração antes do puzzle de propósito: a narração desenha acima do
         // puzzle e o primeiro gesto da pessoa seria dispensar um véu.
@@ -120,10 +120,10 @@ export const CENAS_B3: readonly Cena[] = [
         id: 'b3-relatorio',
         rotulo: 'Relatório',
         arte: { tipo: 'item', itemId: 'relatorio' },
-        pos: { x: 61, y: 70 },
+        pos: { x: 61, y: 62.2 },
         // A única parada da cena à direita do alvo: à esquerda dele a Ana
         // cobriria o próprio relatório, que é a arte que o clique traz à tona.
-        // 61%/70% apoia o item na caixa de papelão à frente da linha, e sobram
+        // 61%/62,2% apoia o item no topo da caixa aberta à frente da linha, e sobram
         // 24px de cada lado — à esquerda a Ana que olha o painel, à direita esta.
         parada: { x: 70, y: 72 },
         requerPuzzleResolvido: 'estruturar',
@@ -200,7 +200,7 @@ export const DIALOGOS_B3: Record<DialogoId, Dialogo> = {
       {
         tipo: 'fala',
         quem: 'ana',
-        texto: 'E o turno da noite começa sem saber o que ficou pendente.',
+        texto: 'Acho que gosto de descobrir onde a informação emperra. Se eu deixar isso só na minha cabeça, o turno da noite continua no escuro.',
       },
       { tipo: 'fala', quem: 'tiago', texto: 'Começa. Ninguém pediu pra você olhar isso.' },
       { tipo: 'fala', quem: 'ana', texto: 'Ninguém pediu pra eu não olhar também.' },

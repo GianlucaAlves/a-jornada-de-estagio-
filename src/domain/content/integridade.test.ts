@@ -164,6 +164,9 @@ const REFERENCIAS: Referencia[] = (() => {
   for (const [id, dialogo] of Object.entries(DIALOGOS)) {
     refs.push(...referenciasDeEfeitos(`diálogo '${id}'`, dialogo.efeitos ?? []));
   }
+  for (const [id, puzzle] of Object.entries(PUZZLES)) {
+    refs.push(...referenciasDeEfeitos(`puzzle '${id}'`, puzzle.efeitosSucesso ?? []));
+  }
   for (const c of CONEXOES) {
     refs.push({ onde: `conexão via '${c.viaLugar}'`, tipo: 'lugar', id: c.viaLugar });
   }
@@ -214,6 +217,9 @@ const EFEITOS_ALCANCAVEIS: readonly Efeito[] = (() => {
     for (const h of cena.hotspots) acc.push(...h.efeitos, ...(h.efeitosComItem ?? []));
   }
   for (const id of DIALOGOS_ALCANCAVEIS) acc.push(...(DIALOGOS[id]?.efeitos ?? []));
+  for (const efeito of [...acc]) {
+    if (efeito.tipo === 'abrirPuzzle') acc.push(...(PUZZLES[efeito.puzzleId].efeitosSucesso ?? []));
+  }
   return acc;
 })();
 
@@ -315,6 +321,9 @@ function alcancavelDoBloco(bloco: BlocoId): { dialogos: Dialogo[]; efeitos: Efei
   for (const cena of CENAS) {
     if (cena.bloco !== bloco) continue;
     for (const h of cena.hotspots) efeitos.push(...h.efeitos, ...(h.efeitosComItem ?? []));
+  }
+  for (const e of [...efeitos]) {
+    if (e.tipo === 'abrirPuzzle') efeitos.push(...(PUZZLES[e.puzzleId].efeitosSucesso ?? []));
   }
   for (const e of efeitos) if (e.tipo === 'dialogo') fila.push(e.dialogoId);
   const vistos = new Set<DialogoId>();

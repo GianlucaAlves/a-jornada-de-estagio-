@@ -41,6 +41,8 @@ export interface EstadoJogo {
   /** Nome revelado no desbloqueio; antes disso o slot é anônimo. */
   nomesRevelados: LugarId[];
   itens: Record<ItemId, EstadoItem>;
+  /** Fila visual de conquistas; o inventário já é atualizado no mesmo gesto. */
+  itensRecebidos: ItemId[];
   itemSelecionado: ItemId | null;
   /** Ordem de aquisição — o painel preenche na ordem em que ela aprendeu. */
   skills: SkillId[];
@@ -92,6 +94,7 @@ export interface AcoesJogo {
   resolverPuzzle: (puzzleId: PuzzleId) => void;
   fecharPuzzle: () => void;
   fecharNarracao: () => void;
+  fecharItemRecebido: () => void;
   fecharMensagemFalha: () => void;
   concluirPausaBloco4: () => void;
   avancarBloco: () => void;
@@ -142,6 +145,7 @@ function estadoInicial(): EstadoJogo {
     lugares: { ...lugaresIniciais(), escritorio: 'destravado' },
     nomesRevelados: ['escritorio'],
     itens: itensIniciais(),
+    itensRecebidos: [],
     itemSelecionado: null,
     skills: [],
     puzzles: puzzlesIniciais(),
@@ -379,7 +383,14 @@ export const useJogo = create<Jogo>((set, get) => {
           break;
 
         case 'concederItem':
-          set((s) => ({ itens: { ...s.itens, [efeito.itemId]: 'presente' } }));
+          set((s) =>
+            s.itens[efeito.itemId] === 'presente'
+              ? s
+              : {
+                  itens: { ...s.itens, [efeito.itemId]: 'presente' },
+                  itensRecebidos: [...s.itensRecebidos, efeito.itemId],
+                },
+          );
           break;
 
         case 'consumirItem':
@@ -590,10 +601,14 @@ export const useJogo = create<Jogo>((set, get) => {
      */
     resolverPuzzle: (puzzleId) => {
       if (get().puzzles[puzzleId] === 'fechado') return;
+      const primeiraResolucao = get().puzzles[puzzleId] !== 'resolvido';
       set((st) => ({
         puzzles: { ...st.puzzles, [puzzleId]: 'resolvido' },
         puzzleAberto: st.puzzleAberto === puzzleId ? null : st.puzzleAberto,
       }));
+      // A recompensa pertence ao puzzle. Reabri-lo para rever a resposta não
+      // concede certificado nem reapresenta a animação.
+      if (primeiraResolucao) aplicar(PUZZLES[puzzleId].efeitosSucesso ?? []);
     },
 
     /**
@@ -617,6 +632,7 @@ export const useJogo = create<Jogo>((set, get) => {
     },
 
     fecharNarracao: () => set({ narracao: null }),
+    fecharItemRecebido: () => set((s) => ({ itensRecebidos: s.itensRecebidos.slice(1) })),
     fecharMensagemFalha: () => set({ mensagemFalha: null }),
 
     concluirPausaBloco4: () => {

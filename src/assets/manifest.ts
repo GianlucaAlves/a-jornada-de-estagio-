@@ -55,6 +55,8 @@ export const MANIFEST: Record<string, string> = {
   'ana-futura': `${RAIZ}/protagonista/ana-futura.png`,
   'ana-trabalhando': `${RAIZ}/protagonista/ana-trabalhando.png`,
   'ana-futura-trabalhando': `${RAIZ}/protagonista/ana-futura-trabalhando.png`,
+  'ana-recebendo-item': `${RAIZ}/protagonista/ana-recebendo-item.png`,
+  'ana-apresentando': `${RAIZ}/protagonista/ana-apresentando.png`,
 
   // ------------------------------------------------ elenco fixo (5 NPCs)
   'npc-rafael': `${RAIZ}/npcs/rafael.png`,
@@ -124,6 +126,10 @@ export const MANIFEST: Record<string, string> = {
   'objeto-quadro-branco': `${RAIZ}/objetos/quadro-branco.png`,
   'objeto-mural-postits': `${RAIZ}/objetos/mural-postits.png`,
   'objeto-tv-grande': `${RAIZ}/objetos/tv-grande.png`,
+  'objeto-figurante-cafe-1': `${RAIZ}/objetos/figurante-cafe-1.png`,
+  'objeto-figurante-cafe-1-gesto': `${RAIZ}/objetos/figurante-cafe-1-gesto.png`,
+  'objeto-figurante-cafe-2': `${RAIZ}/objetos/figurante-cafe-2.png`,
+  'objeto-figurante-cafe-2-gesto': `${RAIZ}/objetos/figurante-cafe-2-gesto.png`,
   /** Esteira da Linha de Produção, com uma etapa visivelmente diferente (ADR-009). */
   'objeto-esteira': `${RAIZ}/objetos/esteira.png`,
   /** Painel de processo da linha: é nele que a etapa lenta fica visível. */
@@ -161,6 +167,8 @@ export const MANIFEST: Record<string, string> = {
    * entregava uma sala sem ninguém.
    */
   'objeto-plateia': `${RAIZ}/objetos/plateia.png`,
+  'objeto-plateia-frente': `${RAIZ}/objetos/plateia-frente.png`,
+  'objeto-plateia-vazia': `${RAIZ}/objetos/plateia-vazia.png`,
 };
 
 /** Caminho do asset, ou null quando não há entrada no manifest. */

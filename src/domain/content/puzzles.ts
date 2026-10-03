@@ -118,6 +118,11 @@ export const PUZZLES: Record<PuzzleId, PuzzleDef> = {
     rotulo: 'A semana dela',
     instrucao: 'Ordene de cima para baixo: primeiro o que destrava o trabalho do time.',
     textoErro: 'Não é essa a ordem.',
+    efeitosSucesso: [
+      { tipo: 'concederItem', itemId: 'certificado-degree' },
+      { tipo: 'concederItem', itemId: 'anotacoes-treinamento' },
+      { tipo: 'concederSkill', skillId: 'competencia-tecnica' },
+    ],
     linhas: [
       { id: 'seq-ata', texto: 'Enviar a ata da reunião de ontem para quem faltou' },
       {

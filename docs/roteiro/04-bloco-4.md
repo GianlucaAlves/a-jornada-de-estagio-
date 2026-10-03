@@ -11,8 +11,10 @@
 
 ## Estado da cena
 
-Sala de reuniões vestida de evento. A mesa foi retirada para liberar o palco e
-a plateia sentada. Na parede, a tela grande; na frente, o atril. Marcos prepara
+Sala de reuniões vestida de evento. A mesa foi retirada para liberar o palco.
+Nove pessoas ocupam duas fileiras de cadeiras separadas, voltadas para o telão;
+as cadeiras continuam na sala depois que elas saem. Na parede, a tela grande;
+na frente, o atril. Marcos prepara
 Ana antes da reunião; Cláudia e Bianca entram como etapas posteriores, sem
 aparecer junto da plateia no momento da apresentação.
 
@@ -86,7 +88,7 @@ Clique. Na tela: gente sentada, de costas, virada para a frente.
 | Situação | A conferência dos lotes só era digitada no fim do turno. |
 | Tarefa | Garantir que as pendências chegassem claras ao turno seguinte. |
 | Ação | Passei a conferência para a planilha compartilhada, na hora. |
-| Resultado | O turno seguinte já começa sabendo o que ficou pendente. |
+| Resultado | Pendências no prazo; o próximo turno sabe o que ficou. |
 
 Deliberadamente o mais **satisfatório** dos cinco: peça na casa errada é
 recusada com aviso, e encaixar as quatro fecha a página. A plateia tem de sentir
@@ -100,10 +102,20 @@ competência — **a PAUSA só funciona se resolver isto tiver sido gostoso.**
 
 ## 4. Apresentar para a sala
 
-Clique no **atril**. A Ana caminha até ele; a página montada continua no telão e
-a plateia permanece sentada, voltada para a frente. Ela explica o que mudou para
-o turno seguinte e propõe testar o formato em outras linhas. Avance pelas duas
-falas; ao terminar, o crachá é concedido e começa a pausa silenciosa.
+Clique no **atril**. Ana caminha até ele; a plateia permanece sentada e o telão
+acompanha cada passo da fala. Avance manualmente pelas quatro partes:
+
+> **Situação — Ana:** Antes, a conferência dos lotes ficava no papel até o fim do turno. Quem chegava depois precisava perguntar o que tinha ficado pendente.
+>
+> **Tarefa — Ana:** Minha parte era fazer essas pendências chegarem claras ao turno seguinte.
+>
+> **Ação — Ana:** Passei a registrar a conferência na planilha compartilhada, na hora, e conferi o preenchimento com o pessoal da linha.
+>
+> **Resultado — Ana:** Agora o outro turno já começa sabendo o que falta. Eu gosto de resolver essa passagem; ainda fico nervosa contando isso em voz alta.
+
+Ana muda de posição entre atril e telão conforme o slide destaca cada parte.
+Ao terminar, começa a pausa silenciosa; o crachá só é recebido depois da
+conversa com Cláudia.
 
 > ⚠️ Era aqui que estava o defeito da versão anterior: o botão de apresentar era
 > o **crachá** — a recompensa fazendo papel do gesto —, flutuando sobre a mesa.
@@ -119,11 +131,11 @@ falas; ao terminar, o crachá é concedido e começa a pausa silenciosa.
 | Tempo | O que acontece |
 |---|---|
 | 0s | Diagrama completo, aceso |
-| +0,6s | Ana se vira pra mesa. Fica esperando. |
-| +2,2s | Um NPC olha o celular. |
-| +3,8s | A líder fecha o notebook. |
-| +5,4s | As cadeiras esvaziam. |
-| +7s | Sala vazia. Ana de pé, sozinha, diagrama aceso atrás dela. |
+| +0,6s | Ana se afasta um pouco do atril e espera. |
+| +2,2s | A primeira pessoa deixa o assento. |
+| +3,8s | A segunda pessoa sai. |
+| +5,4s | A terceira pessoa sai. |
+| +7s | Ana permanece no palco; o resumo STAR continua aceso. |
 
 **Sem texto. Sem som. Sem item novo na tela. Sem skill. Sem celebração de
 nenhum tipo.** Nada.
@@ -170,6 +182,9 @@ Ela é a única que ainda não saiu de quadro.
 
 E sai.
 
+**→ Ganha: Crachá da Innovation Week.** A conquista aparece depois desta
+conversa, preservando a pausa sem texto ou recompensa.
+
 > 💡 **Gancho de fala:** ela **falou**. Falou em quatro palavras e uma instrução,
 > no meio de uma saída. Do ponto de vista dela, ela deu feedback e um
 > direcionamento. Do ponto de vista da Ana, foi quase nada. As duas leituras
@@ -192,7 +207,7 @@ ensina nada aqui — ela vira a mesa e sai do caminho.
 > **Bianca:** Lembra a sua lista? "Falar numa reunião cheia de gente mais
 > experiente."
 >
-> **Ana:** *(pausa)* Eu nunca fiz essa trilha.
+> **Ana:** Eu nunca fiz essa trilha. Falar aqui ainda deu trabalho.
 >
 > **Bianca:** Não. Você fez as outras três.
 
@@ -248,7 +263,7 @@ permanece acesa no painel:
 
 | Elemento | Status |
 |---|---|
-| Itens ganhos | **Crachá Innovation** — concedido ao fim da fala de apresentação |
+| Itens ganhos | **Crachá Innovation** — concedido depois da conversa com Cláudia |
 | Skills ganhas | **Visibilidade** |
 | Lugares destravados | nenhum |
 | NPCs | Marcos, Cláudia, Bianca |

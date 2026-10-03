@@ -249,6 +249,8 @@ export interface PuzzleBase {
   instrucao: string;
   /** Aviso de erro. Curto e sem julgamento. */
   textoErro: string;
+  /** Recompensa entregue no acerto, sem um segundo clique num objeto de cena. */
+  efeitosSucesso?: readonly Efeito[];
 }
 
 /**

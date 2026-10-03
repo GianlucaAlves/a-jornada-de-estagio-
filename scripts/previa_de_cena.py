@@ -171,6 +171,16 @@ def main() -> int:
             continue
         g = fundo.clone()
 
+        # A sala monta cadeiras em camada de UI para preservá-las após a saída
+        # da plateia; a prévia precisa da mesma base para revelar sobreposições.
+        if lugar == "sala-reunioes" and bloco == 4:
+            cadeiras = cat.get("plateia-vazia")
+            if cadeiras is not None:
+                g.colar_base(round(0.53 * LARGURA), round(0.824 * ALTURA), cadeiras)
+            frente = cat.get("plateia-frente")
+            if frente is not None:
+                g.colar_base(round(0.53 * LARGURA), round(0.824 * ALTURA), frente)
+
         # Camadas de CSS da esteira e dos robÃ´s ganham um quadro estÃ¡tico na
         # prÃ©via para conferir apoio e colisÃ£o com o cenÃ¡rio real.
         if lugar == "linha-producao" and bloco == 3:

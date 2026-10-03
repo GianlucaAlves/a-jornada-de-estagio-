@@ -248,7 +248,7 @@ export const DIALOGOS_B5: Record<DialogoId, Dialogo> = {
       { tipo: 'fala', quem: 'bianca', texto: 'O contrato está perto do fim. Como você está pensando nisso?' },
       { tipo: 'fala', quem: 'ana', texto: 'Quero ser efetivada. Ainda não sei se vai acontecer, e não quero fingir que isso não me preocupa.' },
       { tipo: 'fala', quem: 'bianca', texto: 'Faz sentido. E, além da vaga, você já começou a pensar em que tipo de trabalho quer fazer?' },
-      { tipo: 'fala', quem: 'ana', texto: 'É outra pergunta. Quero olhar para o que aprendi e para as tarefas de que gostei antes de decidir a área.' },
+      { tipo: 'fala', quem: 'ana', texto: 'Na conferência gostei de organizar a informação. Na apresentação, nem tanto de ficar na frente da sala. Quero entender essa diferença.' },
     ],
   },
   /**
@@ -291,18 +291,18 @@ export const DIALOGOS_B5: Record<DialogoId, Dialogo> = {
       {
         tipo: 'fala',
         quem: 'bianca',
-        texto: 'Você está com cara de quem está fazendo uma conta que não fecha.',
+        texto: 'Você circulou "passagem de turno" três vezes no caderno.',
       },
       {
         tipo: 'fala',
         quem: 'ana',
-        texto: 'Meu contrato está acabando. Eu quero ser efetivada, mas ainda não sei se vai acontecer.',
+        texto: 'Gostei de descobrir onde o dado parava. Ainda não sei se quero fazer isso nesta área ou em outra.',
       },
       {
         tipo: 'fala',
         quem: 'ana',
         texto:
-          'Aprendi muito aqui. Estou pensando se quero continuar nessa área ou conhecer outra dentro da empresa.',
+          'Quero ser efetivada. Faltam três semanas e ninguém disse se há vaga. Estou tentando não misturar isso com a escolha da área.',
       },
       {
         tipo: 'fala',
@@ -312,12 +312,12 @@ export const DIALOGOS_B5: Record<DialogoId, Dialogo> = {
       {
         tipo: 'fala',
         quem: 'bianca',
-        texto: 'Você aprendeu, entregou e tomou iniciativa. A gente viu isso.',
+        texto: 'Eu vi você conversar com a linha, montar a conferência e depois explicar isso na reunião.',
       },
       {
         tipo: 'fala',
         quem: 'bianca',
-        texto: 'Se a vaga não vier, não apaga o que você fez. Às vezes não há vaga no time, e isso não está nas suas mãos. O que você aprendeu é seu.',
+        texto: 'Se não abrir vaga, esses exemplos continuam sendo seus. Orçamento e espaço no time também entram nessa decisão.',
       },
     ],
     efeitos: [

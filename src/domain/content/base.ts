@@ -40,19 +40,19 @@ export const ITENS: Record<ItemId, Item> = {
   'anotacoes-treinamento': {
     id: 'anotacoes-treinamento',
     nome: 'Anotações do treinamento',
-    descricao: 'Caderno de tópicos, letra apressada. Metade é sobre como organizar a semana.',
+    descricao: 'Ela organizou a semana para caber trabalho, estudo e a prova. O que você tiraria da lista?',
     tardio: false,
   },
   relatorio: {
     id: 'relatorio',
     nome: 'Relatório',
-    descricao: 'Três páginas sobre uma etapa que atrasa todas as outras. Ninguém pediu.',
+    descricao: 'Três páginas sobre uma falha na passagem de turno. Quem percebe o problema antes de receber a tarefa?',
     tardio: false,
   },
   'cartao-rafael': {
     id: 'cartao-rafael',
     nome: 'Cartão do Rafael',
-    descricao: 'Rafael Moreira — Projetos. Ele escreveu o ramal atrás, à mão.',
+    descricao: 'Rafael escreveu o ramal atrás, à mão. Uma conversa do primeiro dia ainda pode abrir uma porta?',
     tardio: true,
   },
   'certificado-degree': {
@@ -60,14 +60,14 @@ export const ITENS: Record<ItemId, Item> = {
     // O id fica: renomeá-lo arrastaria manifest, arte e scripts de geração por
     // um ganho de zero. O que mudou é o TEXTO, e o eixo dele.
     nome: 'Certificado de conclusão',
-    descricao: 'Quarenta horas, fora do horário de trabalho. Ninguém mandou fazer.',
+    descricao: 'Quarenta horas fora do expediente, depois de reorganizar a semana. O que Ana escolheu aprender por conta própria?',
     tardio: true,
   },
   'cracha-innovation': {
     id: 'cracha-innovation',
     nome: 'Crachá do Innovation',
     // Innovation Week é o nome do EVENTO, não de um lugar (ADR-026).
-    descricao: 'Crachá de participante da Innovation Week. O cordão ficou torto na foto.',
+    descricao: 'Ana apresentou a melhoria na passagem de turno. Quem viu o trabalho dela chegar até ali?',
     tardio: true,
   },
 };

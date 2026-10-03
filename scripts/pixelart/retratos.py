@@ -503,16 +503,20 @@ def _barba(g: Grade, c: Corpo, dy0: int) -> None:
     # estava certa. Barba cheia passa da orelha; é isso que a faz cheia.
     fora = 3 if cheia else 0
 
-    for dy in range(9 if cheia else 12, H_ROSTO):
-        g.segmento(X_ROSTO + 1 - fora, y + dy, c.barba * (3 + fora))
-        g.segmento(X_ROSTO + L_ROSTO - 4, y + dy, c.barba * (3 + fora))
-    # bigode: igual nos dois, porque é o que faz o rosto continuar sendo um rosto
-    g.segmento(X_ROSTO + 4, y + 15, c.barba * 11)
-    g.segmento(X_ROSTO + 3, y + 16, c.barba * 13)
+    for dy in range(10 if cheia else 14, H_ROSTO):
+        # O contorno nasce na costeleta e se alarga aos poucos. A faixa reta
+        # anterior parecia colada sobre a face, sobretudo no Tiago.
+        recuo = min(fora, max(0, (dy - 10) // 3)) if cheia else 0
+        espessura = 3 + recuo if cheia else 2
+        g.segmento(X_ROSTO + 1 - recuo, y + dy, c.barba * espessura)
+        g.segmento(X_ROSTO + L_ROSTO - 1 - espessura + recuo, y + dy, c.barba * espessura)
+    # O bigode termina antes das bochechas e deixa o lábio legível.
+    g.segmento(X_ROSTO + 5, y + 15, c.barba * 9)
+    g.segmento(X_ROSTO + 4, y + 16, c.barba * 11)
     for dy in range(19, H_ROSTO):
-        g.segmento(X_ROSTO + 3, y + dy, c.barba * 13)
+        g.segmento(X_ROSTO + (3 if cheia else 5), y + dy, c.barba * (13 if cheia else 9))
     fim = y + H_ROSTO
-    degraus = (2, 4, 6) if not cheia else (0, 1, 3, 5, 7)
+    degraus = (4, 5, 7) if not cheia else (0, 1, 3, 5, 7)
     for i, recuo in enumerate(degraus):
         g.segmento(X_ROSTO + recuo, fim + i, c.barba * (L_ROSTO - 2 * recuo))
     g.segmento(X_ROSTO + 6, y + 17, boca * 7)
@@ -743,6 +747,16 @@ def _extra_claudia(g: Grade, c: Corpo, dy0: int) -> None:
     """
     claro, escuro_gola = c.gola
     y0 = Y_OMBRO + dy0
+    # Duas faixas de camisa camel nas bordas do busto devolvem ao retrato a
+    # roupa de manga clara e colete escuro que identifica Cláudia no cenário.
+    largura = _largura_do_ombro(c)
+    manga_luz, manga, _ = c.roupa_braco or c.roupa
+    for dy in range(y0 + 3, ALTURA):
+        esquerda = EIXO - largura // 2
+        direita = EIXO + largura // 2 - 3
+        g.linha_h(esquerda, dy, 4, manga)
+        g.linha_h(direita, dy, 4, manga)
+        g.ponto(esquerda, dy, manga_luz)
 
     # Botoeira: faixa de 3px da camisa entre as duas bordas do colete, embaixo
     # do V da gola. Contígua, nunca pontos soltos, pelo mesmo motivo acima.
