@@ -17,18 +17,21 @@
 import { useEffect, useRef, useState } from 'react';
 import type { CSSProperties } from 'react';
 import { LUGARES, NPCS } from '../domain/content';
+import { REFLEXOES } from '../domain/content/reflexoes';
 import type { ArteDeHotspot, Hotspot, HotspotId, Lugar } from '../domain/types';
 import { assetDaArteDeHotspot, assetDoCenario } from '../assets/manifest';
 import { seletores, useJogo } from '../store/jogo';
 import {
   CANVAS,
   arte,
+  borda,
   camada,
   cores,
   duracao,
   easing,
   espaco,
   movimento,
+  overlay,
   raio,
   tipografia,
 } from '../styles/tokens';
@@ -120,6 +123,12 @@ export function Cena(): JSX.Element | null {
   const lugares = useJogo((s) => s.lugares);
   const hotspotsFeitos = useJogo((s) => s.hotspotsFeitos);
   const dialogosConcluidos = useJogo((s) => s.dialogosConcluidos);
+  const bloco = useJogo(s => s.bloco);
+  const reflexaoAtiva = useJogo(s => s.reflexaoAtiva);
+  const iniciarReflexao = useJogo(s => s.iniciarReflexao);
+  const reabrirReflexao = useJogo(s => s.reabrirReflexao);
+  const progresso = useJogo(seletores.progressoDeConversas);
+  useEffect(() => { iniciarReflexao(); }, [bloco, tela.tipo === 'cena' ? tela.lugarId : null, iniciarReflexao]);
 
   const lugarId = tela.tipo === 'cena' ? tela.lugarId : null;
   const entrada = posicaoDeEntrada(cena ?? null);
@@ -163,7 +172,7 @@ export function Cena(): JSX.Element | null {
 
   const lugar: Lugar | undefined = LUGARES[lugarId];
   const bloqueado =
-    dialogoAtivo !== null || puzzleAberto !== null || narracao !== null || mensagemFalha !== null || itensRecebidos.length > 0 || pausaBloco4 === 'rodando';
+    reflexaoAtiva !== null || dialogoAtivo !== null || puzzleAberto !== null || narracao !== null || mensagemFalha !== null || itensRecebidos.length > 0 || pausaBloco4 === 'rodando';
 
   /**
    * Lugar concluído NÃO renderiza hotspot nenhum.
@@ -208,7 +217,7 @@ export function Cena(): JSX.Element | null {
    * botão nunca muda de lugar, e o apresentador vê que a saída é só temporária.
    */
   const saidaBloqueada =
-    dialogoAtivo !== null || puzzleAberto !== null || pausaBloco4 === 'rodando';
+    reflexaoAtiva !== null || dialogoAtivo !== null || puzzleAberto !== null || pausaBloco4 === 'rodando';
   const rotuloDaSaida =
     pausaBloco4 === 'rodando'
       ? 'Voltar ao mapa. Indisponível durante a pausa.'
@@ -251,7 +260,8 @@ export function Cena(): JSX.Element | null {
         })();
 
   return (
-    <div style={{ position: 'absolute', inset: 0, zIndex: camada.cenario }}>
+    <div style={{ position: 'absolute', inset: 0, bottom: overlay.barraDeItens, overflow: 'hidden', zIndex: camada.cenario }}>
+    <div style={{ position: 'absolute', width: CANVAS.largura, height: CANVAS.altura }}>
       {/* O bloco vai junto porque o mesmo lugar pode ter vestimenta por fase:
           `assetDoCenario('cafezinho', 6)` devolve a versão de FESTA. Sem passar
           o bloco, o cenário de festa existia no manifest e na pasta de arte e
@@ -269,12 +279,13 @@ export function Cena(): JSX.Element | null {
 
       {lugarId === 'sala-reunioes' && cena?.bloco === 4 ? (
         <>
-          <div aria-hidden="true" style={{ position: 'absolute', left: '53%', top: '82.4%', transform: 'translate(-50%, -100%)', pointerEvents: 'none', zIndex: camada.cenario + 1 }}>
-            <Imagem id="objeto-plateia-vazia" rotulo="" largura={936} altura={216} decorativo mostrarRotulo={false} />
+          <span style={{ position: 'absolute', left: '18.75%', top: '13.7%', width: 1200, height: 56, display: 'flex', alignItems: 'center', justifyContent: 'center', color: cores.texto, fontSize: tipografia.tamanhos.rotulo, fontWeight: tipografia.pesos.forte }}>Innovation Week</span>
+          <div aria-hidden="true" style={{ position: 'absolute', left: '53%', top: '85.4%', transform: 'translate(-50%, -100%)', pointerEvents: 'none', zIndex: camada.cenario + 1 }}>
+            <Imagem id="objeto-plateia-vazia" rotulo="" largura={936} altura={256} decorativo mostrarRotulo={false} />
           </div>
           {!hotspotsFeitos.includes('b4-entrega') ? (
-            <div aria-hidden="true" style={{ position: 'absolute', left: '53%', top: '82.4%', transform: 'translate(-50%, -100%)', pointerEvents: 'none', zIndex: camada.hotspot - 1 }}>
-              <Imagem id="objeto-plateia-frente" rotulo="" largura={936} altura={216} decorativo mostrarRotulo={false} />
+            <div aria-hidden="true" style={{ position: 'absolute', left: '53%', top: '85.4%', transform: 'translate(-50%, -100%)', pointerEvents: 'none', zIndex: camada.hotspot - 1 }}>
+              <Imagem id="objeto-plateia-frente" rotulo="" largura={936} altura={256} decorativo mostrarRotulo={false} />
             </div>
           ) : null}
         </>
@@ -317,8 +328,8 @@ export function Cena(): JSX.Element | null {
 
       {lugarId === 'cafezinho' && cena?.bloco === 2
         ? ([
-            { x: 320, numero: 1, atraso: 0 },
-            { x: 365, numero: 2, atraso: -duracao.cicloRobotico / 2 },
+            { x: 398, numero: 1, atraso: 0 },
+            { x: 451, numero: 2, atraso: -duracao.cicloRobotico / 2 },
           ] as const).map(({ x, numero, atraso }) => (
             <div
               key={numero}
@@ -326,6 +337,7 @@ export function Cena(): JSX.Element | null {
               style={{
                 position: 'absolute',
                 left: x * arte.escala - 100,
+                // O grupo fica à direita para deixar livre a entrada da Ana.
                 // A base fica acima da barra de itens; antes as pernas sumiam
                 // atrás da UI e as pessoas pareciam cortadas pelo sofá.
                 top: 135 * arte.escala,
@@ -358,7 +370,7 @@ export function Cena(): JSX.Element | null {
           ))
         : null}
 
-      {dialogoAtivo?.dialogoId === 'b4-apresentacao' ? <QuadroSTAR passo={dialogoAtivo.indice} /> : null}
+      {lugarId === 'sala-reunioes' && cena?.bloco === 4 ? <QuadroSTAR passo={dialogoAtivo?.dialogoId === 'b4-apresentacao' ? dialogoAtivo.indice : dialogosConcluidos.includes('b4-apresentacao') ? 3 : undefined} /> : null}
 
       {lugarId === 'linha-producao' && cena?.bloco === 3 ? (
         <div
@@ -452,19 +464,22 @@ export function Cena(): JSX.Element | null {
         style={{
           position: 'absolute',
           left: '50%',
-          top: espaco.margem,
+          top: espaco.lg,
           transform: 'translateX(-50%)',
           zIndex: camada.hotspot,
           fontSize: tipografia.tamanhos.subtitulo,
+          fontFamily: tipografia.familiaInterface,
           fontWeight: tipografia.pesos.maximo,
+          lineHeight: tipografia.alturaLinha.compacta,
           color: cores.texto,
-          background: cores.veuLeve,
+          background: cores.caixa,
           padding: `${espaco.sm}px ${espaco.lg}px`,
-          borderRadius: raio.md,
+          borderRadius: raio.sm,
           whiteSpace: 'nowrap',
         }}
       >
         {lugar?.nome ?? 'Lugar'}
+        <span style={{ display: 'block', textAlign: 'center', fontSize: tipografia.minimo, fontWeight: tipografia.pesos.normal }}>Bloco {cena?.bloco ?? bloco} · {cena?.seloTempo ?? REFLEXOES[cena?.bloco ?? bloco].tempo}</span>
       </h1>
 
       <button
@@ -478,7 +493,16 @@ export function Cena(): JSX.Element | null {
           left: espaco.margem,
           top: espaco.margem,
           zIndex: camada.hotspot + 1,
-          minWidth: 320,
+          minWidth: 0,
+          minHeight: espaco.margem,
+          fontSize: tipografia.minimo,
+          fontFamily: tipografia.familiaInterface,
+          fontWeight: tipografia.pesos.normal,
+          background: cores.caixa,
+          color: cores.textoApoio,
+          borderColor: cores.silhuetaContorno,
+          borderWidth: borda.interface,
+          borderRadius: raio.sm,
           opacity: saidaBloqueada ? 0.4 : 1,
           transition: `opacity ${duracao.curta}ms ${easing.suave}`,
         }}
@@ -543,7 +567,8 @@ export function Cena(): JSX.Element | null {
                 ) : (
                   <button
                     type="button"
-                    className="jogo-botao-nu jogo-hotspot"
+                    className={`jogo-botao-nu jogo-hotspot${hotspot.id === 'b3-relatorio' ? ' jogo-clipboard' : ''}`}
+                    disabled={bloqueado}
                     aria-label={
                       itemSelecionado === null
                         ? `Interagir com ${rotulo}`
@@ -557,6 +582,7 @@ export function Cena(): JSX.Element | null {
                     style={estiloDoBotao}
                   >
                     {arte}
+                    {hotspot.id === 'b3-relatorio' ? <span style={{ position: 'absolute', left: '50%', bottom: '100%', transform: 'translateX(-50%)', padding: espaco.xs, background: cores.caixa, color: cores.destaque, fontSize: tipografia.minimo, whiteSpace: 'nowrap' }}>Clipboard · Relatório</span> : null}
                   </button>
                 )}
               </Posicionado>
@@ -565,9 +591,15 @@ export function Cena(): JSX.Element | null {
 
       <Protagonista comando={comando} onChegar={aoChegar} apresentando={dialogoAtivo?.dialogoId === 'b4-apresentacao' && dialogoAtivo.indice % 2 === 1} />
 
+      {reflexaoAtiva ? <div aria-hidden style={{ position: 'absolute', inset: 0, background: cores.veuLeve, zIndex: camada.protagonista - 1, pointerEvents: 'none' }} /> : null}
+      <button type="button" className="jogo-botao-nu" aria-label="Reabrir reflexão de Ana" disabled={bloqueado} onClick={reabrirReflexao}
+        style={{ position: 'absolute', left: espaco.margem, top: espaco.margem + espaco.xxl + espaco.md, zIndex: camada.hotspot + 1, fontSize: tipografia.tamanhos.apoio, color: cores.textoApoio, background: cores.caixa, padding: espaco.sm }}>◌ Pensamento</button>
+      <small aria-label="Progresso das conversas do bloco" style={{ position: 'absolute', left: espaco.margem, top: espaco.margem + 2 * espaco.xxl + espaco.md, color: cores.textoApoio, background: cores.caixa, padding: espaco.xs, fontSize: tipografia.minimo }}>{progresso}</small>
+
       {/* Uma linha, sempre no mesmo lugar, com o nome do que está sob o
           ponteiro. É o que substituiu os retângulos de texto. */}
       <LinhaDeFoco rotulo={rotuloEmFoco} comItem={itemSelecionado !== null} />
+    </div>
     </div>
   );
 }

@@ -1609,7 +1609,8 @@ def sala_reunioes() -> Grade:
     # calha de luz e as duas liam como duas luminárias paralelas. Vermelho de
     # valor médio contra a parede fria `5`/`4` é a única combinação desta paleta
     # que diz "tecido de evento" sem virar lâmpada.
-    g.colar(90, 30, props.faixa_pendurada(300, 18, props.VERMELHO))
+    # Entre o cabeçalho e a TV: o tecido não passa atrás do título da sala.
+    g.colar(90, 37, props.faixa_pendurada(300, 14, props.VERMELHO))
     # O BANHO DE PAREDE VEM ANTES DOS PÔSTERES, e isso é correção de olhar.
     # Estava depois, e a `poca_de_luz` aclara o char que encontra — então ela
     # salpicava laranja EM CIMA dos pôsteres, o que lia como mancha no papel em
@@ -1901,8 +1902,8 @@ CAIXAS_DE_OBJETO: dict[str, tuple[int, int]] = {
     #   objeto-plateia -> largura: 936, altura: 136 (fileira clicável)
     "atril": (36, 56),
     "plateia": (234, 34),
-    "plateia-frente": (234, 54),
-    "plateia-vazia": (234, 54),
+    "plateia-frente": (234, 64),
+    "plateia-vazia": (234, 64),
     "figurante-cafe-1": (50, 84),
     "figurante-cafe-1-gesto": (50, 84),
     "figurante-cafe-2": (50, 84),

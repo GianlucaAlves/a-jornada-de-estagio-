@@ -31,8 +31,8 @@ export const CENAS_B4: readonly Cena[] = [
         id: 'b4-marcos',
         rotulo: 'Marcos',
         arte: { tipo: 'npc', npcId: 'marcos' },
-        pos: { x: 23, y: 75 },
-        parada: { x: 35, y: 76 },
+        pos: { x: 86, y: 70 },
+        parada: { x: 65.5, y: 62 },
         efeitos: [{ tipo: 'dialogo', dialogoId: 'b4-preparacao' }],
       },
       {

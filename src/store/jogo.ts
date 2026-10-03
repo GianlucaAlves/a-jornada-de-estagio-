@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { REFLEXOES } from '../domain/content/reflexoes';
 import {
   BLOCOS,
   CARTOES,
@@ -35,6 +36,8 @@ import type {
 export type PausaBloco4 = 'inativa' | 'rodando' | 'concluida';
 
 export interface EstadoJogo {
+  reflexaoVista: Partial<Record<BlocoId, boolean>>;
+  reflexaoAtiva: { etapa: 'tempo' | 'falas'; indice: number } | null;
   bloco: BlocoId;
   tela: Tela;
   lugares: Record<LugarId, EstadoLugar>;
@@ -86,6 +89,10 @@ export interface EstadoJogo {
 }
 
 export interface AcoesJogo {
+  iniciarReflexao: () => void;
+  reabrirReflexao: () => void;
+  avancarReflexao: () => void;
+  pularReflexao: () => void;
   entrarNoLugar: (lugarId: LugarId) => void;
   voltarAoMapa: () => void;
   clicarHotspot: (hotspotId: HotspotId) => void;
@@ -137,6 +144,8 @@ function puzzlesIniciais(): Record<PuzzleId, EstadoPuzzle> {
 
 function estadoInicial(): EstadoJogo {
   return {
+    reflexaoVista: {},
+    reflexaoAtiva: null,
     bloco: 1,
     // A abertura NÃO é o estado inicial da store: a escolha "Continuar" ou
     // "Começar do início" é decisão da camada de tela, que sabe se há progresso
@@ -190,6 +199,8 @@ const CHAVE_PROGRESSO = 'apresentacao-jogo/progresso';
 const VERSAO_PROGRESSO = 2;
 
 interface ProgressoSalvo {
+  /** Opcional para ler ensaios salvos antes da introdução dos monólogos. */
+  reflexaoVista?: Partial<Record<BlocoId, boolean>>;
   versao: number;
   bloco: BlocoId;
   tela: Tela;
@@ -245,6 +256,7 @@ function salvar(s: EstadoJogo): void {
   const armazem = armazenamento();
   if (!armazem) return;
   const progresso: ProgressoSalvo = {
+    reflexaoVista: s.reflexaoVista,
     versao: VERSAO_PROGRESSO,
     bloco: s.bloco,
     tela: telaRestauravel(s.tela),
@@ -299,6 +311,7 @@ function lerProgresso(): ProgressoSalvo | null {
     if (!Array.isArray(dado.dialogosConcluidos)) return null;
     if (!Array.isArray(dado.nomesRevelados)) return null;
     if (!dado.tela || typeof dado.tela !== 'object') return null;
+    if (dado.reflexaoVista !== undefined && (typeof dado.reflexaoVista !== 'object' || dado.reflexaoVista === null || Array.isArray(dado.reflexaoVista) || Object.entries(dado.reflexaoVista).some(([id, visto]) => !Object.prototype.hasOwnProperty.call(BLOCOS, id) || typeof visto !== 'boolean'))) return null;
     return dado as ProgressoSalvo;
   } catch {
     return null;
@@ -325,6 +338,7 @@ export function progressoSalvo(): { bloco: BlocoId } | null {
   const salvo = lerProgresso();
   if (!salvo) return null;
   const algoAconteceu =
+    Object.values(salvo.reflexaoVista ?? {}).some(Boolean) ||
     salvo.bloco > 1 ||
     salvo.skills.length > 0 ||
     salvo.hotspotsFeitos.length > 0 ||
@@ -476,6 +490,30 @@ export const useJogo = create<Jogo>((set, get) => {
   return {
     ...estadoInicial(),
 
+    iniciarReflexao: () => {
+      const s = get();
+      if (s.tela.tipo !== 'cena' || s.tela.lugarId !== REFLEXOES[s.bloco].lugarId || s.reflexaoVista[s.bloco] || s.reflexaoAtiva || s.dialogoAtivo || s.puzzleAberto) return;
+      set({ reflexaoAtiva: { etapa: 'tempo', indice: 0 }, itemSelecionado: null });
+    },
+    reabrirReflexao: () => {
+      const s = get();
+      if (s.tela.tipo !== 'cena' || s.dialogoAtivo || s.puzzleAberto || s.narracao || s.itensRecebidos.length || s.pausaBloco4 === 'rodando') return;
+      set({ reflexaoAtiva: { etapa: 'falas', indice: 0 }, itemSelecionado: null });
+    },
+    avancarReflexao: () => {
+      const s = get();
+      if (!s.reflexaoAtiva) return;
+      if (s.reflexaoAtiva.etapa === 'tempo') {
+        set({ reflexaoAtiva: { etapa: 'falas', indice: 0 } });
+      } else if (s.reflexaoAtiva.indice + 1 < REFLEXOES[s.bloco].falas.length) {
+        set({ reflexaoAtiva: { etapa: 'falas', indice: s.reflexaoAtiva.indice + 1 } });
+      } else get().pularReflexao();
+    },
+    pularReflexao: () => {
+      if (!get().reflexaoAtiva) return;
+      set(s => ({ reflexaoAtiva: null, reflexaoVista: { ...s.reflexaoVista, [s.bloco]: true } }));
+    },
+
     entrarNoLugar: (lugarId) => {
       const s = get();
       if (s.lugares[lugarId] === 'silhueta') return;
@@ -510,7 +548,7 @@ export const useJogo = create<Jogo>((set, get) => {
      */
     voltarAoMapa: () => {
       const s = get();
-      if (s.dialogoAtivo || s.puzzleAberto || s.pausaBloco4 === 'rodando') return;
+      if (s.reflexaoAtiva || s.dialogoAtivo || s.puzzleAberto || s.pausaBloco4 === 'rodando') return;
       set({
         tela: { tipo: 'mapa' },
         itemSelecionado: null,
@@ -521,7 +559,7 @@ export const useJogo = create<Jogo>((set, get) => {
 
     clicarHotspot: (hotspotId) => {
       const s = get();
-      if (s.dialogoAtivo || s.puzzleAberto || s.pausaBloco4 === 'rodando') return;
+      if (s.reflexaoAtiva || s.dialogoAtivo || s.puzzleAberto || s.pausaBloco4 === 'rodando') return;
       const cena = cenaAtual();
       const h = cena?.hotspots.find((x) => x.id === hotspotId);
       if (!h || !cena) return;
@@ -554,6 +592,7 @@ export const useJogo = create<Jogo>((set, get) => {
 
     selecionarItem: (itemId) => {
       const s = get();
+      if (s.reflexaoAtiva) return;
       if (itemId && s.itens[itemId] !== 'presente') return;
       set({ itemSelecionado: s.itemSelecionado === itemId ? null : itemId });
     },
@@ -642,6 +681,7 @@ export const useJogo = create<Jogo>((set, get) => {
 
     avancarBloco: () => {
       const s = get();
+      if (s.reflexaoAtiva) return;
       if (s.bloco >= ULTIMO_BLOCO) return;
       const proximo = (s.bloco + 1) as BlocoId;
       const cartao = CARTOES.find((c) => c.bloco === proximo);
@@ -669,6 +709,7 @@ export const useJogo = create<Jogo>((set, get) => {
       const cartao = CARTOES.find((c) => c.bloco === bloco);
       set({
         bloco,
+        reflexaoAtiva: null,
         tela: { tipo: 'mapa' },
         itens,
         lugares,
@@ -757,6 +798,7 @@ export const useJogo = create<Jogo>((set, get) => {
       if (!salvoAgora) return;
       set({
         ...estadoInicial(),
+        reflexaoVista: { ...(salvoAgora.reflexaoVista ?? {}) },
         bloco: salvoAgora.bloco,
         tela: telaRestauravel(salvoAgora.tela),
         lugares: { ...salvoAgora.lugares },
@@ -797,6 +839,10 @@ useJogo.subscribe(salvar);
 // ------------------------------------------------------------ seletores
 
 export const seletores = {
+  progressoDeConversas: (s: EstadoJogo): string => {
+    const conversas = [...new Set(CENAS.filter(c => c.bloco === s.bloco).flatMap(c => c.hotspots.filter(h => h.arte.tipo === 'npc').flatMap(h => [...h.efeitos, ...(h.efeitosComItem ?? [])].flatMap(e => e.tipo === 'dialogo' ? [e.dialogoId] : []))))];
+    return `${conversas.filter(id => s.dialogosConcluidos.includes(id)).length}/${conversas.length} conversas`;
+  },
   /** Itens renderizáveis na barra. Tardios NÃO são diferenciados. */
   itensNaBarra: (s: EstadoJogo): ItemId[] =>
     s.revelacao.barraSaiu

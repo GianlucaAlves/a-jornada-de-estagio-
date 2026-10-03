@@ -726,7 +726,7 @@ def _ana(nome: str, **mudanca: object) -> Corpo:
         "luz_cabelo": "Q",
         "volume_cabelo": 15,
         "comprimento_cabelo": 3,
-        "roupa": ("d", "c", "b"),
+        "roupa": ("L", "J", "I"),
         "calca": ("c", "b", "a"),
         "gola": ("8", "7"),
         "pin": "y",
@@ -808,6 +808,7 @@ def _mao_que_aponta(g: Grade, c: Corpo) -> None:
     pele, sombra, _ = _PELES[c.pele]
     g.retangulo(3, 24, 4, 3, pele)
     g.linha_h(3, 26, 4, sombra)
+    _cordao_de_cracha(g, c, "y", "8")
 
 
 # Durante o STAR Ana indica o quadro à esquerda; a pose alterna com a caminhada.
@@ -822,11 +823,17 @@ ANA_APRESENTANDO = replace(
 
 # CONFIANTE — ombro em 21px (x15..35), vão de 2px em x18..19. Cabeça 1px mais
 # alta e base aberta. O vão dobrado é a leitura de "braço solto do corpo".
+def _cracha_da_ana(g: Grade, c: Corpo) -> None:
+    """Credenciamento do evento acompanha a postura a partir do Bloco 4."""
+    _cordao_de_cracha(g, c, "y", "8")
+
+
 ANA_CONFIANTE = _ana(
     "ana-confiante",
     y_topo=2,
     torso_cintura=(21, 29),
     braco=((22, 39, 15, 17),),
+    extra=_cracha_da_ana,
 )
 
 # FUTURA — mão na cintura, vazio triangular de 3px no cotovelo (x18..20 nas
@@ -840,8 +847,8 @@ ANA_CONFIANTE = _ana(
 ANA_FUTURA = _ana(
     "ana-futura",
     y_topo=2,
-    roupa=("Y", "X", "W"),
-    calca=("X", "W", "V"),
+    roupa=("L", "J", "I"),
+    calca=("c", "b", "a"),
     gola=("M", "L"),
     pin="z",
     # Bota de cano curto na mesma família: é o único estado da Ana que troca o
@@ -853,7 +860,7 @@ ANA_FUTURA = _ana(
     # mostrou. `X` resolvia só metade (23 pontos de luminância contra os ~30 que a
     # regra (d) do bloco dos NPCs exige). `Y` sobre `W` dá 84, e o pé lê de
     # relance, que é o que a única figura de revelação do jogo precisa.
-    sapato=("Y", "X", "z"),
+    sapato=("L", "I", "M"),
     cano=2,
     torso_cintura=(21, 29),
     y_cintura=28,
@@ -1110,7 +1117,7 @@ RAFAEL = Corpo(
     luz_cabelo="Q",
     volume_cabelo=17,
     y_topo=3,
-    roupa=("8", "7", "6"),
+    roupa=("e", "d", "c"),
     gola=("t", "T"),
     calca=("p", "o", "n"),
     sapato=("7", "5", "8"),
@@ -1174,7 +1181,7 @@ CLAUDIA = Corpo(
     volume_cabelo=17,
     coque=1,
     y_topo=5,
-    roupa=("3", "2", "1"),
+    roupa=("F", "E", "D"),
     roupa_braco=("r", "q", "p"),
     gola=("r", "q"),
     calca=("4", "3", "2"),
@@ -1202,7 +1209,7 @@ TIAGO = Corpo(
     barba="R",
     franja=False,
     y_topo=4,
-    roupa=("4", "3", "2"),
+    roupa=("Y", "X", "W"),
     gola=("3", "2"),
     calca=("3", "2", "1"),
     sapato=("u", "m", "v"),
@@ -1229,7 +1236,7 @@ BIANCA = Corpo(
     comprimento_cabelo=8,
     oculos=True,
     y_topo=7,
-    roupa=("h", "g", "f"),
+    roupa=("j", "i", "h"),
     gola=("7", "6"),
     calca=("7", "6", "5"),
     sapato=("g", "f", "h"),
@@ -1255,7 +1262,7 @@ MARCOS = Corpo(
     barba="P",
     franja=False,
     y_topo=5,
-    roupa=("p", "o", "n"),
+    roupa=("x", "w", "v"),
     gola=("p", "o"),
     calca=("e", "d", "c"),
     sapato=("L", "I", "M"),
@@ -1278,7 +1285,7 @@ def _copo_do_figurante(g: Grade, c: Corpo) -> None:
 
 
 def figurante_cafe(*, variacao: int = 0, gesto: bool = False) -> Grade:
-    """Colegas de cenário com a mesma grade, rosto e contorno do elenco."""
+    """Figurantes neutros ficam no plano secundário sem disputar cor do elenco."""
     bases = (
         replace(BIANCA, nome="figurante-0", pele="media", cabelo="P",
                 luz_cabelo="Q", oculos=False, roupa=("e", "d", "c"),
@@ -1295,7 +1302,15 @@ def figurante_cafe(*, variacao: int = 0, gesto: bool = False) -> Grade:
     if gesto:
         corpo = replace(corpo, braco_dir=((24, 28, 32, 34), (18, 23, 33, 35)),
                         mao=False, extra=_copo_do_figurante)
-    return _pronto(corpo)
+    corpo = replace(corpo, roupa=("5", "4", "3"), calca=("4", "3", "2"),
+                    roupa_braco=None, pin="", lapela=False)
+    figura = _pronto(corpo)
+    # Menos contraste nas feições e no contorno impede a leitura como novo NPC.
+    for linha in figura.px:
+        for x, cor in enumerate(linha):
+            if cor == CONTORNO:
+                linha[x] = "2"
+    return figura
 
 
 # --------------------------------------------------------------- animação
@@ -1309,7 +1324,12 @@ def figurante_cafe(*, variacao: int = 0, gesto: bool = False) -> Grade:
 def _pronto(c: Corpo) -> Grade:
     """Figura montada e contornada. `contornar()` fecha a silhueta e, de quebra,
     transforma cada vão de 1px na linha interna que separa os volumes."""
-    return contornar(_figura(c))
+    figura = Grade(LARGURA, ALTURA)
+    # A sombra compartilha a linha de contato; pintá-la abaixo mudaria a âncora
+    # que a UI e o mapa de piso usam para medir o pé.
+    figura.linha_h(EIXO - 10, CHAO, 21, "2")
+    figura.colar(0, 0, contornar(_figura(c)))
+    return figura
 
 
 def _respirar(base: Grade, y_dobra: int) -> Grade:

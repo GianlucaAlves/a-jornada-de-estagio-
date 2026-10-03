@@ -206,7 +206,7 @@ describe('a caixa de diálogo, medida', () => {
    */
   it('a caixa não invade o botão de voltar nem o painel de skills', () => {
     const proibidas = FAIXAS_DE_OVERLAY.filter(
-      (f) => f.nome === 'botão Voltar ao mapa' || f.nome === 'painel de skills',
+      (f) => f.nome === 'botão Voltar ao mapa' || f.nome === 'barra de itens',
     );
     expect(proibidas).toHaveLength(2);
     const invadidas = proibidas

@@ -61,7 +61,7 @@ export function LinhaDeFoco({ rotulo, comItem = false }: PropsLinhaDeFoco): JSX.
         style={{
           maxWidth: '70%',
           padding: `${espaco.xs}px ${espaco.md}px`,
-          background: cores.veuLeve,
+          background: cores.caixa,
           borderRadius: raio.sm,
           fontSize: tipografia.tamanhos.minimo,
           fontWeight: tipografia.pesos.normal,

@@ -348,6 +348,8 @@ export interface Lugar {
  * de que a pessoa mudou e o lugar não (ADR-022).
  */
 export interface Cena {
+  /** Pode substituir o selo temporal padrão do bloco sem alterar a narrativa. */
+  seloTempo?: string;
   lugarId: LugarId;
   bloco: BlocoId;
   aberturaTexto?: string;

@@ -56,6 +56,8 @@ export const cores = {
  * `minimo` é o piso absoluto: nada na aplicação usa menos.
  */
 export const tipografia = {
+  /** Letras de terminal aproximam a nova navegação da grade da arte. */
+  familiaInterface: "Consolas, 'Lucida Console', monospace",
   familia:
     "'Segoe UI', 'Noto Sans', 'Helvetica Neue', Arial, sans-serif",
   /** Piso absoluto do spec. */
@@ -110,6 +112,8 @@ export const raio = {
  * a compressão de vídeo simplesmente a apaga.
  */
 export const borda = {
+  /** Exceção da Jornada: molduras secundárias leves, com texto ainda opaco. */
+  interface: 2,
   fina: 3,
   media: 4,
   grossa: 6,
@@ -273,7 +277,7 @@ export const espera = {
  */
 export const overlay = {
   /** Altura da barra de itens, ancorada na base do canvas. */
-  barraDeItens: 190,
+  barraDeItens: 151,
   /** Largura do painel de skills, ancorado na direita. */
   painelDeSkills: 420,
   /**
@@ -298,11 +302,17 @@ export const overlay = {
  * coincidência de dois números iguais escritos em lugares diferentes.
  */
 export const barra = {
+  zonaItens: 826,
+  slotsItens: 3,
+  slotsHabilidades: 9,
+  colunasHabilidades: 3,
+  alturaSelo: 32,
+  larguraSelo: 340,
   larguraDoRotulo: 120,
   /** Slot de item: moldura + ícone + nome. */
-  item: { largura: 210, altura: 132 },
+  item: { largura: 210, altura: 112 },
   /** Lado do ícone dentro do slot. */
-  icone: 88,
+  icone: 64,
   /** Teto de largura da descrição de item, que nasce acima da barra. */
   larguraDaDescricao: 1180,
 } as const;

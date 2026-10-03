@@ -33,7 +33,6 @@ import type { Item, ItemId } from '../domain/types';
 import { assetDoItem } from '../assets/manifest';
 import { seletores, useJogo } from '../store/jogo';
 import {
-  alvo,
   barra,
   borda,
   camada,
@@ -46,6 +45,8 @@ import {
   raio,
   tipografia,
 } from '../styles/tokens';
+import { PainelDeSkills } from './PainelDeSkills';
+import { ROTULOS_DOS_ITENS } from './rotulosDosItens';
 import { Imagem } from './Imagem';
 
 /** O que pode fechar (ou trocar) a descrição na tela. */
@@ -85,6 +86,7 @@ export function BarraDeItens(): JSX.Element {
   const itens = useJogo(seletores.itensNaBarra);
   const itemSelecionado = useJogo((s) => s.itemSelecionado);
   const selecionarItem = useJogo((s) => s.selecionarItem);
+  const recebidos = useJogo(s => s.itensRecebidos);
 
   const [descricaoDe, setDescricaoDe] = useState<ItemId | null>(null);
   /** A região que NÃO conta como "clicar em outra coisa". */
@@ -139,28 +141,31 @@ export function BarraDeItens(): JSX.Element {
   return (
     <>
       {descricao !== undefined ? (
-        <p
-          className="jogo-aparecer"
+        <button
+          type="button"
+          aria-label={`Fechar descrição de ${descricao.nome}`}
+          onClick={() => setDescricaoDe(null)}
           style={{
             position: 'absolute',
-            left: espaco.margem,
-            // Acima da barra E da linha de nome do hotspot: as duas convivem na
-            // tela, e empilhar a descrição direto sobre a barra fazia a legenda
-            // do rodapé passar por baixo dela.
-            bottom: overlay.barraDeItens + overlay.linhaDeFoco + espaco.sm,
-            maxWidth: barra.larguraDaDescricao,
-            zIndex: camada.overlayPersistente,
+            left: espaco.md,
+            // A descrição substitui visualmente os slots na própria barra;
+            // o contexto de um objeto não pode esconder quem está na cena.
+            bottom: espaco.xs,
+            width: barra.zonaItens - 2 * espaco.md,
+            height: overlay.barraDeItens - borda.grossa - 2 * espaco.xs,
+            zIndex: camada.overlayPersistente + 1,
             background: cores.caixa,
             border: `${borda.media}px solid ${cores.contorno}`,
             borderRadius: raio.md,
-            padding: `${espaco.md}px ${espaco.lg}px`,
-            fontSize: tipografia.tamanhos.corpo,
-            lineHeight: tipografia.alturaLinha.corpo,
+            padding: espaco.sm,
+            fontSize: tipografia.minimo,
+            lineHeight: tipografia.alturaLinha.compacta,
+            textAlign: 'left',
             color: cores.texto,
           }}
         >
           <strong style={{ color: cores.destaque }}>{descricao.nome}:</strong> {descricao.descricao}
-        </p>
+        </button>
       ) : null}
 
       <section
@@ -171,12 +176,13 @@ export function BarraDeItens(): JSX.Element {
           left: 0,
           right: 0,
           bottom: 0,
-          minHeight: overlay.barraDeItens,
+          height: overlay.barraDeItens,
+          fontFamily: tipografia.familiaInterface,
           zIndex: camada.overlayPersistente,
           display: 'flex',
           alignItems: 'center',
           gap: espaco.md,
-          padding: `${espaco.md}px ${espaco.margem}px`,
+          padding: `${espaco.xs}px ${espaco.md}px`,
           background: cores.painel,
           borderTop: `${borda.grossa}px solid ${cores.contorno}`,
         }}
@@ -195,8 +201,10 @@ export function BarraDeItens(): JSX.Element {
           Itens
         </h2>
 
-        <ul style={{ display: 'flex', alignItems: 'stretch', gap: espaco.md, flex: '1 1 auto' }}>
-          {itens.map((id) => {
+        <ul style={{ display: 'flex', alignItems: 'stretch', gap: espaco.xs, flex: '0 0 auto' }}>
+          {Array.from({ length: barra.slotsItens }, (_, indice) => {
+            const id = itens[indice];
+            if (!id) return <li key={`vazio-${indice}`} aria-label="Espaço vazio de item" style={{ width: barra.item.largura, height: barra.item.altura, border: `${borda.media}px solid ${cores.silhuetaContorno}`, background: cores.fundoElevado }} />;
             // Um único caminho de renderização para todos os itens.
             const item: Item | undefined = ITENS[id];
             if (item === undefined) return null;
@@ -206,6 +214,8 @@ export function BarraDeItens(): JSX.Element {
                 <button
                   type="button"
                   aria-pressed={ativo}
+                  title={`${item.nome} · ${item.descricao}`}
+                  className={recebidos.includes(id) ? 'jogo-item-novo' : undefined}
                   aria-label={`${item.nome}. ${item.descricao}`}
                   onClick={() => {
                     // Caminho 3, e os dois alternam JUNTOS: seleção e descrição
@@ -221,8 +231,8 @@ export function BarraDeItens(): JSX.Element {
                     alignItems: 'center',
                     gap: espaco.xs,
                     width: barra.item.largura,
-                    minHeight: alvo.confortavel + barra.icone / 2,
-                    padding: espaco.sm,
+                    height: barra.item.altura,
+                    padding: borda.fina,
                     background: ativo ? cores.destaque : cores.fundoElevado,
                     color: ativo ? cores.textoInverso : cores.texto,
                     border: `${ativo ? borda.maxima : borda.media}px solid ${
@@ -240,22 +250,25 @@ export function BarraDeItens(): JSX.Element {
                     altura={barra.icone}
                     mostrarRotulo={false}
                     decorativo
+                    style={{ filter: `drop-shadow(0 ${borda.fina}px 0 ${cores.sombra})` }}
                   />
                   <span
                     style={{
-                      fontSize: tipografia.tamanhos.apoio,
+                      fontSize: tipografia.minimo,
                       fontWeight: tipografia.pesos.forte,
                       lineHeight: tipografia.alturaLinha.compacta,
                       textAlign: 'center',
+                      whiteSpace: 'nowrap',
                     }}
                   >
-                    {item.nome}
+                    {ROTULOS_DOS_ITENS[id]}
                   </span>
                 </button>
               </li>
             );
           })}
         </ul>
+        <PainelDeSkills />
       </section>
     </>
   );

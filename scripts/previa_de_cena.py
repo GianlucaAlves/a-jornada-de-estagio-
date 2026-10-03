@@ -52,6 +52,7 @@ SPRITE_POR_BLOCO = {
     3: "ana-neutra",
     4: "ana-confiante",
     5: "ana-confiante",
+    6: "ana-confiante",
 }
 
 RE_CENA = re.compile(r"lugarId:\s*'([a-z-]+)'\s*,\s*\n\s*bloco:\s*(\d)")
@@ -176,10 +177,10 @@ def main() -> int:
         if lugar == "sala-reunioes" and bloco == 4:
             cadeiras = cat.get("plateia-vazia")
             if cadeiras is not None:
-                g.colar_base(round(0.53 * LARGURA), round(0.824 * ALTURA), cadeiras)
+                g.colar_base(round(0.53 * LARGURA), round(0.854 * ALTURA), cadeiras)
             frente = cat.get("plateia-frente")
             if frente is not None:
-                g.colar_base(round(0.53 * LARGURA), round(0.824 * ALTURA), frente)
+                g.colar_base(round(0.53 * LARGURA), round(0.854 * ALTURA), frente)
 
         # Camadas de CSS da esteira e dos robÃ´s ganham um quadro estÃ¡tico na
         # prÃ©via para conferir apoio e colisÃ£o com o cenÃ¡rio real.

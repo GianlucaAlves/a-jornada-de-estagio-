@@ -45,6 +45,12 @@ export function posicaoDeEntrada(cena: Pick<Cena, 'lugarId' | 'bloco'> | null): 
   if (cena?.lugarId === 'sala-reunioes' && cena.bloco === 4) {
     return { x: 65.5, y: 62 };
   }
+  // As paradas já conferidas contra o piso também são entradas seguras: a
+  // mudança de fase muda a composição sem inventar uma segunda geometria.
+  if (cena?.lugarId === 'cafezinho' && cena.bloco === 2) return { x: 51.5, y: 81 };
+  if (cena?.lugarId === 'linha-producao' && cena.bloco === 3) return { x: 12, y: 78 };
+  if (cena?.lugarId === 'outra-area' && cena.bloco === 5) return { x: 71, y: 74 };
+  if (cena?.lugarId === 'cafezinho' && cena.bloco === 6) return { x: 50, y: 76 };
   return POSICAO_DE_ENTRADA;
 }
 
@@ -153,15 +159,6 @@ export const FAIXAS_DE_OVERLAY: readonly { nome: string; area: Retangulo }[] = [
   {
     nome: 'botão Avançar',
     area: { esquerda: CANVAS.largura - 400, direita: CANVAS.largura, topo: 0, base: 120 },
-  },
-  {
-    nome: 'painel de skills',
-    area: {
-      esquerda: CANVAS.largura - overlay.painelDeSkills,
-      direita: CANVAS.largura,
-      topo: 120,
-      base: CANVAS.altura - overlay.barraDeItens - espaco.md,
-    },
   },
   {
     nome: 'barra de itens',

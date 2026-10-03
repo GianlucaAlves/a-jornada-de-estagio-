@@ -40,7 +40,7 @@ export function QuadroSTAR({ passo }: { passo?: number }): JSX.Element {
         >
           <strong style={{ color: passo === indice ? cores.textoInverso : cores.destaque }}>{titulo}</strong>
           <br />
-          {resumo}
+          <span>{passo !== undefined && indice <= passo ? resumo : '—'}</span>
         </div>
       ))}
     </div>

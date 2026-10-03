@@ -96,8 +96,8 @@ export const CENAS_B2: readonly Cena[] = [
         id: 'b2-rafael',
         rotulo: 'Rafael',
         arte: { tipo: 'npc', npcId: 'rafael' },
-        pos: { x: 59, y: 74 },
-        parada: { x: 70, y: 76 },
+        pos: { x: 62, y: 74 },
+        parada: { x: 73, y: 76 },
         requerItemPresente: 'certificado-degree',
         bloqueadoTexto:
           'Ele está no meio de uma conversa. E a semana dela continua inteira em cima da mesa.',

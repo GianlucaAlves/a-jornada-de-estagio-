@@ -443,3 +443,13 @@ button {
     transition: none;
   }
 }
+
+/* Conquistas chegam por movimento amplo; selos antigos n?o se remountam. */
+@keyframes jogo-selo-pousa { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.jogo-selo-pousa { animation: jogo-selo-pousa 800ms ease-out; }
+@keyframes jogo-item-novo { from { box-shadow: 0 0 0 6px #ffd43b; } to { box-shadow: 0 0 0 0 #ffd43b; } }
+.jogo-item-novo { animation: jogo-item-novo 1200ms ease-out; }
+.jogo-clipboard:not(:disabled) .jogo-hotspot-arte {
+  filter: drop-shadow(4px 0 0 #ffd43b) drop-shadow(-4px 0 0 #ffd43b) drop-shadow(0 4px 0 #ffd43b) drop-shadow(0 -4px 0 #ffd43b);
+}
+@media (prefers-reduced-motion: reduce) { .jogo-selo-pousa, .jogo-item-novo { animation: none; } }

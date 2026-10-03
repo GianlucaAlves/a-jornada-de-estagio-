@@ -2954,7 +2954,7 @@ def atril(largura: int = 32, altura: int = 52) -> Grade:
     return g
 
 
-def plateia(largura: int = 230, altura: int = 50, *, ocupada: bool = True, fileira: str = "toda") -> Grade:
+def plateia(largura: int = 230, altura: int = 60, *, ocupada: bool = True, fileira: str = "toda") -> Grade:
     """Nove espectadores em duas fileiras, vistos de costas para o palco.
 
     Cadeiras e pessoas compartilham coordenadas. A versão vazia fica fixa sob o
@@ -2965,13 +2965,14 @@ def plateia(largura: int = 230, altura: int = 50, *, ocupada: bool = True, filei
               (45, 4), (92, 3), (138, 4), (185, 3)]
     peles = ("s", "t", "N", "k", "s", "N", "t", "k", "s")
     cabelos = ("P", "R", "Q", "R", "P", "Q", "R", "P", "Q")
-    roupas = (AZUL, MADEIRA, VERDE, NEUTRO, AZUL, VERDE, NEUTRO, MADEIRA, AZUL)
+    roupas = (NEUTRO,) * len(lugares)
 
     for i, (cx, variacao) in enumerate(lugares):
         frente = i >= 5
         if fileira == "tras" and frente or fileira == "frente" and not frente:
             continue
-        y = 21 if frente else 1
+        # A segunda fila começa depois dos pés da primeira, sem encostos cruzados.
+        y = 31 if frente else 1
         largura_cadeira = 32 if frente else 29
         esc, med, cla = tons_de_volume(roupas[i])
         if not ocupada:

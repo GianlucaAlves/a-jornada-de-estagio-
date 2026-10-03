@@ -30,7 +30,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 
 import { BLOCOS, CONEXOES, ITENS, LUGARES, SKILLS } from '../domain/content';
 import type { ItemId, LugarId, Ponto, SkillId } from '../domain/types';
-import { CANVAS, cores, overlay, tipografia } from '../styles/tokens';
+import { CANVAS, barra, cores, overlay, tipografia } from '../styles/tokens';
 import {
   CAIXA_DO_CONVITE,
   GEOMETRIA_DA_REVELACAO,
@@ -149,7 +149,7 @@ describe('a caixa livre respeita os dois overlays persistentes', () => {
       CANVAS.altura - overlay.barraDeItens,
     );
     expect(GEOMETRIA_DA_REVELACAO.painel.esquerda).toBe(
-      CANVAS.largura - overlay.painelDeSkills,
+      barra.zonaItens,
     );
     expect(GEOMETRIA_DA_REVELACAO.barra.topo).toBe(CANVAS.altura - overlay.barraDeItens);
   });
@@ -326,7 +326,8 @@ describe('de onde a arte de cada origem parte', () => {
     expect(daSkill).toHaveLength(1);
     for (const { partida } of daSkill) {
       const direita = partida.x + GEOMETRIA_DA_REVELACAO.origem.larguraSkill / 2;
-      expect(direita).toBeLessThanOrEqual(GEOMETRIA_DA_REVELACAO.painel.esquerda);
+      expect(direita).toBeLessThanOrEqual(CANVAS.largura);
+      expect(partida.y).toBeGreaterThanOrEqual(GEOMETRIA_DA_REVELACAO.barra.topo);
     }
   });
 

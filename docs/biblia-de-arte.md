@@ -1,5 +1,19 @@
 # Bíblia de arte — apresentacao_jogo
 
+## Emenda de identidade — outubro de 2026
+
+A especificação «A Jornada do Estágio» substitui a reserva do roxo para o
+clímax: Ana mantém roupa ciano em todas as poses, Rafael usa azul, Cláudia
+vermelho, Tiago roxo, Bianca verde e Marcos âmbar. Silhuetas, peles e acessórios
+existentes são preservados. Figurantes usam neutros com contorno de menor
+contraste. A versão futura continua distinta pela pose, em vez de trocar a
+identidade da roupa. A Jornada autoriza fonte de terminal na navegação, títulos
+e barra; diálogos e descrições mantêm fonte proporcional. O piso segue 22 px.
+Bordas secundárias de navegação e selos usam o token de 2 px solicitado;
+contorno de interação, divisórias e caixa de diálogo conservam traços grossos.
+Os selos da barra usam linhas largas de 32 px como exceção de lista; a
+descrição aberta usa toda a zona e oferece um alvo amplo para fechar.
+
 Leitura obrigatória antes de tocar em arte ou em interação de cena. Não
 improvise estilo: está tudo aqui, inclusive os erros já cometidos e por que
 falharam. Se uma decisão sua contraria este documento, o documento ganha — ou

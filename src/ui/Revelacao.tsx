@@ -69,12 +69,10 @@ import {
   raio,
   tipografia,
 } from '../styles/tokens';
+import { ROTULOS_DOS_ITENS } from './rotulosDosItens';
 import { Imagem } from './Imagem';
-import {
-  GEOMETRIA_DO_PAINEL,
-  PASSO_DA_LINHA,
-  PRIMEIRA_LINHA_Y,
-} from './PainelDeSkills';
+import { PainelDeSkillsVisual } from './PainelDeSkills';
+import { proximaAberta } from './PainelDeSkills';
 
 // ------------------------------------------------------------ geometria
 
@@ -204,15 +202,8 @@ const OPACIDADE_APAGADA = 0.35;
 // a tela troca" era uma coincidência entre dois literais iguais escritos em
 // arquivos diferentes. Quando o painel virou acordeão (ADR-020) a coincidência
 // se desfez, e é de uma entrada DESTE painel que a quarta origem do clímax sai.
-const PAINEL_L = GEOMETRIA_DO_PAINEL.largura;
-const PAINEL_X = GEOMETRIA_DO_PAINEL.esquerda;
-const PAINEL_Y = GEOMETRIA_DO_PAINEL.topo;
-const PAINEL_A = GEOMETRIA_DO_PAINEL.altura;
-const PAINEL_CABECALHO_A = GEOMETRIA_DO_PAINEL.cabecalho.altura;
-const PAINEL_LINHA_A = GEOMETRIA_DO_PAINEL.linha.alturaMinima;
-const PAINEL_PASSO = PASSO_DA_LINHA;
-const PAINEL_PRIMEIRA_LINHA_Y = PRIMEIRA_LINHA_Y;
-
+const PAINEL_X = barra.zonaItens;
+const PAINEL_Y = CANVAS.altura - overlay.barraDeItens;
 // Barra de itens — as mesmas métricas que BarraDeItens.tsx usa, por token.
 //
 // UMA COISA AQUI NÃO É ESPELHO, E É DE PROPÓSITO: a altura do slot. Os três
@@ -228,11 +219,10 @@ const BARRA_Y = CANVAS.altura - BARRA_A;
 const BARRA_ROTULO_L = barra.larguraDoRotulo;
 const ITEM_L = barra.item.largura;
 const ICONE = barra.icone;
-const ITEM_X = espaco.margem + BARRA_ROTULO_L + espaco.md;
-const ITEM_PASSO = ITEM_L + espaco.md;
-const ITEM_A =
-  2 * borda.media + 2 * espaco.sm + ICONE + espaco.xs + 2 * ALTURA_NOME;
-const ITEM_Y = BARRA_Y + Math.round((BARRA_A - ITEM_A) / 2);
+const ITEM_X = espaco.md + BARRA_ROTULO_L + espaco.md;
+const ITEM_PASSO = ITEM_L + espaco.xs;
+const ITEM_A = barra.item.altura;
+const ITEM_Y = BARRA_Y + borda.grossa + espaco.xs + (BARRA_A - borda.grossa - 2 * espaco.xs - ITEM_A) / 2;
 
 /** ~5s de sustentação da versão futura apontando o mapa, sem texto. */
 const SUSTENTACAO_MS = 5000;
@@ -392,16 +382,13 @@ export const GEOMETRIA_DA_VERSAO_FUTURA = {
 function centroDoIcone(indice: number): Ponto {
   return {
     x: ITEM_X + indice * ITEM_PASSO + ITEM_L / 2,
-    y: ITEM_Y + borda.media + espaco.sm + ICONE / 2,
+    y: ITEM_Y + borda.media + borda.fina + ICONE / 2,
   };
 }
 
 /** Entrada do painel de skills — de onde a placa da competência PARTE. */
 function entradaDaSkill(indice: number): Ponto {
-  return {
-    x: PAINEL_X,
-    y: PAINEL_PRIMEIRA_LINHA_Y + indice * PAINEL_PASSO + PAINEL_LINHA_A / 2,
-  };
+  return { x: PAINEL_X + espaco.md + (indice % barra.colunasHabilidades) * barra.larguraSelo + barra.larguraSelo / 2, y: PAINEL_Y + tipografia.minimo * tipografia.alturaLinha.corpo + espaco.xs + Math.floor(indice / barra.colunasHabilidades) * (barra.alturaSelo + borda.fina) + barra.alturaSelo / 2 };
 }
 
 /**
@@ -426,7 +413,7 @@ export function partidaDaConexao(
   }
   const indice = skills.indexOf(conexao.origem.skillId);
   const linha = indice >= 0 ? entradaDaSkill(indice) : { x: PAINEL_X, y: PAINEL_Y };
-  return { x: PAINEL_X - ORIGEM_SKILL_L / 2, y: linha.y };
+  return linha;
 }
 
 /**
@@ -884,6 +871,7 @@ export function Revelacao(): JSX.Element {
   );
 
   const [travado, setTravado] = useState(false);
+  const [skillAberta, setSkillAberta] = useState<SkillId | null>(null);
   const [perguntaVisivel, setPerguntaVisivel] = useState(false);
   const temporizadores = useRef<number[]>([]);
 
@@ -949,10 +937,6 @@ export function Revelacao(): JSX.Element {
     conexao,
     partida: partidaDaConexao(conexao, slots, skills),
   }));
-  const skillsConectadas = new Set<SkillId>();
-  for (const conexao of feitas) {
-    if (conexao.origem.tipo === 'skill') skillsConectadas.add(conexao.origem.skillId);
-  }
   /** Item que acabou de conectar: é ele que pulsa uma vez na barra. */
   const itemQuePulsa: ItemId | null =
     ultima && ultima.origem.tipo === 'item' ? ultima.origem.itemId : null;
@@ -1017,99 +1001,6 @@ export function Revelacao(): JSX.Element {
       {/* ----------------------------------------- o mapa do clímax, em peças */}
       <MapaDaRevelacao conexoes={conexoesNaTela} barraSaiu={barraSaiu} />
 
-      {/* ------------------------------------------------- painel de skills */}
-      <section
-        aria-label="O que eu aprendi"
-        style={{
-          position: 'absolute',
-          left: PAINEL_X,
-          top: PAINEL_Y,
-          width: PAINEL_L,
-          height: PAINEL_A,
-          zIndex: camada.overlayPersistente,
-          background: cores.veuLeve,
-          overflow: 'hidden',
-        }}
-      >
-        <h2
-          style={{
-            position: 'absolute',
-            left: GEOMETRIA_DO_PAINEL.padding.horizontal,
-            top: GEOMETRIA_DO_PAINEL.padding.vertical,
-            height: PAINEL_CABECALHO_A,
-            fontSize: GEOMETRIA_DO_PAINEL.cabecalho.fonte,
-            fontWeight: tipografia.pesos.maximo,
-            letterSpacing: tipografia.espacamento.largo,
-            color: cores.destaque,
-          }}
-        >
-          O que eu aprendi
-        </h2>
-
-        {skills.map((skillId, indice) => {
-          const skill = SKILLS[skillId];
-          const conectada = skillsConectadas.has(skillId);
-          return (
-            <span
-              key={skillId}
-              style={{
-                position: 'absolute',
-                left: GEOMETRIA_DO_PAINEL.padding.horizontal,
-                top: PAINEL_PRIMEIRA_LINHA_Y - PAINEL_Y + indice * PAINEL_PASSO,
-                width: PAINEL_L - 2 * GEOMETRIA_DO_PAINEL.padding.horizontal,
-                height: PAINEL_LINHA_A,
-                display: 'flex',
-                alignItems: 'center',
-                /**
-                 * A marca da esquerda é reservada em TODAS as linhas, mesmo
-                 * transparente: é a mesma linguagem que o acordeão usa para a
-                 * entrada aberta, e reservar impede que a linha escorregue no
-                 * instante em que acende — a partida da quarta origem é ancorada
-                 * nesta coordenada.
-                 */
-                borderLeft: `${borda.maxima}px solid ${
-                  conectada ? cores.destaque : 'transparent'
-                }`,
-                paddingLeft: espaco.sm,
-                /**
-                 * UMA linha por entrada, com reticências como rede. No painel
-                 * de verdade (fase 5) a entrada CRESCE quando o nome quebra;
-                 * aqui ela não pode, porque o passo uniforme é o que ancora a
-                 * partida da quarta origem — nome que quebrasse empurraria as
-                 * linhas de baixo para fora do lugar de onde a arte sai.
-                 */
-                whiteSpace: 'nowrap',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                /**
-                 * 22px — o piso do spec — e NÃO os 24 do painel de verdade.
-                 * Desvio declarado, e medido: o nome mais longo ("Competência
-                 * que ela foi buscar") mede 364px em 24px contra 358px de caixa
-                 * útil depois de reservada a marca da esquerda, e ganharia
-                 * reticências justamente no clímax. Em 22px mede 329px e sobra
-                 * folga. A POSIÇÃO da linha não muda — só o corpo da letra —,
-                 * então nada salta de lugar na troca de tela.
-                 */
-                fontSize: tipografia.minimo,
-                fontWeight: conectada ? tipografia.pesos.maximo : tipografia.pesos.forte,
-                lineHeight: tipografia.alturaLinha.compacta,
-                /**
-                 * SÓ A CONECTADA ACENDE. Antes, quando a barra saía, as nove
-                 * ficavam em destaque — e nove amarelos afogam justamente o
-                 * único que deveria sobrar. O painel PERMANECER (contra a barra,
-                 * que sai) continua sendo metade da tese; a outra metade é haver
-                 * UMA coisa acesa, e duas coisas não podem ser uma (ADR-017).
-                 */
-                color: conectada ? cores.destaque : cores.texto,
-                transition: `color ${duracao.longa}ms ease-out`,
-              }}
-            >
-              {skill.nome}
-            </span>
-          );
-        })}
-      </section>
-
       {/* --------------------------------------------------- barra de itens */}
       <section
         aria-label="Itens"
@@ -1117,7 +1008,7 @@ export function Revelacao(): JSX.Element {
           position: 'absolute',
           left: 0,
           top: BARRA_Y,
-          width: CANVAS.largura,
+          width: barra.zonaItens,
           height: BARRA_A,
           zIndex: camada.overlayPersistente,
           background: cores.painel,
@@ -1131,8 +1022,8 @@ export function Revelacao(): JSX.Element {
         <h2
           style={{
             position: 'absolute',
-            left: espaco.margem,
-            top: (BARRA_A - 30) / 2,
+            left: espaco.md,
+            top: (BARRA_A - tipografia.tamanhos.apoio) / 2,
             width: BARRA_ROTULO_L,
             fontSize: tipografia.tamanhos.apoio,
             fontWeight: tipografia.pesos.maximo,
@@ -1161,7 +1052,7 @@ export function Revelacao(): JSX.Element {
                 flexDirection: 'column',
                 alignItems: 'center',
                 gap: espaco.xs,
-                padding: espaco.sm,
+                padding: borda.fina,
                 background: cores.fundoElevado,
                 border: `${borda.media}px solid ${cores.contorno}`,
                 borderRadius: raio.md,
@@ -1190,7 +1081,7 @@ export function Revelacao(): JSX.Element {
                 style={{
                   // Duas linhas RESERVADAS: os três nomes da fase 6 quebram, e
                   // altura que depende da métrica da fonte não é geometria.
-                  height: 2 * ALTURA_NOME,
+                  height: ALTURA_NOME,
                   overflow: 'hidden',
                   fontSize: tipografia.tamanhos.apoio,
                   fontWeight: tipografia.pesos.forte,
@@ -1199,13 +1090,16 @@ export function Revelacao(): JSX.Element {
                   color: cores.texto,
                 }}
               >
-                {item.nome}
+                {ROTULOS_DOS_ITENS[itemId]}
               </span>
             </span>
           );
         })}
       </section>
 
+      <div style={{ position: 'absolute', left: PAINEL_X, top: PAINEL_Y, right: 0, height: BARRA_A, display: 'flex', alignItems: 'center', padding: `${espaco.xs}px ${espaco.md}px ${espaco.xs}px 0`, background: cores.painel, zIndex: camada.overlayPersistente, borderTop: `${borda.grossa}px solid ${cores.contorno}` }}>
+        <PainelDeSkillsVisual skills={skills.map(id => SKILLS[id])} aberta={skillAberta} aoAlternar={id => setSkillAberta(atual => proximaAberta(atual, id))} destaque={barraSaiu} />
+      </div>
       {/* ------------------------------------------------------ faixa de fala */}
       <p
         aria-live="polite"

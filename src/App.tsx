@@ -22,10 +22,10 @@ import { Cena } from './ui/Cena';
 import { Mapa } from './ui/Mapa';
 import { CartaoDeTransicao } from './ui/CartaoDeTransicao';
 import { Dialogo } from './ui/Dialogo';
+import { Reflexao } from './ui/Reflexao';
 import { Narracao } from './ui/Narracao';
 import { ItemRecebido } from './ui/ItemRecebido';
 import { BarraDeItens } from './ui/BarraDeItens';
-import { PainelDeSkills } from './ui/PainelDeSkills';
 import { PausaBloco4 } from './ui/PausaBloco4';
 import { PuzzleAtivo } from './ui/puzzles';
 import { Revelacao } from './ui/Revelacao';
@@ -71,6 +71,7 @@ export function App(): JSX.Element {
   const pausaBloco4 = useJogo((s) => s.pausaBloco4);
   const barraSaiu = useJogo((s) => s.revelacao.barraSaiu);
   const avancarBloco = useJogo((s) => s.avancarBloco);
+  const reflexaoAtiva = useJogo(s => s.reflexaoAtiva);
 
   /**
    * Toda carga de página começa na abertura (ADR-018) — é o que faz F5 ser o
@@ -110,11 +111,13 @@ export function App(): JSX.Element {
       <TelaAtual />
 
       {mostrarBarra ? <BarraDeItens /> : null}
-      {overlaysVisiveis ? <PainelDeSkills /> : null}
 
       <Dialogo />
-      <Narracao />
-      <ItemRecebido />
+      <Reflexao />
+      {/* A abertura narrativa espera o pensamento: dois canais simultâneos
+          escureciam Ana e obrigavam a plateia a escolher qual texto ler. */}
+      {reflexaoAtiva === null ? <Narracao /> : null}
+      {reflexaoAtiva === null ? <ItemRecebido /> : null}
 
       {/* Puzzle: overlay opaco e modal, acima dos overlays persistentes e
           abaixo da pausa da fase 4. Dirigido por `puzzleAberto` na store. */}
