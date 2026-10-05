@@ -38,7 +38,7 @@ import {
   retanguloDoHotspot,
 } from './geometriaDeCena';
 import type { Retangulo } from './geometriaDeCena';
-import { CAPACIDADE_DE_TEXTO, RETANGULO_ANTIGO, RETANGULO_DA_CAIXA, cabeNaCaixa } from './Dialogo';
+import { CAPACIDADE_DE_TEXTO, RETANGULO_ANTIGO, RETANGULO_DA_CAIXA, cabeNaCaixa, geometriaDaFala } from './Dialogo';
 
 const AREA_DO_CANVAS = CANVAS.largura * CANVAS.altura;
 
@@ -65,7 +65,11 @@ function nome(h: HotspotEmCena): string {
 }
 
 function interceptados(caixa: Retangulo | typeof RETANGULO_DA_CAIXA): readonly HotspotEmCena[] {
-  return TODOS.filter((h) => intersectam(h.retangulo, caixa as Retangulo));
+  return TODOS.filter((h) => {
+    if (caixa !== RETANGULO_DA_CAIXA) return intersectam(h.retangulo, caixa as Retangulo);
+    const g = geometriaDaFala(h.cena.lugarId);
+    return intersectam(h.retangulo, { esquerda: g.esquerda, direita: g.esquerda + g.largura, topo: g.topo, base: g.topo + g.altura });
+  });
 }
 
 /** Quanto da área do hotspot a caixa cobre, em %. */
@@ -80,6 +84,9 @@ const NOVOS = interceptados(RETANGULO_DA_CAIXA);
 const ANTIGOS = interceptados(RETANGULO_ANTIGO);
 
 describe('a caixa de diálogo, medida', () => {
+  it('preserva também monitor e televisão nas duas composições laterais', () => {
+    expect(NOVOS.map(nome)).toEqual([]);
+  });
   it('há hotspot para medir (o teste não passa por lista vazia)', () => {
     expect(TODOS.length).toBeGreaterThan(0);
     expect(Object.keys(DIALOGOS).length).toBeGreaterThan(0);

@@ -1,5 +1,59 @@
 # Bíblia de arte — apresentacao_jogo
 
+## Emenda de figurantes — revisão de 5 de outubro de 2026
+
+Os postos de notebook usam `figurante_digitando` e `notebook_obliquo`.
+A cabeça reutiliza `_cabeca`, com a franja baixa do elenco e pescoço curto:
+o perfil desenhado à parte alongava as feições e destoava dos demais.
+A tela mantém área visível; reduzi-la à aresta fazia o notebook parecer
+uma haste. O teclado precisa ficar atrás dos dedos. A camada
+`bracos_digitando` repete as mesmas coordenadas do corpo para
+resolver essa oclusão; acrescentar mãos em outra posição criava membros
+desligados. Conferir cada quadro ampliado, além da cena com elenco.
+
+Figurantes sentados usam anatomia própria em `figurante_sentado`: quadril
+sobre almofada, coxas horizontais, canelas abaixo do joelho e pés no piso.
+Não recortar a metade superior de um sprite em pé para sugerir esta pose.
+O café possui leitura e celular no sofá, e serviço de café no balcão;
+a festa troca essas atividades por conversa com copos. Produção acrescenta
+inspeção de amostra, e apresentação acrescenta credenciamento com prancheta.
+
+Cada quadro de atividade vem da regeneração do cenário completo. Alterar
+uma pose muda sua oclusão e pode revelar parede ou móvel: copiar somente
+pixels diferentes sobre o quadro anterior deixava buracos e membros soltos.
+Gestos têm ciclo de três segundos ou mais, com atrasos distintos. Conferir
+corpo, objeto e apoio juntos, com elenco e HUD, além de medir o chão.
+
+## Emenda de refinamento — 5 de outubro de 2026
+
+A revisão de acabamento unifica cada posto com seu móvel original. O primeiro
+quadro dos recortes ambientais é o cenário intacto; poses alternativas do café
+regeneram o fundo completo para não deixar remendos atrás do braço. O colega da
+outra área ocupa a borda traseira do bench, e a pasta de Ana é parte do sprite.
+Os robôs compartilham o passo e o período da esteira (304 px, oito segundos).
+Falas e pensamentos usam faixas laterais na produção e na apresentação para
+preservar as telas; sem retrato adicional nessas duas faixas. Na reflexão,
+os controles inferiores substituem temporariamente o inventário. A evolução
+aguarda o clique e revela imediatamente o figurino com movimento reduzido.
+
+`scripts/pixelart/refinamentos.py` compõe detalhes ambientais sobre os cenários
+e gera recortes animados completos. O arquivo `public/assets/ambientes/manifest.json`
+é a fonte única das posições: `VidaDoCenario` o consome diretamente. Ao animar
+um posto, alterar somente os pixels da mão preserva a planta à frente dele.
+Novas regiões precisam aparecer na folha `contato-ambientes.png` e na inspeção
+do navegador, onde existe o HUD e o elenco real.
+
+O mapa passa a ser um campus em miniatura. Os marcos arquitetônicos têm sua
+folha `contato-mapa.png`; a protagonista usa meia escala somente nesta tela,
+pois representa um peão sobre uma maquete. Caminhos derivam dos centros dos
+destinos da interface; não duplicá-los no PNG. Na cena, permanece a escala 4x.
+
+A evolução usa pose de punhos erguidos, insígnia geométrica e variações de Ana
+por nível (mangas, relógio, lapela e pin), preservando rosto e roupa ciano.
+Os braços industriais têm quatro posições com base fixa; taxa deste ciclo é
+ambiental, independente da caminhada. Movimento reduzido conserva o primeiro
+quadro legível. Cartões de capítulo usam a próxima cena sob véu escuro.
+
 ## Emenda de identidade — outubro de 2026
 
 A especificação «A Jornada do Estágio» substitui a reserva do roxo para o

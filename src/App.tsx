@@ -31,8 +31,9 @@ import { PausaBloco4 } from './ui/PausaBloco4';
 import { PuzzleAtivo } from './ui/puzzles';
 import { Revelacao } from './ui/Revelacao';
 import { Perguntas } from './ui/Perguntas';
+import { FasesDev } from './ui/FasesDev';
 import { EvolucaoAna, NivelAna } from './ui/NivelAna';
-import { camada, cores, espaco, tipografia } from './styles/tokens';
+import { camada, cores, espaco, progressao, tipografia } from './styles/tokens';
 
 /**
  * A última fase, derivada do conteúdo. Acrescentar fase não exige editar aqui —
@@ -76,6 +77,7 @@ export function App(): JSX.Element {
   const barraSaiu = useJogo((s) => s.revelacao.barraSaiu);
   const avancarBloco = useJogo((s) => s.avancarBloco);
   const reflexaoAtiva = useJogo(s => s.reflexaoAtiva);
+  const janelaAberta = useJogo(s => Boolean(s.dialogoAtivo || s.puzzleAberto || s.itensRecebidos.length || s.narracao));
   const bloco2 = useJogo(s => s.bloco === 2);
   const [historiaLida, setHistoriaLida] = useState(false);
 
@@ -95,6 +97,7 @@ export function App(): JSX.Element {
     return (
       <Canvas>
         <Abertura aoEntrar={() => setNaAbertura(false)} />
+        {import.meta.env.DEV ? <FasesDev aoTrocar={() => setNaAbertura(false)} /> : null}
       </Canvas>
     );
   }
@@ -108,9 +111,11 @@ export function App(): JSX.Element {
   const overlaysVisiveis = tela.tipo === 'cena' || tela.tipo === 'mapa';
 
   // A barra sai de cena depois da quarta conexão. O painel de skills fica.
-  const mostrarBarra = overlaysVisiveis && !barraSaiu;
+  // Durante o pensamento, a faixa inferior pertence aos dois controles de
+  // leitura; conservar os itens ali fazia botões esconderem seus rótulos.
+  const mostrarBarra = overlaysVisiveis && !barraSaiu && reflexaoAtiva === null;
   const mostrarAvanco =
-    overlaysVisiveis && blocoConcluido && bloco < ULTIMO_BLOCO && pausaBloco4 !== 'rodando';
+    overlaysVisiveis && !janelaAberta && !reflexaoAtiva && blocoConcluido && bloco < ULTIMO_BLOCO && pausaBloco4 !== 'rodando';
   const mostrarHistoria =
     mostrarAvanco && bloco2 && historiaApresentador.trim() !== '' && !historiaLida;
 
@@ -152,7 +157,7 @@ export function App(): JSX.Element {
           onClick={avancarBloco}
           style={{
             position: 'absolute',
-            right: espaco.margem,
+            right: espaco.margem + progressao.larguraHud + espaco.md,
             top: espaco.md,
             zIndex: camada.overlayPersistente + 1,
             minWidth: 300,
@@ -166,6 +171,7 @@ export function App(): JSX.Element {
       ) : null}
 
       {pausaBloco4 === 'rodando' ? <PausaBloco4 /> : null}
+      {import.meta.env.DEV ? <FasesDev aoTrocar={() => setHistoriaLida(false)} /> : null}
     </Canvas>
   );
 }

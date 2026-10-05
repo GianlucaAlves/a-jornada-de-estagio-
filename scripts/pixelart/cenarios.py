@@ -47,13 +47,14 @@ from __future__ import annotations
 from collections.abc import Callable
 from pathlib import Path
 
-from . import props, personagens
+from . import props, personagens, refinamentos
 from .nucleo import (
     CENA,
     Grade,
     contornar,
     escrever_folha_de_contato,
     escrever_sprite,
+    escrever_tira,
 )
 from .paleta import VAZIO, mais_claro, mais_escuro
 
@@ -308,7 +309,7 @@ def _feixe_de_projetor(g: Grade, x_lente: int, y_lente: int, x_tela: int, y0: in
 # ----------------------------------------------------------------- cena 1/6
 
 
-def escritorio() -> Grade:
+def escritorio(*, quadro: int = 0) -> Grade:
     """Base recorrente (Blocos 1, 3 e 5): baias, muitas telas, janela ao poente.
 
     DOIS RETÂNGULOS RESERVADOS, lidos de `bloco1.ts`/`bloco5.ts` e convertidos
@@ -390,11 +391,9 @@ def escritorio() -> Grade:
 
     # Colega no posto do fundo: a mesa esconde o corpo e as duas telas ficam
     # visivelmente ao alcance de alguém, sem criar outro hotspot.
-    _assentar(g, 356, 178, personagens.figurante_cafe(variacao=0), sombra=False)
+    # O posto sentado é composto ao final, junto da sua animação.
     # mesa do fundo sob a janela, com duas telas: a identidade "muitas telas"
-    _assentar(g, 356, 198, props.mesa_de_trabalho(120, 36))
-    _assentar(g, 324, 164, props.monitor(32, 26, "grafico"), sombra=False)
-    _assentar(g, 388, 164, props.monitor(32, 26, "log"), sombra=False)
+    # Mesa, colega e telas vêm de uma composição única em refinamentos.posto.
     # reflexo DUAS filas abaixo do topo: em cima da fila de realce do tampo ele
     # se intercala com o tom claro e o resultado lê como tampo salpicado de
     # dourado, não como brilho de tela.
@@ -432,6 +431,7 @@ def escritorio() -> Grade:
     _aresta_de_luz(g, 0, 232, 164, 10, 2)
     _assentar(g, 450, 274, props.vaso_planta_alta(94), sombra=False)
     _escurecer(g, 428, 178, 52, 92, 1)
+    refinamentos.decorar(g, 'escritorio', quadro)
     _vinheta(g)
     return g
 
@@ -439,7 +439,7 @@ def escritorio() -> Grade:
 # ----------------------------------------------------------------- cena 2/6
 
 
-def cafezinho(*, festa: bool = False) -> Grade:
+def cafezinho(*, festa: bool = False, gesto: bool = False) -> Grade:
     """A cena quente do jogo: madeira dominante, balcão, luz de fim de tarde.
 
     Aqui a proporção da bíblia §3 é invertida de propósito — madeira ~45% da
@@ -590,7 +590,9 @@ def cafezinho(*, festa: bool = False) -> Grade:
     # Uma pessoa serve café atrás do balcão. A bancada entra depois e cobre a
     # parte inferior do corpo; o copo e a máquina ficam ao alcance da mão.
     if not festa:
-        _assentar(g, 105, 190, personagens.figurante_cafe(variacao=1, gesto=True), sombra=False)
+        # Fora das paradas x=21% e x=25%: ali a cabeça de Ana escondia o
+        # figurante inteiro quando ela chegava à máquina ou falava com Bianca.
+        g.colar(155, 107, personagens.figurante_servindo(quadro=int(gesto)))
 
     # --- balcão. A frente de interação moveu `maquina-cafe` para (77,189), que é
     # CHÃO e não bancada: o retângulo x 57..97 / y 141..189 ficou reservado e o
@@ -615,8 +617,8 @@ def cafezinho(*, festa: bool = False) -> Grade:
     else:
         _assentar(g, 132, 150, props.pilha_de_papel(11, 6), sombra=False)
         _assentar(g, 150, 150, props.caneca(props.VERMELHO[3], vapor=True), sombra=False)
-        _assentar(g, 166, 150, props.caneca(props.NEUTRO[6]), sombra=False)
-        _assentar(g, 188, 150, props.vaso_planta_baixa(20), sombra=False)
+        _assentar(g, 188, 150, props.caneca(props.NEUTRO[6]), sombra=False)
+        _assentar(g, 166, 150, props.vaso_planta_baixa(20), sombra=False)
         _assentar(g, 214, 150, props.caneca(props.MADEIRA[4]), sombra=False)
         _assentar(g, 230, 150, props.garrafa_agua(15), sombra=False)
         _assentar(g, 242, 150, props.garrafa_agua(13), sombra=False)
@@ -663,6 +665,7 @@ def cafezinho(*, festa: bool = False) -> Grade:
     _aresta_de_luz(g, 322, 232, 158, 12, 2)
     _assentar(g, 44, 282, props.banqueta(46), sombra=False)
     _escurecer(g, 28, 236, 34, 34, 1)
+    refinamentos.decorar(g, 'cafezinho-festa' if festa else 'cafezinho', int(gesto))
     _vinheta(g)
     return g
 
@@ -1011,7 +1014,7 @@ def _prototipo() -> Grade:
 # --------------------------------------------------- cena nova: fase 3 (v2)
 
 
-def linha_producao() -> Grade:
+def linha_producao(*, quadro: int = 0) -> Grade:
     """Linha de montagem de rádios de telecom, com robôs — e UMA etapa diferente.
 
     Substitui o Laboratório (ADR-009). O tema da fase é PROTAGONISMO: a
@@ -1210,6 +1213,7 @@ def linha_producao() -> Grade:
     _assentar(g, 430, 288, props.celula_de_processo(132, 56, status="ok"), sombra=False)
     _escurecer(g, 364, 230, 116, 40, 2)
     _aresta_de_luz(g, 364, 230, 116, 12, 2)
+    refinamentos.decorar(g, 'linha-producao', quadro)
     _vinheta(g)
     return g
 
@@ -1217,7 +1221,7 @@ def linha_producao() -> Grade:
 # --------------------------------------------------- cena nova: fase 5 (v2)
 
 
-def outra_area() -> Grade:
+def outra_area(*, quadro: int = 0) -> Grade:
     """Outra área da empresa: andar diferente, outro time, OUTRA LUZ (ADR-031).
 
     A fase 5 acontece aqui porque a Ana se deslocou para conversar com alguém de
@@ -1414,7 +1418,7 @@ def outra_area() -> Grade:
     # notebook fechado lê como balcão; o mesmo tampo com dois biombos de
     # bancada, três monitores e duas cadeiras lê como dois postos de trabalho —
     # e "posto de trabalho de verdade" era o que faltava.
-    _assentar(g, 354, 171, personagens.figurante_cafe(variacao=2), sombra=False)
+    # Posto sentado substitui a pessoa em pé atrás da divisória.
     _assentar(g, 300, 170, props.mesa_de_reuniao(196, 40, props.MADEIRA))
     # O tampo tem 196x28 e saiu como uma LAJE marrom no meio da imagem: os três
     # veios que `mesa_de_reuniao` desenha não bastam nessa largura. Duas passadas
@@ -1426,7 +1430,7 @@ def outra_area() -> Grade:
     _assentar(g, 224, 130, props.monitor(32, 26, "grafico"), sombra=False)
     _assentar(g, 262, 130, props.monitor(30, 24, "log"), sombra=False)
     _assentar(g, 296, 130, props.notebook(26, 18, "desktop"), sombra=False)
-    _assentar(g, 384, 130, props.monitor(28, 22, "dash"), sombra=False)
+    # O notebook do colega ocupa este apoio; uma tela anterior criava duplicata.
     props.reflexo_de_tela(g, 206, 133, 40, 3, props.TELA[1])
     _assentar(g, 212, 148, props.garrafa_agua(14), sombra=False)
     _assentar(g, 232, 150, props.telefone(15, 8), sombra=False)
@@ -1454,6 +1458,7 @@ def outra_area() -> Grade:
     _assentar(g, 420, 284, props.sofa_pequeno(130, 48, props.AZUL), sombra=False)
     _escurecer(g, 354, 234, 126, 36, 2)
     _aresta_de_luz(g, 354, 234, 126, 12, 2)
+    refinamentos.decorar(g, 'outra-area', quadro)
     _vinheta(g)
     return g
 
@@ -1461,7 +1466,7 @@ def outra_area() -> Grade:
 # ----------------------------------------------------------------- cena 6/6
 
 
-def sala_reunioes() -> Grade:
+def sala_reunioes(*, quadro: int = 0) -> Grade:
     """A Sala de Reuniões onde acontece a INNOVATION WEEK (ADR-026).
 
     Simetria aqui é composição, não espelho: TV no centro exato (x=240), mesa
@@ -1610,7 +1615,8 @@ def sala_reunioes() -> Grade:
     # valor médio contra a parede fria `5`/`4` é a única combinação desta paleta
     # que diz "tecido de evento" sem virar lâmpada.
     # Entre o cabeçalho e a TV: o tecido não passa atrás do título da sala.
-    g.colar(90, 37, props.faixa_pendurada(300, 14, props.VERMELHO))
+    # Centralizada sobre a TV e com a ponta direita antes da coluna do HUD.
+    g.colar(120, 37, props.faixa_pendurada(240, 14, props.VERMELHO))
     # O BANHO DE PAREDE VEM ANTES DOS PÔSTERES, e isso é correção de olhar.
     # Estava depois, e a `poca_de_luz` aclara o char que encontra — então ela
     # salpicava laranja EM CIMA dos pôsteres, o que lia como mancha no papel em
@@ -1636,6 +1642,7 @@ def sala_reunioes() -> Grade:
     # A plateia e suas cadeiras são camadas da UI, não pixels do cenário. Assim
     # o piso continua legível, e as cadeiras permanecem quando as pessoas saem.
     # A faixa opaca antiga escondia toda a frente como uma parede preta.
+    refinamentos.decorar(g, 'sala-reunioes', quadro)
     _vinheta(g)
     return g
 
@@ -1710,151 +1717,7 @@ o mesmo piso, logo a mesma limitação.
 
 
 def mapa() -> Grade:
-    """Fundo do mapa hub-and-spoke. NÃO é cena: é diagrama.
-
-    `src/ui/Mapa.tsx` desenha seis painéis OPACOS de 300x~250 px de canvas por
-    cima desta imagem, mais o painel de skills à direita e a barra de itens
-    embaixo. Em px de arte isso cobre quase tudo entre x 16..367 e y 41..217.
-    Então detalhe fino no meio é trabalho jogado fora: o que precisa ler é a
-    borda, a faixa do topo e as frestas entre os painéis.
-
-    Daí o desenho: o prédio visto de fora à noite, escuro e de baixo contraste,
-    com duas lajes exatamente nas alturas das duas fileiras de slot e janelas
-    quentes como único brilho. Escuro também por contraste: o painel de slot é
-    claro, e slot claro sobre fundo claro sumiria.
-
-    ERRO JÁ COMETIDO E CORRIGIDO AQUI: a primeira versão distribuía as janelas
-    numa grade perfeita de passo fixo e o mapa saiu como uma tabela de pontos —
-    lia como planilha, não como prédio. Agora a fachada tem colunas de largura
-    variável, lacunas e três estados de janela sorteados por série determinística.
-    """
-    g = Grade(LARGURA, ALTURA, "1")
-    proximo = props.serie(20260929)
-
-    # céu de noite + estrelas
-    g.retangulo(0, 0, LARGURA, ALTURA, "1")
-    # Bandas ALTERNADAS até y=242 (a calçada), e não uma banda de `2` seguida de
-    # duas de `1` até y=60. O prédio é colado depois e cobre tudo entre x=40 e
-    # x=439, então as bandas só aparecem nas duas faixas de 40px nas laterais — e
-    # era ali que sobrava o último chapado da arte: 41x41 px de `1` liso à direita
-    # do prédio. Alternar `2` e `1` é o que faz cada junta EXISTIR (junta entre
-    # dois chars iguais não é desenhada, ver `parede_pintada`), e com bandas de 34
-    # linhas nenhum trecho de tom único passa de 31. Nas laterais isso lê como
-    # camada de neblina, que é o que um céu noturno pede de graça.
-    props.parede_pintada(g, 0, 242, "2121212", sujeira=True)
-    for _ in range(40):
-        g.ponto(proximo(LARGURA), proximo(46), "4")
-
-    # massa do prédio, com recuo no topo para não ser um tijolo
-    g.retangulo(40, 26, 400, 216, "2")
-    g.dither(40, 26, 400, 216, "2", "a", "esparso")
-    g.retangulo(96, 14, 288, 12, "2")
-    g.dither(96, 14, 288, 12, "2", "a", "esparso")
-    g.linha_h(96, 14, 288, "4")
-    g.linha_h(40, 26, 400, "4")
-    g.linha_v(40, 26, 216, "3")
-    g.linha_v(439, 26, 216, "1")
-    for x in (150, 300):  # caixas de casa de máquinas no telhado
-        g.retangulo(x, 6, 26, 9, "2")
-        g.linha_h(x, 6, 26, "4")
-        g.linha_v(x + 25, 6, 9, "1")
-    g.linha_v(330, 0, 7, "3")  # antena
-    g.ponto(330, 0, "v")
-
-    # duas lajes, nas alturas das duas fileiras de slot do Mapa.tsx
-    for y in (60, 150):
-        g.retangulo(42, y, 396, 7, "3")
-        g.dither(42, y + 1, 396, 5, "3", "2", "xadrez")
-        g.linha_h(42, y, 396, "5")
-        g.linha_h(42, y + 6, 396, "1")
-
-    # núcleo de circulação no eixo, com luz quente: é o "hub" do hub-and-spoke
-    g.retangulo(228, 14, 26, 228, "2")
-    g.linha_v(228, 14, 228, "4")
-    g.linha_v(253, 14, 228, "1")
-    for y in range(20, 236, 11):
-        g.retangulo(233, y, 16, 6, "u")
-        g.linha_h(233, y, 16, "v")
-        g.dither(234, y + 2, 14, 3, "u", "v", "xadrez")
-
-    # fachada: colunas de largura variável, com lacunas e três estados de janela
-    x = 48
-    while x < 432:
-        larg = 6 + proximo(4)
-        if 222 < x < 258:  # o núcleo não tem fachada
-            x = 258
-            continue
-        if proximo(7) == 0:  # pilar cego
-            x += larg + 3 + proximo(5)
-            continue
-        y = 32
-        while y < 236:
-            alto = 4 + proximo(3)
-            sorte = proximo(10)
-            # 20% quentes, 10% ciano, 70% apagadas. Com 40% acesas (a primeira
-            # dosagem) a fachada virou árvore de natal: o calor só é calor se a
-            # maioria das janelas estiver escura.
-            if sorte < 2:
-                g.retangulo(x, y, larg, alto, "v")
-                g.linha_h(x, y, larg, "w")
-            elif sorte == 2:
-                g.retangulo(x, y, larg, alto, props.TELA[1])
-                g.linha_h(x, y, larg, props.TELA[2])
-            else:
-                g.retangulo(x, y, larg, alto, "1")
-                g.linha_h(x, y, larg, "2")
-            g.linha_v(x + larg - 1, y, alto, "1")
-            y += alto + 4 + proximo(4)
-        x += larg + 3 + proximo(6)
-
-    # térreo: marquise, vão de entrada aceso e calçada
-    g.retangulo(40, 218, 400, 4, "3")
-    g.linha_h(40, 218, 400, "5")
-    g.retangulo(208, 222, 66, 20, "u")
-    props.parede_pintada(g, 222, 242, "uvw", x0=208, x1=274, sujeira=False)
-    g.moldura(208, 222, 66, 20, "3")
-    g.retangulo(30, 242, 420, 6, "2")
-    g.linha_h(30, 242, 420, "3")
-    props.poca_de_luz(g, 241, 248, 52, 16, quente="x")
-    props.sombra_de_contato(g, 240, 248, 420, altura=2, forca=1)
-
-    # A fachada não explicava por que havia cartões de lugares sobre ela. A
-    # planta abaixo assume o primeiro plano: corredor central e cinco alas
-    # distinguíveis continuam legíveis nas frestas entre os cartões opacos.
-    g.retangulo(0, 0, LARGURA, ALTURA, "2")
-    props.parede_pintada(g, 0, ALTURA, "23232", sujeira=False)
-    g.retangulo(20, 108, 440, 54, "4")
-    g.linha_h(20, 108, 440, "5")
-    g.linha_h(20, 161, 440, "1")
-    g.retangulo(214, 18, 52, 234, "4")
-    g.linha_v(214, 18, 234, "5")
-    g.linha_v(265, 18, 234, "1")
-    for y in range(120, 158, 10):
-        g.retangulo(224, y, 32, 3, "5")
-
-    salas = ((22, 22, 174, 76), (284, 22, 174, 76),
-             (22, 178, 174, 70), (284, 178, 174, 70),
-             (174, 178, 132, 70))
-    for x, y, largura, altura in salas:
-        g.retangulo(x, y, largura, altura, "3")
-        g.retangulo(x + 4, y + 4, largura - 8, altura - 8, "2")
-        g.moldura(x, y, largura, altura, "5")
-    # Mesas, balcão e mesa de reunião dão leitura de escritório sem competir
-    # com os cartões de lugar que a interface posiciona por cima.
-    for x in (40, 94, 302, 356):
-        g.retangulo(x, 40, 34, 20, "5")
-        g.linha_h(x + 4, 44, 18, "u")
-        g.retangulo(x + 10, 62, 12, 8, "1")
-    g.retangulo(40, 194, 62, 18, "5")
-    g.retangulo(44, 197, 12, 9, "u")
-    g.retangulo(310, 196, 112, 24, "5")
-    for x in (322, 356, 390):
-        g.retangulo(x, 186, 12, 8, "1")
-        g.retangulo(x, 222, 12, 8, "1")
-    g.retangulo(186, 194, 108, 18, "5")
-    g.linha_h(194, 198, 92, "u")
-    _vinheta(g)
-    return g
+    return refinamentos.campus()
 
 
 # ------------------------------------------------- objetos interativos (PNG)
@@ -2023,13 +1886,26 @@ def gerar(destino: Path) -> list[tuple[str, Grade]]:
     for nome, grade in cenas:
         escrever_sprite(destino / f"{nome}.png", grade)
 
+    refinamentos.ambientes(destino.parent / "ambientes", cenas)
     grade_mapa = mapa()
     escrever_sprite(destino.parent / "mapa" / "mapa.png", grade_mapa)
+    mapa_ativo = refinamentos.campus_em_movimento(grade_mapa)
+    escrever_tira(destino.parent / 'mapa' / 'mapa-idle.png', [grade_mapa, mapa_ativo])
+    escrever_folha_de_contato(_RAIZ_DO_REPO / 'docs/arte/contato-mapa-ambiente.png',
+                             [('campus repouso', grade_mapa), ('campus ativo', mapa_ativo)], por_fila=1, escala=2)
+    marcos = [(lugar, refinamentos.marco(lugar)) for lugar in
+              ('escritorio', 'cafezinho', 'linha-producao', 'sala-reunioes', 'outra-area')]
+    for lugar, marco in marcos:
+        escrever_sprite(destino.parent / 'mapa' / f'{lugar}.png', marco)
+    escrever_folha_de_contato(_RAIZ_DO_REPO / 'docs/arte/contato-mapa.png', marcos, por_fila=5, escala=4)
 
     objetos = _objetos()
     pasta_objetos = destino.parent / "objetos"
     for nome, grade in objetos:
         escrever_sprite(pasta_objetos / f"{nome}.png", grade)
+    ciclo = [_objeto('braco-robotico', props.braco_robotico(46, fase=f))[1] for f in range(4)]
+    escrever_tira(pasta_objetos / 'braco-robotico-andando.png', ciclo)
+    objetos.extend((f'robô quadro {f}', g) for f, g in enumerate(ciclo))
 
     folha_objetos = _RAIZ_DO_REPO / "docs" / "arte" / "contato-objetos.png"
     escrever_folha_de_contato(folha_objetos, objetos, por_fila=5, escala=3)

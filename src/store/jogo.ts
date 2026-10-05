@@ -591,7 +591,9 @@ export const useJogo = create<Jogo>((set, get) => {
         !s.hotspotsFeitos.includes(`abertura:${lugarId}:${s.bloco}`)
       ) {
         set((st) => ({
-          narracao: cena.aberturaTexto ?? null,
+          // A reflexão já apresenta a época e o contexto. Conservar apenas a
+          // visita no save evita uma segunda introdução depois do monólogo.
+          narracao: null,
           hotspotsFeitos: [...st.hotspotsFeitos, `abertura:${lugarId}:${st.bloco}`],
         }));
       }
@@ -629,6 +631,16 @@ export const useJogo = create<Jogo>((set, get) => {
       const h = cena?.hotspots.find((x) => x.id === hotspotId);
       if (!h || !cena) return;
       if (s.lugares[cena.lugarId] === 'concluido') return;
+
+      // O item desbloqueia o equipamento uma vez. Cancelar o minigame não
+      // desfaz esse acesso nem exige consumir novamente o item já entregue.
+      const puzzleDestravado = h.efeitosComItem?.find(
+        efeito => efeito.tipo === 'abrirPuzzle' && s.puzzles[efeito.puzzleId] !== 'fechado',
+      );
+      if (!s.itemSelecionado && puzzleDestravado?.tipo === 'abrirPuzzle') {
+        aplicar([puzzleDestravado]);
+        return;
+      }
 
       const bloqueio = hotspotBloqueado(h);
       if (bloqueio !== null) {

@@ -20,6 +20,7 @@ describe('entrada e retomada dos monólogos', () => {
     for (let i = 0; i < dados.falas.length; i++) useJogo.getState().avancarReflexao();
     expect(useJogo.getState().reflexaoAtiva).toBeNull();
     expect(useJogo.getState().reflexaoVista[bloco]).toBe(true);
+    expect(useJogo.getState().narracao).toBeNull();
     useJogo.getState().voltarAoMapa();
     useJogo.getState().entrarNoLugar(dados.lugarId);
     useJogo.getState().iniciarReflexao();

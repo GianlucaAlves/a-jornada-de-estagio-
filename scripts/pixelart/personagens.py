@@ -53,6 +53,7 @@ from .nucleo import (
 )
 from .paleta import CONTORNO, VAZIO
 from .props import MADEIRA, NEUTRO
+from . import props
 
 # --------------------------------------------------------------- geometria
 
@@ -1313,6 +1314,112 @@ def figurante_cafe(*, variacao: int = 0, gesto: bool = False) -> Grade:
     return figura
 
 
+def figurante_sentado(*, variacao: int = 0, atividade: str = 'teclado', quadro: int = 0) -> Grade:
+    """Quadril sobre o assento, coxas horizontais e pernas abaixo dos joelhos.
+
+    O corpo sentado tem proporções próprias: cortar o corpo em pé deixava
+    antebraços sem cotovelo e a impressão de uma cabeça colada à mesa.
+    """
+    g = Grade(50, 68)
+    pele = ('media', 'escura', 'clara')[variacao % 3]
+    base, sombra, _ = _PELES[pele]
+    _cabeca(g, 3, pele=pele, cabelo='P' if variacao != 1 else 'R',
+            luz_cabelo='Q', volume=17, comprimento=5 if variacao == 0 else 0)
+    roupa = ('5', '4', '3') if atividade == 'teclado' else ('e', 'd', 'c') if variacao % 2 else ('p', 'o', 'n')
+    _bloco(g, ((24, 39, 18, 32),), *roupa)
+    g.linha_h(18, 40, 15, '2')
+    g.retangulo(22, 24, 6, 3, '7')
+    # A coxa dobra no assento; a canela é vertical e o sapato toca o piso.
+    _bloco(g, ((41, 46, 18, 37), (47, 62, 29, 33), (47, 61, 36, 40)), '5', '3', '2')
+    g.retangulo(28, 63, 8, 3, '2')
+    g.retangulo(35, 62, 9, 3, '2')
+    g.linha_h(28, 63, 7, '4')
+    g.linha_h(35, 62, 8, '4')
+    _bloco(g, ((26, 35, 13, 16), (26, 34, 35, 38)), *roupa)
+    if atividade == 'teclado':
+        _bloco(g, ((36, 39, 14, 25), (35, 38, 36, 45)), *roupa)
+        g.retangulo(25, 37 - quadro, 5, 3, base)
+        g.linha_h(25, 39 - quadro, 5, sombra)
+        g.retangulo(45, 36 + quadro, 4, 3, base)
+    elif atividade == 'livro':
+        g.colar(14, 37, props.caderno_aberto(25, 14))
+        g.retangulo(13, 37, 4, 5, base)
+        g.retangulo(38 - quadro, 40, 4, 5, base)
+        if quadro:
+            g.linha_v(29, 39, 9, '8')
+    elif atividade == 'celular':
+        g.retangulo(15, 35, 11, 4, roupa[1])
+        g.retangulo(26, 32, 5, 6, base)
+        g.retangulo(29, 28, 7, 11, '2')
+        g.retangulo(30, 29, 5, 8, 'J')
+        g.linha_h(31, 30 + quadro, 3, 'M')
+        g.retangulo(36, 38, 4, 5, base)
+    else:
+        # Conversa na festa: um copo apoiado na mão, outro braço repousa no colo.
+        g.retangulo(14, 35, 12, 4, roupa[1])
+        g.retangulo(25, 32 - quadro, 5, 6, base)
+        g.retangulo(25, 28 - quadro, 6, 7, '7')
+        g.linha_h(26, 29 - quadro, 4, 'x')
+        g.retangulo(36, 39, 4, 5, base)
+    return contornar(g)
+
+
+def figurante_digitando(*, quadro: int = 0) -> Grade:
+    """Cabeça canônica inclinada sobre o teclado, com corpo sentado.
+
+    O perfil redesenhado alongava o rosto e perdia a identidade do elenco.
+    Reutilizar a cabeça e a franja baixa preserva feições e proporções; a
+    inclinação nasce do deslocamento sobre o ombro, sem esticar o pescoço.
+    """
+    g = Grade(56, 68)
+    cabeca = Grade(50, 32)
+    _cabeca(cabeca, 3, pele='media', cabelo='P', luz_cabelo='Q',
+            volume=15, comprimento=3, franja_baixa=True)
+    g.colar(2, 0, cabeca)
+    _bloco(g, ((26, 29, 20, 33), (30, 40, 20, 32)), '5', '4', '3')
+    g.linha_h(20, 41, 13, '2')
+    g.retangulo(26, 26, 5, 2, '7')
+    g.linha_v(30, 29, 10, '5')
+    _bloco(g, ((42, 47, 19, 37), (48, 62, 33, 37)), '4', '3', '2')
+    g.retangulo(32, 63, 10, 3, '2')
+    g.linha_h(32, 63, 9, '4')
+    g.colar(0, 0, bracos_digitando(quadro=quadro))
+    return contornar(g)
+
+
+def bracos_digitando(*, quadro: int = 0) -> Grade:
+    """Camada dianteira dos braços: teclado atrás das mãos, mesa sob elas."""
+    g = Grade(56, 68)
+    # Braço distante sobre a mesa, braço próximo com cotovelo abaixo da
+    # manga. O vão separa braço e peito até a dobra; a mão não nasce no torso.
+    _bloco(g, ((28, 35, 34, 37), (36, 39, 35, 42)), '5', '4', '3')
+    g.retangulo(42, 39 + quadro, 4, 3, 'T')
+    _bloco(g, ((28, 36, 16, 19), (37, 40, 17, 20), (41, 43, 20, 36)), '5', '4', '3')
+    g.retangulo(36, 42 - quadro, 5, 3, 't')
+    g.linha_h(36, 44 - quadro, 5, 'T')
+    return contornar(g)
+
+
+def figurante_servindo(*, quadro: int = 0) -> Grade:
+    """A mão segura a alça e o bico aponta para a xícara sobre o balcão."""
+    g = Grade(50, 56)
+    _cabeca(g, 3, pele='escura', cabelo='R', luz_cabelo='Q', volume=17)
+    _bloco(g, ((24, 43, 18, 32), (26, 37, 13, 16), (26, 32, 35, 38)), 'i', 'g', 'f')
+    g.retangulo(21, 28, 9, 17, '6')
+    g.linha_v(22, 29, 15, '8')
+    g.retangulo(35, 32, 9, 4, 'g')
+    g.retangulo(41, 33, 4, 3, 'k')
+    g.retangulo(42, 28, 7, 6, '2')
+    g.linha_h(43, 28, 5, '7')
+    g.retangulo(46, 33, 3, 4, '5')
+    if quadro:
+        g.linha_v(48, 37, 2, 'p')
+    g.retangulo(43, 38, 6, 5, '7')
+    g.linha_h(44, 38, 4, '8')
+    g.retangulo(14, 38, 4, 5, 'k')
+    return contornar(g)
+
+
 # --------------------------------------------------------------- animação
 # Emenda registrada na bíblia §6.1: a janela de 600–1200ms do spec vale para
 # transição e entrada de elemento, NÃO para taxa de quadro de sprite. O CSS que
@@ -1419,6 +1526,47 @@ def _conferir_elenco(pecas: list[tuple[str, Grade]]) -> None:
         assinaturas[chave] = nome
 
 
+def _punhos_de_conquista(g: Grade, c: Corpo) -> None:
+    pele, sombra, _ = _PELES[c.pele]
+    for x in (8, 39):
+        g.retangulo(x, 5, 4, 5, pele)
+        g.linha_h(x, 9, 4, sombra)
+    _cracha_da_ana(g, c)
+
+
+def _visual_do_nivel(nivel: int) -> Corpo:
+    base = (ANA_ENCOLHIDA, ANA_NEUTRA, ANA_NEUTRA, ANA_CONFIANTE,
+            ANA_CONFIANTE, ANA_CONFIANTE)[nivel - 1]
+    def detalhes(g: Grade, c: Corpo) -> None:
+        if base.extra:
+            base.extra(g, c)
+        if nivel >= 3:
+            # Relógio de pulso e costura clara tornam a maturidade visível
+            # sem antecipar a contratação nem trocar a roupa ciano.
+            g.retangulo(32, 37, 3, 2, 'K')
+            g.ponto(33, 37, '8')
+        if nivel >= 4:
+            g.linha_v(21, 28, 12, 'H')
+            g.linha_v(29, 28, 12, 'L')
+        if nivel >= 5:
+            g.retangulo(28, 29, 2, 3, 'y')
+        if nivel == 6:
+            g.linha_h(27, 33, 3, 'z')
+        if nivel in (3, 5):
+            # Pasta proporcional e presa junto à mão, inclusive na caminhada.
+            # Um PNG de item sobreposto na UI atravessava o braço e a perna.
+            g.retangulo(17, 42, 12, 17, 'K')
+            g.retangulo(18, 43, 10, 15, '6')
+            g.retangulo(19, 45, 8, 11, '8')
+            g.linha_h(21, 48, 5, '4')
+            g.linha_h(21, 51, 5, '4')
+            pele, sombra, _ = _PELES[c.pele]
+            g.retangulo(16, 39, 4, 4, pele)
+            g.linha_h(17, 42, 3, sombra)
+    return replace(base, nome=f'ana-nivel-{nivel}', manga=2 if nivel in (2, 3) else base.manga,
+                   extra=detalhes)
+
+
 def gerar(destino: Path) -> list[tuple[str, Grade]]:
     """Escreve os PNG em `destino` e devolve (nome, grade) para a folha.
 
@@ -1458,6 +1606,23 @@ def gerar(destino: Path) -> list[tuple[str, Grade]]:
             registrar(f"{c.nome}-andando q{i}", q)
 
         pecas.append((c.nome, parado))
+
+    # Punhos erguidos e base aberta distinguem conquista de levantar um item.
+    celebrando = replace(ANA_CONFIANTE, nome="ana-celebrando",
+                        braco=((22, 27, 15, 17), (16, 23, 11, 13), (9, 17, 9, 11)),
+                        braco_dir=((22, 27, 33, 35), (16, 23, 37, 39), (9, 17, 39, 41)),
+                        mao=False, extra=_punhos_de_conquista)
+    conquista = _pronto(celebrando)
+    avisos.extend(verificar_sprite('ana-celebrando', conquista, chao=CHAO))
+    escrever_sprite(destino / "ana-celebrando.png", conquista)
+    pecas.append(("ana-celebrando", conquista))
+    for nivel in range(1, 7):
+        visual = _visual_do_nivel(nivel)
+        registrar(visual.nome, _pronto(visual))
+        escrever_sprite(destino / f'{visual.nome}.png', _pronto(visual))
+        escrever_tira(destino / f'{visual.nome}-idle.png', _tira_idle(visual))
+        escrever_tira(destino / f'{visual.nome}-andando.png', _tira_andando(visual))
+        pecas.append((visual.nome, _pronto(visual)))
 
     recebendo = _pronto(ANA_RECEBENDO_ITEM)
     registrar(ANA_RECEBENDO_ITEM.nome, recebendo)

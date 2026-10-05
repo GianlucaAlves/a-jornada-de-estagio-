@@ -1,0 +1,92 @@
+[
+  {
+    "cenario": "escritorio",
+    "recorte": 0,
+    "bytesAlterados": 1776
+  },
+  {
+    "cenario": "escritorio",
+    "recorte": 1,
+    "bytesAlterados": 192
+  },
+  {
+    "cenario": "escritorio",
+    "recorte": 2,
+    "bytesAlterados": 96
+  },
+  {
+    "cenario": "cafezinho",
+    "recorte": 0,
+    "bytesAlterados": 96
+  },
+  {
+    "cenario": "cafezinho",
+    "recorte": 1,
+    "bytesAlterados": 1152
+  },
+  {
+    "cenario": "cafezinho",
+    "recorte": 2,
+    "bytesAlterados": 864
+  },
+  {
+    "cenario": "cafezinho-festa",
+    "recorte": 0,
+    "bytesAlterados": 3504
+  },
+  {
+    "cenario": "cafezinho-festa",
+    "recorte": 1,
+    "bytesAlterados": 2400
+  },
+  {
+    "cenario": "cafezinho-festa",
+    "recorte": 2,
+    "bytesAlterados": 864
+  },
+  {
+    "cenario": "linha-producao",
+    "recorte": 0,
+    "bytesAlterados": 1488
+  },
+  {
+    "cenario": "linha-producao",
+    "recorte": 1,
+    "bytesAlterados": 96
+  },
+  {
+    "cenario": "linha-producao",
+    "recorte": 2,
+    "bytesAlterados": 192
+  },
+  {
+    "cenario": "sala-reunioes",
+    "recorte": 0,
+    "bytesAlterados": 240
+  },
+  {
+    "cenario": "sala-reunioes",
+    "recorte": 1,
+    "bytesAlterados": 192
+  },
+  {
+    "cenario": "sala-reunioes",
+    "recorte": 2,
+    "bytesAlterados": 720
+  },
+  {
+    "cenario": "outra-area",
+    "recorte": 0,
+    "bytesAlterados": 1776
+  },
+  {
+    "cenario": "outra-area",
+    "recorte": 1,
+    "bytesAlterados": 480
+  },
+  {
+    "cenario": "outra-area",
+    "recorte": 2,
+    "bytesAlterados": 192
+  }
+]

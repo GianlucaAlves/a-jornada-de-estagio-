@@ -13,6 +13,7 @@ import { CARTOES } from '../domain/content';
 import type { BlocoId, CartaoTransicao } from '../domain/types';
 import { useJogo } from '../store/jogo';
 import { CANVAS, camada, cores, espaco, tipografia } from '../styles/tokens';
+import { Imagem } from './Imagem';
 
 /**
  * O que o cartão diz, por fase. Pura, e exportada para ser testável.
@@ -111,7 +112,7 @@ export function CartaoDeTransicao(): JSX.Element | null {
   return (
     <button
       type="button"
-      className="jogo-surgir"
+      className="jogo-surgir jogo-cartao-capitulo"
       aria-label={
         apresentador === ''
           ? `Entrar no bloco ${bloco}: ${tempo} ${titulo}. Clique para continuar`
@@ -139,6 +140,9 @@ export function CartaoDeTransicao(): JSX.Element | null {
         cursor: travado ? 'default' : 'pointer',
       }}
     >
+      <Imagem id={`cenario-${({ 1: 'escritorio', 2: 'cafezinho', 3: 'linha-producao', 4: 'sala-reunioes', 5: 'outra-area', 6: 'cafezinho-festa' } as const)[bloco]}`} rotulo="" largura={CANVAS.largura} altura={CANVAS.altura} decorativo mostrarRotulo={false} style={{ position: 'absolute', inset: 0 }} />
+      <div aria-hidden style={{ position: 'absolute', inset: 0, background: cores.veu }} />
+      <style>{`.jogo-cartao-capitulo > span { position: relative; }`}</style>
       <span
         aria-hidden
         style={{

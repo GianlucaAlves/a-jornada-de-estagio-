@@ -4,10 +4,12 @@ import { REFLEXOES } from '../domain/content/reflexoes';
 import { assetDoRetratoDaAna } from '../assets/manifest';
 import { useJogo } from '../store/jogo';
 import { alvo, borda, camada, caixaDeDialogo, cores, duracao, espaco, tipografia } from '../styles/tokens';
+import { geometriaDaFala } from './Dialogo';
 import { Imagem } from './Imagem';
 
 export function Reflexao(): JSX.Element | null {
   const bloco = useJogo(s => s.bloco);
+  const tela = useJogo(s => s.tela);
   const ativa = useJogo(s => s.reflexaoAtiva);
   const sprite = useJogo(s => s.sprite);
   const avancar = useJogo(s => s.avancarReflexao);
@@ -34,6 +36,7 @@ export function Reflexao(): JSX.Element | null {
   }, [ativa, avancar, pular]);
   if (!ativa) return null;
   const dados = REFLEXOES[bloco];
+  const geometria = geometriaDaFala(tela.tipo === 'cena' ? tela.lugarId : undefined);
   return <div role="dialog" aria-modal="true" aria-label={ativa.etapa === 'tempo' ? 'Entrada do bloco' : 'Ana · pensando'}
     ref={regiao} onKeyDown={evento => {
       // Tab não pode levar o foco a um NPC que a reflexão ainda bloqueia.
@@ -48,12 +51,12 @@ export function Reflexao(): JSX.Element | null {
     {ativa.etapa === 'tempo' ? <button className="jogo-botao" onClick={avancar} style={{ position: 'absolute', left: '25%', right: '25%', top: '30%', background: cores.caixa, color: cores.texto, fontSize: tipografia.tamanhos.titulo }}>
       Bloco {bloco} · {dados.tempo}
     </button> : <>
-      <button type="button" onClick={avancar} aria-label="Avançar pensamento de Ana" style={{ position: 'absolute', left: caixaDeDialogo.esquerda, top: caixaDeDialogo.topo, width: caixaDeDialogo.largura + caixaDeDialogo.retrato.largura, minHeight: caixaDeDialogo.altura, padding: espaco.md, display: 'flex', alignItems: 'center', gap: espaco.md, border: `${borda.media}px dashed ${cores.destaque}`, background: cores.veu, color: cores.texto, textAlign: 'left' }}>
-        <Imagem id={assetDoRetratoDaAna(sprite)} rotulo="Ana pensando" largura={caixaDeDialogo.retrato.largura} altura={caixaDeDialogo.retrato.altura} mostrarRotulo={false} decorativo />
-        <span>
-          <strong style={{ display: 'block', color: cores.destaque, fontSize: tipografia.tamanhos.corpo }}>Ana · pensando</strong>
-          <em style={{ fontSize: tipografia.tamanhos.corpo, lineHeight: tipografia.alturaLinha.corpo }}>{ganchoVisivel ? dados.gancho : dados.falas[ativa.indice]}</em>
-          <span aria-hidden style={{ display: 'block', textAlign: 'right', color: cores.destaque }}>▶</span>
+      <button type="button" onClick={avancar} aria-label="Avançar pensamento de Ana" style={{ position: 'absolute', left: geometria.esquerda, top: geometria.topo, width: geometria.largura, height: geometria.altura, padding: espaco.md, display: 'flex', alignItems: 'center', gap: espaco.md, border: `${borda.media}px dashed ${cores.destaque}`, background: cores.caixa, color: cores.texto, textAlign: 'left', fontSize: geometria.tamanhoTexto, lineHeight: tipografia.alturaLinha.compacta }}>
+        {geometria.mostrarRetrato ? <Imagem id={assetDoRetratoDaAna(sprite)} rotulo="Ana pensando" largura={caixaDeDialogo.retrato.largura} altura={caixaDeDialogo.retrato.altura} mostrarRotulo={false} decorativo /> : null}
+        <span style={{ flex: 1, minWidth: 0 }}>
+          <strong style={{ display: 'block', color: cores.destaque, fontSize: geometria.tamanhoTexto }}>Ana · pensando</strong>
+          <em style={{ display: 'block', marginTop: espaco.xs, fontSize: geometria.tamanhoTexto, lineHeight: tipografia.alturaLinha.corpo }}>{ganchoVisivel ? dados.gancho : dados.falas[ativa.indice]}</em>
+          <span aria-hidden style={{ position: 'absolute', top: espaco.md, right: espaco.md, color: cores.destaque }}>▶</span>
         </span>
       </button>
       {ativa.indice === dados.falas.length - 1 && !ganchoVisivel ? <button type="button" className="jogo-botao" onClick={() => setGanchoVisivel(true)} style={{ position: 'absolute', left: espaco.margem, bottom: espaco.md, minHeight: alvo.minimo, background: cores.caixa, fontSize: tipografia.tamanhos.apoio }}>Pergunta para a conversa</button> : null}

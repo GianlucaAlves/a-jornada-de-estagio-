@@ -1,0 +1,25 @@
+{
+  "entradas": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "entrega": {
+    "puzzle": "estruturar",
+    "situacao": "liberado",
+    "item": "consumido",
+    "xp": 0,
+    "narracao": null
+  },
+  "retomada": {
+    "puzzle": "estruturar",
+    "situacao": "liberado",
+    "item": "consumido",
+    "xp": 0,
+    "narracao": null
+  },
+  "erros": []
+}

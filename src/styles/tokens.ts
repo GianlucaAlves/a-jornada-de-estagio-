@@ -130,20 +130,33 @@ export const duracao = {
   /** Reserva os dois quadros de montagem antes de encerrar a caminhada do NPC. */
   atrasoDeEntradaNpc: 80,
   esteira: 8000,
-  cicloRobotico: 4000,
+  cicloRobotico: 8000,
+  /** Gestos de fundo têm pausa para ler como ações, em vez de tremor de braço. */
+  atividadeAmbiental: 3000,
 } as const;
 
 /** Medidas do ciclo contínuo de produção, em px de canvas. */
 export const movimento = { esteira: 304 } as const;
 
+/** O mapa usa miniaturas em meia escala; a cena continua na grade de quatro. */
+export const mapaJornada = {
+  centro: { x: 40, y: 53 },
+  ana: { largura: 100, altura: 168 },
+} as const;
+
 /** Reserva lateral fora do mapa e acima da faixa de personagens. */
 export const progressao = {
-  larguraHud: 336,
-  topoHud: 156,
+  larguraHud: 400,
+  topoHud: 24,
+  leituraGanho: 3600,
+  icone: 32,
+  palco: 440,
+  percursoMapa: 900,
   retrato: { largura: 64, altura: 76.8 },
   alturaBarra: 24,
   duracaoEvolucao: 3800,
   inicioNovoTitulo: 1200,
+  revelarVisual: 2400,
   intervaloDigitacao: 40,
   larguraEvolucao: 1000,
   frequenciaSom: 660,
@@ -266,6 +279,20 @@ export const caixaDeDialogo = {
    * nó), não esticando a caixa de volta ao tamanho antigo.
    */
   linhasDeTexto: 3,
+} as const;
+
+/** Duas cenas têm telas no alto: a fala ocupa a lateral livre, sem tapá-las.
+ * Sem retrato, a coluna conserva a capacidade de leitura em fonte de 24 px. */
+export const falaLateral = {
+  topo: 104,
+  largura: 696,
+  altura: 220,
+  esquerda: { 'sala-reunioes': espaco.margem, 'linha-producao': 744 },
+} as const;
+
+export const apresentacao = {
+  tela: { esquerda: 784, topo: 232, largura: 352, altura: 176 },
+  faixa: { esquerda: 480, topo: 164, largura: 960, altura: 40 },
 } as const;
 
 /**

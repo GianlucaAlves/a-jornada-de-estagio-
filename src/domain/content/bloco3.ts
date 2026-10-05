@@ -88,8 +88,8 @@ export const CENAS_B3: readonly Cena[] = [
         efeitos: [{ tipo: 'dialogo', dialogoId: 'b3-tiago' }],
       },
       {
-        // PORTA DE LEVA-E-TRAZ. Clique seco devolve narração, nunca silêncio:
-        // hotspot mudo parece travamento quando projetado.
+        // Antes da entrega, clique seco devolve a pista. Depois de usar as
+        // anotações, o painel permanece liberado, inclusive ao cancelar o puzzle.
         //
         // Era `objeto-monitor-ligado` numa mesa do Escritório, ancorado pelo
         // centro. Aqui fica fixado na parede sobre a célula de inspeção; o

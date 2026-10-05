@@ -17,7 +17,6 @@
 import { useEffect, useRef, useState } from 'react';
 import type { CSSProperties } from 'react';
 import { CENAS, LUGARES, NPCS, PUZZLES } from '../domain/content';
-import { REFLEXOES } from '../domain/content/reflexoes';
 import { chaveDaPresenca, presencasIniciais } from '../domain/content/presencas';
 import { PresencaEmCena } from './PresencaEmCena';
 import type { ArteDeHotspot, Hotspot, HotspotId, Lugar } from '../domain/types';
@@ -25,8 +24,8 @@ import { assetDaArteDeHotspot, assetDoCenario } from '../assets/manifest';
 import { seletores, useJogo } from '../store/jogo';
 import {
   CANVAS,
-  arte,
   alvo,
+  apresentacao,
   borda,
   camada,
   cores,
@@ -42,6 +41,8 @@ import { Imagem } from './Imagem';
 import { Posicionado } from './Canvas';
 import { LinhaDeFoco } from './LinhaDeFoco';
 import { Protagonista } from './Protagonista';
+import { IconeJornada } from './IconeJornada';
+import { VidaDoCenario } from './VidaDoCenario';
 import { QuadroSTAR } from './QuadroSTAR';
 import type { ComandoDeMovimento } from './Protagonista';
 import { SpriteAnimado, atrasoDoId } from './SpriteAnimado';
@@ -306,7 +307,7 @@ export function Cena(): JSX.Element | null {
 
       {lugarId === 'sala-reunioes' && cena?.bloco === 4 ? (
         <>
-          <span style={{ position: 'absolute', left: '18.75%', top: '13.7%', width: 1200, height: 56, display: 'flex', alignItems: 'center', justifyContent: 'center', color: cores.texto, fontSize: tipografia.tamanhos.rotulo, fontWeight: tipografia.pesos.forte }}>Innovation Week</span>
+          <span aria-label="Faixa do evento" style={{ position: 'absolute', left: apresentacao.faixa.esquerda, top: apresentacao.faixa.topo, width: apresentacao.faixa.largura, height: apresentacao.faixa.altura, display: 'flex', alignItems: 'center', justifyContent: 'center', color: cores.texto, fontSize: tipografia.tamanhos.rotulo, fontWeight: tipografia.pesos.forte }}>Innovation Week</span>
           <div aria-hidden="true" style={{ position: 'absolute', left: '53%', top: '85.4%', transform: 'translate(-50%, -100%)', pointerEvents: 'none', zIndex: camada.cenario + 1 }}>
             <Imagem id="objeto-plateia-vazia" rotulo="" largura={936} altura={256} decorativo mostrarRotulo={false} />
           </div>
@@ -351,49 +352,7 @@ export function Cena(): JSX.Element | null {
         </div>
       ) : null}
 
-      {lugarId === 'cafezinho' && cena?.bloco === 2
-        ? ([
-            { x: 398, numero: 1, atraso: 0 },
-            { x: 451, numero: 2, atraso: -duracao.cicloRobotico / 2 },
-          ] as const).map(({ x, numero, atraso }) => (
-            <div
-              key={numero}
-              aria-hidden="true"
-              style={{
-                position: 'absolute',
-                left: x * arte.escala - 100,
-                // O grupo fica à direita para deixar livre a entrada da Ana.
-                // A base fica acima da barra de itens; antes as pernas sumiam
-                // atrás da UI e as pessoas pareciam cortadas pelo sofá.
-                top: 135 * arte.escala,
-                width: 200,
-                height: 336,
-                pointerEvents: 'none',
-                zIndex: camada.cenario + 2,
-              }}
-            >
-              {(['', '-gesto'] as const).map((sufixo) => (
-                <Imagem
-                  key={sufixo}
-                  id={`objeto-figurante-cafe-${numero}${sufixo}`}
-                  rotulo="Colega no cafezinho"
-                  largura={200}
-                  altura={336}
-                  decorativo
-                  mostrarRotulo={false}
-                  className={sufixo ? 'jogo-figurante-gesto' : 'jogo-figurante-base'}
-                  style={{
-                    position: 'absolute',
-                    inset: 0,
-                    animationDuration: `${duracao.cicloRobotico}ms`,
-                    animationDelay: `${atraso}ms`,
-                    animationPlayState: dialogoAtivo !== null || puzzleAberto !== null ? 'paused' : 'running',
-                  }}
-                />
-              ))}
-            </div>
-          ))
-        : null}
+      <VidaDoCenario lugar={lugarId} bloco={bloco} />
 
       {lugarId === 'sala-reunioes' && cena?.bloco === 4 ? <QuadroSTAR passo={dialogoAtivo?.dialogoId === 'b4-apresentacao' ? dialogoAtivo.indice : dialogosConcluidos.includes('b4-apresentacao') ? 3 : undefined} /> : null}
 
@@ -439,8 +398,10 @@ export function Cena(): JSX.Element | null {
       ) : null}
 
       {lugarId === 'linha-producao' && cena?.bloco === 3
-        ? ([134, 216] as const).map((centro, indice) => {
-            const atraso = indice === 0 ? 0 : -duracao.cicloRobotico / 2;
+        ? ([134, 210] as const).map((centro, indice) => {
+            // O passo das estações acompanha os 304 px entre rádios. O pequeno
+            // atraso conserva gestos diferentes sem trabalhar sobre o vazio.
+            const atraso = indice === 0 ? 0 : -duracao.minima;
             const estilo = {
               position: 'absolute' as const,
               left: centro * 4 - 48,
@@ -450,73 +411,29 @@ export function Cena(): JSX.Element | null {
             };
             return (
               <div key={centro} aria-hidden="true" style={estilo}>
-                <Imagem
+                <SpriteAnimado
                   id="objeto-braco-robotico"
-                  rotulo="Braço robótico em repouso"
+                  rotulo="Braço robótico montando um rádio"
                   largura={96}
                   altura={200}
+                  estado="andando"
                   decorativo
-                  mostrarRotulo={false}
-                  className="jogo-robo-repouso"
-                  style={{
-                    position: 'absolute',
-                    inset: 0,
-                    animationDuration: `${duracao.cicloRobotico}ms`,
-                    animationDelay: `${atraso}ms`,
-                  }}
-                />
-                <Imagem
-                  id="objeto-braco-robotico-estendido"
-                  rotulo="Braço robótico trabalhando"
-                  largura={96}
-                  altura={200}
-                  decorativo
-                  mostrarRotulo={false}
-                  className="jogo-robo-alcance"
-                  style={{
-                    position: 'absolute',
-                    inset: 0,
-                    animationDuration: `${duracao.cicloRobotico}ms`,
-                    animationDelay: `${atraso}ms`,
-                  }}
+                  style={{ animationDuration: `${duracao.cicloRobotico}ms`, animationDelay: `${atraso}ms` }}
                 />
               </div>
             );
           })
         : null}
 
-      <h1
-        style={{
-          position: 'absolute',
-          left: '80%',
-          top: espaco.lg,
-          transform: 'translateX(-50%)',
-          zIndex: camada.hotspot,
-          fontSize: tipografia.tamanhos.subtitulo,
-          fontFamily: tipografia.familiaInterface,
-          fontWeight: tipografia.pesos.maximo,
-          lineHeight: tipografia.alturaLinha.compacta,
-          color: cores.texto,
-          background: cores.caixa,
-          padding: `${espaco.sm}px ${espaco.lg}px`,
-          borderRadius: raio.sm,
-          whiteSpace: 'nowrap',
-        }}
-      >
-        {lugar?.nome ?? 'Lugar'}
-        <span style={{ display: 'block', textAlign: 'center', fontSize: tipografia.minimo, fontWeight: tipografia.pesos.normal }}>Bloco {cena?.bloco ?? bloco} · {cena?.seloTempo ?? REFLEXOES[cena?.bloco ?? bloco].tempo}</span>
-      </h1>
-
-      <div aria-label="Controles e progresso da fase" style={{ position: 'absolute', left: espaco.margem, top: espaco.xs, zIndex: camada.hotspot + 1, display: 'flex', alignItems: 'center', gap: espaco.sm, padding: espaco.xs, background: cores.caixa, border: `${borda.interface}px solid ${cores.contorno}`, borderRadius: raio.sm }}>
-        <button type="button" className="jogo-botao" aria-label={rotuloDaSaida} disabled={saidaBloqueada} onClick={voltarAoMapa} style={{ minWidth: 0, minHeight: alvo.minimo, padding: `${espaco.sm}px ${espaco.md}px`, fontSize: tipografia.minimo, fontFamily: tipografia.familiaInterface, fontWeight: tipografia.pesos.normal, background: cores.caixa, color: fasePronta ? cores.sucesso : cores.textoApoio, borderColor: fasePronta ? cores.sucesso : cores.silhuetaContorno, borderWidth: borda.interface, borderRadius: raio.sm, opacity: saidaBloqueada ? 0.4 : 1, transition: `opacity ${duracao.curta}ms ${easing.suave}` }}>
+      <div aria-label="Controles e progresso da fase" style={{ visibility: dialogoAtivo || reflexaoAtiva ? 'hidden' : 'visible', position: 'absolute', left: espaco.margem, top: espaco.xs, zIndex: camada.hotspot + 1, display: 'flex', alignItems: 'center', gap: espaco.sm, padding: espaco.xs, background: cores.caixa, border: `${borda.interface}px solid ${cores.contorno}`, borderRadius: raio.sm }}>
+        <button type="button" className="jogo-botao" aria-label={rotuloDaSaida} disabled={saidaBloqueada} onClick={voltarAoMapa} style={{ visibility: 'visible', minWidth: 0, minHeight: alvo.minimo, padding: `${espaco.sm}px ${espaco.md}px`, fontSize: tipografia.minimo, fontFamily: tipografia.familiaInterface, fontWeight: tipografia.pesos.normal, background: cores.caixa, color: fasePronta ? cores.sucesso : cores.textoApoio, borderColor: fasePronta ? cores.sucesso : cores.silhuetaContorno, borderWidth: borda.interface, borderRadius: raio.sm, opacity: saidaBloqueada ? 0.4 : 1, transition: `opacity ${duracao.curta}ms ${easing.suave}` }}>
           <span aria-hidden>◀</span> Voltar ao mapa
         </button>
-        <button type="button" className="jogo-botao-nu" aria-label="Reabrir reflexão de Ana" disabled={bloqueado} onClick={reabrirReflexao} style={{ minHeight: alvo.minimo, fontSize: tipografia.minimo, fontFamily: tipografia.familiaInterface, color: cores.textoApoio, background: cores.painel, border: `${borda.interface}px solid ${cores.silhuetaContorno}`, borderRadius: raio.sm, padding: `0 ${espaco.md}px` }}>◌ Pensamento</button>
+        <button type="button" className="jogo-botao-nu" aria-label="Reabrir reflexão de Ana" disabled={bloqueado} onClick={reabrirReflexao} style={{ minHeight: alvo.minimo, fontSize: tipografia.minimo, fontFamily: tipografia.familiaInterface, color: cores.textoApoio, background: cores.painel, border: `${borda.interface}px solid ${cores.silhuetaContorno}`, borderRadius: raio.sm, padding: `0 ${espaco.md}px` }}><IconeJornada tipo="pensamento" /> Pensamento</button>
         <div style={{ display: 'flex', alignItems: 'center', gap: espaco.xs }}>
-          <small aria-label="Progresso das conversas do bloco" style={{ display: 'flex', alignItems: 'center', minHeight: alvo.minimo, color: dialogasDaCenaConcluidas ? cores.sucesso : cores.textoApoio, background: cores.painel, border: `${borda.interface}px solid ${cores.silhuetaContorno}`, borderRadius: raio.sm, padding: `0 ${espaco.sm}px`, fontSize: tipografia.minimo, whiteSpace: 'nowrap' }}>🗨 {progresso}{dialogasDaCenaConcluidas ? ' ✓' : ''}</small>
-          {progressoMinigames !== null ? <small aria-label="Progresso dos minigames do bloco" style={{ display: 'flex', alignItems: 'center', minHeight: alvo.minimo, color: minigamesDaCenaConcluidos ? cores.sucesso : cores.textoApoio, background: cores.painel, border: `${borda.interface}px solid ${cores.silhuetaContorno}`, borderRadius: raio.sm, padding: `0 ${espaco.sm}px`, fontSize: tipografia.minimo, whiteSpace: 'nowrap' }}>🧩 {progressoMinigames}{minigamesDaCenaConcluidos ? ' ✓' : ''}</small> : null}
+          <small aria-label="Progresso das conversas do bloco" style={{ display: 'flex', alignItems: 'center', gap: espaco.sm, minHeight: alvo.minimo, color: dialogasDaCenaConcluidas ? cores.sucesso : cores.textoApoio, background: cores.painel, border: `${borda.interface}px solid ${cores.silhuetaContorno}`, borderRadius: raio.sm, padding: `0 ${espaco.sm}px`, fontSize: tipografia.minimo, whiteSpace: 'nowrap' }}><IconeJornada tipo="conversa" /> {progresso}{dialogasDaCenaConcluidas ? ' ✓' : ''}</small>
+          {progressoMinigames !== null ? <small aria-label="Progresso dos minigames do bloco" style={{ display: 'flex', alignItems: 'center', gap: espaco.sm, minHeight: alvo.minimo, color: minigamesDaCenaConcluidos ? cores.sucesso : cores.textoApoio, background: cores.painel, border: `${borda.interface}px solid ${cores.silhuetaContorno}`, borderRadius: raio.sm, padding: `0 ${espaco.sm}px`, fontSize: tipografia.minimo, whiteSpace: 'nowrap' }}><IconeJornada tipo="minigame" /> {progressoMinigames}{minigamesDaCenaConcluidos ? ' ✓' : ''}</small> : null}
         </div>
-        {fasePronta ? <span role="status" style={{ color: cores.sucesso, fontSize: tipografia.minimo, fontWeight: tipografia.pesos.forte, whiteSpace: 'nowrap' }}>Fase pronta ✓</span> : null}
       </div>
 
       {hotspotsVisiveis?.filter(h => !lugarConcluido || h.arte.tipo === 'npc').map((hotspot) => {

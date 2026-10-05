@@ -1,5 +1,5 @@
 /** O mesmo slide aparece durante a fala e permanece aceso no silêncio. */
-import { borda, camada, cores, espaco, tipografia } from '../styles/tokens';
+import { apresentacao, camada, cores, espaco, tipografia } from '../styles/tokens';
 
 const PASSOS = [
   ['Situação', 'Lotes no papel'],
@@ -14,16 +14,15 @@ export function QuadroSTAR({ passo }: { passo?: number }): JSX.Element {
       aria-label="Apresentação de Ana sobre a passagem de turno"
       style={{
         position: 'absolute',
-        left: '40.6%',
-        top: '28.5%',
-        width: 360,
-        height: 136,
+        left: apresentacao.tela.esquerda,
+        top: apresentacao.tela.topo,
+        width: apresentacao.tela.largura,
+        height: apresentacao.tela.altura,
         display: 'grid',
         gridTemplateColumns: '1fr 1fr',
         gap: 0,
         background: cores.painel,
-        border: `${borda.fina}px solid ${cores.contorno}`,
-        zIndex: camada.dialogo + 1,
+        zIndex: camada.hotspot + 1,
         pointerEvents: 'none',
       }}
     >
@@ -31,10 +30,10 @@ export function QuadroSTAR({ passo }: { passo?: number }): JSX.Element {
         <div
           key={titulo}
           style={{
-            padding: `0 ${espaco.xs}px`,
+            padding: `${espaco.xs}px`,
             fontSize: tipografia.tamanhos.minimo,
-            lineHeight: 1,
-            color: cores.texto,
+            lineHeight: tipografia.alturaLinha.compacta,
+            color: passo === indice ? cores.textoInverso : cores.texto,
             background: passo === indice ? cores.acao : cores.painel,
           }}
         >

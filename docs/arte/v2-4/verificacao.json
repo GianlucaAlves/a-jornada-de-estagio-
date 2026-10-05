@@ -1,0 +1,208 @@
+{
+  "erros": [],
+  "medidas": [
+    {
+      "nome": "b1-mapa",
+      "hud": {
+        "x": 1456,
+        "y": 24,
+        "width": 400,
+        "height": 343.46875
+      },
+      "colisoes": []
+    },
+    {
+      "nome": "b1-cena",
+      "hud": {
+        "x": 1456,
+        "y": 24,
+        "width": 400,
+        "height": 343.46875
+      },
+      "colisoes": []
+    },
+    {
+      "nome": "b1-concluido",
+      "hud": {
+        "x": 1456,
+        "y": 24,
+        "width": 400,
+        "height": 343.46875
+      },
+      "colisoes": []
+    },
+    {
+      "nome": "b2-mapa",
+      "hud": {
+        "x": 1456,
+        "y": 24,
+        "width": 400,
+        "height": 343.46875
+      },
+      "colisoes": []
+    },
+    {
+      "nome": "b2-cena",
+      "hud": {
+        "x": 1456,
+        "y": 24,
+        "width": 400,
+        "height": 343.46875
+      },
+      "colisoes": []
+    },
+    {
+      "nome": "b3-mapa",
+      "hud": {
+        "x": 1456,
+        "y": 24,
+        "width": 400,
+        "height": 343.46875
+      },
+      "colisoes": []
+    },
+    {
+      "nome": "b3-cena",
+      "hud": {
+        "x": 1456,
+        "y": 24,
+        "width": 400,
+        "height": 343.46875
+      },
+      "colisoes": []
+    },
+    {
+      "nome": "b3-concluido",
+      "hud": {
+        "x": 1456,
+        "y": 24,
+        "width": 400,
+        "height": 343.46875
+      },
+      "colisoes": []
+    },
+    {
+      "nome": "b4-mapa",
+      "hud": {
+        "x": 1456,
+        "y": 24,
+        "width": 400,
+        "height": 343.46875
+      },
+      "colisoes": []
+    },
+    {
+      "nome": "b4-cena",
+      "hud": {
+        "x": 1456,
+        "y": 24,
+        "width": 400,
+        "height": 343.46875
+      },
+      "colisoes": []
+    },
+    {
+      "nome": "b4-concluido",
+      "hud": {
+        "x": 1456,
+        "y": 24,
+        "width": 400,
+        "height": 343.46875
+      },
+      "colisoes": []
+    },
+    {
+      "nome": "b5-mapa",
+      "hud": {
+        "x": 1456,
+        "y": 24,
+        "width": 400,
+        "height": 343.46875
+      },
+      "colisoes": []
+    },
+    {
+      "nome": "b5-cena",
+      "hud": {
+        "x": 1456,
+        "y": 24,
+        "width": 400,
+        "height": 343.46875
+      },
+      "colisoes": []
+    },
+    {
+      "nome": "b5-concluido",
+      "hud": {
+        "x": 1456,
+        "y": 24,
+        "width": 400,
+        "height": 343.46875
+      },
+      "colisoes": []
+    },
+    {
+      "nome": "b6-mapa",
+      "hud": {
+        "x": 1456,
+        "y": 24,
+        "width": 400,
+        "height": 343.46875
+      },
+      "colisoes": []
+    },
+    {
+      "nome": "b6-cena",
+      "hud": {
+        "x": 1456,
+        "y": 24,
+        "width": 400,
+        "height": 343.46875
+      },
+      "colisoes": []
+    },
+    {
+      "nome": "dialogo",
+      "hud": {
+        "x": 1456,
+        "y": 24,
+        "width": 400,
+        "height": 343.46875
+      },
+      "colisoes": []
+    },
+    {
+      "nome": "xp-entrada",
+      "hud": {
+        "x": 1456,
+        "y": 24,
+        "width": 400,
+        "height": 343.46875
+      },
+      "colisoes": []
+    },
+    {
+      "nome": "xp-fila",
+      "hud": {
+        "x": 1456,
+        "y": 24,
+        "width": 400,
+        "height": 343.46875
+      },
+      "colisoes": []
+    },
+    {
+      "nome": "720p",
+      "hud": {
+        "x": 970.6666870117188,
+        "y": 16,
+        "width": 266.66668701171875,
+        "height": 228.9791717529297
+      },
+      "colisoes": []
+    }
+  ],
+  "filaXp": "dois ganhos preservados após 4s de modal",
+  "movimentoReduzido": true,
+  "percursoMapa": true
+}

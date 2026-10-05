@@ -47,12 +47,12 @@ SAIDA = RAIZ / "docs" / "arte"
 
 # sprite da Ana por bloco, conforme src/domain/content/blocos.ts
 SPRITE_POR_BLOCO = {
-    1: "ana-encolhida",
-    2: "ana-neutra",
-    3: "ana-neutra",
-    4: "ana-confiante",
-    5: "ana-confiante",
-    6: "ana-confiante",
+    1: "ana-nivel-1",
+    2: "ana-nivel-2",
+    3: "ana-nivel-3",
+    4: "ana-nivel-4",
+    5: "ana-nivel-5",
+    6: "ana-nivel-6",
 }
 
 RE_CENA = re.compile(r"lugarId:\s*'([a-z-]+)'\s*,\s*\n\s*bloco:\s*(\d)")
@@ -118,6 +118,10 @@ def blocos() -> list[tuple[str, int, list[dict[str, object]]]]:
             for m in RE_HOTSPOT.finditer(trecho):
                 depois = trecho[m.end() : m.end() + 600]
                 arte = RE_ARTE.search(trecho[m.start() : m.end() + 600])
+                # A UI respeita dimensões declaradas do hotspot. Ignorá-las
+                # mostrava pranchetas e púlpitos gigantes só nesta ferramenta.
+                bloco_arte = trecho[m.start():m.end()].split('arte:', 1)[-1].split('}', 1)[0]
+                dimensoes = dict(re.findall(r'(largura|altura):\s*(\d+)', bloco_arte))
                 anc = RE_ANCORA.search(depois)
                 hotspots.append(
                     {
@@ -127,6 +131,7 @@ def blocos() -> list[tuple[str, int, list[dict[str, object]]]]:
                         "tipo": arte.group(1) if arte else None,
                         "ident": arte.group(2) if arte else None,
                         "ancora": anc.group(1) if anc else "base",
+                        "dimensoes": dimensoes,
                     }
                 )
             saida.append((lugar, bloco, hotspots))
@@ -192,18 +197,32 @@ def main() -> int:
                 if radio is not None:
                     g.colar_base(esquerda + radio.largura // 2, 145, radio)
             if repouso is not None:
-                for centro in (134, 216):
+                for centro in (134, 210):
                     g.colar_base(centro, 142, repouso)
 
+        # Assuntos de uma mesma pessoa compartilham o corpo na UI.
+        pessoas_vistas = set()
         # arte dos hotspots primeiro: a Ana entra por cima, como na cena real
         for h in hotspots:
             tipo, ident = h["tipo"], h["ident"]
             if not tipo or not ident:
                 continue
+            if tipo == 'npc':
+                if ident in pessoas_vistas:
+                    continue
+                pessoas_vistas.add(ident)
             peca = arte_de(cat, str(tipo), str(ident))
             if peca is None:
                 print(f"aviso: {lugar}/B{bloco} '{h['id']}' sem arte para {ident}")
                 continue
+            dimensoes = h['dimensoes']
+            if 'largura' in dimensoes and 'altura' in dimensoes:
+                w, altura_peca = int(dimensoes['largura']) // 4, int(dimensoes['altura']) // 4
+                ajustada = Grade(w, altura_peca)
+                for py in range(altura_peca):
+                    for px in range(w):
+                        ajustada.ponto(px, py, peca.em(px * peca.largura // w, py * peca.altura // altura_peca))
+                peca = ajustada
             x, y = em_arte(h["pos"])  # type: ignore[arg-type]
             if h["ancora"] == "centro":
                 g.colar(x - peca.largura // 2, y - peca.altura // 2, peca)

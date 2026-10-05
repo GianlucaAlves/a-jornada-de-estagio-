@@ -155,7 +155,7 @@ button {
 @keyframes jogo-aparecer {
   from {
     opacity: 0;
-    transform: translateY(24px);
+    transform: translateY(var(--jogo-entrada-y, 24px));
   }
   to {
     opacity: 1;

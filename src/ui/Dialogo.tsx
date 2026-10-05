@@ -34,6 +34,7 @@ import type {
   Dialogo as DialogoDef,
   DialogoAtivo,
   Locutor,
+  LugarId,
   NoDialogo,
   NpcId,
   SpriteId,
@@ -44,6 +45,7 @@ import { POSICOES_DOS_DIALOGOS, chaveDaPresenca } from '../domain/content/presen
 import {
   borda,
   caixaDeDialogo,
+  falaLateral,
   camada,
   cores,
   espaco,
@@ -54,6 +56,19 @@ import {
 import { Imagem } from './Imagem';
 
 const NPC_IDS: readonly NpcId[] = ['rafael', 'claudia', 'tiago', 'bianca', 'marcos'];
+
+/** A composição do cenário determina uma faixa estável durante toda a fala. */
+export function geometriaDaFala(lugar?: LugarId) {
+  const lateral = lugar === 'sala-reunioes' || lugar === 'linha-producao';
+  return {
+    esquerda: lateral ? falaLateral.esquerda[lugar] : caixaDeDialogo.esquerda,
+    topo: lateral ? falaLateral.topo : caixaDeDialogo.topo,
+    largura: lateral ? falaLateral.largura : caixaDeDialogo.largura,
+    altura: lateral ? falaLateral.altura : caixaDeDialogo.altura,
+    mostrarRetrato: !lateral,
+    tamanhoTexto: lateral ? tipografia.tamanhos.apoio : tipografia.tamanhos.corpo,
+  };
+}
 
 export function ehNpc(locutor: Locutor): locutor is NpcId {
   return (NPC_IDS as readonly string[]).includes(locutor);
@@ -211,6 +226,7 @@ export function Dialogo(): JSX.Element | null {
   }
 
   const nome = fala.identidade === null ? '' : linhaDeNome(fala.identidade);
+  const geometria = geometriaDaFala(tela.tipo === 'cena' ? tela.lugarId : undefined);
 
   return (
     <button
@@ -219,11 +235,14 @@ export function Dialogo(): JSX.Element | null {
       aria-label={`Avançar diálogo. ${nome.length > 0 ? `${nome}: ` : ''}${fala.no.texto}`}
       onClick={avancarDialogo}
       style={{
+        // Nas faixas laterais, a entrada só altera opacidade: deslocar 20 px
+        // fazia a moldura cruzar a cabeça da Cláudia durante a animação.
+        ['--jogo-entrada-y' as string]: `${geometria.mostrarRetrato ? espaco.md : 0}px`,
         position: 'absolute',
-        left: caixaDeDialogo.esquerda,
-        top: caixaDeDialogo.topo,
-        width: caixaDeDialogo.largura,
-        height: caixaDeDialogo.altura,
+        left: geometria.esquerda,
+        top: geometria.topo,
+        width: geometria.largura,
+        height: geometria.altura,
         zIndex: camada.dialogo,
         display: 'flex',
         gap: espaco.md,
@@ -245,7 +264,7 @@ export function Dialogo(): JSX.Element | null {
         overflow: 'hidden',
       }}
     >
-      {fala.retratoId === null ? null : (
+      {fala.retratoId === null || !geometria.mostrarRetrato ? null : (
         <Imagem
           id={fala.retratoId}
           rotulo={nome}
@@ -281,7 +300,7 @@ export function Dialogo(): JSX.Element | null {
             justifyContent: 'space-between',
             gap: espaco.sm,
             marginBottom: espaco.sm,
-            fontSize: tipografia.tamanhos.corpo,
+            fontSize: geometria.tamanhoTexto,
             fontWeight: tipografia.pesos.maximo,
             lineHeight: tipografia.alturaLinha.compacta,
             letterSpacing: tipografia.espacamento.largo,
@@ -323,7 +342,7 @@ export function Dialogo(): JSX.Element | null {
           style={{
             display: 'block',
             flex: '1 1 auto',
-            fontSize: tipografia.tamanhos.corpo,
+            fontSize: geometria.tamanhoTexto,
             lineHeight: tipografia.alturaLinha.corpo,
             fontWeight: tipografia.pesos.normal,
             color: cores.texto,

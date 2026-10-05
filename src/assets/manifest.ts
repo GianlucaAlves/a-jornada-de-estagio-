@@ -24,6 +24,9 @@ const RAIZ = '/assets';
 
 /** id de asset -> caminho. Chaves são ids estáveis, não nomes de arquivo. */
 export const MANIFEST: Record<string, string> = {
+  ...Object.fromEntries(['escritorio', 'cafezinho', 'cafezinho-festa', 'linha-producao', 'sala-reunioes', 'outra-area'].flatMap(nome => [0, 1, 2].map(i => [`ambiente-${nome}-${i}`, `${RAIZ}/ambientes/${nome}-${i}.png`]))),
+  'ana-celebrando': `${RAIZ}/protagonista/ana-celebrando.png`,
+  ...Object.fromEntries([1, 2, 3, 4, 5, 6].map(n => [`ana-nivel-${n}`, `${RAIZ}/protagonista/ana-nivel-${n}.png`])),
   // ------------------------------------------------ cenários (1920x1080)
   // Cinco lugares, não seis. `sala-treinamento` e `innovation` deixaram de ser
   // lugares (ADR-026) e o Laboratório virou Linha de Produção (ADR-009). As
@@ -47,6 +50,7 @@ export const MANIFEST: Record<string, string> = {
 
   // ------------------------------------------------ mapa
   mapa: `${RAIZ}/mapa/mapa.png`,
+  ...Object.fromEntries(['escritorio', 'cafezinho', 'linha-producao', 'sala-reunioes', 'outra-area'].map(nome => [`marco-${nome}`, `${RAIZ}/mapa/${nome}.png`])),
 
   // ------------------------------------------------ protagonista (4 sprites)
   'ana-encolhida': `${RAIZ}/protagonista/ana-encolhida.png`,

@@ -589,6 +589,26 @@ describe('abrirPuzzle não rebaixa puzzle já resolvido (ADR-011)', () => {
 });
 
 describe('sair do puzzle reinicia o puzzle (ADR-011)', () => {
+  it('o painel da fase 3 reabre sem o item consumido, inclusive depois de sair para o mapa', () => {
+    j().entrarNoBloco(3);
+    j().entrarNoLugar('linha-producao');
+    j().selecionarItem('anotacoes-treinamento');
+    j().clicarHotspot('b3-monitor');
+    expect(j().itens['anotacoes-treinamento']).toBe('consumido');
+    expect(j().puzzleAberto).toBe('estruturar');
+    const pontuacao = j().xpAtual;
+    j().fecharPuzzle();
+    j().voltarAoMapa();
+    j().entrarNoLugar('linha-producao');
+    j().clicarHotspot('b3-monitor');
+    expect(j().puzzleAberto).toBe('estruturar');
+    expect(j().xpAtual).toBe(pontuacao);
+    expect(j().itens['anotacoes-treinamento']).toBe('consumido');
+    j().resolverPuzzle('estruturar');
+    j().clicarHotspot('b3-monitor');
+    expect(j().puzzleAberto).toBe('estruturar');
+    expect(j().puzzles.estruturar).toBe('resolvido');
+  });
   it('fecharPuzzle fecha o overlay, mantém liberado e permite reabrir', () => {
     const abre = hotspotQueAbre(1, 'senha');
     j().entrarNoLugar('escritorio');
@@ -1113,6 +1133,8 @@ describe('narração pendente não atravessa troca de tela', () => {
   it('voltarAoMapa limpa narração e mensagem de falha', () => {
     j().entrarNoBloco(3);
     j().entrarNoLugar('escritorio');
+    // A entrada não narra mais: o texto pendente nasce de uma pista acionada.
+    j().clicarHotspot('b3-claudia');
     expect(j().narracao).not.toBeNull();
     j().selecionarItem('certificado-degree');
     const alvo = acharCena('escritorio', 3)?.hotspots.find(

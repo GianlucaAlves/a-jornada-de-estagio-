@@ -26,7 +26,6 @@ import { useJogo } from '../store/jogo';
 import { CANVAS, arte, camada, easing, limitarDuracao } from '../styles/tokens';
 import { SpriteAnimado } from './SpriteAnimado';
 import { Imagem } from './Imagem';
-import { PastaDaAna } from './PastaDaAna';
 
 /**
  * Uma ordem de movimento. `seq` existe para que a mesma coordenada possa ser
@@ -139,14 +138,13 @@ export function Protagonista({
         <Imagem id="ana-apresentando" rotulo={NOME_PROTAGONISTA} largura={largura} altura={altura} />
       ) : (
         <SpriteAnimado
-          id={assetDoSprite(spriteAtivo)}
+          id={sprite === undefined && !spriteAtivo.includes('futura') && !spriteAtivo.includes('trabalhando') ? `ana-nivel-${nivel}` : assetDoSprite(spriteAtivo)}
           rotulo={NOME_PROTAGONISTA}
           largura={largura}
           altura={altura}
           estado={movendo ? 'andando' : 'parado'}
         />
       )}
-      {sprite === undefined && !apresentando && spriteAtivo !== 'ana-futura' && spriteAtivo !== 'ana-futura-trabalhando' ? <PastaDaAna nivel={nivel} largura={largura} altura={altura} /> : null}
     </div>
   );
 }

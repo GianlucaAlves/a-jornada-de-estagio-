@@ -147,18 +147,21 @@ export function SpriteAnimado({
   style,
 }: PropsSpriteAnimado): JSX.Element {
   const caminho = caminhoDaTira(id, estado === 'andando' ? 'andando' : 'idle');
-  const [temTira, setTemTira] = useState<boolean>(
-    () => caminho !== null && sondados.get(caminho) === true,
+  const [sondagemAtual, setSondagemAtual] = useState<{ caminho: string | null; existe: boolean }>(
+    () => ({ caminho, existe: caminho !== null && sondados.get(caminho) === true }),
   );
+  // O resultado pertence ao caminho sondado. Reaproveitar o booleano do
+  // sprite anterior fazia a nova pose desaparecer durante a primeira carga.
+  const temTira = caminho !== null && (sondados.get(caminho) === true || (sondagemAtual.caminho === caminho && sondagemAtual.existe));
 
   useEffect(() => {
     if (caminho === null) {
-      setTemTira(false);
+      setSondagemAtual({ caminho, existe: false });
       return;
     }
     let vivo = true;
     void sondarTira(caminho).then((existe) => {
-      if (vivo) setTemTira(existe);
+      if (vivo) setSondagemAtual({ caminho, existe });
     });
     return () => {
       vivo = false;

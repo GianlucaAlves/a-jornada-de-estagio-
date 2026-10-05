@@ -1193,6 +1193,25 @@ def notebook(largura: int = 30, altura: int = 22, conteudo: str = "login") -> Gr
     return g
 
 
+def notebook_obliquo() -> Grade:
+    """Tela oblíqua legível e teclado à esquerda, voltado para as mãos."""
+    g = Grade(32, 25)
+    for y in range(20):
+        x = 14 - y // 5
+        g.linha_h(x, y, 17, '2')
+        if 2 <= y <= 17:
+            g.linha_h(x + 2, y, 13, 'I')
+            g.ponto(x + 2, y, 'J')
+        if y in (5, 8, 11, 14):
+            g.linha_h(x + 4, y, 7 if y != 11 else 10, 'L')
+    g.retangulo(0, 21, 28, 3, '4')
+    g.linha_h(1, 20, 27, '6')
+    for x in range(2, 24, 3):
+        g.linha_h(x, 21, 2, '2')
+    g.linha_h(0, 24, 29, '2')
+    return g
+
+
 def notebook_fechado(largura: int = 26, altura: int = 7) -> Grade:
     g = Grade(largura, altura)
     g.retangulo(0, 0, largura, altura, "3")
@@ -2055,7 +2074,7 @@ def celula_de_processo(largura: int = 52, altura: int = 40, *, status: str = "ok
     return g
 
 
-def braco_robotico(altura: int = 46, *, estendido: bool = False) -> Grade:
+def braco_robotico(altura: int = 46, *, estendido: bool = False, fase: int | None = None) -> Grade:
     """Braço robótico de base fixa: base, torre, antebraço em diagonal e garra.
 
     Robô é o que o ADR-009 pede em cena, e o que faz um robô ler como robô nesta
@@ -2068,32 +2087,40 @@ def braco_robotico(altura: int = 46, *, estendido: bool = False) -> Grade:
     cadeiras da sala de treinamento.
     """
     g = Grade(22, altura)
-    esc, med, cla = tons_de_volume(AZUL)
+    # Âmbar destaca a articulação contra as carcaças azuis da linha.
+    esc, med, cla = tons_de_volume(LUZ)
     cx = 8
 
-    # base e torre
+    # Pedestal curto: o volume superior é o braço, não uma coluna decorativa.
     g.retangulo(cx - 6, altura - 6, 13, 6, med)
     _borda_de_volume(g, cx - 6, altura - 6, 13, 6, cla, esc)
-    g.retangulo(cx - 3, 10, 7, altura - 16, med)
-    g.linha_v(cx - 3, 10, altura - 16, cla)
-    g.linha_v(cx + 3, 10, altura - 16, esc)
-    g.dither(cx - 2, 12, 5, altura - 20, med, mais_escuro(med), "esparso")
+    g.retangulo(cx - 4, altura - 14, 9, 8, med)
+    _borda_de_volume(g, cx - 4, altura - 14, 9, 8, cla, esc)
 
     # junta do ombro: 2px mais claro, é o que diz "isto gira"
-    g.retangulo(cx - 4, 8, 9, 4, cla)
-    g.moldura(cx - 4, 8, 9, 4, esc)
-    g.ponto(cx, 9, LUZ[4])  # piloto aceso
+    ombro = (cx, altura - 15)
 
     # antebraço em diagonal, com a garra na ponta
-    if estendido:
-        pontos = ((cx + 2, 10), (14, 18), (18, 26))
+    if fase is not None:
+        # A garra baixa até o topo do rádio. Base e ombro ficam no mesmo
+        # pixel durante todo o ciclo, inclusive no retorno intermediário.
+        trajetorias = ((ombro, (6, 10), (18, 17)),
+                       (ombro, (13, 22), (18, 34)),
+                       (ombro, (10, 14), (18, 25)),
+                       (ombro, (8, 12), (18, 17)))
+        pontos = trajetorias[fase % 4]
+    elif estendido:
+        pontos = (ombro, (13, 22), (18, 34))
     else:
-        pontos = ((cx + 2, 9), (15, 10), (19, 16))
+        pontos = (ombro, (6, 10), (18, 17))
     for i in range(len(pontos) - 1):
         (x0, y0), (x1, y1) = pontos[i], pontos[i + 1]
-        linha(g, x0, y0, x1, y1, med)
-        linha(g, x0, y0 - 1, x1, y1 - 1, cla)
-        linha(g, x0, y0 + 1, x1, y1 + 1, esc)
+        for dx in range(-2, 3):
+            linha(g, x0 + dx, y0, x1 + dx, y1, esc if dx == 2 else cla if dx == -2 else med)
+    for jx, jy in pontos[:-1]:
+        _elipse(g, jx, jy, 4, 4, esc)
+        _elipse(g, jx, jy, 2, 2, cla)
+        g.ponto(jx, jy, '2')
     gx, gy = pontos[-1]
     g.retangulo(gx - 1, gy, 3, 3, esc)
     g.ponto(gx - 2, gy + 3, med)

@@ -5,7 +5,8 @@
  * a plateia sabe que existe algo ali e não sabe o quê. O desbloqueio revela o
  * nome. Concluído recebe marca discreta — nada de celebração.
  */
-import { assetDoCenario, ASSET_MAPA } from '../assets/manifest';
+import { useEffect, useRef, useState } from 'react';
+import { ASSET_MAPA } from '../assets/manifest';
 import { LUGARES } from '../domain/content';
 import { seletores, useJogo } from '../store/jogo';
 import type { EstadoLugar, LugarId, Ponto } from '../domain/types';
@@ -20,9 +21,12 @@ import {
   espaco,
   raio,
   tipografia,
+  progressao,
+  mapaJornada,
 } from '../styles/tokens';
 import { Imagem } from './Imagem';
 import { Posicionado } from './Canvas';
+import { SpriteAnimado } from './SpriteAnimado';
 
 const LARGURA_SLOT = 300;
 /**
@@ -73,7 +77,7 @@ const ALTURA_TITULO =
   Math.round(tipografia.tamanhos.subtitulo * tipografia.alturaLinha.corpo) + 2 * espaco.sm;
 
 const LIVRE_ESQ = espaco.margem;
-const LIVRE_DIR = CANVAS.largura - PAINEL_L - espaco.lg;
+const LIVRE_DIR = CANVAS.largura - PAINEL_L - espaco.margem;
 const LIVRE_TOPO = espaco.margem + ALTURA_TITULO + espaco.md;
 const LIVRE_BASE = CANVAS.altura - BARRA_A - espaco.md;
 
@@ -132,18 +136,46 @@ function rotuloAcessivel(nome: string | null, estado: EstadoLugar): string {
 export function Mapa(): JSX.Element {
   const slots = useJogo(seletores.slotsDoMapa);
   const entrarNoLugar = useJogo((s) => s.entrarNoLugar);
+  const nivel = useJogo(s => s.nivel);
+  const [destino, setDestino] = useState<LugarId | null>(null);
+  const [posicao, setPosicao] = useState<Ponto>(mapaJornada.centro);
+  const temporizador = useRef<number>();
+  useEffect(() => () => window.clearTimeout(temporizador.current), []);
+  function viajar(id: LugarId): void {
+    if (destino) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { entrarNoLugar(id); return; }
+    setDestino(id);
+    const alvo = posicaoEnquadrada(LUGARES[id].pos);
+    setPosicao({ x: alvo.x, y: posicao.y });
+    temporizador.current = window.setTimeout(() => {
+      setPosicao(alvo);
+      temporizador.current = window.setTimeout(() => entrarNoLugar(id), progressao.percursoMapa / 2);
+    }, progressao.percursoMapa / 2);
+  }
 
   return (
     <div style={{ position: 'absolute', inset: 0, zIndex: camada.cenario }}>
-      <Imagem
+      <SpriteAnimado
         id={ASSET_MAPA}
-        rotulo="Mapa do prédio"
+        rotulo="Campus da jornada"
         largura={CANVAS.largura}
         altura={CANVAS.altura}
         decorativo
-        mostrarRotulo={false}
-        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}
+        estado="estatico"
+        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', animationDuration: `${duracao.esteira}ms` }}
       />
+
+      <svg aria-hidden="true" viewBox={`0 0 ${CANVAS.largura} ${CANVAS.altura}`} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
+        {slots.map(slot => {
+          const p = posicaoEnquadrada(slot.pos);
+          const d = `M ${p.x * CANVAS.largura / 100} ${mapaJornada.centro.y * CANVAS.altura / 100} V ${p.y * CANVAS.altura / 100}`;
+          return <g key={slot.id}><path d={d} fill="none" stroke={cores.textoApoio} strokeWidth={espaco.lg + borda.grossa * 2} /><path d={d} fill="none" stroke={cores.caixa} strokeWidth={espaco.lg} /><path d={d} fill="none" stroke={slot.estado === 'concluido' ? cores.sucesso : slot.estado === 'silhueta' ? cores.silhuetaContorno : cores.destaque} strokeWidth={borda.grossa} strokeDasharray={`${espaco.sm} ${espaco.sm}`} /></g>;
+        })}
+        <path d={`M ${CENTRO_ESQ} ${mapaJornada.centro.y * CANVAS.altura / 100} H ${CENTRO_DIR}`} fill="none" stroke={cores.textoApoio} strokeWidth={espaco.lg + borda.grossa * 2} />
+        <path d={`M ${CENTRO_ESQ} ${mapaJornada.centro.y * CANVAS.altura / 100} H ${CENTRO_DIR}`} fill="none" stroke={cores.caixa} strokeWidth={espaco.lg} />
+        <path d={`M ${CENTRO_ESQ} ${mapaJornada.centro.y * CANVAS.altura / 100} H ${CENTRO_DIR}`} fill="none" stroke={cores.textoApoio} strokeWidth={borda.grossa} strokeDasharray={`${espaco.sm} ${espaco.sm}`} />
+      </svg>
+      <div aria-hidden="true" style={{ position: 'absolute', left: `${posicao.x}%`, top: `${posicao.y}%`, transform: 'translate(-50%, -100%)', zIndex: camada.protagonista, pointerEvents: 'none', transition: `left ${progressao.percursoMapa / 2}ms linear, top ${progressao.percursoMapa / 2}ms linear` }}><SpriteAnimado id={`ana-nivel-${nivel}`} rotulo="Ana no mapa" largura={mapaJornada.ana.largura} altura={mapaJornada.ana.altura} estado={destino ? 'andando' : 'parado'} decorativo /></div>
 
       <h1
         style={{
@@ -158,7 +190,7 @@ export function Mapa(): JSX.Element {
           borderRadius: raio.md,
         }}
       >
-        Mapa da jornada
+        Escolha seu próximo destino
       </h1>
 
       {slots.map((slot) => (
@@ -168,7 +200,7 @@ export function Mapa(): JSX.Element {
           nome={slot.nome}
           estado={slot.estado}
           pos={posicaoEnquadrada(slot.pos)}
-          onEntrar={entrarNoLugar}
+          onEntrar={viajar}
         />
       ))}
     </div>
@@ -211,9 +243,9 @@ function SlotDoMapa({ id, nome, estado, pos, onEntrar }: PropsSlot): JSX.Element
           height: ALTURA_SLOT,
           minHeight: alvo.confortavel,
           padding: espaco.sm,
-          background: silhuetado ? cores.silhueta : cores.painel,
-          border: `${concluido ? borda.grossa : borda.media}px solid ${corDaBorda}`,
-          borderRadius: raio.lg,
+          background: 'transparent',
+          border: `${borda.media}px solid transparent`,
+          borderRadius: raio.sm,
           cursor: silhuetado ? 'default' : 'pointer',
           transition: `background ${duracao.curta}ms ${easing.suave}`,
         }}
@@ -226,12 +258,12 @@ function SlotDoMapa({ id, nome, estado, pos, onEntrar }: PropsSlot): JSX.Element
             height: ALTURA_MINIATURA,
             borderRadius: raio.md,
             overflow: 'hidden',
-            background: cores.silhueta,
+            background: 'transparent',
           }}
         >
-          {silhuetado ? null : (
+          {silhuetado ? <svg aria-hidden="true" width="100%" height="100%" viewBox="0 0 68 36"><path d="M4 33V15H14V5H52V15H64V33Z" fill={cores.silhueta} stroke={cores.silhuetaContorno} strokeWidth="2" /><path d="M30 14H38V20H34V24 M34 27V29" fill="none" stroke={cores.textoApoio} strokeWidth="3" /></svg> : (
             <Imagem
-              id={assetDoCenario(id)}
+              id={`marco-${id}`}
               rotulo={nome ?? 'Lugar'}
               largura={LARGURA_SLOT - espaco.md}
               altura={ALTURA_MINIATURA}
@@ -259,9 +291,11 @@ function SlotDoMapa({ id, nome, estado, pos, onEntrar }: PropsSlot): JSX.Element
             lineHeight: tipografia.alturaLinha.corpo,
             color: cores.texto,
             textAlign: 'center',
+            background: cores.caixa,
+            borderBottom: `${borda.grossa}px solid ${corDaBorda}`,
           }}
         >
-          {silhuetado ? null : (
+          {silhuetado ? 'A descobrir' : (
             <>
               {nome ?? 'Lugar'}
               {/* Marca discreta de concluído: um traço de cor, sem festa. */}
