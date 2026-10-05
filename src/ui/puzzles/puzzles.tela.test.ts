@@ -33,7 +33,6 @@ import type {
   PuzzleId,
   PuzzleMontar,
   PuzzleSenha,
-  PuzzleSequenciar,
 } from '../../domain/types';
 import { tipografia } from '../../styles/tokens';
 
@@ -41,7 +40,6 @@ import { AssociarPares } from './AssociarPares';
 import { Estruturar } from './Estruturar';
 import { Montar } from './Montar';
 import { Senha } from './Senha';
-import { Sequenciar } from './Sequenciar';
 
 /** Um render por puzzle, feito uma vez. */
 const TELAS: ReadonlyArray<{ id: PuzzleId; html: string }> = [
@@ -53,12 +51,6 @@ const TELAS: ReadonlyArray<{ id: PuzzleId; html: string }> = [
     id: 'associar',
     html: renderToStaticMarkup(
       createElement(AssociarPares, { def: PUZZLES.associar as PuzzleAssociar }),
-    ),
-  },
-  {
-    id: 'sequenciar',
-    html: renderToStaticMarkup(
-      createElement(Sequenciar, { def: PUZZLES.sequenciar as PuzzleSequenciar }),
     ),
   },
   {

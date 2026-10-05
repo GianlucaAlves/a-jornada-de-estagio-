@@ -16,14 +16,17 @@
  */
 import { useEffect, useRef, useState } from 'react';
 import type { CSSProperties } from 'react';
-import { LUGARES, NPCS } from '../domain/content';
+import { CENAS, LUGARES, NPCS, PUZZLES } from '../domain/content';
 import { REFLEXOES } from '../domain/content/reflexoes';
+import { chaveDaPresenca, presencasIniciais } from '../domain/content/presencas';
+import { PresencaEmCena } from './PresencaEmCena';
 import type { ArteDeHotspot, Hotspot, HotspotId, Lugar } from '../domain/types';
 import { assetDaArteDeHotspot, assetDoCenario } from '../assets/manifest';
 import { seletores, useJogo } from '../store/jogo';
 import {
   CANVAS,
   arte,
+  alvo,
   borda,
   camada,
   cores,
@@ -83,10 +86,12 @@ function ArteDoHotspot({
   arte,
   rotulo,
   hotspotId,
+  andando = false,
 }: {
   arte: ArteDeHotspot;
   rotulo: string;
   hotspotId: HotspotId;
+  andando?: boolean;
 }): JSX.Element {
   const tamanho = tamanhoDaArte(arte);
 
@@ -100,7 +105,7 @@ function ArteDoHotspot({
       // que respira deixa de ser adesivo. Objeto e item ficam 'estatico': só se
       // movem se a arte trouxer tira de ambiente (cursor piscando, vapor da
       // caneca). Monitor que respira lê como erro, não como vida.
-      estado={arte.tipo === 'npc' ? 'parado' : 'estatico'}
+      estado={arte.tipo === 'npc' ? andando ? 'andando' : 'parado' : 'estatico'}
       atrasoMs={atrasoDoId(hotspotId)}
       decorativo
       className="jogo-hotspot-arte"
@@ -109,6 +114,7 @@ function ArteDoHotspot({
 }
 
 export function Cena(): JSX.Element | null {
+  const presencasNpcs = useJogo(s => s.presencasNpcs);
   const tela = useJogo((s) => s.tela);
   const cena = useJogo(seletores.cenaAtual);
   const clicarHotspot = useJogo((s) => s.clicarHotspot);
@@ -128,10 +134,16 @@ export function Cena(): JSX.Element | null {
   const iniciarReflexao = useJogo(s => s.iniciarReflexao);
   const reabrirReflexao = useJogo(s => s.reabrirReflexao);
   const progresso = useJogo(seletores.progressoDeConversas);
+  const progressoMinigames = useJogo(seletores.progressoDeMinigames);
+  const fasePronta = useJogo((s) => s.blocoConcluido);
+  const mostrarMensagemConclusao = useJogo((s) => s.mostrarMensagemConclusao);
+  const ensaiarPuzzle = useJogo((s) => s.ensaiarPuzzle);
+  const puzzles = useJogo((s) => s.puzzles);
   useEffect(() => { iniciarReflexao(); }, [bloco, tela.tipo === 'cena' ? tela.lugarId : null, iniciarReflexao]);
 
   const lugarId = tela.tipo === 'cena' ? tela.lugarId : null;
   const entrada = posicaoDeEntrada(cena ?? null);
+  useEffect(() => useJogo.getState().fecharMensagemConclusao(), [lugarId, cena?.bloco]);
 
   const [comando, setComando] = useState<ComandoDeMovimento>({
     alvo: entrada,
@@ -171,43 +183,45 @@ export function Cena(): JSX.Element | null {
   if (lugarId === null) return null;
 
   const lugar: Lugar | undefined = LUGARES[lugarId];
-  const bloqueado =
+  const npcEmMovimento = Object.entries(presencasNpcs).some(([chave, p]) => chave.startsWith(`${cena?.bloco}:${lugarId}:`) && Boolean(p.movimento));
+  const bloqueado = npcEmMovimento ||
     reflexaoAtiva !== null || dialogoAtivo !== null || puzzleAberto !== null || narracao !== null || mensagemFalha !== null || itensRecebidos.length > 0 || pausaBloco4 === 'rodando';
 
   /**
-   * Lugar concluído NÃO renderiza hotspot nenhum.
+   * Lugar concluído deixa de oferecer interações, mas conserva o elenco.
    *
    * `clicarHotspot` recusa o clique quando o lugar está 'concluido', e hotspot
    * que não responde parece bug quando projetado (o spec rejeitou isso
-   * explicitamente). Revisita é só cenário + linha de eco (que vem por
-   * `narracao`, posta por `entrarNoLugar`) + botão de voltar.
+   * explicitamente). Presença física é independente da disponibilidade do
+   * botão: tirar o NPC ao concluir o lugar fazia a pessoa evaporar ao vivo.
    */
   const lugarConcluido = lugares[lugarId] === 'concluido';
   const hotspotsVisiveis = cena?.hotspots.filter((hotspot) => {
     if (lugarId === 'outra-area' && cena?.bloco === 5) {
       if (hotspot.id === 'b5-bianca-inicial') return !hotspotsFeitos.includes('b5-bianca-inicial');
       if (hotspot.id === 'b5-bianca') {
-        return hotspotsFeitos.includes('b5-caderno') && hotspotsFeitos.includes('b5-grade');
+        return hotspotsFeitos.includes('b5-bianca-inicial');
       }
     }
-    if (lugarId !== 'sala-reunioes' || cena?.bloco !== 4) return true;
-    // A sequência também organiza a sala: a plateia sai no silêncio, e cada
-    // conversa seguinte traz só quem ainda está presente naquele momento.
-    if (hotspot.id === 'b4-marcos') return !hotspotsFeitos.includes('b4-marcos');
-    if (hotspot.id === 'b4-plateia') {
-      return pausaBloco4 !== 'rodando' && !hotspotsFeitos.includes('b4-entrega');
-    }
-    if (hotspot.id === 'b4-claudia') {
-      return (
-        pausaBloco4 !== 'rodando' &&
-        hotspotsFeitos.includes('b4-entrega') &&
-        dialogosConcluidos.includes('b4-apresentacao') &&
-        !hotspotsFeitos.includes('b4-claudia')
-      );
-    }
-    if (hotspot.id === 'b4-bianca') return hotspotsFeitos.includes('b4-claudia');
     return true;
   });
+  const dialogasDaCenaConcluidas = (() => {
+    const ids = [...new Set(CENAS.filter((c) => c.bloco === cena?.bloco).flatMap((c) => c.hotspots).flatMap((h) =>
+      [...h.efeitos, ...(h.efeitosComItem ?? [])].flatMap((e) =>
+        e.tipo === 'dialogo' ? [e.dialogoId] : [],
+      ),
+    ))];
+    return ids.length > 0 && ids.every((id) => dialogosConcluidos.includes(id));
+  })();
+  const minigamesDaCenaConcluidos = (() => {
+    // O contador é da fase; o mesmo minigame aparece nas duas cenas do Bloco 2.
+    const ids = [...new Set(CENAS.filter((c) => c.bloco === cena?.bloco).flatMap((c) => c.hotspots).flatMap((h) =>
+      [...h.efeitos, ...(h.efeitosComItem ?? [])].flatMap((e) =>
+        e.tipo === 'abrirPuzzle' ? [e.puzzleId] : [],
+      ),
+    ))];
+    return ids.length > 0 && ids.every((id) => puzzles[id] === 'resolvido');
+  })();
 
   /**
    * Saída recusada pela store enquanto há diálogo, puzzle ou a pausa do Bloco 4.
@@ -227,8 +241,21 @@ export function Cena(): JSX.Element | null {
           ? 'Voltar ao mapa. Indisponível durante a conversa: termine a conversa primeiro.'
           : 'Voltar ao mapa';
 
-  function acionar(hotspot: Hotspot): void {
+  function acionar(hotspot: Hotspot, shiftAtivo = false): void {
     if (bloqueado) return;
+    const efeitos = [...hotspot.efeitos, ...(hotspot.efeitosComItem ?? [])];
+    const puzzle = efeitos.find((efeito) => efeito.tipo === 'abrirPuzzle');
+    const puzzleId = puzzle?.tipo === 'abrirPuzzle' ? puzzle.puzzleId : null;
+    const puzzleResolvido = puzzleId !== null && puzzles[puzzleId] === 'resolvido';
+    const acaoConcluida = hotspot.mensagemConcluido !== undefined && hotspotsFeitos.includes(hotspot.id);
+    if (puzzleResolvido || acaoConcluida) {
+      if (shiftAtivo && puzzleResolvido && puzzleId !== null) {
+        ensaiarPuzzle(puzzleId);
+      } else {
+        mostrarMensagemConclusao(hotspot.mensagemConcluido ?? (puzzleId === null ? '' : PUZZLES[puzzleId].mensagemConcluido));
+      }
+      return;
+    }
     // Clique durante a caminhada TELEPORTA ao destino em vez de enfileirar.
     const teleportar = movendo;
     setPendente(hotspot.id);
@@ -283,11 +310,9 @@ export function Cena(): JSX.Element | null {
           <div aria-hidden="true" style={{ position: 'absolute', left: '53%', top: '85.4%', transform: 'translate(-50%, -100%)', pointerEvents: 'none', zIndex: camada.cenario + 1 }}>
             <Imagem id="objeto-plateia-vazia" rotulo="" largura={936} altura={256} decorativo mostrarRotulo={false} />
           </div>
-          {!hotspotsFeitos.includes('b4-entrega') ? (
-            <div aria-hidden="true" style={{ position: 'absolute', left: '53%', top: '85.4%', transform: 'translate(-50%, -100%)', pointerEvents: 'none', zIndex: camada.hotspot - 1 }}>
+            <div aria-hidden="true" style={{ position: 'absolute', left: dialogosConcluidos.includes('b4-apresentacao') ? '-60%' : '53%', transition: `left ${duracao.maxima}ms ${easing.constante}`, top: '85.4%', transform: 'translate(-50%, -100%)', pointerEvents: 'none', zIndex: camada.hotspot - 1 }}>
               <Imagem id="objeto-plateia-frente" rotulo="" largura={936} altura={256} decorativo mostrarRotulo={false} />
             </div>
-          ) : null}
         </>
       ) : null}
 
@@ -463,7 +488,7 @@ export function Cena(): JSX.Element | null {
       <h1
         style={{
           position: 'absolute',
-          left: '50%',
+          left: '80%',
           top: espaco.lg,
           transform: 'translateX(-50%)',
           zIndex: camada.hotspot,
@@ -482,37 +507,19 @@ export function Cena(): JSX.Element | null {
         <span style={{ display: 'block', textAlign: 'center', fontSize: tipografia.minimo, fontWeight: tipografia.pesos.normal }}>Bloco {cena?.bloco ?? bloco} · {cena?.seloTempo ?? REFLEXOES[cena?.bloco ?? bloco].tempo}</span>
       </h1>
 
-      <button
-        type="button"
-        className="jogo-botao"
-        aria-label={rotuloDaSaida}
-        disabled={saidaBloqueada}
-        onClick={voltarAoMapa}
-        style={{
-          position: 'absolute',
-          left: espaco.margem,
-          top: espaco.margem,
-          zIndex: camada.hotspot + 1,
-          minWidth: 0,
-          minHeight: espaco.margem,
-          fontSize: tipografia.minimo,
-          fontFamily: tipografia.familiaInterface,
-          fontWeight: tipografia.pesos.normal,
-          background: cores.caixa,
-          color: cores.textoApoio,
-          borderColor: cores.silhuetaContorno,
-          borderWidth: borda.interface,
-          borderRadius: raio.sm,
-          opacity: saidaBloqueada ? 0.4 : 1,
-          transition: `opacity ${duracao.curta}ms ${easing.suave}`,
-        }}
-      >
-        <span aria-hidden>◀</span> Voltar ao mapa
-      </button>
+      <div aria-label="Controles e progresso da fase" style={{ position: 'absolute', left: espaco.margem, top: espaco.xs, zIndex: camada.hotspot + 1, display: 'flex', alignItems: 'center', gap: espaco.sm, padding: espaco.xs, background: cores.caixa, border: `${borda.interface}px solid ${cores.contorno}`, borderRadius: raio.sm }}>
+        <button type="button" className="jogo-botao" aria-label={rotuloDaSaida} disabled={saidaBloqueada} onClick={voltarAoMapa} style={{ minWidth: 0, minHeight: alvo.minimo, padding: `${espaco.sm}px ${espaco.md}px`, fontSize: tipografia.minimo, fontFamily: tipografia.familiaInterface, fontWeight: tipografia.pesos.normal, background: cores.caixa, color: fasePronta ? cores.sucesso : cores.textoApoio, borderColor: fasePronta ? cores.sucesso : cores.silhuetaContorno, borderWidth: borda.interface, borderRadius: raio.sm, opacity: saidaBloqueada ? 0.4 : 1, transition: `opacity ${duracao.curta}ms ${easing.suave}` }}>
+          <span aria-hidden>◀</span> Voltar ao mapa
+        </button>
+        <button type="button" className="jogo-botao-nu" aria-label="Reabrir reflexão de Ana" disabled={bloqueado} onClick={reabrirReflexao} style={{ minHeight: alvo.minimo, fontSize: tipografia.minimo, fontFamily: tipografia.familiaInterface, color: cores.textoApoio, background: cores.painel, border: `${borda.interface}px solid ${cores.silhuetaContorno}`, borderRadius: raio.sm, padding: `0 ${espaco.md}px` }}>◌ Pensamento</button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: espaco.xs }}>
+          <small aria-label="Progresso das conversas do bloco" style={{ display: 'flex', alignItems: 'center', minHeight: alvo.minimo, color: dialogasDaCenaConcluidas ? cores.sucesso : cores.textoApoio, background: cores.painel, border: `${borda.interface}px solid ${cores.silhuetaContorno}`, borderRadius: raio.sm, padding: `0 ${espaco.sm}px`, fontSize: tipografia.minimo, whiteSpace: 'nowrap' }}>🗨 {progresso}{dialogasDaCenaConcluidas ? ' ✓' : ''}</small>
+          {progressoMinigames !== null ? <small aria-label="Progresso dos minigames do bloco" style={{ display: 'flex', alignItems: 'center', minHeight: alvo.minimo, color: minigamesDaCenaConcluidos ? cores.sucesso : cores.textoApoio, background: cores.painel, border: `${borda.interface}px solid ${cores.silhuetaContorno}`, borderRadius: raio.sm, padding: `0 ${espaco.sm}px`, fontSize: tipografia.minimo, whiteSpace: 'nowrap' }}>🧩 {progressoMinigames}{minigamesDaCenaConcluidos ? ' ✓' : ''}</small> : null}
+        </div>
+        {fasePronta ? <span role="status" style={{ color: cores.sucesso, fontSize: tipografia.minimo, fontWeight: tipografia.pesos.forte, whiteSpace: 'nowrap' }}>Fase pronta ✓</span> : null}
+      </div>
 
-      {lugarConcluido
-        ? null
-        : hotspotsVisiveis?.map((hotspot) => {
+      {hotspotsVisiveis?.filter(h => !lugarConcluido || h.arte.tipo === 'npc').map((hotspot) => {
             const ancora = hotspot.ancora ?? 'base';
             const folga = folgaDeAlvo(tamanhoDaArte(hotspot.arte));
 
@@ -521,13 +528,20 @@ export function Cena(): JSX.Element | null {
              * sumir deixaria um buraco onde estava a TV), mas deixa de ser
              * botão. Ver `hotspotInerte`.
              */
-            const inerte = hotspotInerte(hotspot, hotspotsFeitos);
+            const efeitosDoHotspot = [...hotspot.efeitos, ...(hotspot.efeitosComItem ?? [])];
+            const puzzleDoHotspot = efeitosDoHotspot.find((efeito) => efeito.tipo === 'abrirPuzzle');
+            const puzzleConcluido = puzzleDoHotspot?.tipo === 'abrirPuzzle' && puzzles[puzzleDoHotspot.puzzleId] === 'resolvido';
+            const acaoConcluida = hotspot.mensagemConcluido !== undefined && hotspotsFeitos.includes(hotspot.id);
+            const concluido = puzzleConcluido || acaoConcluida;
+            const inerte = lugarConcluido || (hotspot.id === 'b4-plateia' && dialogosConcluidos.includes('b4-apresentacao')) || hotspotInerte(hotspot, hotspotsFeitos) && !concluido;
 
             /** Nome com cargo: o leitor de telas ouve o mesmo que a plateia lê. */
             const rotulo = rotuloComCargo(hotspot.rotulo, hotspot.arte);
+            const chave = hotspot.arte.tipo === 'npc' ? chaveDaPresenca(cena!.bloco, lugarId, hotspot.arte.npcId) : null;
+            const presenca = chave ? presencasNpcs[chave] ?? presencasIniciais()[chave] : null;
 
             const arte = (
-              <ArteDoHotspot arte={hotspot.arte} rotulo={rotulo} hotspotId={hotspot.id} />
+              <ArteDoHotspot arte={hotspot.arte} rotulo={rotulo} hotspotId={hotspot.id} andando={Boolean(presenca?.movimento)} />
             );
 
             /**
@@ -541,9 +555,10 @@ export function Cena(): JSX.Element | null {
              * Inflar o sprite resolveria o alvo e estragaria a arte.
              */
             const estiloDoBotao = {
-              '--aura': itemSelecionado === null ? cores.destaque : cores.acao,
+              '--aura': concluido ? 'transparent' : itemSelecionado === null ? cores.destaque : cores.acao,
               padding: folga,
               margin: -folga,
+              position: 'relative',
               cursor: 'pointer',
               /**
                * Cena bloqueada (fala, puzzle, narração, pausa do Bloco 4):
@@ -555,26 +570,23 @@ export function Cena(): JSX.Element | null {
               pointerEvents: bloqueado ? 'none' : 'auto',
             } as CSSProperties;
 
-            return (
-              <Posicionado
-                key={hotspot.id}
-                pos={hotspot.pos}
-                ancora={ancora}
-                zIndex={camada.hotspot}
-              >
+            const conteudo = (
+              <>
                 {inerte ? (
                   arte
                 ) : (
                   <button
                     type="button"
-                    className={`jogo-botao-nu jogo-hotspot${hotspot.id === 'b3-relatorio' ? ' jogo-clipboard' : ''}`}
+                    className={`jogo-botao-nu jogo-hotspot${concluido ? ' jogo-concluido' : ''}${hotspot.id === 'b3-relatorio' ? ' jogo-clipboard' : ''}`}
                     disabled={bloqueado}
                     aria-label={
-                      itemSelecionado === null
+                      concluido
+                        ? `Concluído. Mostrar resultado de ${rotulo}. Shift e clique para refazer o minigame.`
+                        : itemSelecionado === null
                         ? `Interagir com ${rotulo}`
                         : `Usar item selecionado em ${rotulo}`
                     }
-                    onClick={() => acionar(hotspot)}
+                    onClick={(evento) => acionar(hotspot, evento.shiftKey)}
                     onMouseEnter={() => setEmFoco(hotspot.id)}
                     onMouseLeave={() => setEmFoco((atual) => (atual === hotspot.id ? null : atual))}
                     onFocus={() => setEmFoco(hotspot.id)}
@@ -582,20 +594,20 @@ export function Cena(): JSX.Element | null {
                     style={estiloDoBotao}
                   >
                     {arte}
+                    {concluido ? <span aria-hidden style={{ position: 'absolute', right: folga, top: folga, display: 'grid', placeItems: 'center', width: alvo.minimo / 2, height: alvo.minimo / 2, borderRadius: raio.redondo, border: `${borda.interface}px solid ${cores.caixa}`, background: cores.sucesso, color: cores.textoInverso, fontSize: tipografia.minimo, fontWeight: tipografia.pesos.forte }}>✓</span> : null}
                     {hotspot.id === 'b3-relatorio' ? <span style={{ position: 'absolute', left: '50%', bottom: '100%', transform: 'translateX(-50%)', padding: espaco.xs, background: cores.caixa, color: cores.destaque, fontSize: tipografia.minimo, whiteSpace: 'nowrap' }}>Clipboard · Relatório</span> : null}
                   </button>
                 )}
-              </Posicionado>
+              </>
             );
+            return chave && presenca
+              ? <PresencaEmCena key={chave} chave={chave} presenca={presenca}>{conteudo}</PresencaEmCena>
+              : <Posicionado key={hotspot.id} pos={hotspot.id === 'b4-plateia' && dialogosConcluidos.includes('b4-apresentacao') ? { ...hotspot.pos, x: -60 } : hotspot.pos} ancora={ancora} zIndex={camada.hotspot} style={hotspot.id === 'b4-plateia' ? { transition: `left ${duracao.maxima}ms ${easing.constante}` } : undefined}>{conteudo}</Posicionado>;
           })}
 
       <Protagonista comando={comando} onChegar={aoChegar} apresentando={dialogoAtivo?.dialogoId === 'b4-apresentacao' && dialogoAtivo.indice % 2 === 1} />
 
       {reflexaoAtiva ? <div aria-hidden style={{ position: 'absolute', inset: 0, background: cores.veuLeve, zIndex: camada.protagonista - 1, pointerEvents: 'none' }} /> : null}
-      <button type="button" className="jogo-botao-nu" aria-label="Reabrir reflexão de Ana" disabled={bloqueado} onClick={reabrirReflexao}
-        style={{ position: 'absolute', left: espaco.margem, top: espaco.margem + espaco.xxl + espaco.md, zIndex: camada.hotspot + 1, fontSize: tipografia.tamanhos.apoio, color: cores.textoApoio, background: cores.caixa, padding: espaco.sm }}>◌ Pensamento</button>
-      <small aria-label="Progresso das conversas do bloco" style={{ position: 'absolute', left: espaco.margem, top: espaco.margem + 2 * espaco.xxl + espaco.md, color: cores.textoApoio, background: cores.caixa, padding: espaco.xs, fontSize: tipografia.minimo }}>{progresso}</small>
-
       {/* Uma linha, sempre no mesmo lugar, com o nome do que está sob o
           ponteiro. É o que substituiu os retângulos de texto. */}
       <LinhaDeFoco rotulo={rotuloEmFoco} comItem={itemSelecionado !== null} />

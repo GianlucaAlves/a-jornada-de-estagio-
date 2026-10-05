@@ -51,6 +51,7 @@ import type {
   SkillId,
 } from '../domain/types';
 import { acharCena, existeProgressoSalvo, progressoSalvo, seletores, useJogo } from './jogo';
+import { xpTotal } from '../domain/content/niveis';
 
 // ------------------------------------------------------------------ apoio
 
@@ -250,10 +251,15 @@ function atravessarFronteira(proximo: Fronteira): void {
   expect(BLOCOS[proximo].estadoAssumido.skills).toHaveLength(SKILLS_NA_FRONTEIRA[proximo]);
 
   expect(j().blocoConcluido).toBe(true);
+  expect(j().xpAtual, `XP completo da fase ${j().bloco}`).toBe(xpTotal(j().bloco));
   j().avancarBloco();
+  expect(j().tela).toEqual({ tipo: 'evolucao', bloco: proximo });
+  j().concluirEvolucao();
   expect(j().tela).toEqual({ tipo: 'cartao', bloco: proximo });
-  expect(j().blocoConcluido).toBe(false);
   j().entrarNoBloco(proximo);
+  expect(j().blocoConcluido).toBe(false);
+  expect(j().nivel).toBe(proximo);
+  expect(j().xpAtual).toBe(0);
   expect(j().bloco).toBe(proximo);
   expect(j().tela).toEqual({ tipo: 'mapa' });
 
@@ -726,6 +732,9 @@ describe('progresso salvo no navegador (ADR-018)', () => {
     atravessarFronteira(2);
     // Deixa a store num estado sujo: cartão na tela e puzzle aberto.
     j().entrarNoLugar('cafezinho');
+    j().clicarHotspot(cenasDaFase(2).flatMap(c => c.hotspots).find(h => h.id === 'b2-bianca')!.id);
+    concluirDialogo();
+    j().entrarNoLugar('escritorio');
     j().clicarHotspot(hotspotQueAbre(2, 'associar').id);
     expect(j().puzzleAberto).not.toBeNull();
 
@@ -1142,16 +1151,11 @@ describe('colisão de id de hotspot entre cenas', () => {
     expect(j().hotspotsFeitos).toContain(algum);
   });
 
-  /**
-   * Espelho do teste de `umaVezSo` em integridade: se um gate
-   * `requerHotspotsFeitos` apontasse para um id que também existe numa cena
-   * ANTERIOR, o gate nasceria pré-satisfeito. A porta abriria sem que o hotspot
-   * desta fase tivesse sido clicado — em silêncio, no palco.
-   */
-  it('nenhum requerHotspotsFeitos aponta para um id que já existe em cena anterior', () => {
+  /** Gates podem ligar cenas da mesma fase, mas nunca devem herdar um clique da fase passada. */
+  it('nenhum requerHotspotsFeitos aponta para um id de fase anterior', () => {
     const preSatisfeitos: string[] = [];
-    CENAS.forEach((cena, i) => {
-      const anteriores = new Set(CENAS.slice(0, i).flatMap((c) => c.hotspots.map((h) => h.id)));
+    CENAS.forEach((cena) => {
+      const anteriores = new Set(CENAS.filter((c) => c.bloco < cena.bloco).flatMap((c) => c.hotspots.map((h) => h.id)));
       for (const h of cena.hotspots) {
         for (const dep of h.requerHotspotsFeitos ?? []) {
           if (anteriores.has(dep)) {

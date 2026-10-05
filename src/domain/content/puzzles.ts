@@ -43,6 +43,7 @@ export const PUZZLES: Record<PuzzleId, PuzzleDef> = {
     instrucao:
       'Três campos, três pessoas. Cada uma sabe um pedaço; ninguém sabe a senha inteira.',
     textoErro: 'A senha não abriu. Confira os três campos.',
+    mensagemConcluido: 'Notebook: Consegui entrar no sistema. Precisei de três pessoas pra isso, e tudo bem.',
     campos: [
       // Tiago é veterano do operacional: a parte que é igual pra todo mundo é
       // justamente a que quem está há anos na casa responde sem pensar.
@@ -72,74 +73,34 @@ export const PUZZLES: Record<PuzzleId, PuzzleDef> = {
   associar: {
     id: 'associar',
     tipo: 'associar',
-    rotulo: 'O que falta, e onde aprender',
-    instrucao: 'Ligue cada lacuna à trilha que fecha ela.',
-    textoErro: 'Essa trilha não fecha essa lacuna.',
-    esquerda: [
-      { id: 'lacuna-semana', texto: 'Organizar a semana quando tudo parece urgente' },
-      { id: 'lacuna-reuniao', texto: 'Falar numa reunião cheia de gente mais experiente' },
-      { id: 'lacuna-email', texto: 'Escrever um e-mail que a pessoa responde' },
-      { id: 'lacuna-planilha', texto: 'Montar uma planilha que outra pessoa entende' },
-    ],
-    direita: [
-      { id: 'trilha-prioridades', texto: 'Degreed · Prioridades e gestão do próprio tempo (8h)' },
-      { id: 'trilha-apresentar', texto: 'Percipio · Falar em público e conduzir reunião' },
-      { id: 'trilha-escrita', texto: 'Percipio · Escrita profissional no trabalho' },
-      { id: 'trilha-planilhas', texto: 'Degreed · Planilhas: montar, revisar, apresentar' },
-    ],
-    gabarito: {
-      'lacuna-semana': 'trilha-prioridades',
-      'lacuna-reuniao': 'trilha-apresentar',
-      'lacuna-email': 'trilha-escrita',
-      'lacuna-planilha': 'trilha-planilhas',
-    },
-  },
-
-  /**
-   * FASE 2 — planejamento. Veio da fase 3 (ADR-007), porque "priorizar por
-   * impacto no time" é literalmente um problema de ordenação, e porque a fase 3
-   * carregava dois puzzles seguidos e era a mais longa.
-   *
-   * O critério da ordem é UM e é dito na instrução: primeiro o que destrava o
-   * trabalho de outras pessoas. A planilha de horas vem antes de tudo porque
-   * três pessoas estão paradas por causa dela; a pasta do projeto vem por
-   * último porque ninguém está esperando por ela.
-   *
-   * GANCHO — é o mais universal do projeto: a segunda linha é a demanda que cai
-   * no mesmo dia da prova da faculdade, e a escolha certa é avisar cedo, com
-   * transparência. Nem aceitar e entregar mal, nem dizer um não seco. O puzzle
-   * ENCENA; quem apresenta é que nomeia (docs/roteiro/02-bloco-2.md).
-   *
-   * `linhas` já está embaralhada: a ordem de exibição não pode ser a resposta.
-   */
-  sequenciar: {
-    id: 'sequenciar',
-    tipo: 'sequenciar',
-    rotulo: 'A semana dela',
-    instrucao: 'Ordene de cima para baixo: primeiro o que destrava o trabalho do time.',
-    textoErro: 'Não é essa a ordem.',
+    rotulo: 'Planejar e aprender na prática',
+    instrucao: 'Ligue cada situação a uma prática que pode ajudar.',
+    textoErro: 'Essa prática não resolve essa situação.',
+    mensagemConcluido: 'Notebook: Cruzei cada tema de estudo com um problema real do meu dia. Ainda não sei onde vou usar tudo isso, mas já comecei.',
     efeitosSucesso: [
+      { tipo: 'concederSkill', skillId: 'leitura-mercado' },
       { tipo: 'concederItem', itemId: 'certificado-degree' },
-      { tipo: 'concederItem', itemId: 'anotacoes-treinamento' },
+      { tipo: 'concederSkill', skillId: 'aprendizado-continuo' },
       { tipo: 'concederSkill', skillId: 'competencia-tecnica' },
     ],
-    linhas: [
-      { id: 'seq-ata', texto: 'Enviar a ata da reunião de ontem para quem faltou' },
-      {
-        id: 'seq-planilha',
-        texto: 'Corrigir a planilha de horas: três pessoas não conseguem lançar as delas',
-      },
-      { id: 'seq-pasta', texto: 'Organizar a pasta do projeto, que ninguém abre há um mês' },
-      {
-        id: 'seq-status',
-        texto: 'Cobrar o status das duas frentes que a reunião de amanhã vai pedir',
-      },
-      {
-        id: 'seq-prazo',
-        texto: 'Avisar a liderança que a demanda nova cai no dia da prova da faculdade',
-      },
+    esquerda: [
+      { id: 'situacao-pedidos', texto: 'Chegam pedidos de todo lado e já estou esquecendo prazos.' },
+      { id: 'situacao-prazos', texto: 'Duas entregas disputam atenção: uma vence hoje, a outra exige foco.' },
+      { id: 'situacao-ferramenta', texto: 'No trabalho pediram uma ferramenta que ainda não sei usar.' },
+      { id: 'situacao-idioma', texto: 'Quero acompanhar projetos e documentos de equipes de outros países.' },
     ],
-    ordemCorreta: ['seq-planilha', 'seq-prazo', 'seq-status', 'seq-ata', 'seq-pasta'],
+    direita: [
+      { id: 'pratica-anotar', texto: 'Anoto na hora o prazo, quem pediu e o que preciso entregar.' },
+      { id: 'pratica-priorizar', texto: 'Avalio urgência e esforço; deixo a tarefa mais pesada para a manhã.' },
+      { id: 'pratica-curso', texto: 'Faço um curso curto da ferramenta e já pratico no trabalho.' },
+      { id: 'pratica-ingles', texto: 'Estudo inglês para entender documentos e participar das conversas.' },
+    ],
+    gabarito: {
+      'situacao-pedidos': 'pratica-anotar',
+      'situacao-prazos': 'pratica-priorizar',
+      'situacao-ferramenta': 'pratica-curso',
+      'situacao-idioma': 'pratica-ingles',
+    },
   },
 
   /**
@@ -163,6 +124,7 @@ export const PUZZLES: Record<PuzzleId, PuzzleDef> = {
     instrucao:
       'Cada trecho vai num campo. Dois não entram em lugar nenhum — estruturar é escolher.',
     textoErro: 'Esse trecho não responde o que o campo pergunta.',
+    mensagemConcluido: 'Clipboard · Relatório: Os números que pareciam soltos agora contam uma história. Ninguém pediu, mas está feito e leva o meu nome.',
     campos: [
       { id: 'problema', rotulo: 'Problema' },
       { id: 'solucao', rotulo: 'Solução' },
@@ -220,6 +182,7 @@ export const PUZZLES: Record<PuzzleId, PuzzleDef> = {
     rotulo: 'Uma página para o gestor',
     instrucao: 'Quatro campos, quatro peças. Cada peça pertence a um campo.',
     textoErro: 'Essa peça não é desse campo.',
+    mensagemConcluido: 'Telão: Situação, tarefa, ação e resultado no lugar. O que eu fiz deixou de ser só meu e passou a poder ser visto.',
     campos: [
       { id: 'situacao', rotulo: 'Situação' },
       { id: 'tarefa', rotulo: 'Tarefa' },

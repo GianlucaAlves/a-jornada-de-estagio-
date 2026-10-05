@@ -33,7 +33,7 @@ clicar em algo.
 > *Primeiro dia. Ninguém te olha, e mesmo assim você sente que todo mundo está
 > olhando.*
 
-**Diálogo não tem escolha.** Cada NPC diz de 4 a 6 falas curtas, avança com um
+**Diálogo não tem escolha.** Cada NPC diz de 4 a 7 falas curtas, avança com um
 clique e acaba. Ele planta a pista e para; **quem desenvolve o tema é você**.
 
 ---
@@ -62,19 +62,21 @@ reaberto quantas vezes quiser: tem botão de sair, e sair reinicia.
 
 Escolha óbvia, e ele resolve só um terço.
 
-> **Tiago:** Ah, a nova! A senha do primeiro acesso tá no e-mail de boas-vindas.
+> **Tiago:** Ah, a nova! A senha inicial tá no e-mail de boas-vindas.
 >
-> **Ana:** Eu não consigo abrir o e-mail sem a senha.
+> **Ana:** Então... não consigo abrir o e-mail sem a senha.
 
-> **Ana:** Fiquei parada ali porque achei que perguntar no primeiro dia ia parecer falta de preparo.
+> **Ana:** Fiquei um tempão olhando pra tela. Achei que perguntar logo no primeiro dia ia pegar mal.
 >
 > **Tiago:** *(pausa)* É. Todo mundo cai nessa.
 >
-> **Tiago:** O começo é igual pra todo mundo: **NOVO**, em letra maiúscula. O do
-> meio é o número do teu time, isso é com a Cláudia.
+> **Tiago:** O começo é **NOVO**, em maiúscula. Igual pra todo mundo.
 >
-> **Tiago:** E o fim é o dia que você entrou. *(volta pro que estava fazendo)*
-> Eu também demorei até decorar onde abria chamado.
+> **Tiago:** O do meio é o número do teu time; a Cláudia sabe. No fim vai o dia
+> que você entrou.
+>
+> **Tiago:** *(volta pro que estava fazendo)* Eu também demorei pra decorar onde
+> abria chamado.
 
 **→ Campo 1: `NOVO`**
 **→ Ganha skill: Coragem de perguntar**
@@ -92,15 +94,15 @@ Escolha óbvia, e ele resolve só um terço.
 Ela para, mas por pouco tempo. Isso é de propósito: no Bloco 3 ela vai parar de
 verdade, e a diferença tem que ser sentida.
 
-> **Cláudia:** Você é a estagiária nova. Cláudia.
+> **Cláudia:** Você é a estagiária nova? Cláudia.
 >
-> **Ana:** Ana. Preciso do número do time, pra senha.
+> **Ana:** Sou, sim. Ana. Tô tentando entrar no sistema... qual é o número do time?
 >
-> **Cláudia:** **12**. *(para, volta meio metro)* O que te trouxe pra cá?
+> **Cláudia:** É **12**. *(para, volta meio metro)* E me conta: o que te trouxe pra cá?
 >
-> **Ana:** Queria ver como é na prática. Na faculdade eu só vi isso no papel.
+> **Ana:** Queria ver como é no dia a dia. Na faculdade a gente vê muita coisa no papel, né?
 >
-> **Cláudia:** Hm. *(anota mentalmente e sai)* Bom primeiro dia.
+> **Cláudia:** Ah, entendi. *(anota mentalmente e sai)* Bom primeiro dia.
 
 **→ Campo 2: `12`**
 **→ Ganha skill: Autoconhecimento**
@@ -116,18 +118,19 @@ verdade, e a diferença tem que ser sentida.
 
 Único que puxa conversa sem ela pedir.
 
-> **Rafael:** Você tá há quarenta minutos naquela tela, né? Relaxa, eu fiquei uma
-> hora e vinte.
+> **Rafael:** Você tá há quarenta minutos nessa tela, né? Eu levei quase uma hora
+> e meia. Tá indo bem.
 >
 > **Ana:** *(constrangida)* Tanto assim?
 >
-> **Rafael:** Rafael, projetos, time do lado. O fim da senha é o dia que você
-> entrou: hoje, dia **03**.
+> **Rafael:** Sou o Rafael, do time de Projetos, ali do lado. No fim vai o dia
+> que você entrou: hoje é **03**.
 >
 > **Rafael:** *(escreve o ramal atrás de um cartão)* Qualquer coisa que travar, me
 > chama. Sério.
 >
-> **Rafael:** Amanhã você produz. Hoje já sabe onde ficam três ramais. Eu levei uma semana.
+> **Rafael:** Pra primeiro dia, três ramais já é bastante. Eu levei uma semana
+> pra achar todo mundo.
 
 **→ Campo 3: `03`**
 **→ Ganha: Cartão do Rafael**

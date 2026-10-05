@@ -1,8 +1,10 @@
 import { create } from 'zustand';
 import { REFLEXOES } from '../domain/content/reflexoes';
+import { nivelDoBloco, xpDasInteracoes, xpTotal } from '../domain/content/niveis';
+import { assentarPresencas, marcarDialogo, presencasIniciais } from '../domain/content/presencas';
+import type { PresencasNpcs } from '../domain/content/presencas';
 import {
   BLOCOS,
-  CARTOES,
   CENAS,
   CONEXOES,
   DIALOGOS,
@@ -36,6 +38,12 @@ import type {
 export type PausaBloco4 = 'inativa' | 'rodando' | 'concluida';
 
 export interface EstadoJogo {
+  nivel: BlocoId;
+  xpAtual: number;
+  interacoesPontuadas: string[];
+  evolucoesVistas: BlocoId[];
+  ganhoXp: { id: string; valor: number; lugarId: LugarId; pos: { x: number; y: number }; sequencia: number } | null;
+  presencasNpcs: PresencasNpcs;
   reflexaoVista: Partial<Record<BlocoId, boolean>>;
   reflexaoAtiva: { etapa: 'tempo' | 'falas'; indice: number } | null;
   bloco: BlocoId;
@@ -51,6 +59,8 @@ export interface EstadoJogo {
   skills: SkillId[];
   puzzles: Record<PuzzleId, EstadoPuzzle>;
   puzzleAberto: PuzzleId | null;
+  /** Mensagem transitória da Ana na área de contexto da barra inferior. */
+  mensagemConclusao: string | null;
   /**
    * Quantas vezes um puzzle foi ABERTO nesta sessão. Monótono.
    *
@@ -89,6 +99,8 @@ export interface EstadoJogo {
 }
 
 export interface AcoesJogo {
+  concluirEvolucao: () => void;
+  concluirMovimentoNpc: (chave: string) => void;
   iniciarReflexao: () => void;
   reabrirReflexao: () => void;
   avancarReflexao: () => void;
@@ -99,6 +111,9 @@ export interface AcoesJogo {
   selecionarItem: (itemId: ItemId | null) => void;
   avancarDialogo: () => void;
   resolverPuzzle: (puzzleId: PuzzleId) => void;
+  ensaiarPuzzle: (puzzleId: PuzzleId) => void;
+  mostrarMensagemConclusao: (mensagem: string) => void;
+  fecharMensagemConclusao: () => void;
   fecharPuzzle: () => void;
   fecharNarracao: () => void;
   fecharItemRecebido: () => void;
@@ -144,6 +159,12 @@ function puzzlesIniciais(): Record<PuzzleId, EstadoPuzzle> {
 
 function estadoInicial(): EstadoJogo {
   return {
+    nivel: 1,
+    xpAtual: 0,
+    interacoesPontuadas: [],
+    evolucoesVistas: [],
+    ganhoXp: null,
+    presencasNpcs: presencasIniciais(),
     reflexaoVista: {},
     reflexaoAtiva: null,
     bloco: 1,
@@ -159,6 +180,7 @@ function estadoInicial(): EstadoJogo {
     skills: [],
     puzzles: puzzlesIniciais(),
     puzzleAberto: null,
+    mensagemConclusao: null,
     aberturasDePuzzle: 0,
     hotspotsFeitos: [],
     dialogoAtivo: null,
@@ -199,6 +221,13 @@ const CHAVE_PROGRESSO = 'apresentacao-jogo/progresso';
 const VERSAO_PROGRESSO = 2;
 
 interface ProgressoSalvo {
+  nivel?: BlocoId;
+  xpAtual?: number;
+  interacoesPontuadas?: string[];
+  evolucoesVistas?: BlocoId[];
+  blocoConcluido?: boolean;
+  /** Saves anteriores migram pelas conversas concluídas, sem perder o ensaio. */
+  presencasNpcs?: PresencasNpcs;
   /** Opcional para ler ensaios salvos antes da introdução dos monólogos. */
   reflexaoVista?: Partial<Record<BlocoId, boolean>>;
   versao: number;
@@ -256,6 +285,12 @@ function salvar(s: EstadoJogo): void {
   const armazem = armazenamento();
   if (!armazem) return;
   const progresso: ProgressoSalvo = {
+    nivel: s.nivel,
+    xpAtual: s.xpAtual,
+    interacoesPontuadas: s.interacoesPontuadas,
+    evolucoesVistas: s.evolucoesVistas,
+    blocoConcluido: s.blocoConcluido,
+    presencasNpcs: assentarPresencas(s.presencasNpcs),
     reflexaoVista: s.reflexaoVista,
     versao: VERSAO_PROGRESSO,
     bloco: s.bloco,
@@ -311,7 +346,16 @@ function lerProgresso(): ProgressoSalvo | null {
     if (!Array.isArray(dado.dialogosConcluidos)) return null;
     if (!Array.isArray(dado.nomesRevelados)) return null;
     if (!dado.tela || typeof dado.tela !== 'object') return null;
+    if (dado.nivel !== undefined && dado.nivel !== dado.bloco) return null;
+    if (dado.xpAtual !== undefined && (!Number.isFinite(dado.xpAtual) || dado.xpAtual < 0 || dado.xpAtual > xpTotal(dado.bloco!))) return null;
+    if (dado.interacoesPontuadas !== undefined && (!Array.isArray(dado.interacoesPontuadas) || dado.interacoesPontuadas.some(id => typeof id !== 'string'))) return null;
+    if (dado.evolucoesVistas !== undefined && (!Array.isArray(dado.evolucoesVistas) || dado.evolucoesVistas.some(id => !BLOCOS[id]))) return null;
+    if (dado.blocoConcluido !== undefined && typeof dado.blocoConcluido !== 'boolean') return null;
     if (dado.reflexaoVista !== undefined && (typeof dado.reflexaoVista !== 'object' || dado.reflexaoVista === null || Array.isArray(dado.reflexaoVista) || Object.entries(dado.reflexaoVista).some(([id, visto]) => !Object.prototype.hasOwnProperty.call(BLOCOS, id) || typeof visto !== 'boolean'))) return null;
+    if (dado.presencasNpcs !== undefined) {
+      if (!chavesBatem(dado.presencasNpcs, Object.keys(presencasIniciais()))) return null;
+      if (Object.values(dado.presencasNpcs).some(p => !p || typeof p.visivel !== 'boolean' || !p.posicaoAtual || !Number.isFinite(p.posicaoAtual.x) || !Number.isFinite(p.posicaoAtual.y) || p.movimento !== undefined)) return null;
+    }
     return dado as ProgressoSalvo;
   } catch {
     return null;
@@ -361,6 +405,18 @@ export function acharCena(lugarId: LugarId, bloco: BlocoId): Cena | undefined {
 }
 
 export const useJogo = create<Jogo>((set, get) => {
+  function pontuar(id: string): void {
+    const s = get();
+    const valor = nivelDoBloco(s.bloco).xpPorInteracao[id];
+    if (!valor || s.interacoesPontuadas.includes(id) || s.tela.tipo !== 'cena') return;
+    const lugarId = s.tela.lugarId;
+    const hotspot = CENAS.find(c => c.bloco === s.bloco && c.lugarId === lugarId)?.hotspots.find(h =>
+      id === `hotspot:${h.id}` || [...h.efeitos, ...(h.efeitosComItem ?? [])].some(e =>
+        (e.tipo === 'dialogo' && id === `dialogo:${e.dialogoId}`) || (e.tipo === 'abrirPuzzle' && id === `puzzle:${e.puzzleId}`)));
+    if (!hotspot) return;
+    const interacoesPontuadas = [...s.interacoesPontuadas, id];
+    set({ interacoesPontuadas, xpAtual: xpDasInteracoes(s.bloco, interacoesPontuadas), ganhoXp: { id, valor, lugarId, pos: hotspot.pos, sequencia: (s.ganhoXp?.sequencia ?? 0) + 1 } });
+  }
   /** Aplica efeitos em sequência. Único caminho de mutação narrativa. */
   function aplicar(efeitos: readonly Efeito[]): void {
     for (const efeito of efeitos) {
@@ -370,7 +426,7 @@ export const useJogo = create<Jogo>((set, get) => {
           break;
 
         case 'dialogo':
-          set({ dialogoAtivo: { dialogoId: efeito.dialogoId, indice: 0 } });
+          set(s => ({ dialogoAtivo: { dialogoId: efeito.dialogoId, indice: 0 }, presencasNpcs: marcarDialogo(s.presencasNpcs, efeito.dialogoId, 'inicial') }));
           break;
 
         case 'abrirPuzzle':
@@ -490,6 +546,14 @@ export const useJogo = create<Jogo>((set, get) => {
   return {
     ...estadoInicial(),
 
+    concluirMovimentoNpc: chave => set(s => {
+      const p = s.presencasNpcs[chave];
+      if (!p?.movimento) return s;
+      const proximo = p.movimento.proximos?.[0];
+      if (proximo) return { presencasNpcs: { ...s.presencasNpcs, [chave]: { posicaoAtual: p.movimento.destino, visivel: true, movimento: { ...p.movimento, origem: p.movimento.destino, destino: proximo, proximos: p.movimento.proximos!.slice(1) } } } };
+      return { presencasNpcs: { ...s.presencasNpcs, [chave]: { posicaoAtual: p.movimento.destino, visivel: p.movimento.visivelAoChegar } } };
+    }),
+
     iniciarReflexao: () => {
       const s = get();
       if (s.tela.tipo !== 'cena' || s.tela.lugarId !== REFLEXOES[s.bloco].lugarId || s.reflexaoVista[s.bloco] || s.reflexaoAtiva || s.dialogoAtivo || s.puzzleAberto) return;
@@ -518,7 +582,7 @@ export const useJogo = create<Jogo>((set, get) => {
       const s = get();
       if (s.lugares[lugarId] === 'silhueta') return;
       const cena = acharCena(lugarId, s.bloco);
-      set({ tela: { tipo: 'cena', lugarId }, itemSelecionado: null, narracao: null });
+      set({ tela: { tipo: 'cena', lugarId }, itemSelecionado: null, narracao: null, presencasNpcs: assentarPresencas(s.presencasNpcs) });
       // Lugar concluído: linha de eco, sem puzzle e sem repetir diálogo.
       if (s.lugares[lugarId] === 'concluido' && cena) {
         set({ narracao: cena.ecoTexto });
@@ -551,6 +615,7 @@ export const useJogo = create<Jogo>((set, get) => {
       if (s.reflexaoAtiva || s.dialogoAtivo || s.puzzleAberto || s.pausaBloco4 === 'rodando') return;
       set({
         tela: { tipo: 'mapa' },
+        presencasNpcs: assentarPresencas(s.presencasNpcs),
         itemSelecionado: null,
         narracao: null,
         mensagemFalha: null,
@@ -578,6 +643,7 @@ export const useJogo = create<Jogo>((set, get) => {
             hotspotsFeitos: [...st.hotspotsFeitos, h.id],
             itemSelecionado: null,
           }));
+          pontuar(`hotspot:${h.id}`);
           aplicar(h.efeitosComItem);
           return;
         }
@@ -587,6 +653,7 @@ export const useJogo = create<Jogo>((set, get) => {
       }
 
       set((st) => ({ hotspotsFeitos: [...st.hotspotsFeitos, h.id] }));
+      pontuar(`hotspot:${h.id}`);
       aplicar(h.efeitos);
     },
 
@@ -620,10 +687,12 @@ export const useJogo = create<Jogo>((set, get) => {
         const jaConcluido = s.dialogosConcluidos.includes(dialogo.id);
         set((st) => ({
           dialogoAtivo: null,
+          presencasNpcs: marcarDialogo(st.presencasNpcs, dialogo.id, 'final'),
           dialogosConcluidos: jaConcluido
             ? st.dialogosConcluidos
             : [...st.dialogosConcluidos, dialogo.id],
         }));
+        if (!jaConcluido) pontuar(`dialogo:${dialogo.id}`);
         if (!jaConcluido && dialogo.efeitos) aplicar(dialogo.efeitos);
         return;
       }
@@ -647,8 +716,19 @@ export const useJogo = create<Jogo>((set, get) => {
       }));
       // A recompensa pertence ao puzzle. Reabri-lo para rever a resposta não
       // concede certificado nem reapresenta a animação.
-      if (primeiraResolucao) aplicar(PUZZLES[puzzleId].efeitosSucesso ?? []);
+      if (primeiraResolucao) {
+        pontuar(`puzzle:${puzzleId}`);
+        aplicar(PUZZLES[puzzleId].efeitosSucesso ?? []);
+      }
     },
+
+    ensaiarPuzzle: (puzzleId) => {
+      const s = get();
+      if (s.puzzles[puzzleId] !== 'resolvido' || s.dialogoAtivo || s.puzzleAberto || s.reflexaoAtiva) return;
+      set((atual) => ({ puzzleAberto: puzzleId, mensagemConclusao: null, aberturasDePuzzle: atual.aberturasDePuzzle + 1 }));
+    },
+    mostrarMensagemConclusao: (mensagem) => set({ mensagemConclusao: mensagem, itemSelecionado: null }),
+    fecharMensagemConclusao: () => set({ mensagemConclusao: null }),
 
     /**
      * SAIR DO PUZZLE (ADR-011). Fecha o overlay e reinicia o puzzle.
@@ -681,18 +761,24 @@ export const useJogo = create<Jogo>((set, get) => {
 
     avancarBloco: () => {
       const s = get();
-      if (s.reflexaoAtiva) return;
+      if (s.reflexaoAtiva || s.dialogoAtivo || s.puzzleAberto || s.pausaBloco4 === 'rodando') return;
+      if (s.tela.tipo === 'evolucao' || s.tela.tipo === 'cartao') return;
       if (s.bloco >= ULTIMO_BLOCO) return;
       const proximo = (s.bloco + 1) as BlocoId;
-      const cartao = CARTOES.find((c) => c.bloco === proximo);
       set({
-        tela: { tipo: 'cartao', bloco: proximo },
-        blocoConcluido: false,
+        tela: s.evolucoesVistas.includes(s.bloco) ? { tipo: 'cartao', bloco: proximo } : { tipo: 'evolucao', bloco: proximo },
+        evolucoesVistas: [...new Set([...s.evolucoesVistas, s.bloco])],
         itemSelecionado: null,
         narracao: null,
-        // A troca de postura acontece escondida atrás do cartão.
-        sprite: cartao?.sprite ?? s.sprite,
+        // A evolução usa a mesma configuração que desenha o cartão de nível.
+        sprite: nivelDoBloco(proximo).spriteAna,
       });
+    },
+
+    concluirEvolucao: () => {
+      const s = get();
+      if (s.tela.tipo !== 'evolucao') return;
+      set({ tela: { tipo: 'cartao', bloco: s.tela.bloco }, evolucoesVistas: [...new Set([...s.evolucoesVistas, s.bloco])] });
     },
 
     /**
@@ -706,9 +792,12 @@ export const useJogo = create<Jogo>((set, get) => {
       const lugares = lugaresIniciais();
       for (const id of def.estadoAssumido.lugaresDestravados) lugares[id] = 'destravado';
       for (const id of def.estadoAssumido.lugaresConcluidos) lugares[id] = 'concluido';
-      const cartao = CARTOES.find((c) => c.bloco === bloco);
       set({
         bloco,
+        nivel: bloco,
+        xpAtual: xpDasInteracoes(bloco, get().interacoesPontuadas),
+        ganhoXp: null,
+        presencasNpcs: { ...get().presencasNpcs, ...Object.fromEntries(Object.entries(presencasIniciais()).filter(([chave]) => chave.startsWith(`${bloco}:`))) },
         reflexaoAtiva: null,
         tela: { tipo: 'mapa' },
         itens,
@@ -721,7 +810,7 @@ export const useJogo = create<Jogo>((set, get) => {
         itemSelecionado: null,
         narracao: null,
         blocoConcluido: false,
-        sprite: cartao?.sprite ?? 'ana-neutra',
+        sprite: nivelDoBloco(bloco).spriteAna,
       });
     },
 
@@ -796,10 +885,19 @@ export const useJogo = create<Jogo>((set, get) => {
     continuar: () => {
       const salvoAgora = lerProgresso();
       if (!salvoAgora) return;
+      const interacoesPontuadas = salvoAgora.interacoesPontuadas ?? [...salvoAgora.dialogosConcluidos.map(id => `dialogo:${id}`), ...TODOS_PUZZLES.filter(id => salvoAgora.puzzles[id] === 'resolvido').map(id => `puzzle:${id}`), ...salvoAgora.hotspotsFeitos.map(id => `hotspot:${id}`)];
+      const xpAtual = xpDasInteracoes(salvoAgora.bloco, interacoesPontuadas);
       set({
         ...estadoInicial(),
+        presencasNpcs: salvoAgora.presencasNpcs ?? salvoAgora.dialogosConcluidos.reduce((p, id) => assentarPresencas(marcarDialogo(marcarDialogo(p, id, 'inicial'), id, 'final')), presencasIniciais()),
         reflexaoVista: { ...(salvoAgora.reflexaoVista ?? {}) },
         bloco: salvoAgora.bloco,
+        nivel: salvoAgora.bloco,
+        // Saves anteriores migram pelo que terminou, nunca pela abertura de conversa.
+        interacoesPontuadas,
+        xpAtual,
+        evolucoesVistas: salvoAgora.evolucoesVistas ?? [],
+        blocoConcluido: salvoAgora.blocoConcluido ?? (salvoAgora.bloco < ULTIMO_BLOCO && xpTotal(salvoAgora.bloco) === xpAtual),
         tela: telaRestauravel(salvoAgora.tela),
         lugares: { ...salvoAgora.lugares },
         nomesRevelados: [...salvoAgora.nomesRevelados],
@@ -841,7 +939,16 @@ useJogo.subscribe(salvar);
 export const seletores = {
   progressoDeConversas: (s: EstadoJogo): string => {
     const conversas = [...new Set(CENAS.filter(c => c.bloco === s.bloco).flatMap(c => c.hotspots.filter(h => h.arte.tipo === 'npc').flatMap(h => [...h.efeitos, ...(h.efeitosComItem ?? [])].flatMap(e => e.tipo === 'dialogo' ? [e.dialogoId] : []))))];
-    return `${conversas.filter(id => s.dialogosConcluidos.includes(id)).length}/${conversas.length} conversas`;
+    const total = CENAS.find(c => c.bloco === s.bloco)?.totalConversas ?? 0;
+    return `Conversas ${conversas.filter(id => s.dialogosConcluidos.includes(id)).length}/${total}`;
+  },
+  progressoDeMinigames: (s: EstadoJogo): string | null => {
+    const cenas = CENAS.filter(c => c.bloco === s.bloco);
+    const total = cenas[0]?.totalMinigames ?? 0;
+    if (total === 0) return null;
+    const ids = [...new Set(cenas.flatMap(c => c.hotspots.flatMap(h => [...h.efeitos, ...(h.efeitosComItem ?? [])].flatMap(e => e.tipo === 'abrirPuzzle' ? [e.puzzleId] : []))))];
+    const concluidos = ids.filter(id => s.puzzles[id] === 'resolvido').length;
+    return `Minigames ${concluidos}/${total}`;
   },
   /** Itens renderizáveis na barra. Tardios NÃO são diferenciados. */
   itensNaBarra: (s: EstadoJogo): ItemId[] =>

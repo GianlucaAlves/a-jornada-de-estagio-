@@ -40,6 +40,7 @@ import type {
 } from '../domain/types';
 import { assetDoRetrato } from '../assets/manifest';
 import { useJogo } from '../store/jogo';
+import { POSICOES_DOS_DIALOGOS, chaveDaPresenca } from '../domain/content/presencas';
 import {
   borda,
   caixaDeDialogo,
@@ -193,12 +194,21 @@ export function cabeNaCaixa(texto: string): boolean {
 // ------------------------------------------------------------------ componente
 
 export function Dialogo(): JSX.Element | null {
+  const presencas = useJogo(s => s.presencasNpcs);
+  const tela = useJogo(s => s.tela);
+  const bloco = useJogo(s => s.bloco);
   const dialogoAtivo = useJogo((s) => s.dialogoAtivo);
   const sprite = useJogo((s) => s.sprite);
   const avancarDialogo = useJogo((s) => s.avancarDialogo);
 
   const fala = falaNaTela(dialogoAtivo, sprite);
   if (fala === null) return null;
+  // A fala espera quem estava fora atravessar a borda. O retrato sozinho não
+  // substitui a presença do locutor na cena compartilhada com a plateia.
+  if (tela.tipo === 'cena') {
+    if ((POSICOES_DOS_DIALOGOS[dialogoAtivo!.dialogoId] ?? []).some(m => presencas[m.chave]?.movimento)) return null;
+    if (ehNpc(fala.no.quem) && !presencas[chaveDaPresenca(bloco, tela.lugarId, fala.no.quem)]?.visivel) return null;
+  }
 
   const nome = fala.identidade === null ? '' : linhaDeNome(fala.identidade);
 

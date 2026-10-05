@@ -1,232 +1,77 @@
-# BLOCO 2 — O QUE NINGUÉM ENSINOU
+# Bloco 2 — O que ninguém ensinou
 
-**Temas:** aprendizado contínuo + planejamento
-**Apresenta:** Heloisa
-**Laço:** Cafezinho → Escritório → Cafezinho *(ADR-032)*
-**Sprite:** `ana-neutra`
-**Cartão:** **1 mês depois — O que ninguém ensinou**
-**Puzzles:** `associar` (café) e `sequenciar` (mesa)
-**Tempo alvo:** 9 min
+**Temas:** planejamento + busca por conhecimento  
+**Apresenta:** Heloisa  
+**Laço:** Cafezinho → Escritório → Cafezinho  
+**Cartão:** **1 mês depois — O que ninguém ensinou**  
+**Minigame:** `associar` (Escritório; único do bloco)
 
 > Conteúdo tipado em `src/domain/content/bloco2.ts`.
 
----
+## Abertura — Cafezinho
 
-# CENA A — CAFEZINHO
+> Um mês. Já sei onde fica o café e como entrar no sistema. Mas ainda tem muita coisa que a faculdade não falou.
 
-## Estado da cena
+## 1. Bianca — cursos e prática
 
-Copa. Máquina de café à esquerda, balcão longo no meio, luz mais quente que o
-Escritório. A **Bianca** encostada no balcão, o notebook dela aberto ao lado. Mais
-à direita, o **Rafael**.
+Bianca conversa com Ana sobre aprender ferramentas que o trabalho pede. Ela fala de cursos curtos, prática no próprio trabalho e inglês para acompanhar documentos e projetos com equipes de fora. No final, aponta o notebook no Escritório.
 
-**Hotspots:** Bianca · Notebook da Bianca · Máquina de café · Rafael
-
-## Abertura
-
-> *Um mês. Ela já sabe a senha de cor e já sabe que ninguém almoça antes de
-> meio-dia e meia. Ainda não sabe o que está fazendo.*
-
----
-
-## 1. Bianca (documentação de produto) — o coração do bloco
-
-Seis falas. Ela **abre** os dois assuntos do bloco e não explica nenhum.
-
-> **Bianca:** Você é do time da Cláudia, né? Ela falou que você pergunta muito.
-> Era elogio.
+> **Bianca:** Você tá com cara de quem ganhou cinco pedidos antes do almoço. Foi isso?
 >
-> **Bianca:** Eu sou formada em **Letras**. Hoje eu trabalho com **tecnologia**.
+> **Ana:** Quase. Planilha, ferramenta nova... eu digo “deixa comigo” e depois tento lembrar de tudo.
 >
-> **Ana:** Letras? Eu estava escolhendo trilha pelo nome da faculdade, sem olhar para o trabalho que tenho aqui.
+> **Bianca:** Conheço. Eu vim de outra área e fui aprendendo com curso curto, já testando no trabalho.
 >
-> **Bianca:** Transição aos vinte e oito, estudando **o que estava faltando**. Que
-> é diferente de estudar o que tem na grade.
+> **Ana:** Tipo o quê? Aqui já me pediram umas coisas que nunca vi na faculdade.
 >
-> **Bianca:** Tem as duas aqui dentro: **Degreed** é trilha, com começo e fim.
-> **Percipio** é biblioteca, pra quando você já sabe o nome do problema.
+> **Bianca:** Planilhas, o programa da área, gestão de projetos. E inglês também: tem documento e projeto de fora que chega assim.
 >
-> **Bianca:** Eu ainda estudo, Ana. Semana passada passei a tarde tentando explicar uma coisa em duas páginas. Ainda não consegui.
+> **Bianca:** Olha aquele notebook no Escritório. Tem umas situações pra ligar com jeitos de resolver. Vê se alguma te ajuda.
 
-**→ Ganha skill: Leitura do que o trabalho pede**
-**→ Ganha skill: Aprendizado contínuo**
+## 2. Escritório — minigame `associar`
 
-> ⚠️ **A Bianca é a única exceção ao expurgo de vocabulário** (ADR-027). "Formada
-> em Letras, trabalha com tecnologia" é a frase mais anti-nicho que este projeto
-> pode dizer, e ela depende do contraste entre as duas áreas. **Aqui ela só
-> planta.** Ela volta na fase 5 para falar de pivotar — não antecipe nada disso,
-> nem em fala nem em comentário.
+O notebook só responde depois da conversa com Bianca. A pessoa liga cada situação a uma prática útil. Os dois primeiros pares tratam de planejamento; os dois últimos, de buscar conhecimento.
 
-> 💡 **Gancho 1 — o elogio:** o que o Bloco 1 plantou já rendeu, e ela não ficou
-> sabendo na hora. Isso vai acontecer de novo.
+| Situação | Prática |
+|---|---|
+| Chegam pedidos de todo lado e já estou esquecendo prazos. | Anoto na hora o prazo, quem pediu e o que preciso entregar. |
+| Duas entregas disputam atenção: uma vence hoje, a outra exige foco. | Avalio urgência e esforço; deixo a tarefa mais pesada para a manhã. |
+| No trabalho pediram uma ferramenta que ainda não sei usar. | Faço um curso curto da ferramenta e já pratico no trabalho. |
+| Quero acompanhar projetos e documentos de equipes de outros países. | Estudo inglês para entender documentos e participar das conversas. |
 
-> 💡 **Gancho 2 — a grade x a terça-feira** *(a Bianca só abriu a porta com
-> "estudar o que faltou"; o resto é seu)*: pergunte à plateia quanto tempo o curso
-> deles dedicou a conduzir uma reunião com gente mais experiente na sala. E a
-> prova teórica? Bastante. **Nenhum dos dois é inútil — mas só um deles aparece na
-> terça-feira.** O diploma não é desperdício, ele é **incompleto**: dá a base de
-> raciocínio, não dá o vocabulário do dia a dia. Quem trata isso como traição da
-> faculdade fica ressentido; quem trata como lacuna, estuda.
+Ao concluir, Ana recebe o **Certificado de conclusão** e as habilidades previstas para o bloco. Ela volta ao Cafezinho pelo mapa para conversar com Rafael.
 
-> 💡 **Gancho 3 — Degreed x Percipio** *(ela deu uma frase pra cada; **desenvolva
-> agora**)*: trilha estruturada é pra quando **você não sabe o que não sabe**;
-> biblioteca sob demanda é pra quando **você já sabe o nome do problema** e precisa
-> resolver hoje. Errar a ferramenta é o que faz a pessoa desistir: ninguém aguenta
-> uma trilha de 40h pra tirar uma dúvida de 20 minutos, e ninguém constrói base
-> pulando de vídeo em vídeo.
+## 3. Rafael — anotar e priorizar
 
-> 💡 **Gancho 4 — "ninguém aqui parou":** ela é a prova viva de que a transição é
-> possível e de que ela não termina.
+Rafael só conversa depois que o notebook foi concluído. Ao final, entrega as **Anotações do treinamento** e conclui o bloco.
 
----
-
-## 2. Notebook da Bianca — PUZZLE `associar`
-
-**Mecânica:** ligar cada lacuna à trilha que fecha ela. 4 pares. Par errado
-recua e avisa: *"Essa trilha não fecha essa lacuna."*
-
-**Esquerda — "apareceu na minha frente e eu não soube resolver":**
-
-1. Organizar a semana quando tudo parece urgente
-2. Falar numa reunião cheia de gente mais experiente
-3. Escrever um e-mail que a pessoa responde
-4. Montar uma planilha que outra pessoa entende
-
-**Direita — trilhas:** Degreed · Prioridades e gestão do próprio tempo (8h) ·
-Percipio · Falar em público e conduzir reunião · Percipio · Escrita profissional
-no trabalho · Degreed · Planilhas: montar, revisar, apresentar
-
-> ⚠️ **Plantio deliberado.** A lacuna da reunião é exatamente o que falta nela no
-> **Bloco 4**, onde o tema é saber se vender. A plateia não precisa notar agora —
-> precisa reconhecer depois. **Não comente durante o puzzle.**
-
----
-
-## 3. Máquina de café
-
-> *Ela aperta o botão errado e sai chá. Ela bebe o chá.*
-
-Pequeno, bobo, e diz muito sobre onde ela está. Sem item, sem skill — só
-personagem.
-
----
-
-# CENA B — ESCRITÓRIO *(a ida)*
-
-Mesmo cenário da fase 1. O lugar não mudou; ela mudou (ADR-022).
-
-> *A mesa dela. A semana inteira em cima dela, e tudo parecendo urgente.*
-
-**Hotspots:** Tela da Ana · Notebook da Ana
-
-## 1. Tela da Ana
-
-> *Uma demanda nova caiu às cinco da tarde. A prova da faculdade é quinta. As duas
-> coisas estão na mesma tela.*
-
-Duas informações, zero comentário. É o setup do terceiro pilar.
-
-## 2. Notebook da Ana — PUZZLE `sequenciar`
-
-**Mecânica:** ordenar cinco linhas. Critério único, dito na instrução: **primeiro
-o que destrava o trabalho do time.**
-
-**Ordem correta:**
-
-```
-1  Corrigir a planilha de horas: três pessoas não conseguem lançar as delas
-2  Avisar a liderança que a demanda nova cai no dia da prova da faculdade
-3  Cobrar o status das duas frentes que a reunião de amanhã vai pedir
-4  Enviar a ata da reunião de ontem para quem faltou
-5  Organizar a pasta do projeto, que ninguém abre há um mês
-```
-
-> 💡 **Gancho do puzzle — o terceiro pilar da Heloisa, e é o material mais
-> universal do projeto:** repare no que está em **segundo** lugar. Não é entregar a
-> demanda nova; é **avisar**. Cair uma demanda de última hora no dia da prova é a
-> coisa mais comum que existe, e há três saídas: aceitar e entregar mal, dizer um
-> não seco, ou **avisar cedo, com transparência, e negociar o prazo**. Só uma
-> delas mantém as duas coisas de pé. E repare no que ficou por último: a pasta que
-> ninguém abre há um mês parecia trabalho, mas ninguém está esperando por ela.
-> **Urgente e importante não são a mesma palavra.**
-
-## 3. Acerto do puzzle e recebimento
-
-Ao colocar as cinco tarefas na ordem certa, Ana recebe imediatamente o
-**Certificado de conclusão** e as **Anotações do treinamento**. Ela ergue cada
-item; o texto da conquista dá ao apresentador uma pergunta para desenvolver.
-O certificado não fica sobre a mesa como um novo alvo de clique.
-
-**→ Ganha: Certificado de conclusão**
-**→ Ganha: Anotações do treinamento** *(usado na fase 3)*
-**→ Ganha skill: Competência que ela foi buscar**
-
-> 💡 **Gancho de fala:** essa é a fala mais honesta da apresentação. Ela **não**
-> vai usar aquilo agora. A maior parte do que a gente estuda não tem aplicação
-> imediata — e é exatamente por isso que a maior parte das pessoas para de
-> estudar.
-
----
-
-# CENA A' — CAFEZINHO *(o fecho)*
-
-## 4. Rafael — só responde com o certificado na mão
-
-Sem a trilha concluída: *"Ele está no meio de uma conversa. E a semana dela
-continua inteira em cima da mesa."*
-
-> **Rafael:** Sobreviveu ao primeiro mês. *(brinda com o copo)*
+> **Rafael:** E aí, conseguiu ligar as situações às práticas? Qual delas te faria falta já?
 >
-> **Ana:** Por pouco.
-
-> **Ana:** Gostei de organizar a semana. Só precisei avisar cedo que a demanda nova caiu no dia da minha prova.
-
-> **Rafael:** Melhor avisar na terça do que pedir desculpa na sexta.
+> **Ana:** Anotar, com certeza. Essa semana deixei um prazo só na cabeça... não deu muito certo.
 >
-> **Rafael:** Eu vi que você usou meu ramal zero vezes.
+> **Rafael:** Já fiz igual. Anota na hora o prazo, quem pediu e o que ficou combinado. A cabeça agradece.
 >
-> **Rafael:** Não deixa de chamar por achar que tá incomodando. Esse foi o meu
-> erro.
-
-**→ Cafezinho concluído. Fim do bloco.**
-
-> 💡 **Gancho de fala:** a rede não serve de nada guardada. Ela tem o ramal desde
-> o primeiro dia e nunca ligou. E note que **ele** chama isso de erro dele, não
-> dela.
-
-> ⚠️ Ele fala do **ramal**, nunca do cartão. Mencionar o objeto sinalizaria o item
-> tardio.
-
----
+> **Ana:** E quando chegam três coisas juntas? Eu olho pra lista e travo.
+>
+> **Rafael:** Olha o prazo e o tamanho do trabalho. O mais pesado eu tento fazer de manhã. Se os prazos batem, aviso cedo e combino.
+>
+> **Rafael:** E separa um tempinho pro curso também. Se deixar pro “quando der”... já sabe. Toma, começa por esse caderno.
 
 ## Fecho do bloco
 
-> *Ela entrou no café sem saber o que estudar.*
-> *Saiu com quatro trilhas, um certificado que não serve pra nada hoje, e um
-> caderno.*
+> Ela começou a anotar as demandas e a buscar o que ainda precisa aprender.
+>
+> Saiu com um certificado e um jeito de organizar as demandas.
 
-> 💡 **Gancho de fecho:** *"Um mês atrás ela não sabia nem o que perguntar. Agora
-> ela sabe o nome do que ela não sabe. Isso é progresso, mesmo sem parecer."*
+## Checklist
 
-**→ Passa o bastão.** Cartão **"6 meses depois — Sem ninguém pedir"**.
-
----
-
-## Checklist do bloco
-
-| Elemento | Status |
+| Elemento | Resultado |
 |---|---|
-| Itens ganhos | Certificado de conclusão *(tardio)*, Anotações do treinamento |
-| Skills ganhas | Leitura do que o trabalho pede, Aprendizado contínuo, Competência que ela foi buscar *(nesta ordem)* |
-| Lugar concluído | Cafezinho |
-| NPCs | Bianca (nova), Rafael (reaparição) |
-| Puzzles | `associar` no café · `sequenciar` na mesa |
-| Laço | Cafezinho → Escritório → Cafezinho, fechado pelo certificado |
+| Conversas | Bianca e Rafael — 2 no total |
+| Minigames | `associar` no Escritório — 1 no total |
+| Item do minigame | Certificado de conclusão |
+| Item da conversa final | Anotações do treinamento |
+| Skills do minigame | Leitura do trabalho, Aprendizado contínuo e Competência técnica |
+| Percurso | Cafezinho → Escritório → Cafezinho |
 
-## Nota de encenação
-
-O `associar` fica no **café**, não na mesa. A spec de conteúdo imaginava os dois
-puzzles no Escritório; a suíte da store afirma que o hotspot que abre `associar` é
-alcançável entrando no Cafezinho, e a leitura do café é melhor de qualquer forma:
-a conversa vira lista ali, no notebook da Bianca, na frente dela. O que exige mesa
-— ordenar a própria semana — é o que fica no Escritório.
+O certificado só chega depois das associações no Escritório. Rafael não conclui o bloco antes disso. O minigame resume as práticas da apresentação: registrar pedidos e prazos, priorizar por urgência e esforço, reservar a manhã para tarefas mais exigentes, fazer cursos curtos aplicados ao trabalho e estudar inglês para ampliar a participação em projetos.

@@ -1,0 +1,3557 @@
+[
+  {
+    "arquivo": "001-abertura.png",
+    "descricao": "Abertura sem progresso salvo",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "002-b1-cartao.png",
+    "descricao": "Fase 1: cartão temporal e passagem de apresentação",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cartao",
+      "bloco": 1
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "003-b1-mapa.png",
+    "descricao": "Fase 1: mapa e lugares disponíveis",
+    "bloco": 1,
+    "tela": {
+      "tipo": "mapa"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "004-b1-escritorio.png",
+    "descricao": "Fase 1: Escritório, sem overlays",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "005-b1-escritorio-narracao.png",
+    "descricao": "Primeiro dia. Ninguém te olha, e mesmo assim você sente que todo mundo está olhando.",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "006-b1-b1-notebook-foco.png",
+    "descricao": "Hotspot: Notebook; aura e linha de foco",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "007-b1-b1-tiago-foco.png",
+    "descricao": "Hotspot: Tiago; aura e linha de foco",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "008-b1-b1-claudia-foco.png",
+    "descricao": "Hotspot: Cláudia; aura e linha de foco",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "009-b1-b1-rafael-foco.png",
+    "descricao": "Hotspot: Rafael; aura e linha de foco",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "010-b1-b1-tela-foco.png",
+    "descricao": "Hotspot: Tela aberta; aura e linha de foco",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "011-b1-tiago-fala-1.png",
+    "descricao": "b1-tiago, fala 1/7: tiago: Ah, a nova! A senha inicial tá no e-mail de boas-vindas.",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": {
+      "dialogoId": "b1-tiago",
+      "indice": 0
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "012-b1-tiago-fala-2.png",
+    "descricao": "b1-tiago, fala 2/7: ana: Então... não consigo abrir o e-mail sem a senha.",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": {
+      "dialogoId": "b1-tiago",
+      "indice": 1
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "013-b1-tiago-fala-3.png",
+    "descricao": "b1-tiago, fala 3/7: ana: Fiquei um tempão olhando pra tela. Achei que perguntar logo no primeiro dia ia pegar mal.",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": {
+      "dialogoId": "b1-tiago",
+      "indice": 2
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "014-b1-tiago-fala-4.png",
+    "descricao": "b1-tiago, fala 4/7: tiago: (pausa) É. Todo mundo cai nessa.",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": {
+      "dialogoId": "b1-tiago",
+      "indice": 3
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "015-b1-tiago-fala-5.png",
+    "descricao": "b1-tiago, fala 5/7: tiago: O começo é NOVO, em maiúscula. Igual pra todo mundo.",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": {
+      "dialogoId": "b1-tiago",
+      "indice": 4
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "016-b1-tiago-fala-6.png",
+    "descricao": "b1-tiago, fala 6/7: tiago: O do meio é o número do teu time; a Cláudia sabe. No fim vai o dia que você entrou.",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": {
+      "dialogoId": "b1-tiago",
+      "indice": 5
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "017-b1-tiago-fala-7.png",
+    "descricao": "b1-tiago, fala 7/7: tiago: (volta pro que estava fazendo) Eu também demorei pra decorar onde abria chamado.",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": {
+      "dialogoId": "b1-tiago",
+      "indice": 6
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "018-b1-claudia-fala-1.png",
+    "descricao": "b1-claudia, fala 1/5: claudia: Você é a estagiária nova? Cláudia.",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": {
+      "dialogoId": "b1-claudia",
+      "indice": 0
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "019-b1-claudia-fala-2.png",
+    "descricao": "b1-claudia, fala 2/5: ana: Sou, sim. Ana. Tô tentando entrar no sistema... qual é o número do time?",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": {
+      "dialogoId": "b1-claudia",
+      "indice": 1
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "020-b1-claudia-fala-3.png",
+    "descricao": "b1-claudia, fala 3/5: claudia: É 12. (para, volta meio metro) E me conta: o que te trouxe pra cá?",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": {
+      "dialogoId": "b1-claudia",
+      "indice": 2
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "021-b1-claudia-fala-4.png",
+    "descricao": "b1-claudia, fala 4/5: ana: Queria ver como é no dia a dia. Na faculdade a gente vê muita coisa no papel, né?",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": {
+      "dialogoId": "b1-claudia",
+      "indice": 3
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "022-b1-claudia-fala-5.png",
+    "descricao": "b1-claudia, fala 5/5: claudia: Ah, entendi. (anota mentalmente e sai) Bom primeiro dia.",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": {
+      "dialogoId": "b1-claudia",
+      "indice": 4
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "023-b1-rafael-fala-1.png",
+    "descricao": "b1-rafael, fala 1/5: rafael: Você tá há quarenta minutos nessa tela, né? Eu levei quase uma hora e meia. Tá indo bem.",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": {
+      "dialogoId": "b1-rafael",
+      "indice": 0
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "024-b1-rafael-fala-2.png",
+    "descricao": "b1-rafael, fala 2/5: ana: (constrangida) Tanto assim?",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": {
+      "dialogoId": "b1-rafael",
+      "indice": 1
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "025-b1-rafael-fala-3.png",
+    "descricao": "b1-rafael, fala 3/5: rafael: Sou o Rafael, do time de Projetos, ali do lado. No fim vai o dia que você entrou: hoje é 03.",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": {
+      "dialogoId": "b1-rafael",
+      "indice": 2
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "026-b1-rafael-fala-4.png",
+    "descricao": "b1-rafael, fala 4/5: rafael: (escreve o ramal atrás de um cartão) Qualquer coisa que travar, me chama. Sério.",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": {
+      "dialogoId": "b1-rafael",
+      "indice": 3
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "027-b1-rafael-fala-5.png",
+    "descricao": "b1-rafael, fala 5/5: rafael: Pra primeiro dia, três ramais já é bastante. Eu levei uma semana pra achar todo mundo.",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": {
+      "dialogoId": "b1-rafael",
+      "indice": 4
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "028-b1-reflexao-tempo.png",
+    "descricao": "Fase 1: abertura da reflexão",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "029-b1-reflexao-1.png",
+    "descricao": "Ana pensando: Primeiro dia. Meu coração tá batendo tão rápido que parece que todo mundo consegue ouvir.",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "030-b1-reflexao-2.png",
+    "descricao": "Ana pensando: Eu preciso parecer que sei o que estou fazendo. Se alguém perceber que eu não sei nada, vai achar que eu não deveria estar aqui.",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "031-b1-reflexao-3.png",
+    "descricao": "Ana pensando: Talvez eu consiga resolver tudo sozinha... é só prestar atenção e não incomodar ninguém.",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "032-b1-escritorio-eco.png",
+    "descricao": "Revisita concluída: Aqui ela falou com três pessoas pra digitar oito caracteres.",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "033-b1-fecho.png",
+    "descricao": "Fecho da fase: Ela precisou falar com três pessoas pra digitar oito caracteres.\nNenhuma delas deu a resposta inteira.",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "034-b2-cartao.png",
+    "descricao": "Fase 2: cartão temporal e passagem de apresentação",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cartao",
+      "bloco": 2
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "035-b2-mapa.png",
+    "descricao": "Fase 2: mapa e lugares disponíveis",
+    "bloco": 2,
+    "tela": {
+      "tipo": "mapa"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "036-b2-cafezinho.png",
+    "descricao": "Fase 2: Cafezinho, sem overlays",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "037-b2-cafezinho-narracao.png",
+    "descricao": "Um mês. Já sei onde fica o café e como entrar no sistema. Mas ainda tem muita coisa que a faculdade não falou.",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "038-b2-b2-bianca-foco.png",
+    "descricao": "Hotspot: Bianca; aura e linha de foco",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "039-b2-b2-maquina-foco.png",
+    "descricao": "Hotspot: Máquina de café; aura e linha de foco",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "040-b2-b2-rafael-foco.png",
+    "descricao": "Hotspot: Rafael; aura e linha de foco",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "041-b2-bianca-fala-1.png",
+    "descricao": "b2-bianca, fala 1/6: bianca: Você tá com cara de quem ganhou cinco pedidos antes do almoço. Foi isso?",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": {
+      "dialogoId": "b2-bianca",
+      "indice": 0
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "042-b2-bianca-fala-2.png",
+    "descricao": "b2-bianca, fala 2/6: ana: Quase. Planilha, ferramenta nova... eu digo “deixa comigo” e depois tento lembrar de tudo.",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": {
+      "dialogoId": "b2-bianca",
+      "indice": 1
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "043-b2-bianca-fala-3.png",
+    "descricao": "b2-bianca, fala 3/6: bianca: Conheço. Eu vim de outra área e fui aprendendo com curso curto, já testando no trabalho.",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": {
+      "dialogoId": "b2-bianca",
+      "indice": 2
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "044-b2-bianca-fala-4.png",
+    "descricao": "b2-bianca, fala 4/6: ana: Tipo o quê? Aqui já me pediram umas coisas que nunca vi na faculdade.",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": {
+      "dialogoId": "b2-bianca",
+      "indice": 3
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "045-b2-bianca-fala-5.png",
+    "descricao": "b2-bianca, fala 5/6: bianca: Planilhas, o programa da área, gestão de projetos. E inglês também: tem documento e projeto de fora que chega assim.",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": {
+      "dialogoId": "b2-bianca",
+      "indice": 4
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "046-b2-bianca-fala-6.png",
+    "descricao": "b2-bianca, fala 6/6: bianca: Olha aquele notebook no Escritório. Tem umas situações pra ligar com jeitos de resolver. Vê se alguma te ajuda.",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": {
+      "dialogoId": "b2-bianca",
+      "indice": 5
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "047-b2-rafael-fala-1.png",
+    "descricao": "b2-rafael, fala 1/6: rafael: E aí, conseguiu ligar as situações às práticas? Qual delas te faria falta já?",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": {
+      "dialogoId": "b2-rafael",
+      "indice": 0
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "048-b2-rafael-fala-2.png",
+    "descricao": "b2-rafael, fala 2/6: ana: Anotar, com certeza. Essa semana deixei um prazo só na cabeça... não deu muito certo.",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": {
+      "dialogoId": "b2-rafael",
+      "indice": 1
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "049-b2-rafael-fala-3.png",
+    "descricao": "b2-rafael, fala 3/6: rafael: Já fiz igual. Anota na hora o prazo, quem pediu e o que ficou combinado. A cabeça agradece.",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": {
+      "dialogoId": "b2-rafael",
+      "indice": 2
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "050-b2-rafael-fala-4.png",
+    "descricao": "b2-rafael, fala 4/6: ana: E quando chegam três coisas juntas? Eu olho pra lista e travo.",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": {
+      "dialogoId": "b2-rafael",
+      "indice": 3
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "051-b2-rafael-fala-5.png",
+    "descricao": "b2-rafael, fala 5/6: rafael: Olha o prazo e o tamanho do trabalho. O mais pesado eu tento fazer de manhã. Se os prazos batem, aviso cedo e combino.",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": {
+      "dialogoId": "b2-rafael",
+      "indice": 4
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "052-b2-rafael-fala-6.png",
+    "descricao": "b2-rafael, fala 6/6: rafael: E separa um tempinho pro curso também. Se deixar pro “quando der”... já sabe. Toma, começa por esse caderno.",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": {
+      "dialogoId": "b2-rafael",
+      "indice": 5
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "053-b2-reflexao-tempo.png",
+    "descricao": "Fase 2: abertura da reflexão",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "054-b2-reflexao-1.png",
+    "descricao": "Ana pensando: Um mês. Já sei onde fica o café e como entrar no sistema. Mas ainda tem muita coisa que a faculdade não falou.",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "055-b2-reflexao-2.png",
+    "descricao": "Ana pensando: Agora todo mundo me pede alguma coisa. Uma planilha, uma ata, um status pra ontem. E eu digo sim pra tudo e guardo tudo de cabeça.",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "056-b2-reflexao-3.png",
+    "descricao": "Ana pensando: Esta semana escapou um prazo. Não foi falta de vontade, foi falta de um jeito de me organizar.",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "057-b2-reflexao-4.png",
+    "descricao": "Ana pensando: E tem coisa que me pedem e eu ainda não sei fazer. Quando tudo chega junto, eu travo e tento fazer tudo ao mesmo tempo.",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "058-b2-cafezinho-eco.png",
+    "descricao": "Revisita concluída: Ela começou a anotar as demandas e a buscar o que ainda precisa aprender.",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "059-b2-escritorio.png",
+    "descricao": "Fase 2: Escritório, sem overlays",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "060-b2-escritorio-narracao.png",
+    "descricao": "De volta à mesa. Agora ela já sabe o que está procurando.",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "061-b2-b2-notebook-foco.png",
+    "descricao": "Hotspot: Notebook da Ana; aura e linha de foco",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "062-b2-escritorio-eco.png",
+    "descricao": "Revisita concluída: Um plano para dar conta do que chega e aprender o que ainda falta.",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "063-b2-fecho.png",
+    "descricao": "Fecho da fase: Ela percebeu o que ainda precisava aprender.\nSaiu com um certificado e um jeito de organizar as demandas.",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "064-b3-cartao.png",
+    "descricao": "Fase 3: cartão temporal e passagem de apresentação",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cartao",
+      "bloco": 3
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "065-b3-mapa.png",
+    "descricao": "Fase 3: mapa e lugares disponíveis",
+    "bloco": 3,
+    "tela": {
+      "tipo": "mapa"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "066-b3-linha-producao.png",
+    "descricao": "Fase 3: Linha de Produção, sem overlays",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "linha-producao"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "067-b3-linha-producao-narracao.png",
+    "descricao": "Seis meses. Ela tem tarefas de verdade agora. Nenhuma delas é essa.",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "linha-producao"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "068-b3-b3-tiago-foco.png",
+    "descricao": "Hotspot: Tiago; aura e linha de foco",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "linha-producao"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "069-b3-b3-monitor-foco.png",
+    "descricao": "Hotspot: Números da linha; aura e linha de foco",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "linha-producao"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "070-b3-b3-relatorio-foco.png",
+    "descricao": "Hotspot: Relatório; aura e linha de foco",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "linha-producao"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "071-b3-tiago-fala-1.png",
+    "descricao": "b3-tiago, fala 1/6: tiago: Essa conferência aí sempre foi no papel. No fim do turno a gente passa pra planilha, senão não fecha.",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "linha-producao"
+    },
+    "dialogo": {
+      "dialogoId": "b3-tiago",
+      "indice": 0
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "072-b3-tiago-fala-2.png",
+    "descricao": "b3-tiago, fala 2/6: tiago: (dá de ombros) Sei lá, quando eu cheguei já era assim.",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "linha-producao"
+    },
+    "dialogo": {
+      "dialogoId": "b3-tiago",
+      "indice": 1
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "073-b3-tiago-fala-3.png",
+    "descricao": "b3-tiago, fala 3/6: ana: Eu fico pensando... gosto de achar onde a informação emperra. Se eu guardar isso só pra mim, o pessoal da noite continua no escuro.",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "linha-producao"
+    },
+    "dialogo": {
+      "dialogoId": "b3-tiago",
+      "indice": 2
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "074-b3-tiago-fala-4.png",
+    "descricao": "b3-tiago, fala 4/6: tiago: Começa. Ninguém pediu pra você olhar isso.",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "linha-producao"
+    },
+    "dialogo": {
+      "dialogoId": "b3-tiago",
+      "indice": 3
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "075-b3-tiago-fala-5.png",
+    "descricao": "b3-tiago, fala 5/6: ana: Pois é. Mas também ninguém pediu pra eu deixar quieto.",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "linha-producao"
+    },
+    "dialogo": {
+      "dialogoId": "b3-tiago",
+      "indice": 4
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "076-b3-tiago-fala-6.png",
+    "descricao": "b3-tiago, fala 6/6: tiago: (pausa, depois ri) Tá bom. Olha aí.",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "linha-producao"
+    },
+    "dialogo": {
+      "dialogoId": "b3-tiago",
+      "indice": 5
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "077-b3-reflexao-tempo.png",
+    "descricao": "Fase 3: abertura da reflexão",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "linha-producao"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "078-b3-reflexao-1.png",
+    "descricao": "Ana pensando: Seis meses. Eu já não me perco tanto, e quando não entendo alguma coisa, sei como perguntar.",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "linha-producao"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "079-b3-reflexao-2.png",
+    "descricao": "Ana pensando: Tem algo estranho nesses números. Ninguém me pediu pra olhar, e talvez nem seja problema meu.",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "linha-producao"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "080-b3-reflexao-3.png",
+    "descricao": "Ana pensando: Mas eu não consigo deixar passar. Eu gosto de descobrir onde a informação trava.",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "linha-producao"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "081-b3-linha-producao-eco.png",
+    "descricao": "Revisita concluída: Aqui ela escreveu três páginas que ninguém tinha pedido.",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "linha-producao"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "082-b3-escritorio.png",
+    "descricao": "Fase 3: Escritório, sem overlays",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "083-b3-escritorio-narracao.png",
+    "descricao": "Ela atravessou o prédio com três páginas na mão. A mesa é a mesma de seis meses atrás.",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "084-b3-b3-claudia-foco.png",
+    "descricao": "Hotspot: Cláudia; aura e linha de foco",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "085-b3-claudia-fala-1.png",
+    "descricao": "b3-claudia, fala 1/6: claudia: O que é isso?",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": {
+      "dialogoId": "b3-claudia",
+      "indice": 0
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "086-b3-claudia-fala-2.png",
+    "descricao": "b3-claudia, fala 2/6: ana: A conferência da linha, lembra? Aquela que só vai pra planilha no fim do turno.",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": {
+      "dialogoId": "b3-claudia",
+      "indice": 1
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "087-b3-claudia-fala-3.png",
+    "descricao": "b3-claudia, fala 3/6: claudia: (folheando) Quem te pediu isso?",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": {
+      "dialogoId": "b3-claudia",
+      "indice": 2
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "088-b3-claudia-fala-4.png",
+    "descricao": "b3-claudia, fala 4/6: ana: Ninguém.",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": {
+      "dialogoId": "b3-claudia",
+      "indice": 3
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "089-b3-claudia-fala-5.png",
+    "descricao": "b3-claudia, fala 5/6: claudia: Peraí... seis meses fazendo isso à mão e ninguém tinha juntado por escrito?",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": {
+      "dialogoId": "b3-claudia",
+      "indice": 4
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "090-b3-claudia-fala-6.png",
+    "descricao": "b3-claudia, fala 6/6: claudia: Guardei seu nome.",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": {
+      "dialogoId": "b3-claudia",
+      "indice": 5
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "091-b3-escritorio-eco.png",
+    "descricao": "Revisita concluída: Aqui ela entregou um relatório que ninguém tinha pedido.",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "092-b3-fecho.png",
+    "descricao": "Fecho da fase: Ninguém pediu pra ela olhar aquela etapa.\nEla saiu de lá com um relatório e com o nome dela dentro dele.",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "linha-producao"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "093-b4-cartao.png",
+    "descricao": "Fase 4: cartão temporal e passagem de apresentação",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cartao",
+      "bloco": 4
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "094-b4-mapa.png",
+    "descricao": "Fase 4: mapa e lugares disponíveis",
+    "bloco": 4,
+    "tela": {
+      "tipo": "mapa"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "095-b4-sala-reunioes.png",
+    "descricao": "Fase 4: Sala de Reuniões, sem overlays",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "096-b4-sala-reunioes-narracao.png",
+    "descricao": "Um ano. Ela não é mais a estagiária nova; é só a estagiária. Innovation Week: as cadeiras viradas para a frente, a sala cheia, uma fila de estagiários mostrando o que fizeram. A próxima é ela.",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "097-b4-b4-marcos-foco.png",
+    "descricao": "Hotspot: Marcos; aura e linha de foco",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "098-b4-b4-tv-foco.png",
+    "descricao": "Hotspot: Tela da sala; aura e linha de foco",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "099-b4-b4-plateia-foco.png",
+    "descricao": "Hotspot: A plateia; aura e linha de foco",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "100-b4-b4-entrega-foco.png",
+    "descricao": "Hotspot: Apresentar para a sala; aura e linha de foco",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "101-b4-preparacao-fala-1.png",
+    "descricao": "b4-preparacao, fala 1/6: marcos: Antes de entrar: se alguém perguntar o que mudou com esse projeto, o que você conta?",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": {
+      "dialogoId": "b4-preparacao",
+      "indice": 0
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "102-b4-preparacao-fala-2.png",
+    "descricao": "b4-preparacao, fala 2/6: ana: Que eu participei. Mas... não sei se ficou claro o que eu fiz.",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": {
+      "dialogoId": "b4-preparacao",
+      "indice": 1
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "103-b4-preparacao-fala-3.png",
+    "descricao": "b4-preparacao, fala 3/6: marcos: Então conta em quatro passos: situação, tarefa, ação e resultado. Como tava, o que cabia a você, o que fez e no que deu.",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": {
+      "dialogoId": "b4-preparacao",
+      "indice": 2
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "104-b4-preparacao-fala-4.png",
+    "descricao": "b4-preparacao, fala 4/6: ana: Aí mostro a minha parte sem apagar o trabalho do time.",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": {
+      "dialogoId": "b4-preparacao",
+      "indice": 3
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "105-b4-preparacao-fala-5.png",
+    "descricao": "b4-preparacao, fala 5/6: marcos: Isso. E depois dá pra contar essa história num post profissional. Tem gente que não tava na sala.",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": {
+      "dialogoId": "b4-preparacao",
+      "indice": 4
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "106-b4-preparacao-fala-6.png",
+    "descricao": "b4-preparacao, fala 6/6: marcos: Só confere o que pode sair pra fora, tá? Fala do que aprendeu sem mostrar dado interno.",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": {
+      "dialogoId": "b4-preparacao",
+      "indice": 5
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "107-b4-apresentacao-fala-1.png",
+    "descricao": "b4-apresentacao, fala 1/4: ana: Antes, a gente anotava a conferência no papel e só passava pra planilha no fim do turno. Quem chegava depois perguntava o que faltava.",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": {
+      "dialogoId": "b4-apresentacao",
+      "indice": 0
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "108-b4-apresentacao-fala-2.png",
+    "descricao": "b4-apresentacao, fala 2/4: ana: Minha parte era deixar isso claro pro turno seguinte.",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": {
+      "dialogoId": "b4-apresentacao",
+      "indice": 1
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "109-b4-apresentacao-fala-3.png",
+    "descricao": "b4-apresentacao, fala 3/4: ana: Passei a registrar na planilha compartilhada, ali na hora. Depois conferi com o pessoal da linha se tava funcionando.",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": {
+      "dialogoId": "b4-apresentacao",
+      "indice": 2
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "110-b4-apresentacao-fala-4.png",
+    "descricao": "b4-apresentacao, fala 4/4: ana: Agora o outro turno já começa sabendo o que falta. Eu gosto de resolver essa passagem... ainda fico nervosa falando aqui na frente.",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": {
+      "dialogoId": "b4-apresentacao",
+      "indice": 3
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "111-b4-reconhecimento-fala-1.png",
+    "descricao": "b4-reconhecimento, fala 1/3: claudia: Bom trabalho. (já de pé, notebook debaixo do braço)",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": {
+      "dialogoId": "b4-reconhecimento",
+      "indice": 0
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "112-b4-reconhecimento-fala-2.png",
+    "descricao": "b4-reconhecimento, fala 2/3: ana: Obrigada.",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": {
+      "dialogoId": "b4-reconhecimento",
+      "indice": 1
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "113-b4-reconhecimento-fala-3.png",
+    "descricao": "b4-reconhecimento, fala 3/3: claudia: Depois manda no canal do time, pra quem não veio ver também.",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": {
+      "dialogoId": "b4-reconhecimento",
+      "indice": 2
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "114-b4-virada-fala-1.png",
+    "descricao": "b4-virada, fala 1/6: bianca: (da porta) Foi muito bom, Ana. Sério.",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": {
+      "dialogoId": "b4-virada",
+      "indice": 0
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "115-b4-virada-fala-2.png",
+    "descricao": "b4-virada, fala 2/6: ana: Mas ninguém falou nada.",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": {
+      "dialogoId": "b4-virada",
+      "indice": 1
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "116-b4-virada-fala-3.png",
+    "descricao": "b4-virada, fala 3/6: bianca: Eu sei. Tava cheia de gente que já conhecia o projeto, né?",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": {
+      "dialogoId": "b4-virada",
+      "indice": 2
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "117-b4-virada-fala-4.png",
+    "descricao": "b4-virada, fala 4/6: bianca: Mas eles ouviram você contar o que mudou. Isso conta.",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": {
+      "dialogoId": "b4-virada",
+      "indice": 3
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "118-b4-virada-fala-5.png",
+    "descricao": "b4-virada, fala 5/6: ana: Nossa, eu tava tremendo por dentro. Ainda não sei se acostumo.",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": {
+      "dialogoId": "b4-virada",
+      "indice": 4
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "119-b4-virada-fala-6.png",
+    "descricao": "b4-virada, fala 6/6: bianca: Nem precisa decidir agora. Hoje você fez mesmo assim.",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": {
+      "dialogoId": "b4-virada",
+      "indice": 5
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "120-b4-reflexao-tempo.png",
+    "descricao": "Fase 4: abertura da reflexão",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "121-b4-reflexao-1.png",
+    "descricao": "Ana pensando: Um ano. Eu fiz coisas. Mas quem sabe disso além de mim?",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "122-b4-reflexao-2.png",
+    "descricao": "Ana pensando: Só de pensar em ficar na frente de todo mundo, minhas mãos gelam.",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "123-b4-reflexao-3.png",
+    "descricao": "Ana pensando: Acho que posso gostar de organizar tudo isso e ainda assim não gostar de ser o centro das atenções. Uma coisa não precisa vir com a outra.",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "124-b4-sala-reunioes-eco.png",
+    "descricao": "Revisita concluída: As cadeiras continuam viradas para a frente. A tela ainda está acesa com a página dela, e não tem mais ninguém na sala.",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "125-b4-fecho.png",
+    "descricao": "Fecho da fase: O trabalho era o mesmo antes e depois da página que ela escreveu.\nO que mudou foi quanta gente sabia que ele existia.",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "126-b5-cartao.png",
+    "descricao": "Fase 5: cartão temporal e passagem de apresentação",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cartao",
+      "bloco": 5
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "127-b5-mapa.png",
+    "descricao": "Fase 5: mapa e lugares disponíveis",
+    "bloco": 5,
+    "tela": {
+      "tipo": "mapa"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "128-b5-outra-area.png",
+    "descricao": "Fase 5: Outra área, sem overlays",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "129-b5-outra-area-narracao.png",
+    "descricao": "Dois anos. O contrato fecha em três semanas. Ana quer ser efetivada, mas ainda não sabe se vai acontecer. Ela também está pensando em que área quer construir a carreira.",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "130-b5-b5-bianca-inicial-foco.png",
+    "descricao": "Hotspot: Bianca; aura e linha de foco",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "131-b5-b5-caderno-foco.png",
+    "descricao": "Hotspot: Caderno dela; aura e linha de foco",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "132-b5-b5-grade-foco.png",
+    "descricao": "Hotspot: Grade do próximo semestre; aura e linha de foco",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "133-b5-contrato-fala-1.png",
+    "descricao": "b5-contrato, fala 1/4: bianca: Tá chegando no fim do contrato... como isso tá batendo?",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": {
+      "dialogoId": "b5-contrato",
+      "indice": 0
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "134-b5-contrato-fala-2.png",
+    "descricao": "b5-contrato, fala 2/4: ana: Quero muito ser efetivada. Só não sei se vai rolar, e fico tentando fingir que não me preocupa.",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": {
+      "dialogoId": "b5-contrato",
+      "indice": 1
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "135-b5-contrato-fala-3.png",
+    "descricao": "b5-contrato, fala 3/4: bianca: Justo. E, tirando essa vaga, já se pegou pensando no tipo de trabalho que quer fazer?",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": {
+      "dialogoId": "b5-contrato",
+      "indice": 2
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "136-b5-contrato-fala-4.png",
+    "descricao": "b5-contrato, fala 4/4: ana: Na conferência curti organizar a informação. Na apresentação, ficar na frente da sala... nem tanto. Quero entender essa diferença.",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": {
+      "dialogoId": "b5-contrato",
+      "indice": 3
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "137-b5-pivo-fala-1.png",
+    "descricao": "b5-pivo, fala 1/6: bianca: Você circulou \"passagem de turno\" três vezes no caderno.",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": {
+      "dialogoId": "b5-pivo",
+      "indice": 0
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "138-b5-pivo-fala-2.png",
+    "descricao": "b5-pivo, fala 2/6: ana: Acho que gostei de descobrir onde a informação travava. Mas não sei se quero fazer isso aqui... ou em outra área.",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": {
+      "dialogoId": "b5-pivo",
+      "indice": 1
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "139-b5-pivo-fala-3.png",
+    "descricao": "b5-pivo, fala 3/6: ana: E a efetivação? Faltam três semanas e ninguém falou se tem vaga. Tento separar essa ansiedade da escolha da área, mas é difícil.",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": {
+      "dialogoId": "b5-pivo",
+      "indice": 2
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "140-b5-pivo-fala-4.png",
+    "descricao": "b5-pivo, fala 4/6: bianca: Sou formada em Letras e trabalho com documentação. Até descobrir esse caminho, achava que mudar era me desviar.",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": {
+      "dialogoId": "b5-pivo",
+      "indice": 3
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "141-b5-pivo-fala-5.png",
+    "descricao": "b5-pivo, fala 5/6: bianca: Eu vi você lá na linha, montando a conferência. E depois explicando o que mudou na reunião.",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": {
+      "dialogoId": "b5-pivo",
+      "indice": 4
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "142-b5-pivo-fala-6.png",
+    "descricao": "b5-pivo, fala 6/6: bianca: Se a vaga não aparecer, isso continua sendo seu. E a decisão também passa pelo orçamento, pelo espaço no time... nem tudo depende da gente.",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": {
+      "dialogoId": "b5-pivo",
+      "indice": 5
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "143-b5-reflexao-tempo.png",
+    "descricao": "Fase 5: abertura da reflexão",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "144-b5-reflexao-1.png",
+    "descricao": "Ana pensando: Meu contrato está acabando. Eu quero ficar, isso eu sei.",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "145-b5-reflexao-2.png",
+    "descricao": "Ana pensando: Mas, se me efetivarem, eu quero continuar nessa área? E se não, pra onde eu vou?",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "146-b5-reflexao-3.png",
+    "descricao": "Ana pensando: Efetivação e escolha de carreira não são a mesma pergunta. Acho que a pergunta de verdade é: que tipo de problema eu gosto de resolver?",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "147-b5-outra-area-eco.png",
+    "descricao": "Revisita concluída: Ana reconheceu o que aprendeu e começou a pensar no próximo passo da carreira.",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "148-b5-fecho.png",
+    "descricao": "Fecho da fase: Ela não sabe se fica.\nSabe o que leva se não ficar.",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "149-b6-cartao.png",
+    "descricao": "Fase 6: cartão temporal e passagem de apresentação",
+    "bloco": 6,
+    "tela": {
+      "tipo": "cartao",
+      "bloco": 6
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "150-b6-mapa.png",
+    "descricao": "Fase 6: mapa e lugares disponíveis",
+    "bloco": 6,
+    "tela": {
+      "tipo": "mapa"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "151-b6-cafezinho.png",
+    "descricao": "Fase 6: Cafezinho, sem overlays",
+    "bloco": 6,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "152-b6-cafezinho-narracao.png",
+    "descricao": "Três semanas. O Cafezinho está cheio, alguém trouxe bolo e ninguém está trabalhando. O time inteiro está aqui, e é por causa dela.",
+    "bloco": 6,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "153-b6-b6-claudia-foco.png",
+    "descricao": "Hotspot: Cláudia; aura e linha de foco",
+    "bloco": 6,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "154-b6-b6-tiago-foco.png",
+    "descricao": "Hotspot: Tiago; aura e linha de foco",
+    "bloco": 6,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "155-b6-b6-rafael-foco.png",
+    "descricao": "Hotspot: Rafael; aura e linha de foco",
+    "bloco": 6,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "156-b6-b6-bianca-foco.png",
+    "descricao": "Hotspot: Bianca; aura e linha de foco",
+    "bloco": 6,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "157-b6-b6-marcos-foco.png",
+    "descricao": "Hotspot: Marcos; aura e linha de foco",
+    "bloco": 6,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "158-b6-noticia-fala-1.png",
+    "descricao": "b6-noticia, fala 1/6: claudia: Assinaram hoje cedo. Você foi efetivada. É oficial.",
+    "bloco": 6,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": {
+      "dialogoId": "b6-noticia",
+      "indice": 0
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "159-b6-noticia-fala-2.png",
+    "descricao": "b6-noticia, fala 2/6: ana: Eu... espera, é sério?",
+    "bloco": 6,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": {
+      "dialogoId": "b6-noticia",
+      "indice": 1
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "160-b6-noticia-fala-3.png",
+    "descricao": "b6-noticia, fala 3/6: claudia: Seu nome apareceu em três lugares diferentes na conversa de ontem.",
+    "bloco": 6,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": {
+      "dialogoId": "b6-noticia",
+      "indice": 2
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "161-b6-noticia-fala-4.png",
+    "descricao": "b6-noticia, fala 4/6: ana: (baixo) Três lugares?",
+    "bloco": 6,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": {
+      "dialogoId": "b6-noticia",
+      "indice": 3
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "162-b6-noticia-fala-5.png",
+    "descricao": "b6-noticia, fala 5/6: claudia: O pessoal de Produto precisava de alguém pra organizar a documentação. Foi por aí que seu nome chegou até lá.",
+    "bloco": 6,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": {
+      "dialogoId": "b6-noticia",
+      "indice": 4
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "163-b6-noticia-fala-6.png",
+    "descricao": "b6-noticia, fala 6/6: claudia: Vem cá. Eu te mostro de onde veio cada um.",
+    "bloco": 6,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": {
+      "dialogoId": "b6-noticia",
+      "indice": 5
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "164-b6-tiago-pergunta-fala-1.png",
+    "descricao": "b6-tiago-pergunta, fala 1/3: tiago: Dois anos e você ainda pergunta. Gosto disso.",
+    "bloco": 6,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": {
+      "dialogoId": "b6-tiago-pergunta",
+      "indice": 0
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "165-b6-tiago-pergunta-fala-2.png",
+    "descricao": "b6-tiago-pergunta, fala 2/3: ana: Eu ainda não entendo metade do que você fala.",
+    "bloco": 6,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": {
+      "dialogoId": "b6-tiago-pergunta",
+      "indice": 1
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "166-b6-tiago-pergunta-fala-3.png",
+    "descricao": "b6-tiago-pergunta, fala 3/3: tiago: Nem eu. A gente descobre junto.",
+    "bloco": 6,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": {
+      "dialogoId": "b6-tiago-pergunta",
+      "indice": 2
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "167-b6-rafael-ramal-fala-1.png",
+    "descricao": "b6-rafael-ramal, fala 1/2: rafael: Anotei seu ramal. Pra ficar justo, né?",
+    "bloco": 6,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": {
+      "dialogoId": "b6-rafael-ramal",
+      "indice": 0
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "168-b6-rafael-ramal-fala-2.png",
+    "descricao": "b6-rafael-ramal, fala 2/2: ana: (ri) Sem cartão dessa vez, hein.",
+    "bloco": 6,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": {
+      "dialogoId": "b6-rafael-ramal",
+      "indice": 1
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "169-b6-bianca-mudanca-fala-1.png",
+    "descricao": "b6-bianca-mudanca, fala 1/2: bianca: Eu falei que dava pra mudar de ideia no meio do caminho, lembra?",
+    "bloco": 6,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": {
+      "dialogoId": "b6-bianca-mudanca",
+      "indice": 0
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "170-b6-bianca-mudanca-fala-2.png",
+    "descricao": "b6-bianca-mudanca, fala 2/2: ana: Eu achava que gostava da planilha. Acho que gostei mesmo foi de fazer a informação chegar a quem precisava.",
+    "bloco": 6,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": {
+      "dialogoId": "b6-bianca-mudanca",
+      "indice": 1
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "171-b6-marcos-proximo-fala-1.png",
+    "descricao": "b6-marcos-proximo, fala 1/2: marcos: Ano que vem você apresenta de novo? Agora do outro lado da mesa.",
+    "bloco": 6,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": {
+      "dialogoId": "b6-marcos-proximo",
+      "indice": 0
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "172-b6-marcos-proximo-fala-2.png",
+    "descricao": "b6-marcos-proximo, fala 2/2: ana: Pode ser. Da próxima vez quero trazer um projeto desde o começo.",
+    "bloco": 6,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": {
+      "dialogoId": "b6-marcos-proximo",
+      "indice": 1
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "173-b6-reflexao-tempo.png",
+    "descricao": "Fase 6: abertura da reflexão",
+    "bloco": 6,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "174-b6-reflexao-1.png",
+    "descricao": "Ana pensando: Último dia de contrato. Eu não sei como isso vai terminar.",
+    "bloco": 6,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "175-b6-reflexao-2.png",
+    "descricao": "Ana pensando: No primeiro dia eu nem sabia como pedir uma senha. Hoje eu sei o que gosto, o que aprendi e o que ainda quero aprender.",
+    "bloco": 6,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "176-b6-reflexao-3.png",
+    "descricao": "Ana pensando: Seja qual for a resposta, essa história é minha.",
+    "bloco": 6,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "177-b6-cafezinho-eco.png",
+    "descricao": "Revisita concluída: Ninguém voltou pra mesa depois disso.",
+    "bloco": 6,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "178-b6-fecho.png",
+    "descricao": "Fecho da fase: Tudo o que ela carregou, ela usou.\nTudo o que ela aprendeu, ela é.",
+    "bloco": 6,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "179-b1-notebook-acao.png",
+    "descricao": "Progressão: ação de Notebook",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": "senha"
+  },
+  {
+    "arquivo": "180-b1-notebook-consequencia.png",
+    "descricao": "Progressão após Notebook: elenco, objetos e habilidades",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "181-b1-tiago-acao.png",
+    "descricao": "Progressão: ação de Tiago",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": {
+      "dialogoId": "b1-tiago",
+      "indice": 0
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "182-b1-tiago-consequencia.png",
+    "descricao": "Progressão após Tiago: elenco, objetos e habilidades",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "183-b1-claudia-acao.png",
+    "descricao": "Progressão: ação de Cláudia",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": {
+      "dialogoId": "b1-claudia",
+      "indice": 0
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "184-b1-claudia-consequencia.png",
+    "descricao": "Progressão após Cláudia: elenco, objetos e habilidades",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "185-b1-rafael-acao.png",
+    "descricao": "Progressão: ação de Rafael",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": {
+      "dialogoId": "b1-rafael",
+      "indice": 0
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "186-b1-rafael-consequencia.png",
+    "descricao": "Progressão após Rafael: elenco, objetos e habilidades",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "187-b1-tela-acao.png",
+    "descricao": "Progressão: ação de Tela aberta",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "188-b1-tela-consequencia.png",
+    "descricao": "Progressão após Tela aberta: elenco, objetos e habilidades",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "189-b2-bianca-acao.png",
+    "descricao": "Progressão: ação de Bianca",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": {
+      "dialogoId": "b2-bianca",
+      "indice": 0
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "190-b2-bianca-consequencia.png",
+    "descricao": "Progressão após Bianca: elenco, objetos e habilidades",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "191-b2-maquina-acao.png",
+    "descricao": "Progressão: ação de Máquina de café",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "192-b2-maquina-consequencia.png",
+    "descricao": "Progressão após Máquina de café: elenco, objetos e habilidades",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "193-b2-rafael-acao.png",
+    "descricao": "Progressão: ação de Rafael",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "194-b2-rafael-consequencia.png",
+    "descricao": "Progressão após Rafael: elenco, objetos e habilidades",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "195-b2-notebook-acao.png",
+    "descricao": "Progressão: ação de Notebook da Ana",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": "associar"
+  },
+  {
+    "arquivo": "196-b2-notebook-consequencia.png",
+    "descricao": "Progressão após Notebook da Ana: elenco, objetos e habilidades",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "197-b3-tiago-acao.png",
+    "descricao": "Progressão: ação de Tiago",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "linha-producao"
+    },
+    "dialogo": {
+      "dialogoId": "b3-tiago",
+      "indice": 0
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "198-b3-tiago-consequencia.png",
+    "descricao": "Progressão após Tiago: elenco, objetos e habilidades",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "linha-producao"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "199-b3-monitor-acao.png",
+    "descricao": "Progressão: ação de Números da linha",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "linha-producao"
+    },
+    "dialogo": null,
+    "puzzle": "estruturar"
+  },
+  {
+    "arquivo": "200-b3-monitor-consequencia.png",
+    "descricao": "Progressão após Números da linha: elenco, objetos e habilidades",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "linha-producao"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "201-b3-relatorio-acao.png",
+    "descricao": "Progressão: ação de Relatório",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "linha-producao"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "202-b3-relatorio-consequencia.png",
+    "descricao": "Progressão após Relatório: elenco, objetos e habilidades",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "linha-producao"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "203-b3-claudia-acao.png",
+    "descricao": "Progressão: ação de Cláudia",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": {
+      "dialogoId": "b3-claudia",
+      "indice": 0
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "204-b3-claudia-consequencia.png",
+    "descricao": "Progressão após Cláudia: elenco, objetos e habilidades",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "205-b4-marcos-acao.png",
+    "descricao": "Progressão: ação de Marcos",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": {
+      "dialogoId": "b4-preparacao",
+      "indice": 0
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "206-b4-marcos-consequencia.png",
+    "descricao": "Progressão após Marcos: elenco, objetos e habilidades",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "207-b4-tv-acao.png",
+    "descricao": "Progressão: ação de Tela da sala",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": null,
+    "puzzle": "montar"
+  },
+  {
+    "arquivo": "208-b4-tv-consequencia.png",
+    "descricao": "Progressão após Tela da sala: elenco, objetos e habilidades",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "209-b4-plateia-acao.png",
+    "descricao": "Progressão: ação de A plateia",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "210-b4-plateia-consequencia.png",
+    "descricao": "Progressão após A plateia: elenco, objetos e habilidades",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "211-b4-entrega-acao.png",
+    "descricao": "Progressão: ação de Apresentar para a sala",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": {
+      "dialogoId": "b4-apresentacao",
+      "indice": 0
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "212-b4-entrega-silencio.png",
+    "descricao": "Progressão: plateia saiu e a sala permanece em silêncio",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "213-b4-entrega-consequencia.png",
+    "descricao": "Progressão após Apresentar para a sala: elenco, objetos e habilidades",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "214-b4-claudia-acao.png",
+    "descricao": "Progressão: ação de Cláudia",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": {
+      "dialogoId": "b4-reconhecimento",
+      "indice": 0
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "215-b4-claudia-consequencia.png",
+    "descricao": "Progressão após Cláudia: elenco, objetos e habilidades",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "216-b4-bianca-acao.png",
+    "descricao": "Progressão: ação de Bianca",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": {
+      "dialogoId": "b4-virada",
+      "indice": 0
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "217-b4-bianca-consequencia.png",
+    "descricao": "Progressão após Bianca: elenco, objetos e habilidades",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "218-b5-bianca-inicial-acao.png",
+    "descricao": "Progressão: ação de Bianca",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": {
+      "dialogoId": "b5-contrato",
+      "indice": 0
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "219-b5-bianca-inicial-consequencia.png",
+    "descricao": "Progressão após Bianca: elenco, objetos e habilidades",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "220-b5-caderno-acao.png",
+    "descricao": "Progressão: ação de Caderno dela",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "221-b5-caderno-consequencia.png",
+    "descricao": "Progressão após Caderno dela: elenco, objetos e habilidades",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "222-b5-grade-acao.png",
+    "descricao": "Progressão: ação de Grade do próximo semestre",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "223-b5-grade-consequencia.png",
+    "descricao": "Progressão após Grade do próximo semestre: elenco, objetos e habilidades",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "224-b5-bianca-acao.png",
+    "descricao": "Progressão: ação de Bianca",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": {
+      "dialogoId": "b5-pivo",
+      "indice": 0
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "225-b5-bianca-consequencia.png",
+    "descricao": "Progressão após Bianca: elenco, objetos e habilidades",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "226-b6-tiago-acao.png",
+    "descricao": "Progressão: ação de Tiago",
+    "bloco": 6,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": {
+      "dialogoId": "b6-tiago-pergunta",
+      "indice": 0
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "227-b6-tiago-consequencia.png",
+    "descricao": "Progressão após Tiago: elenco, objetos e habilidades",
+    "bloco": 6,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "228-b6-rafael-acao.png",
+    "descricao": "Progressão: ação de Rafael",
+    "bloco": 6,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": {
+      "dialogoId": "b6-rafael-ramal",
+      "indice": 0
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "229-b6-rafael-consequencia.png",
+    "descricao": "Progressão após Rafael: elenco, objetos e habilidades",
+    "bloco": 6,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "230-b6-bianca-acao.png",
+    "descricao": "Progressão: ação de Bianca",
+    "bloco": 6,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": {
+      "dialogoId": "b6-bianca-mudanca",
+      "indice": 0
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "231-b6-bianca-consequencia.png",
+    "descricao": "Progressão após Bianca: elenco, objetos e habilidades",
+    "bloco": 6,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "232-b6-marcos-acao.png",
+    "descricao": "Progressão: ação de Marcos",
+    "bloco": 6,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": {
+      "dialogoId": "b6-marcos-proximo",
+      "indice": 0
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "233-b6-marcos-consequencia.png",
+    "descricao": "Progressão após Marcos: elenco, objetos e habilidades",
+    "bloco": 6,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "234-b6-claudia-acao.png",
+    "descricao": "Progressão: ação de Cláudia",
+    "bloco": 6,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "cafezinho"
+    },
+    "dialogo": {
+      "dialogoId": "b6-noticia",
+      "indice": 0
+    },
+    "puzzle": null
+  },
+  {
+    "arquivo": "235-b6-claudia-consequencia.png",
+    "descricao": "Progressão após Cláudia: elenco, objetos e habilidades",
+    "bloco": 6,
+    "tela": {
+      "tipo": "revelacao"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "236-b1-senha-inicio.png",
+    "descricao": "Minigame: Senha temporária de primeiro acesso; Três campos, três pessoas. Cada uma sabe um pedaço; ninguém sabe a senha inteira.",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": "senha"
+  },
+  {
+    "arquivo": "237-b1-senha-erro.png",
+    "descricao": "A senha não abriu. Confira os três campos.",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": "senha"
+  },
+  {
+    "arquivo": "238-b1-senha-acerto.png",
+    "descricao": "Senha completa: NOVO / 12 / 03",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": "senha"
+  },
+  {
+    "arquivo": "239-b1-senha-apos.png",
+    "descricao": "Retorno à cena depois da resolução",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "240-b1-senha-lembranca.png",
+    "descricao": "Revisita do minigame: Notebook: Consegui entrar no sistema. Precisei de três pessoas pra isso, e tudo bem.",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "241-b2-associar-inicio.png",
+    "descricao": "Minigame: Planejar e aprender na prática; Ligue cada situação a uma prática que pode ajudar.",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": "associar"
+  },
+  {
+    "arquivo": "242-b2-associar-erro.png",
+    "descricao": "Essa prática não resolve essa situação.",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": "associar"
+  },
+  {
+    "arquivo": "243-b2-associar-par-1.png",
+    "descricao": "Associação correta 1: Chegam pedidos de todo lado e já estou esquecendo prazos. → Anoto na hora o prazo, quem pediu e o que preciso entregar.",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": "associar"
+  },
+  {
+    "arquivo": "244-b2-associar-par-2.png",
+    "descricao": "Associação correta 2: Duas entregas disputam atenção: uma vence hoje, a outra exige foco. → Avalio urgência e esforço; deixo a tarefa mais pesada para a manhã.",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": "associar"
+  },
+  {
+    "arquivo": "245-b2-associar-par-3.png",
+    "descricao": "Associação correta 3: No trabalho pediram uma ferramenta que ainda não sei usar. → Faço um curso curto da ferramenta e já pratico no trabalho.",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": "associar"
+  },
+  {
+    "arquivo": "246-b2-associar-par-4.png",
+    "descricao": "Associação correta 4: Quero acompanhar projetos e documentos de equipes de outros países. → Estudo inglês para entender documentos e participar das conversas.",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": "associar"
+  },
+  {
+    "arquivo": "247-b2-associar-apos.png",
+    "descricao": "Retorno à cena depois da resolução",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "248-b2-associar-lembranca.png",
+    "descricao": "Revisita do minigame: Notebook: Cruzei cada tema de estudo com um problema real do meu dia. Ainda não sei onde vou usar tudo isso, mas já comecei.",
+    "bloco": 2,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "249-b3-estruturar-inicio.png",
+    "descricao": "Minigame: A proposta dela, em três campos; Cada trecho vai num campo. Dois não entram em lugar nenhum — estruturar é escolher.",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "linha-producao"
+    },
+    "dialogo": null,
+    "puzzle": "estruturar"
+  },
+  {
+    "arquivo": "250-b3-estruturar-erro.png",
+    "descricao": "Esse trecho não responde o que o campo pergunta.",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "linha-producao"
+    },
+    "dialogo": null,
+    "puzzle": "estruturar"
+  },
+  {
+    "arquivo": "251-b3-estruturar-distrator.png",
+    "descricao": "Isso é verdade. Mas ninguém consegue fazer nada com isso.",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "linha-producao"
+    },
+    "dialogo": null,
+    "puzzle": "estruturar"
+  },
+  {
+    "arquivo": "252-b3-estruturar-campo-1.png",
+    "descricao": "Problema: A conferência de cada lote é anotada no papel e só digitada no fim do turno.",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "linha-producao"
+    },
+    "dialogo": null,
+    "puzzle": "estruturar"
+  },
+  {
+    "arquivo": "253-b3-estruturar-campo-2.png",
+    "descricao": "Solução: Conferir direto na planilha compartilhada, no momento da conferência.",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "linha-producao"
+    },
+    "dialogo": null,
+    "puzzle": "estruturar"
+  },
+  {
+    "arquivo": "254-b3-estruturar-campo-3.png",
+    "descricao": "Impacto: O turno seguinte começa sabendo o que ficou pendente, sem esperar a digitação.",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "linha-producao"
+    },
+    "dialogo": null,
+    "puzzle": "estruturar"
+  },
+  {
+    "arquivo": "255-b3-estruturar-apos.png",
+    "descricao": "Retorno à cena depois da resolução",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "linha-producao"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "256-b3-estruturar-lembranca.png",
+    "descricao": "Revisita do minigame: Clipboard · Relatório: Os números que pareciam soltos agora contam uma história. Ninguém pediu, mas está feito e leva o meu nome.",
+    "bloco": 3,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "linha-producao"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "257-b4-montar-inicio.png",
+    "descricao": "Minigame: Uma página para o gestor; Quatro campos, quatro peças. Cada peça pertence a um campo.",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": null,
+    "puzzle": "montar"
+  },
+  {
+    "arquivo": "258-b4-montar-erro.png",
+    "descricao": "Essa peça não é desse campo.",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": null,
+    "puzzle": "montar"
+  },
+  {
+    "arquivo": "259-b4-montar-campo-1.png",
+    "descricao": "Situação: A conferência dos lotes só era digitada no fim do turno.",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": null,
+    "puzzle": "montar"
+  },
+  {
+    "arquivo": "260-b4-montar-campo-2.png",
+    "descricao": "Tarefa: Garantir que as pendências chegassem claras ao turno seguinte.",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": null,
+    "puzzle": "montar"
+  },
+  {
+    "arquivo": "261-b4-montar-campo-3.png",
+    "descricao": "Ação: Passei a conferência para a planilha compartilhada, na hora.",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": null,
+    "puzzle": "montar"
+  },
+  {
+    "arquivo": "262-b4-montar-campo-4.png",
+    "descricao": "Resultado: O turno seguinte já começa sabendo o que ficou pendente.",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": null,
+    "puzzle": "montar"
+  },
+  {
+    "arquivo": "263-b4-montar-apos.png",
+    "descricao": "Retorno à cena depois da resolução",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "264-b4-montar-lembranca.png",
+    "descricao": "Revisita do minigame: Telão: Situação, tarefa, ação e resultado no lugar. O que eu fiz deixou de ser só meu e passou a poder ser visto.",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "265-inventario-final.png",
+    "descricao": "Três itens tardios e nove habilidades; estado de documentação",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "266-item-anotacoes-treinamento-recebido.png",
+    "descricao": "Recebimento de Anotações do treinamento",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "267-item-anotacoes-treinamento-descricao.png",
+    "descricao": "Anotações do treinamento: Tudo o que ouço e preciso lembrar, registrado na hora.",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "268-item-relatorio-recebido.png",
+    "descricao": "Recebimento de Relatório",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "269-item-relatorio-descricao.png",
+    "descricao": "Relatório: Três páginas sobre uma falha na passagem de turno. Quem percebe o problema antes de receber a tarefa?",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "270-item-cartao-rafael-recebido.png",
+    "descricao": "Recebimento de Cartão do Rafael",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "271-item-cartao-rafael-descricao.png",
+    "descricao": "Cartão do Rafael: Rafael escreveu o ramal atrás, à mão. Uma conversa do primeiro dia ainda pode abrir uma porta?",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "272-item-certificado-degree-recebido.png",
+    "descricao": "Recebimento de Certificado de conclusão",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "273-item-certificado-degree-descricao.png",
+    "descricao": "Certificado de conclusão: Uma trilha escolhida a partir do que o trabalho já pede. O que Ana decidiu aprender por conta própria?",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "274-item-cracha-innovation-recebido.png",
+    "descricao": "Recebimento de Crachá do Innovation",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "275-item-cracha-innovation-descricao.png",
+    "descricao": "Crachá do Innovation: Ana apresentou a melhoria na passagem de turno. Quem viu o trabalho dela chegar até ali?",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "276-habilidade-coragem-perguntar.png",
+    "descricao": "Coragem de perguntar: Perguntar não é admitir que você não sabe. É o jeito mais rápido de passar a saber.",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "277-habilidade-autoconhecimento.png",
+    "descricao": "Autoconhecimento: Saber responder 'o que te trouxe aqui' antes que alguém pergunte.",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "278-habilidade-leitura-mercado.png",
+    "descricao": "Leitura do que o trabalho pede: Entender o que é urgente, o que dá mais trabalho e o que o time precisa primeiro.",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "279-habilidade-aprendizado-continuo.png",
+    "descricao": "Aprendizado contínuo: Ninguém aqui parou de estudar. Nem quem já chegou.",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "280-habilidade-competencia-tecnica.png",
+    "descricao": "Competência que ela foi buscar: Aprender o que ainda não sabia fazer. Serviu antes do que ela imaginava.",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "281-habilidade-proatividade.png",
+    "descricao": "Proatividade: Resolver o que ninguém mandou é o que te diferencia de quem só cumpre.",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "282-habilidade-protagonismo.png",
+    "descricao": "Protagonismo: Liderança não vem com cargo. Vem de assumir o que ninguém assumiu.",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "283-habilidade-visibilidade.png",
+    "descricao": "Visibilidade: Trabalho que ninguém sabe que existe não vira oportunidade sozinho.",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "284-habilidade-plano-futuro.png",
+    "descricao": "Plano de futuro: Onde eu quero estar não é uma pergunta pra depois. É a pergunta que organiza o agora.",
+    "bloco": 5,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "outra-area"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "285-b4-pausa.png",
+    "descricao": "Pausa dramática depois da apresentação: ausência de recompensa imediata",
+    "bloco": 4,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "sala-reunioes"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "286-final-mapa-inicial.png",
+    "descricao": "Revelação: mapa antes das quatro conexões",
+    "bloco": 6,
+    "tela": {
+      "tipo": "revelacao"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "287-final-conexao-1.png",
+    "descricao": "Perguntaram ao Rafael se ele conhecia alguém. Ele disse seu nome.",
+    "bloco": 6,
+    "tela": {
+      "tipo": "revelacao"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "288-final-conexao-2.png",
+    "descricao": "A vaga pedia alguém disposto a aprender o que ainda não sabia.\nEla tinha quarenta horas que ninguém mandou fazer.",
+    "bloco": 6,
+    "tela": {
+      "tipo": "revelacao"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "289-final-conexao-3.png",
+    "descricao": "Na conversa de ontem, duas pessoas da Innovation Week lembravam dela.",
+    "bloco": 6,
+    "tela": {
+      "tipo": "revelacao"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "290-final-conexao-4.png",
+    "descricao": "Três pessoas tinham o perfil. Uma tinha entregue algo que ninguém pediu.\n\"Guardei seu nome.\"",
+    "bloco": 6,
+    "tela": {
+      "tipo": "revelacao"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "291-final-barra-vazia.png",
+    "descricao": "Itens consumidos; habilidades permanecem",
+    "bloco": 6,
+    "tela": {
+      "tipo": "revelacao"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "292-final-ana-futura-pergunta.png",
+    "descricao": "Versão futura e pergunta do fecho",
+    "bloco": 6,
+    "tela": {
+      "tipo": "revelacao"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "293-final-ana-futura.png",
+    "descricao": "Sustentação visual depois da pergunta",
+    "bloco": 6,
+    "tela": {
+      "tipo": "revelacao"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "294-perguntas-1.png",
+    "descricao": "Primeira pergunta final",
+    "bloco": 6,
+    "tela": {
+      "tipo": "perguntas"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "295-perguntas-2.png",
+    "descricao": "Pergunta final 2",
+    "bloco": 6,
+    "tela": {
+      "tipo": "perguntas"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "296-perguntas-3.png",
+    "descricao": "Pergunta final 3",
+    "bloco": 6,
+    "tela": {
+      "tipo": "perguntas"
+    },
+    "dialogo": null,
+    "puzzle": null
+  },
+  {
+    "arquivo": "297-abertura-retomada.png",
+    "descricao": "Abertura com progresso salvo: continuar ou reiniciar",
+    "bloco": 1,
+    "tela": {
+      "tipo": "cena",
+      "lugarId": "escritorio"
+    },
+    "dialogo": null,
+    "puzzle": null
+  }
+]

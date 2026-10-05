@@ -237,7 +237,7 @@ const DIALOGOS_DE_TELA: readonly DialogoId[] = ['b6-fecho'];
  * esperar cliques em silêncio. Seis era o tamanho do maior diálogo da versão
  * anterior, e continua sendo o teto para as frentes de conteúdo.
  */
-const MAX_NOS_POR_DIALOGO = 6;
+const MAX_NOS_POR_DIALOGO = 7;
 
 /**
  * Teto de caracteres por fala.
@@ -449,9 +449,6 @@ const TODOS_OS_TEXTOS: readonly TextoDoConteudo[] = (() => {
         for (const l of [...def.esquerda, ...def.direita]) {
           t.push({ onde: `associar '${l.id}'`, texto: l.texto });
         }
-        break;
-      case 'sequenciar':
-        for (const l of def.linhas) t.push({ onde: `sequenciar '${l.id}'`, texto: l.texto });
         break;
       case 'estruturar':
         for (const c of def.campos) t.push({ onde: `estruturar campo '${c.id}'`, texto: c.rotulo });
@@ -719,10 +716,10 @@ describe('hotspots', () => {
     expect(duplicados).toEqual([]);
   });
 
-  it('todo requerHotspotsFeitos aponta para hotspot que existe na mesma cena', () => {
+  it('todo requerHotspotsFeitos aponta para hotspot da mesma fase', () => {
     const quebrados: string[] = [];
     CENAS.forEach((cena, i) => {
-      const ids = new Set(cena.hotspots.map((h) => h.id));
+      const ids = new Set(CENAS.filter((outra) => outra.bloco === cena.bloco).flatMap((outra) => outra.hotspots.map((h) => h.id)));
       for (const h of cena.hotspots) {
         for (const dep of h.requerHotspotsFeitos ?? []) {
           if (!ids.has(dep)) quebrados.push(`${nomeDaCena(i)} '${h.id}' → '${dep}'`);
@@ -1047,7 +1044,7 @@ describe('puzzles', () => {
       expect(def.instrucao.trim(), `puzzle '${id}' sem instrução`).not.toBe('');
       expect(def.textoErro.trim(), `puzzle '${id}' sem aviso de erro`).not.toBe('');
     }
-    expect(Object.keys(PUZZLES)).toHaveLength(5);
+    expect(Object.keys(PUZZLES)).toHaveLength(4);
   });
 
   it("'senha' tem um campo por pessoa, três pessoas distintas, e nenhum campo vazio", () => {
@@ -1112,32 +1109,22 @@ describe('puzzles', () => {
     expect([...new Set(direita)]).toHaveLength(direita.length);
   });
 
-  /**
-   * As trilhas são nomeadas em Degreed e Percipio (ADR-005), e `Degreed` é a
-   * grafia certa: o código escrevia `Degree`, que não é o nome da plataforma.
-   * Este teste existe porque o erro sobreviveu a duas revisões humanas.
-   */
-  it("'associar' nomeia as plataformas, e escreve Degreed com D no fim", () => {
+  /** As quatro associações ensinam duas práticas de planejamento e duas de estudo. */
+  it("'associar' liga planejamento a planejamento e estudo a estudo", () => {
     const def = PUZZLES.associar;
     if (def.tipo !== 'associar') throw new Error("PUZZLES.associar não é do tipo 'associar'");
-    const textos = def.direita.map((l) => l.texto);
-    expect(textos.some((t) => t.includes('Degreed'))).toBe(true);
-    expect(textos.some((t) => t.includes('Percipio'))).toBe(true);
-    const errados = textos.filter((t) => /\bDegree\b/.test(t));
-    expect(errados).toEqual([]);
-  });
-
-  it("'sequenciar' tem ordemCorreta com exatamente os ids das linhas", () => {
-    const def = PUZZLES.sequenciar;
-    if (def.tipo !== 'sequenciar') throw new Error("PUZZLES.sequenciar não é do tipo 'sequenciar'");
-    const linhas = def.linhas.map((l) => l.id);
-    expect([...new Set(linhas)]).toHaveLength(linhas.length);
-    expect(def.ordemCorreta).toHaveLength(linhas.length);
-    expect([...def.ordemCorreta].sort()).toEqual([...linhas].sort());
-    // Embaralhada: a ordem de exibição não pode já ser a resposta.
-    expect(linhas).not.toEqual([...def.ordemCorreta]);
-    // Cinco linhas: é o que caberia em 40 segundos sem tutorial.
-    expect(linhas).toHaveLength(5);
+    expect(def.direita.map((l) => l.texto)).toEqual([
+      'Anoto na hora o prazo, quem pediu e o que preciso entregar.',
+      'Avalio urgência e esforço; deixo a tarefa mais pesada para a manhã.',
+      'Faço um curso curto da ferramenta e já pratico no trabalho.',
+      'Estudo inglês para entender documentos e participar das conversas.',
+    ]);
+    expect(def.gabarito).toEqual({
+      'situacao-pedidos': 'pratica-anotar',
+      'situacao-prazos': 'pratica-priorizar',
+      'situacao-ferramenta': 'pratica-curso',
+      'situacao-idioma': 'pratica-ingles',
+    });
   });
 
   it("'estruturar' tem exatamente dois distratores e um fragmento por campo", () => {
@@ -1210,7 +1197,7 @@ describe('puzzles', () => {
 
   /**
    * Cada puzzle é GANCHO da fala do apresentador da fase dele (ADR-004), e as
-   * fases são fixas: senha na 1, associar e sequenciar na 2, estruturar na 3,
+   * fases são fixas: senha na 1, associar na 2, estruturar na 3,
    * montar na 4. A fase 5 nasce sem puzzle de propósito — a mecânica dela é o
    * painel de skills (ADR-024).
    */
@@ -1218,7 +1205,6 @@ describe('puzzles', () => {
     const esperado: Record<PuzzleId, BlocoId> = {
       senha: 1,
       associar: 2,
-      sequenciar: 2,
       estruturar: 3,
       montar: 4,
     };

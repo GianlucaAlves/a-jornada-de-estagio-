@@ -26,6 +26,7 @@ import { useJogo } from '../store/jogo';
 import { CANVAS, arte, camada, easing, limitarDuracao } from '../styles/tokens';
 import { SpriteAnimado } from './SpriteAnimado';
 import { Imagem } from './Imagem';
+import { PastaDaAna } from './PastaDaAna';
 
 /**
  * Uma ordem de movimento. `seq` existe para que a mesma coordenada possa ser
@@ -68,6 +69,7 @@ export function Protagonista({
   largura = arte.personagem.largura,
 }: PropsProtagonista): JSX.Element {
   const spriteDaStore = useJogo((s) => s.sprite);
+  const nivel = useJogo(s => s.nivel);
   const spriteAtivo: SpriteId = sprite ?? spriteDaStore;
 
   const [pos, setPos] = useState<Ponto>(comando.alvo);
@@ -144,6 +146,7 @@ export function Protagonista({
           estado={movendo ? 'andando' : 'parado'}
         />
       )}
+      {sprite === undefined && !apresentando && spriteAtivo !== 'ana-futura' && spriteAtivo !== 'ana-futura-trabalhando' ? <PastaDaAna nivel={nivel} largura={largura} altura={altura} /> : null}
     </div>
   );
 }

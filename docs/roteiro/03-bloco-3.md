@@ -40,22 +40,23 @@ Ao entrar no Escritório, mais tarde:
 
 ## 1. Tiago (apoio operacional) — o acesso e a frase do bloco
 
-> **Tiago:** Essa conferência é no papel desde antes de eu entrar. A gente digita
-> no fim do turno e segue o jogo.
+> **Tiago:** Essa conferência aí sempre foi no papel. No fim do turno a gente
+> passa pra planilha, senão não fecha.
 >
-> **Tiago:** *(dá de ombros)* **Entrou no orçamento da rotina.**
+> **Tiago:** *(dá de ombros)* Sei lá, quando eu cheguei já era assim.
 >
-> **Ana:** Acho que gosto de descobrir onde a informação emperra. Se eu deixar isso só na minha cabeça, o turno da noite continua no escuro.
+> **Ana:** Eu fico pensando... gosto de achar onde a informação emperra. Se eu
+> guardar isso só pra mim, o pessoal da noite continua no escuro.
 >
 > **Tiago:** Começa. Ninguém pediu pra você olhar isso.
 >
-> **Ana:** **Ninguém pediu pra eu não olhar também.**
+> **Ana:** **Pois é. Mas também ninguém pediu pra eu deixar quieto.**
 >
-> **Tiago:** *(pausa, depois ri)* Então olha.
+> **Tiago:** *(pausa, depois ri)* Tá bom. Olha aí.
 
-> 💡 **Gancho de fala:** *"'Entrou no orçamento da rotina'. Toda empresa tem uns
-> cinco desses. Todo mundo sabe, ninguém olha, porque olhar não é tarefa de
-> ninguém."* — **esse é o bloco inteiro em uma frase.** E repare que o Tiago não é
+> 💡 **Gancho de fala:** aquela conferência virou rotina porque, quando o Tiago
+> chegou, já era feita daquele jeito. Muita equipe tem processo assim: todo mundo
+> sabe que existe, mas ninguém para pra perguntar se ainda faz sentido. E o Tiago não é
 > vilão: ele é uma pessoa razoável protegendo o próprio dia. A pergunta que fica
 > pra plateia é qual conferência no papel existe no time dela agora.
 
@@ -135,13 +136,13 @@ Com o relatório — e diferente do Bloco 1, ela **para**:
 
 > **Cláudia:** O que é isso?
 >
-> **Ana:** A conferência da linha. Aquela que a gente digita no fim do turno.
+> **Ana:** A conferência da linha, lembra? Aquela que só vai pra planilha no fim do turno.
 >
 > **Cláudia:** *(folheando)* Quem te pediu isso?
 >
 > **Ana:** Ninguém.
 >
-> **Cláudia:** Seis meses fazendo na mão, e ninguém tinha parado pra escrever isso.
+> **Cláudia:** Peraí... seis meses fazendo isso à mão e ninguém tinha juntado por escrito?
 >
 > **Cláudia:** **Guardei seu nome.**
 

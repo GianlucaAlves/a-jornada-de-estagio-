@@ -76,7 +76,7 @@ export type SkillId =
 
 export type NpcId = 'rafael' | 'claudia' | 'tiago' | 'bianca' | 'marcos';
 
-export type PuzzleId = 'senha' | 'associar' | 'sequenciar' | 'estruturar' | 'montar';
+export type PuzzleId = 'senha' | 'associar' | 'estruturar' | 'montar';
 
 export type DialogoId = string;
 export type HotspotId = string;
@@ -212,6 +212,8 @@ export interface Hotspot {
   efeitos: Efeito[];
   /** Se true, só pode ser acionado uma vez. */
   umaVezSo?: boolean;
+  /** Retorno em primeira pessoa ao revisitar uma ação já concluída. */
+  mensagemConcluido?: string;
 }
 
 // ---------------------------------------------------------------- diálogos
@@ -249,6 +251,8 @@ export interface PuzzleBase {
   instrucao: string;
   /** Aviso de erro. Curto e sem julgamento. */
   textoErro: string;
+  /** Texto próprio da Ana que aparece ao revisitar um minigame concluído. */
+  mensagemConcluido: string;
   /** Recompensa entregue no acerto, sem um segundo clique num objeto de cena. */
   efeitosSucesso?: readonly Efeito[];
 }
@@ -289,13 +293,6 @@ export interface PuzzleAssociar extends PuzzleBase {
   gabarito: Readonly<Record<string, string>>;
 }
 
-export interface PuzzleSequenciar extends PuzzleBase {
-  id: 'sequenciar';
-  tipo: 'sequenciar';
-  linhas: readonly { id: string; texto: string }[];
-  ordemCorreta: readonly string[];
-}
-
 export interface PuzzleEstruturar extends PuzzleBase {
   id: 'estruturar';
   tipo: 'estruturar';
@@ -329,7 +326,6 @@ export interface PuzzleMontar extends PuzzleBase {
 export type PuzzleDef =
   | PuzzleSenha
   | PuzzleAssociar
-  | PuzzleSequenciar
   | PuzzleEstruturar
   | PuzzleMontar;
 
@@ -350,6 +346,9 @@ export interface Lugar {
 export interface Cena {
   /** Pode substituir o selo temporal padrão do bloco sem alterar a narrativa. */
   seloTempo?: string;
+  /** Totais do bloco mantidos na configuração das cenas para os contadores. */
+  totalConversas: number;
+  totalMinigames: number;
   lugarId: LugarId;
   bloco: BlocoId;
   aberturaTexto?: string;
@@ -443,6 +442,7 @@ export type Tela =
   | { tipo: 'cena'; lugarId: LugarId }
   | { tipo: 'mapa' }
   | { tipo: 'cartao'; bloco: BlocoId }
+  | { tipo: 'evolucao'; bloco: BlocoId }
   | { tipo: 'revelacao' }
   | { tipo: 'perguntas' };
 

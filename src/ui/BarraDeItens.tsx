@@ -87,6 +87,8 @@ export function BarraDeItens(): JSX.Element {
   const itemSelecionado = useJogo((s) => s.itemSelecionado);
   const selecionarItem = useJogo((s) => s.selecionarItem);
   const recebidos = useJogo(s => s.itensRecebidos);
+  const mensagemConclusao = useJogo(s => s.mensagemConclusao);
+  const fecharMensagemConclusao = useJogo(s => s.fecharMensagemConclusao);
 
   const [descricaoDe, setDescricaoDe] = useState<ItemId | null>(null);
   /** A região que NÃO conta como "clicar em outra coisa". */
@@ -105,13 +107,13 @@ export function BarraDeItens(): JSX.Element {
    * tempo restante do primeiro e a segunda leitura duraria menos que a primeira.
    */
   useEffect(() => {
-    if (descricaoDe === null) return undefined;
+    if (descricaoDe === null && mensagemConclusao === null) return undefined;
     const id = window.setTimeout(
       () => setDescricaoDe((atual) => proximaDescricao(atual, { tipo: 'tempo' })),
       espera.descricaoDeItemMs,
     );
     return () => window.clearTimeout(id);
-  }, [descricaoDe]);
+  }, [descricaoDe, mensagemConclusao]);
 
   /**
    * Caminho 2: clique em qualquer outra coisa.
@@ -126,21 +128,47 @@ export function BarraDeItens(): JSX.Element {
    * voltar, e a própria descrição — fecha.
    */
   useEffect(() => {
-    if (descricaoDe === null) return undefined;
+    if (descricaoDe === null && mensagemConclusao === null) return undefined;
     const aoApontar = (evento: PointerEvent): void => {
       const destino = evento.target;
       if (destino instanceof Node && regiaoDaBarra.current?.contains(destino)) return;
       setDescricaoDe((atual) => proximaDescricao(atual, { tipo: 'clique-fora' }));
+      fecharMensagemConclusao();
     };
     window.addEventListener('pointerdown', aoApontar, true);
     return () => window.removeEventListener('pointerdown', aoApontar, true);
-  }, [descricaoDe]);
+  }, [descricaoDe, mensagemConclusao, fecharMensagemConclusao]);
 
   const descricao: Item | undefined = descricaoDe === null ? undefined : ITENS[descricaoDe];
 
   return (
     <>
-      {descricao !== undefined ? (
+      {mensagemConclusao !== null ? (
+        <button
+          type="button"
+          aria-label="Fechar lembrança da ação concluída"
+          onClick={fecharMensagemConclusao}
+          style={{
+            position: 'absolute',
+            left: espaco.md,
+            bottom: espaco.xs,
+            width: barra.zonaItens - 2 * espaco.md,
+            height: overlay.barraDeItens - borda.grossa - 2 * espaco.xs,
+            zIndex: camada.overlayPersistente + 1,
+            background: cores.caixa,
+            border: `${borda.media}px solid ${cores.contorno}`,
+            borderRadius: raio.md,
+            padding: espaco.sm,
+            fontSize: tipografia.minimo,
+            lineHeight: tipografia.alturaLinha.compacta,
+            textAlign: 'left',
+            color: cores.texto,
+          }}
+        >
+          <strong style={{ color: cores.destaque }}>{mensagemConclusao.split(':', 1)[0]}:</strong>{' '}
+          {mensagemConclusao.slice(mensagemConclusao.indexOf(':') + 1).trim()}
+        </button>
+      ) : descricao !== undefined ? (
         <button
           type="button"
           aria-label={`Fechar descrição de ${descricao.nome}`}

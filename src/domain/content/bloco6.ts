@@ -111,6 +111,8 @@ export const CENAS_B6: readonly Cena[] = [
   {
     lugarId: 'cafezinho',
     bloco: 6,
+    totalConversas: 5,
+    totalMinigames: 0,
     aberturaTexto:
       'Três semanas. O Cafezinho está cheio, alguém trouxe bolo e ninguém está trabalhando. ' +
       'O time inteiro está aqui, e é por causa dela.',
@@ -209,9 +211,9 @@ export const DIALOGOS_B6: Record<DialogoId, Dialogo> = {
       {
         tipo: 'fala',
         quem: 'claudia',
-        texto: 'Assinaram hoje de manhã. É efetivação, não é mais estágio.',
+        texto: 'Assinaram hoje cedo. Você foi efetivada. É oficial.',
       },
-      { tipo: 'fala', quem: 'ana', texto: 'Eu não sei o que dizer.' },
+      { tipo: 'fala', quem: 'ana', texto: 'Eu... espera, é sério?' },
       {
         tipo: 'fala',
         quem: 'claudia',
@@ -221,7 +223,7 @@ export const DIALOGOS_B6: Record<DialogoId, Dialogo> = {
       {
         tipo: 'fala',
         quem: 'claudia',
-        texto: 'O time de produto precisava de alguém para organizar a documentação. Foi assim que seu nome chegou até lá.',
+        texto: 'O pessoal de Produto precisava de alguém pra organizar a documentação. Foi por aí que seu nome chegou até lá.',
       },
       { tipo: 'fala', quem: 'claudia', texto: 'Vem cá. Eu te mostro de onde veio cada um.' },
     ],
@@ -241,8 +243,8 @@ export const DIALOGOS_B6: Record<DialogoId, Dialogo> = {
   'b6-rafael-ramal': {
     id: 'b6-rafael-ramal',
     nos: [
-      { tipo: 'fala', quem: 'rafael', texto: 'Anotei o seu ramal. Só pra ficar justo.' },
-      { tipo: 'fala', quem: 'ana', texto: '(ri) Não tem cartão aqui pra escrever atrás.' },
+      { tipo: 'fala', quem: 'rafael', texto: 'Anotei seu ramal. Pra ficar justo, né?' },
+      { tipo: 'fala', quem: 'ana', texto: '(ri) Sem cartão dessa vez, hein.' },
     ],
   },
 
@@ -253,7 +255,7 @@ export const DIALOGOS_B6: Record<DialogoId, Dialogo> = {
       {
         tipo: 'fala',
         quem: 'tiago',
-        texto: 'Dois anos e você ainda pergunta as coisas. Isso aqui é raro.',
+        texto: 'Dois anos e você ainda pergunta. Gosto disso.',
       },
       { tipo: 'fala', quem: 'ana', texto: 'Eu ainda não entendo metade do que você fala.' },
       { tipo: 'fala', quem: 'tiago', texto: 'Nem eu. A gente descobre junto.' },
@@ -271,9 +273,9 @@ export const DIALOGOS_B6: Record<DialogoId, Dialogo> = {
       {
         tipo: 'fala',
         quem: 'bianca',
-        texto: 'Eu te disse que dava pra mudar de ideia no meio do caminho.',
+        texto: 'Eu falei que dava pra mudar de ideia no meio do caminho, lembra?',
       },
-      { tipo: 'fala', quem: 'ana', texto: 'Eu achava que gostava da planilha. Gostei mesmo foi de fazer a informação chegar a quem precisava dela.' },
+      { tipo: 'fala', quem: 'ana', texto: 'Eu achava que gostava da planilha. Acho que gostei mesmo foi de fazer a informação chegar a quem precisava.' },
     ],
   },
 
@@ -284,7 +286,7 @@ export const DIALOGOS_B6: Record<DialogoId, Dialogo> = {
       {
         tipo: 'fala',
         quem: 'marcos',
-        texto: 'Ano que vem você apresenta de novo? Do outro lado da mesa.',
+        texto: 'Ano que vem você apresenta de novo? Agora do outro lado da mesa.',
       },
       { tipo: 'fala', quem: 'ana', texto: 'Pode ser. Da próxima vez quero trazer um projeto desde o começo.' },
     ],

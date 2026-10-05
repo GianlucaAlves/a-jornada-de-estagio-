@@ -41,18 +41,17 @@ export const BLOCOS: Record<BlocoId, Bloco> = {
   2: {
     id: 2,
     titulo: 'O que ninguém ensinou',
-    // Da fase 1: o Cartão do Rafael e duas skills. O laço é Cafezinho →
-    // Escritório → Cafezinho (ADR-032): conselho se recebe no café, trabalho se
-    // faz na mesa. Por isso os DOIS entram destravados — a ida é parte da fase.
+    // O café abre a conversa, o Escritório recebe o único minigame, e Rafael
+    // fecha a fase de volta no café com o caderno de anotações.
     estadoAssumido: {
       itens: ['cartao-rafael'],
       skills: ['coragem-perguntar', 'autoconhecimento'],
-      lugaresDestravados: ['escritorio', 'cafezinho'],
+      lugaresDestravados: ['cafezinho', 'escritorio'],
       lugaresConcluidos: [],
     },
     fechoTexto:
-      'Ela entrou no café sem saber o que estudar.\n' +
-      'Saiu com quatro trilhas, um certificado que não serve pra nada hoje, e um caderno.',
+      'Ela percebeu o que ainda precisava aprender.\n' +
+      'Saiu com um certificado e um jeito de organizar as demandas.',
   },
 
   3: {

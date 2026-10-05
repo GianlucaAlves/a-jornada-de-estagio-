@@ -14,9 +14,10 @@ export const REFLEXOES: Record<BlocoId, ReflexaoDeBloco> = {
   ], gancho: 'Quando você chegou em algum lugar novo, o que fez para não parecer despreparado(a)?' },
   2: { lugarId: 'cafezinho', tempo: '1 mês depois', falas: [
     'Um mês. Já sei onde fica o café e como entrar no sistema. Mas ainda tem muita coisa que a faculdade não falou.',
-    'Eu escolhi esse curso pelo nome, pelo que todo mundo dizia que dava futuro. Mas o que eu sei fazer, de verdade?',
-    'Hoje as coisas que mais me prendem a atenção são as que bagunçam e depois ficam claras. Será que isso quer dizer alguma coisa?',
-  ], gancho: 'O que você sabe fazer que não está escrito no nome do seu curso ou cargo?' },
+    'Agora todo mundo me pede alguma coisa. Uma planilha, uma ata, um status pra ontem. E eu digo sim pra tudo e guardo tudo de cabeça.',
+    'Esta semana escapou um prazo. Não foi falta de vontade, foi falta de um jeito de me organizar.',
+    'E tem coisa que me pedem e eu ainda não sei fazer. Quando tudo chega junto, eu travo e tento fazer tudo ao mesmo tempo.',
+  ], gancho: 'Quando muita coisa chega ao mesmo tempo, qual é a sua reação? E o que já te cobram que você ainda não sabe fazer?' },
   3: { lugarId: 'linha-producao', tempo: '6 meses depois', falas: [
     'Seis meses. Eu já não me perco tanto, e quando não entendo alguma coisa, sei como perguntar.',
     'Tem algo estranho nesses números. Ninguém me pediu pra olhar, e talvez nem seja problema meu.',

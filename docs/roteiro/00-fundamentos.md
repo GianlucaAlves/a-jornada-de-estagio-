@@ -74,6 +74,14 @@ Uns 38 anos. Energia de quem organiza eventos. Entusiasmado, faz perguntas em ve
 
 ---
 
+## Voz das falas
+
+As conversas devem soar como colegas de trabalho conversando em português brasileiro, não como um texto explicativo lido em voz alta. Use frases curtas, pausas e reações; varie o ritmo e deixe as pessoas responderem ao que acabaram de ouvir. Uma fala pode começar e terminar sem explicar o assunto inteiro.
+
+Mantenha as vozes distintas: Rafael é próximo e bem-humorado sem exagero; Cláudia é direta e econômica, mesmo quando demonstra que ouviu; Tiago resolve as coisas com humor casual; Bianca é acolhedora e reflexiva; Marcos conduz com perguntas; Ana muda de insegura para mais à vontade ao longo da jornada. Evite gíria forçada e falas que soem como uma lista de dicas. As práticas e ideias do roteiro devem aparecer dentro da situação e da conversa.
+
+---
+
 ## Itens
 
 ### Imediatos (têm uso visível no mesmo bloco)

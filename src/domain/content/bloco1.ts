@@ -42,6 +42,8 @@ export const CENAS_B1: readonly Cena[] = [
   {
     lugarId: 'escritorio',
     bloco: 1,
+    totalConversas: 3,
+    totalMinigames: 1,
     aberturaTexto:
       'Primeiro dia. Ninguém te olha, e mesmo assim você sente que todo mundo está olhando.',
     ecoTexto: 'Aqui ela falou com três pessoas pra digitar oito caracteres.',
@@ -143,10 +145,10 @@ export const DIALOGOS_B1: Record<DialogoId, Dialogo> = {
       {
         tipo: 'fala',
         quem: 'tiago',
-        texto: 'Ah, a nova! A senha do primeiro acesso tá no e-mail de boas-vindas.',
+        texto: 'Ah, a nova! A senha inicial tá no e-mail de boas-vindas.',
       },
-      { tipo: 'fala', quem: 'ana', texto: 'Eu não consigo abrir o e-mail sem a senha.' },
-      { tipo: 'fala', quem: 'ana', texto: 'Fiquei parada ali porque achei que perguntar no primeiro dia ia parecer falta de preparo.' },
+      { tipo: 'fala', quem: 'ana', texto: 'Então... não consigo abrir o e-mail sem a senha.' },
+      { tipo: 'fala', quem: 'ana', texto: 'Fiquei um tempão olhando pra tela. Achei que perguntar logo no primeiro dia ia pegar mal.' },
       // A piada seca é o beat inteiro. Ele não se desculpa e não resolve: ele
       // reconhece e segue. É o ritmo normal de quem já está dentro.
       { tipo: 'fala', quem: 'tiago', texto: '(pausa) É. Todo mundo cai nessa.' },
@@ -155,13 +157,17 @@ export const DIALOGOS_B1: Record<DialogoId, Dialogo> = {
         // anos na casa responde isso sem pensar.
         tipo: 'fala',
         quem: 'tiago',
-        texto:
-          'O começo é igual pra todo mundo: NOVO, em letra maiúscula. O do meio é o número do teu time, isso é com a Cláudia.',
+        texto: 'O começo é NOVO, em maiúscula. Igual pra todo mundo.',
       },
       {
         tipo: 'fala',
         quem: 'tiago',
-        texto: 'E o fim é o dia que você entrou. (volta pro que estava fazendo) Eu também demorei até decorar onde abria chamado.',
+        texto: 'O do meio é o número do teu time; a Cláudia sabe. No fim vai o dia que você entrou.',
+      },
+      {
+        tipo: 'fala',
+        quem: 'tiago',
+        texto: '(volta pro que estava fazendo) Eu também demorei pra decorar onde abria chamado.',
       },
     ],
     // Ela perguntou. É a primeira coisa que ela faz sozinha no dia.
@@ -171,25 +177,25 @@ export const DIALOGOS_B1: Record<DialogoId, Dialogo> = {
   'b1-claudia': {
     id: 'b1-claudia',
     nos: [
-      { tipo: 'fala', quem: 'claudia', texto: 'Você é a estagiária nova. Cláudia.' },
-      { tipo: 'fala', quem: 'ana', texto: 'Ana. Preciso do número do time, pra senha.' },
+      { tipo: 'fala', quem: 'claudia', texto: 'Você é a estagiária nova? Cláudia.' },
+      { tipo: 'fala', quem: 'ana', texto: 'Sou, sim. Ana. Tô tentando entrar no sistema... qual é o número do time?' },
       {
         // PISTA 2, literal. E é a deixa dela para a pergunta que planta o
         // autoconhecimento — "volta meio metro" é a única coisa que mostra que
         // a resposta importou.
         tipo: 'fala',
         quem: 'claudia',
-        texto: '12. (para, volta meio metro) O que te trouxe pra cá?',
+        texto: 'É 12. (para, volta meio metro) E me conta: o que te trouxe pra cá?',
       },
       {
         tipo: 'fala',
         quem: 'ana',
-        texto: 'Queria ver como é na prática. Na faculdade eu só vi isso no papel.',
+        texto: 'Queria ver como é no dia a dia. Na faculdade a gente vê muita coisa no papel, né?',
       },
       {
         tipo: 'fala',
         quem: 'claudia',
-        texto: 'Hm. (anota mentalmente e sai) Bom primeiro dia.',
+        texto: 'Ah, entendi. (anota mentalmente e sai) Bom primeiro dia.',
       },
     ],
     // Ela soube responder "o que te trouxe aqui" sem enrolar. A Cláudia não
@@ -203,14 +209,14 @@ export const DIALOGOS_B1: Record<DialogoId, Dialogo> = {
       {
         tipo: 'fala',
         quem: 'rafael',
-        texto: 'Você tá há quarenta minutos naquela tela, né? Relaxa, eu fiquei uma hora e vinte.',
+        texto: 'Você tá há quarenta minutos nessa tela, né? Eu levei quase uma hora e meia. Tá indo bem.',
       },
       { tipo: 'fala', quem: 'ana', texto: '(constrangida) Tanto assim?' },
       {
         // PISTA 3, literal, com o dia em dois dígitos para não haver dúvida.
         tipo: 'fala',
         quem: 'rafael',
-        texto: 'Rafael, projetos, time do lado. O fim da senha é o dia que você entrou: hoje, dia 03.',
+        texto: 'Sou o Rafael, do time de Projetos, ali do lado. No fim vai o dia que você entrou: hoje é 03.',
       },
       {
         // O cartão nasce aqui, no meio de uma frase sobre outra coisa. É o item
@@ -222,7 +228,7 @@ export const DIALOGOS_B1: Record<DialogoId, Dialogo> = {
       {
         tipo: 'fala',
         quem: 'rafael',
-        texto: 'Amanhã você produz. Hoje já sabe onde ficam três ramais. Eu levei uma semana.',
+        texto: 'Pra primeiro dia, três ramais já é bastante. Eu levei uma semana pra achar todo mundo.',
       },
     ],
     efeitos: [{ tipo: 'concederItem', itemId: 'cartao-rafael' }],

@@ -33,7 +33,6 @@ import { AssociarPares } from './AssociarPares';
 import { Estruturar } from './Estruturar';
 import { Montar } from './Montar';
 import { Senha } from './Senha';
-import { Sequenciar } from './Sequenciar';
 
 function corpo(def: PuzzleDef): JSX.Element {
   switch (def.tipo) {
@@ -41,8 +40,6 @@ function corpo(def: PuzzleDef): JSX.Element {
       return <Senha def={def} />;
     case 'associar':
       return <AssociarPares def={def} />;
-    case 'sequenciar':
-      return <Sequenciar def={def} />;
     case 'estruturar':
       return <Estruturar def={def} />;
     case 'montar':

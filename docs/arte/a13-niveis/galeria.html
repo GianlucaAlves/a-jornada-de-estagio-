@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="pt-BR">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A13 — níveis e XP de Ana</title>
+<style>
+body { margin:32px; background:#060a12; color:white; font:22px/1.45 system-ui; }
+a { color:#4fa8ff; } h1 { font-size:40px; } figure { margin:32px 0; }
+img,video { display:block; width:100%; max-width:1920px; border:3px solid white; }
+figcaption { margin-bottom:12px; } nav { display:flex; flex-wrap:wrap; gap:20px; }
+</style>
+<h1>A13 — níveis e XP de Ana</h1>
+<p>Seis títulos, XP por interação obrigatória, save e evolução pulável. Esta galeria registra a implementação da A13.</p>
+<nav><a href="../../decisoes/a13-nivel-e-xp.md">Decisões e critérios</a><a href="verificacao.json">Medições do navegador</a><a href="niveis.webm">Baixar vídeo</a></nav>
+<figure><figcaption>Evolução e navegação no jogo</figcaption><video controls preload="metadata" src="niveis.webm"></video></figure>
+<main id="prints"></main>
+<script>
+const cenas = ['b1-escritorio','b2-cafezinho','b2-escritorio','b3-linha-producao','b3-escritorio','b4-sala-reunioes','b5-outra-area','b6-cafezinho'];
+const arquivos = [...cenas.flatMap(cena => [`${cena}-cena`, `${cena}-mapa`]), 'ganho-xp','minigame-sem-hud','evolucao-fecho','evolucao-novo-titulo','cartao-depois-evolucao','nivel-2-barra-zerada'];
+for (const arquivo of arquivos) {
+  const figura = document.createElement('figure');
+  const legenda = document.createElement('figcaption');
+  legenda.textContent = arquivo.replaceAll('-', ' ');
+  const link = document.createElement('a'); link.href = `${arquivo}.png`;
+  const imagem = document.createElement('img'); imagem.src = link.href; imagem.alt = legenda.textContent; imagem.loading = 'lazy';
+  link.append(imagem); figura.append(legenda,link); document.querySelector('#prints').append(figura);
+}
+</script>
+</html>

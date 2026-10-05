@@ -40,7 +40,7 @@ export const ITENS: Record<ItemId, Item> = {
   'anotacoes-treinamento': {
     id: 'anotacoes-treinamento',
     nome: 'Anotações do treinamento',
-    descricao: 'Ela organizou a semana para caber trabalho, estudo e a prova. O que você tiraria da lista?',
+    descricao: 'Tudo o que ouço e preciso lembrar, registrado na hora.',
     tardio: false,
   },
   relatorio: {
@@ -60,7 +60,7 @@ export const ITENS: Record<ItemId, Item> = {
     // O id fica: renomeá-lo arrastaria manifest, arte e scripts de geração por
     // um ganho de zero. O que mudou é o TEXTO, e o eixo dele.
     nome: 'Certificado de conclusão',
-    descricao: 'Quarenta horas fora do expediente, depois de reorganizar a semana. O que Ana escolheu aprender por conta própria?',
+    descricao: 'Uma trilha escolhida a partir do que o trabalho já pede. O que Ana decidiu aprender por conta própria?',
     tardio: true,
   },
   'cracha-innovation': {
@@ -104,7 +104,7 @@ export const SKILLS: Record<SkillId, Skill> = {
     nome: 'Leitura do que o trabalho pede',
     // Era 'Leitura de mercado' com um texto sobre diploma. O eixo continua o
     // mesmo — a grade não é a fronteira — mas agora vale para qualquer área.
-    texto: 'O que o trabalho pede raramente é o que a grade ensinou. Dá para descobrir antes.',
+    texto: 'Entender o que é urgente, o que dá mais trabalho e o que o time precisa primeiro.',
     bloco: 2,
   },
   'aprendizado-continuo': {

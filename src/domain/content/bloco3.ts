@@ -67,6 +67,8 @@ export const CENAS_B3: readonly Cena[] = [
     // o relatório só existe depois do puzzle, e a Cláudia só recebe depois dele.
     lugarId: 'linha-producao',
     bloco: 3,
+    totalConversas: 2,
+    totalMinigames: 1,
     aberturaTexto: 'Seis meses. Ela tem tarefas de verdade agora. Nenhuma delas é essa.',
     ecoTexto: 'Aqui ela escreveu três páginas que ninguém tinha pedido.',
     hotspots: [
@@ -146,6 +148,8 @@ export const CENAS_B3: readonly Cena[] = [
     // atravessa o prédio para entregar, e não há mais nada para fazer lá.
     lugarId: 'escritorio',
     bloco: 3,
+    totalConversas: 2,
+    totalMinigames: 1,
     aberturaTexto:
       'Ela atravessou o prédio com três páginas na mão. A mesa é a mesma de seis meses atrás.',
     ecoTexto: 'Aqui ela entregou um relatório que ninguém tinha pedido.',
@@ -179,10 +183,9 @@ export const CENAS_B3: readonly Cena[] = [
 
 export const DIALOGOS_B3: Record<DialogoId, Dialogo> = {
   /**
-   * "Entrou no orçamento da rotina" é a fala mais útil da fase para quem
-   * apresenta, e ela é dita por quem está do lado certo da razão: o Tiago não
-   * está errado, ele está ocupado. Toda empresa tem cinco dessas, todo mundo
-   * sabe, ninguém olha — porque olhar não é tarefa de ninguém.
+   * "Quando eu cheguei já era assim" carrega a inércia sem transformar Tiago em
+   * vilão: ele está ocupado e nunca teve motivo para questionar a rotina. Toda
+   * equipe tem processos que continuam por hábito, mesmo quando poderiam mudar.
    *
    * O diálogo termina com ele liberando, e nenhum dos dois comenta o que acabou
    * de acontecer.
@@ -194,17 +197,17 @@ export const DIALOGOS_B3: Record<DialogoId, Dialogo> = {
         tipo: 'fala',
         quem: 'tiago',
         texto:
-          'Essa conferência é no papel desde antes de eu entrar. A gente digita no fim do turno e segue o jogo.',
+          'Essa conferência aí sempre foi no papel. No fim do turno a gente passa pra planilha, senão não fecha.',
       },
-      { tipo: 'fala', quem: 'tiago', texto: '(dá de ombros) Entrou no orçamento da rotina.' },
+      { tipo: 'fala', quem: 'tiago', texto: '(dá de ombros) Sei lá, quando eu cheguei já era assim.' },
       {
         tipo: 'fala',
         quem: 'ana',
-        texto: 'Acho que gosto de descobrir onde a informação emperra. Se eu deixar isso só na minha cabeça, o turno da noite continua no escuro.',
+        texto: 'Eu fico pensando... gosto de achar onde a informação emperra. Se eu guardar isso só pra mim, o pessoal da noite continua no escuro.',
       },
       { tipo: 'fala', quem: 'tiago', texto: 'Começa. Ninguém pediu pra você olhar isso.' },
-      { tipo: 'fala', quem: 'ana', texto: 'Ninguém pediu pra eu não olhar também.' },
-      { tipo: 'fala', quem: 'tiago', texto: '(pausa, depois ri) Então olha.' },
+      { tipo: 'fala', quem: 'ana', texto: 'Pois é. Mas também ninguém pediu pra eu deixar quieto.' },
+      { tipo: 'fala', quem: 'tiago', texto: '(pausa, depois ri) Tá bom. Olha aí.' },
     ],
   },
 
@@ -223,14 +226,14 @@ export const DIALOGOS_B3: Record<DialogoId, Dialogo> = {
       {
         tipo: 'fala',
         quem: 'ana',
-        texto: 'A conferência da linha. Aquela que a gente digita no fim do turno.',
+        texto: 'A conferência da linha, lembra? Aquela que só vai pra planilha no fim do turno.',
       },
       { tipo: 'fala', quem: 'claudia', texto: '(folheando) Quem te pediu isso?' },
       { tipo: 'fala', quem: 'ana', texto: 'Ninguém.' },
       {
         tipo: 'fala',
         quem: 'claudia',
-        texto: 'Seis meses fazendo na mão, e ninguém tinha parado pra escrever isso.',
+        texto: 'Peraí... seis meses fazendo isso à mão e ninguém tinha juntado por escrito?',
       },
       { tipo: 'fala', quem: 'claudia', texto: 'Guardei seu nome.' },
     ],

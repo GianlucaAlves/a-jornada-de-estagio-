@@ -1,0 +1,182 @@
+{
+  "medidas": [
+    {
+      "nome": "b1-escritorio-mapa",
+      "caixa": {
+        "x": 1520,
+        "y": 156,
+        "width": 336,
+        "height": 237.078125
+      },
+      "fonteMinima": 22,
+      "colisoes": []
+    },
+    {
+      "nome": "b1-escritorio-cena",
+      "caixa": {
+        "x": 1520,
+        "y": 156,
+        "width": 336,
+        "height": 237.078125
+      },
+      "fonteMinima": 22,
+      "colisoes": []
+    },
+    {
+      "nome": "b2-cafezinho-mapa",
+      "caixa": {
+        "x": 1520,
+        "y": 156,
+        "width": 336,
+        "height": 237.078125
+      },
+      "fonteMinima": 22,
+      "colisoes": []
+    },
+    {
+      "nome": "b2-cafezinho-cena",
+      "caixa": {
+        "x": 1520,
+        "y": 156,
+        "width": 336,
+        "height": 237.078125
+      },
+      "fonteMinima": 22,
+      "colisoes": []
+    },
+    {
+      "nome": "b2-escritorio-mapa",
+      "caixa": {
+        "x": 1520,
+        "y": 156,
+        "width": 336,
+        "height": 237.078125
+      },
+      "fonteMinima": 22,
+      "colisoes": []
+    },
+    {
+      "nome": "b2-escritorio-cena",
+      "caixa": {
+        "x": 1520,
+        "y": 156,
+        "width": 336,
+        "height": 237.078125
+      },
+      "fonteMinima": 22,
+      "colisoes": []
+    },
+    {
+      "nome": "b3-linha-producao-mapa",
+      "caixa": {
+        "x": 1520,
+        "y": 156,
+        "width": 336,
+        "height": 237.078125
+      },
+      "fonteMinima": 22,
+      "colisoes": []
+    },
+    {
+      "nome": "b3-linha-producao-cena",
+      "caixa": {
+        "x": 1520,
+        "y": 156,
+        "width": 336,
+        "height": 237.078125
+      },
+      "fonteMinima": 22,
+      "colisoes": []
+    },
+    {
+      "nome": "b3-escritorio-mapa",
+      "caixa": {
+        "x": 1520,
+        "y": 156,
+        "width": 336,
+        "height": 237.078125
+      },
+      "fonteMinima": 22,
+      "colisoes": []
+    },
+    {
+      "nome": "b3-escritorio-cena",
+      "caixa": {
+        "x": 1520,
+        "y": 156,
+        "width": 336,
+        "height": 237.078125
+      },
+      "fonteMinima": 22,
+      "colisoes": []
+    },
+    {
+      "nome": "b4-sala-reunioes-mapa",
+      "caixa": {
+        "x": 1520,
+        "y": 156,
+        "width": 336,
+        "height": 237.078125
+      },
+      "fonteMinima": 22,
+      "colisoes": []
+    },
+    {
+      "nome": "b4-sala-reunioes-cena",
+      "caixa": {
+        "x": 1520,
+        "y": 156,
+        "width": 336,
+        "height": 237.078125
+      },
+      "fonteMinima": 22,
+      "colisoes": []
+    },
+    {
+      "nome": "b5-outra-area-mapa",
+      "caixa": {
+        "x": 1520,
+        "y": 156,
+        "width": 336,
+        "height": 263.46875
+      },
+      "fonteMinima": 22,
+      "colisoes": []
+    },
+    {
+      "nome": "b5-outra-area-cena",
+      "caixa": {
+        "x": 1520,
+        "y": 156,
+        "width": 336,
+        "height": 263.46875
+      },
+      "fonteMinima": 22,
+      "colisoes": []
+    },
+    {
+      "nome": "b6-cafezinho-mapa",
+      "caixa": {
+        "x": 1520,
+        "y": 156,
+        "width": 336,
+        "height": 237.078125
+      },
+      "fonteMinima": 22,
+      "colisoes": []
+    },
+    {
+      "nome": "b6-cafezinho-cena",
+      "caixa": {
+        "x": 1520,
+        "y": 156,
+        "width": 336,
+        "height": 237.078125
+      },
+      "fonteMinima": 22,
+      "colisoes": []
+    }
+  ],
+  "evolucaoAutomaticaMs": 3808.300000011921,
+  "erros": []
+}

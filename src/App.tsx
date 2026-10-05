@@ -14,6 +14,7 @@
  */
 import { useState } from 'react';
 import { BLOCOS } from './domain/content';
+import { historiaApresentador } from './domain/content/bloco2';
 import type { BlocoId } from './domain/types';
 import { useJogo } from './store/jogo';
 import { Abertura } from './ui/Abertura';
@@ -30,6 +31,7 @@ import { PausaBloco4 } from './ui/PausaBloco4';
 import { PuzzleAtivo } from './ui/puzzles';
 import { Revelacao } from './ui/Revelacao';
 import { Perguntas } from './ui/Perguntas';
+import { EvolucaoAna, NivelAna } from './ui/NivelAna';
 import { camada, cores, espaco, tipografia } from './styles/tokens';
 
 /**
@@ -48,6 +50,8 @@ function TelaAtual(): JSX.Element | null {
       return <Mapa />;
     case 'cartao':
       return <CartaoDeTransicao />;
+    case 'evolucao':
+      return <EvolucaoAna />;
     case 'revelacao':
       return <Revelacao />;
     case 'perguntas':
@@ -72,6 +76,8 @@ export function App(): JSX.Element {
   const barraSaiu = useJogo((s) => s.revelacao.barraSaiu);
   const avancarBloco = useJogo((s) => s.avancarBloco);
   const reflexaoAtiva = useJogo(s => s.reflexaoAtiva);
+  const bloco2 = useJogo(s => s.bloco === 2);
+  const [historiaLida, setHistoriaLida] = useState(false);
 
   /**
    * Toda carga de página começa na abertura (ADR-018) — é o que faz F5 ser o
@@ -105,12 +111,15 @@ export function App(): JSX.Element {
   const mostrarBarra = overlaysVisiveis && !barraSaiu;
   const mostrarAvanco =
     overlaysVisiveis && blocoConcluido && bloco < ULTIMO_BLOCO && pausaBloco4 !== 'rodando';
+  const mostrarHistoria =
+    mostrarAvanco && bloco2 && historiaApresentador.trim() !== '' && !historiaLida;
 
   return (
     <Canvas>
       <TelaAtual />
 
       {mostrarBarra ? <BarraDeItens /> : null}
+      {overlaysVisiveis ? <NivelAna /> : null}
 
       <Dialogo />
       <Reflexao />
@@ -124,7 +133,18 @@ export function App(): JSX.Element {
       <PuzzleAtivo />
 
       {/* Cue de passagem de bastão: o bloco sinalizou fim, o cartão pode entrar. */}
-      {mostrarAvanco ? (
+      {mostrarHistoria ? (
+        <div role="dialog" aria-modal="true" aria-label="Um momento de história" style={{ position: 'absolute', inset: 0, zIndex: camada.overlayPersistente + 1, display: 'grid', placeItems: 'center', padding: espaco.margem, background: cores.veu }}>
+          <section className="jogo-caixa" style={{ width: 1000 }}>
+            <h2 style={{ fontSize: tipografia.tamanhos.subtitulo, marginBottom: espaco.md }}>Um momento de história</h2>
+            <p style={{ fontSize: tipografia.tamanhos.apoio, fontWeight: tipografia.pesos.forte, color: cores.destaque, marginBottom: espaco.sm }}>Apresentadora</p>
+            <p style={{ fontSize: tipografia.tamanhos.corpo, marginBottom: espaco.lg }}>{historiaApresentador}</p>
+            <button type="button" className="jogo-botao" onClick={() => setHistoriaLida(true)} style={{ background: cores.acao, color: cores.textoInverso }}>Continuar ▶</button>
+          </section>
+        </div>
+      ) : null}
+
+      {mostrarAvanco && !mostrarHistoria ? (
         <button
           type="button"
           className="jogo-botao"

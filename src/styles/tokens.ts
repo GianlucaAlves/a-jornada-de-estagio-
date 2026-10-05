@@ -127,12 +127,29 @@ export const duracao = {
   media: 800,
   longa: 1000,
   maxima: 1200,
+  /** Reserva os dois quadros de montagem antes de encerrar a caminhada do NPC. */
+  atrasoDeEntradaNpc: 80,
   esteira: 8000,
   cicloRobotico: 4000,
 } as const;
 
 /** Medidas do ciclo contínuo de produção, em px de canvas. */
 export const movimento = { esteira: 304 } as const;
+
+/** Reserva lateral fora do mapa e acima da faixa de personagens. */
+export const progressao = {
+  larguraHud: 336,
+  topoHud: 156,
+  retrato: { largura: 64, altura: 76.8 },
+  alturaBarra: 24,
+  duracaoEvolucao: 3800,
+  inicioNovoTitulo: 1200,
+  intervaloDigitacao: 40,
+  larguraEvolucao: 1000,
+  frequenciaSom: 660,
+  volumeSom: 0.08,
+  duracaoSom: 0.3,
+} as const;
 
 /** Sombras sólidas e deslocadas. Sem desfoque difuso, sem gradiente. */
 export const sombra = {

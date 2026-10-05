@@ -216,6 +216,14 @@ button {
   outline: none;
 }
 
+/* A marca de concluído substitui a aura de interação: clicar outra vez mostra
+   a lembrança da Ana, portanto o amarelo deixaria de descrever a ação real. */
+.jogo-hotspot.jogo-concluido:hover .jogo-hotspot-arte,
+.jogo-hotspot.jogo-concluido:focus-visible .jogo-hotspot-arte,
+.jogo-clipboard.jogo-concluido:not(:disabled) .jogo-hotspot-arte {
+  filter: none;
+}
+
 /* ------------------------------------------------ animação de sprite
 
    EXCEÇÃO REGISTRADA à janela 600-1200ms (bíblia §6.1): a janela vale para

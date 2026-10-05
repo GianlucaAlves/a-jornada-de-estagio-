@@ -1,5 +1,5 @@
 /**
- * Puzzle da FASE 2 — ligar cada lacuna à trilha que fecha ela.
+ * Puzzle da FASE 2 — ligar situações a práticas de planejamento e estudo.
  *
  * A MECÂNICA FICOU INTACTA (clique na esquerda, clique na direita, nasce uma
  * linha grossa de alto contraste) porque ela está entre as quatro aprovadas. O
@@ -304,7 +304,7 @@ export function AssociarPares({ def }: AssociarParesProps): JSX.Element {
               key={item.id}
               type="button"
               className="jogo-botao-nu"
-              aria-label={`Lacuna: ${item.texto}${ligado ? ' (já ligada)' : ''}`}
+              aria-label={`Situação: ${item.texto}${ligado ? ' (já ligada)' : ''}`}
               aria-pressed={selecionado}
               disabled={ligado}
               onClick={() => despachar({ tipo: 'clicarEsquerda', id: item.id })}
@@ -336,7 +336,7 @@ export function AssociarPares({ def }: AssociarParesProps): JSX.Element {
               key={item.id}
               type="button"
               className="jogo-botao-nu"
-              aria-label={`Trilha: ${item.texto}${ligado ? ' (já ligada)' : ''}`}
+              aria-label={`Prática: ${item.texto}${ligado ? ' (já ligada)' : ''}`}
               disabled={!habilitado}
               onClick={() => despachar({ tipo: 'clicarDireita', id: item.id })}
               style={{

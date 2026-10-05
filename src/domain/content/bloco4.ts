@@ -3,9 +3,9 @@
  * visível acompanham a ordem real de interação.
  *
  * Ordem: Marcos -> plateia e puzzle -> apresentação no atril -> pausa silenciosa
- * -> Cláudia -> Bianca. A cena oculta plateia e NPCs quando saem da narrativa;
- * `Cena.tsx` aplica essa composição usando os hotspots concluídos e o estado da
- * pausa. A apresentação inicia a pausa; o crachá vem no reconhecimento de Cláudia.
+ * -> Cláudia -> Bianca. A presença dos NPCs é independente dos assuntos de
+ * conversa; `presencas.ts` registra as saídas pela borda depois de cada fala.
+ * A apresentação inicia a pausa; o crachá vem no reconhecimento de Cláudia.
  *
  * Coordenadas de personagens, plateia e atril foram revisadas com a prévia
  * composta e os testes de geometria. A sala foi aberta para reservar o palco.
@@ -16,6 +16,8 @@ export const CENAS_B4: readonly Cena[] = [
   {
     lugarId: 'sala-reunioes',
     bloco: 4,
+    totalConversas: 3,
+    totalMinigames: 1,
     aberturaTexto:
       'Um ano. Ela não é mais a estagiária nova; é só a estagiária. ' +
       'Innovation Week: as cadeiras viradas para a frente, a sala cheia, ' +
@@ -132,7 +134,7 @@ export const CENAS_B4: readonly Cena[] = [
         efeitos: [{ tipo: 'dialogo', dialogoId: 'b4-reconhecimento' }],
       },
       {
-        // A virada depois de Cláudia; Cena mantém Bianca oculta até esse beat.
+        // Bianca aguarda na porta; liberar a conversa não materializa sua figura.
         id: 'b4-bianca',
         rotulo: 'Bianca',
         arte: { tipo: 'npc', npcId: 'bianca' },
@@ -150,21 +152,21 @@ export const DIALOGOS_B4: Record<DialogoId, Dialogo> = {
   'b4-preparacao': {
     id: 'b4-preparacao',
     nos: [
-      { tipo: 'fala', quem: 'marcos', texto: 'Antes de começar: quem vai te ouvir sabe o que você fez?' },
-      { tipo: 'fala', quem: 'ana', texto: 'Sabe que eu participei. Não sei se sabe o que mudou com o meu trabalho.' },
-      { tipo: 'fala', quem: 'marcos', texto: 'Conta pelo STAR: situação, tarefa, ação e resultado. Qual era o problema, o que era sua responsabilidade, o que você fez e o que mudou.' },
-      { tipo: 'fala', quem: 'ana', texto: 'Assim eu mostro a minha parte sem diminuir a do time.' },
-      { tipo: 'fala', quem: 'marcos', texto: 'Se vender é dar clareza ao seu trabalho. Um post no LinkedIn também pode contar essa história para quem não estava aqui.' },
-      { tipo: 'fala', quem: 'marcos', texto: 'Compartilhe só o que pode ser público. Dá para falar do aprendizado sem expor dados internos.' },
+      { tipo: 'fala', quem: 'marcos', texto: 'Antes de entrar: se alguém perguntar o que mudou com esse projeto, o que você conta?' },
+      { tipo: 'fala', quem: 'ana', texto: 'Que eu participei. Mas... não sei se ficou claro o que eu fiz.' },
+      { tipo: 'fala', quem: 'marcos', texto: 'Então conta em quatro passos: situação, tarefa, ação e resultado. Como tava, o que cabia a você, o que fez e no que deu.' },
+      { tipo: 'fala', quem: 'ana', texto: 'Aí mostro a minha parte sem apagar o trabalho do time.' },
+      { tipo: 'fala', quem: 'marcos', texto: 'Isso. E depois dá pra contar essa história num post profissional. Tem gente que não tava na sala.' },
+      { tipo: 'fala', quem: 'marcos', texto: 'Só confere o que pode sair pra fora, tá? Fala do que aprendeu sem mostrar dado interno.' },
     ],
   },
   'b4-apresentacao': {
     id: 'b4-apresentacao',
     nos: [
-      { tipo: 'fala', quem: 'ana', texto: 'Antes, a conferência dos lotes ficava no papel até o fim do turno. Quem chegava depois precisava perguntar o que tinha ficado pendente.' },
-      { tipo: 'fala', quem: 'ana', texto: 'Minha parte era fazer essas pendências chegarem claras ao turno seguinte.' },
-      { tipo: 'fala', quem: 'ana', texto: 'Passei a registrar a conferência na planilha compartilhada, na hora, e conferi o preenchimento com o pessoal da linha.' },
-      { tipo: 'fala', quem: 'ana', texto: 'Agora o outro turno já começa sabendo o que falta. Eu gosto de resolver essa passagem; ainda fico nervosa contando isso em voz alta.' },
+      { tipo: 'fala', quem: 'ana', texto: 'Antes, a gente anotava a conferência no papel e só passava pra planilha no fim do turno. Quem chegava depois perguntava o que faltava.' },
+      { tipo: 'fala', quem: 'ana', texto: 'Minha parte era deixar isso claro pro turno seguinte.' },
+      { tipo: 'fala', quem: 'ana', texto: 'Passei a registrar na planilha compartilhada, ali na hora. Depois conferi com o pessoal da linha se tava funcionando.' },
+      { tipo: 'fala', quem: 'ana', texto: 'Agora o outro turno já começa sabendo o que falta. Eu gosto de resolver essa passagem... ainda fico nervosa falando aqui na frente.' },
     ],
     efeitos: [{ tipo: 'iniciarPausaBloco4' }],
   },
@@ -181,41 +183,36 @@ export const DIALOGOS_B4: Record<DialogoId, Dialogo> = {
       {
         tipo: 'fala',
         quem: 'claudia',
-        texto: 'Manda no canal do time depois, pra quem não estava aqui ver.',
+        texto: 'Depois manda no canal do time, pra quem não veio ver também.',
       },
     ],
     efeitos: [{ tipo: 'concederItem', itemId: 'cracha-innovation' }],
   },
 
   /**
-   * CALLBACK DO PUZZLE DA FASE 2 — o par `lacuna-reuniao` → `trilha-apresentar`.
+   * A Bianca reconhece o esforço da Ana sem transformar o momento em uma lista
+   * de conselhos; as reações curtas deixam o reconhecimento aparecer na pausa.
    *
-   * A plateia identificou a lacuna junto com ela e viu a Ana não fechar essa.
-   * A Bianca NÃO explica o callback: se a plateia não lembrar, quem lembra é o
-   * apresentador, numa frase, antes de clicar.
-   *
-   * Seis nós é o teto, e ela usa os seis. Repare no que ela não faz: não ensina
-   * a se vender, não consola, não dá três dicas. Ela vira a mesa e sai do
-   * caminho, e o painel acende `visibilidade` sem que ninguém a nomeie.
+   * Seis nós é o teto, e ela usa os seis. A cena confirma que Ana ainda sente
+   * nervosismo, mas já consegue falar do próprio trabalho.
    */
   'b4-virada': {
     id: 'b4-virada',
     nos: [
-      { tipo: 'fala', quem: 'bianca', texto: '(da porta) Isso é bom, Ana. Bom de verdade.' },
-      { tipo: 'fala', quem: 'ana', texto: 'Ninguém falou nada.' },
+      { tipo: 'fala', quem: 'bianca', texto: '(da porta) Foi muito bom, Ana. Sério.' },
+      { tipo: 'fala', quem: 'ana', texto: 'Mas ninguém falou nada.' },
       {
         tipo: 'fala',
         quem: 'bianca',
-        texto: 'Quem ia falar? Naquela sala só tinha quem já sabia do projeto.',
+        texto: 'Eu sei. Tava cheia de gente que já conhecia o projeto, né?',
       },
       {
         tipo: 'fala',
         quem: 'bianca',
-        texto:
-          'Lembra a sua lista? "Falar numa reunião cheia de gente mais experiente."',
+        texto: 'Mas eles ouviram você contar o que mudou. Isso conta.',
       },
-      { tipo: 'fala', quem: 'ana', texto: 'Eu nunca fiz essa trilha. Falar aqui ainda deu trabalho.' },
-      { tipo: 'fala', quem: 'bianca', texto: 'Não. Você fez as outras três.' },
+      { tipo: 'fala', quem: 'ana', texto: 'Nossa, eu tava tremendo por dentro. Ainda não sei se acostumo.' },
+      { tipo: 'fala', quem: 'bianca', texto: 'Nem precisa decidir agora. Hoje você fez mesmo assim.' },
     ],
     efeitos: [
       { tipo: 'concederSkill', skillId: 'visibilidade' },

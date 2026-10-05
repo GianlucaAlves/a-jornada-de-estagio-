@@ -75,16 +75,16 @@ efetivada e não sabe se a decisão virá; também percebe que essa resposta nã
 decide sozinha em que área quer crescer. A conversa termina abrindo espaço para
 olhar as próprias experiências, sem prever o resultado.
 
-> **Bianca:** O contrato está perto do fim. Como você está pensando nisso?
+> **Bianca:** Tá chegando no fim do contrato... como isso tá batendo?
 >
-> **Ana:** Quero ser efetivada. Ainda não sei se vai acontecer, e não quero
-> fingir que isso não me preocupa.
+> **Ana:** Quero muito ser efetivada. Só não sei se vai rolar, e fico tentando
+> fingir que não me preocupa.
 >
-> **Bianca:** Faz sentido. E, além da vaga, você já começou a pensar em que tipo
-> de trabalho quer fazer?
+> **Bianca:** Justo. E, tirando essa vaga, já se pegou pensando no tipo de
+> trabalho que quer fazer?
 >
-> **Ana:** Na conferência gostei de organizar a informação. Na apresentação,
-> nem tanto de ficar na frente da sala. Quero entender essa diferença.
+> **Ana:** Na conferência curti organizar a informação. Na apresentação, ficar na
+> frente da sala... nem tanto. Quero entender essa diferença.
 
 ---
 
@@ -132,15 +132,15 @@ Com os dois, seis falas:
 
 > **Bianca:** Você circulou "passagem de turno" três vezes no caderno.
 >
-> **Ana:** Gostei de descobrir onde o dado parava. Ainda não sei se quero fazer isso nesta área ou em outra.
+> **Ana:** Acho que gostei de descobrir onde a informação travava. Mas não sei se quero fazer isso aqui... ou em outra área.
 >
-> **Ana:** Quero ser efetivada. Faltam três semanas e ninguém disse se há vaga. Estou tentando não misturar isso com a escolha da área.
+> **Ana:** E a efetivação? Faltam três semanas e ninguém falou se tem vaga. Tento separar essa ansiedade da escolha da área, mas é difícil.
 >
-> **Bianca:** Sou formada em Letras e trabalho com documentação. Nem sabia que esse caminho existia; demorei para parar de chamar a mudança de desvio.
+> **Bianca:** Sou formada em Letras e trabalho com documentação. Até descobrir esse caminho, achava que mudar era me desviar.
 >
-> **Bianca:** Eu vi você conversar com a linha, montar a conferência e depois explicar isso na reunião.
+> **Bianca:** Eu vi você lá na linha, montando a conferência. E depois explicando o que mudou na reunião.
 >
-> **Bianca:** Se não abrir vaga, esses exemplos continuam sendo seus. Orçamento e espaço no time também entram nessa decisão.
+> **Bianca:** Se a vaga não aparecer, isso continua sendo seu. E a decisão também passa pelo orçamento, pelo espaço no time... nem tudo depende da gente.
 >
 
 **→ Ganha skill: Plano de futuro**

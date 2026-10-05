@@ -52,10 +52,10 @@ ambos precisam acontecer antes de Ana apresentar:
 
 ## 1. Marcos — antes da reunião
 
-Marcos ajuda Ana a organizar o que vai contar. A conversa introduz Situação,
-Tarefa, Ação e Resultado; falar do próprio trabalho é dar clareza à contribuição.
-Ele lembra que LinkedIn pode levar a história a quem não estava na sala e que
-ela só deve compartilhar informação pública.
+Marcos pergunta o que Ana contaria se alguém quisesse saber o que mudou com o
+projeto. Juntos, eles organizam a história em Situação, Tarefa, Ação e Resultado.
+Ele sugere que ela compartilhe a experiência com quem não estava na sala e
+lembra, de passagem, que dados internos ficam de fora.
 
 > 💡 **Gancho de fala:** STAR dá uma ordem para contar uma realização. Use o caso
 > da fase 3 e peça à plateia que perceba a diferença entre a ação e o impacto.
@@ -105,13 +105,13 @@ competência — **a PAUSA só funciona se resolver isto tiver sido gostoso.**
 Clique no **atril**. Ana caminha até ele; a plateia permanece sentada e o telão
 acompanha cada passo da fala. Avance manualmente pelas quatro partes:
 
-> **Situação — Ana:** Antes, a conferência dos lotes ficava no papel até o fim do turno. Quem chegava depois precisava perguntar o que tinha ficado pendente.
+> **Situação — Ana:** Antes, a gente anotava a conferência no papel e só passava pra planilha no fim do turno. Quem chegava depois perguntava o que faltava.
 >
-> **Tarefa — Ana:** Minha parte era fazer essas pendências chegarem claras ao turno seguinte.
+> **Tarefa — Ana:** Minha parte era deixar isso claro pro turno seguinte.
 >
-> **Ação — Ana:** Passei a registrar a conferência na planilha compartilhada, na hora, e conferi o preenchimento com o pessoal da linha.
+> **Ação — Ana:** Passei a registrar na planilha compartilhada, ali na hora. Depois conferi com o pessoal da linha se tava funcionando.
 >
-> **Resultado — Ana:** Agora o outro turno já começa sabendo o que falta. Eu gosto de resolver essa passagem; ainda fico nervosa contando isso em voz alta.
+> **Resultado — Ana:** Agora o outro turno já começa sabendo o que falta. Eu gosto de resolver essa passagem... ainda fico nervosa falando aqui na frente.
 
 Ana muda de posição entre atril e telão conforme o slide destaca cada parte.
 Ao terminar, começa a pausa silenciosa; o crachá só é recebido depois da
@@ -178,7 +178,7 @@ Ela é a única que ainda não saiu de quadro.
 >
 > **Ana:** Obrigada.
 >
-> **Cláudia:** Manda no canal do time depois, pra quem não estava aqui ver.
+> **Cláudia:** Depois manda no canal do time, pra quem não veio ver também.
 
 E sai.
 
@@ -198,27 +198,24 @@ conversa, preservando a pausa sem texto ou recompensa.
 Ela aparece na porta. Não estava na reunião. **Seis linhas, e ela para.** Ela não
 ensina nada aqui — ela vira a mesa e sai do caminho.
 
-> **Bianca:** *(da porta)* Isso é bom, Ana. Bom de verdade.
+> **Bianca:** *(da porta)* Foi muito bom, Ana. Sério.
 >
-> **Ana:** Ninguém falou nada.
+> **Ana:** Mas ninguém falou nada.
 >
-> **Bianca:** Quem ia falar? Naquela sala só tinha quem já sabia do projeto.
+> **Bianca:** Eu sei. Tava cheia de gente que já conhecia o projeto, né?
 >
-> **Bianca:** Lembra a sua lista? "Falar numa reunião cheia de gente mais
-> experiente."
+> **Bianca:** Mas eles ouviram você contar o que mudou. Isso conta.
 >
-> **Ana:** Eu nunca fiz essa trilha. Falar aqui ainda deu trabalho.
+> **Ana:** Nossa, eu tava tremendo por dentro. Ainda não sei se acostumo.
 >
-> **Bianca:** Não. Você fez as outras três.
+> **Bianca:** Nem precisa decidir agora. Hoje você fez mesmo assim.
 
-> ⚠️ **Callback do Bloco 2.** É o par `lacuna-reuniao` → `trilha-apresentar` do
-> puzzle de associar. A plateia identificou a lacuna junto com ela e viu a Ana
-> não fechar essa. A Bianca **não explica** o callback — se a plateia não
-> lembrar, **você é quem lembra**, numa frase, antes de clicar.
+> A Bianca reconhece o esforço da Ana sem transformar o momento em uma lista de
+> conselhos. A conversa confirma que ela ainda sente nervosismo, mas já consegue
+> falar do próprio trabalho.
 
-> 💡 **Gancho de fala:** visibilidade não é autopromoção. É **tradução**. Ela fez
-> um trabalho excelente numa língua que só quatro pessoas falam — e a trilha que
-> ela deixou de fazer era exatamente a de traduzir.
+> 💡 **Gancho de fala:** visibilidade não é autopromoção. É **tradução**: ela
+> contou o trabalho para quem não estava na linha nem acompanhou o processo.
 
 **→ Ganha skill: Visibilidade** *(concedida no fim do diálogo, e a fase fecha)*
 

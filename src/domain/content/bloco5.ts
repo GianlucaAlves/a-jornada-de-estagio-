@@ -105,6 +105,8 @@ export const CENAS_B5: readonly Cena[] = [
   {
     lugarId: 'outra-area',
     bloco: 5,
+    totalConversas: 2,
+    totalMinigames: 0,
     aberturaTexto:
       'Dois anos. O contrato fecha em três semanas. Ana quer ser efetivada, mas ainda não sabe se vai acontecer. ' +
       'Ela também está pensando em que área quer construir a carreira.',
@@ -151,6 +153,7 @@ export const CENAS_B5: readonly Cena[] = [
         pos: { x: 20, y: 54 },
         parada: { x: 8, y: 76 },
         umaVezSo: true,
+        mensagemConcluido: 'Caderno: Escrevi o que aprendi, do que me orgulho e o que quero desenvolver. Está tudo aqui, e é meu.',
         efeitos: [
           {
             tipo: 'narrar',
@@ -198,6 +201,7 @@ export const CENAS_B5: readonly Cena[] = [
         // entre a figura e a folha e 36px entre a figura e o painel de skills.
         parada: { x: 71, y: 74 },
         umaVezSo: true,
+        mensagemConcluido: 'Grade: Comparei cada matéria com o que mais gostei de fazer no estágio. A dúvida agora está mais concreta.',
         efeitos: [
           {
             tipo: 'narrar',
@@ -245,10 +249,10 @@ export const DIALOGOS_B5: Record<DialogoId, Dialogo> = {
   'b5-contrato': {
     id: 'b5-contrato',
     nos: [
-      { tipo: 'fala', quem: 'bianca', texto: 'O contrato está perto do fim. Como você está pensando nisso?' },
-      { tipo: 'fala', quem: 'ana', texto: 'Quero ser efetivada. Ainda não sei se vai acontecer, e não quero fingir que isso não me preocupa.' },
-      { tipo: 'fala', quem: 'bianca', texto: 'Faz sentido. E, além da vaga, você já começou a pensar em que tipo de trabalho quer fazer?' },
-      { tipo: 'fala', quem: 'ana', texto: 'Na conferência gostei de organizar a informação. Na apresentação, nem tanto de ficar na frente da sala. Quero entender essa diferença.' },
+      { tipo: 'fala', quem: 'bianca', texto: 'Tá chegando no fim do contrato... como isso tá batendo?' },
+      { tipo: 'fala', quem: 'ana', texto: 'Quero muito ser efetivada. Só não sei se vai rolar, e fico tentando fingir que não me preocupa.' },
+      { tipo: 'fala', quem: 'bianca', texto: 'Justo. E, tirando essa vaga, já se pegou pensando no tipo de trabalho que quer fazer?' },
+      { tipo: 'fala', quem: 'ana', texto: 'Na conferência curti organizar a informação. Na apresentação, ficar na frente da sala... nem tanto. Quero entender essa diferença.' },
     ],
   },
   /**
@@ -296,28 +300,27 @@ export const DIALOGOS_B5: Record<DialogoId, Dialogo> = {
       {
         tipo: 'fala',
         quem: 'ana',
-        texto: 'Gostei de descobrir onde o dado parava. Ainda não sei se quero fazer isso nesta área ou em outra.',
+        texto: 'Acho que gostei de descobrir onde a informação travava. Mas não sei se quero fazer isso aqui... ou em outra área.',
       },
       {
         tipo: 'fala',
         quem: 'ana',
-        texto:
-          'Quero ser efetivada. Faltam três semanas e ninguém disse se há vaga. Estou tentando não misturar isso com a escolha da área.',
+        texto: 'E a efetivação? Faltam três semanas e ninguém falou se tem vaga. Tento separar essa ansiedade da escolha da área, mas é difícil.',
       },
       {
         tipo: 'fala',
         quem: 'bianca',
-        texto: 'Sou formada em Letras e trabalho com documentação. Nem sabia que esse caminho existia; demorei para parar de chamar a mudança de desvio.',
+        texto: 'Sou formada em Letras e trabalho com documentação. Até descobrir esse caminho, achava que mudar era me desviar.',
       },
       {
         tipo: 'fala',
         quem: 'bianca',
-        texto: 'Eu vi você conversar com a linha, montar a conferência e depois explicar isso na reunião.',
+        texto: 'Eu vi você lá na linha, montando a conferência. E depois explicando o que mudou na reunião.',
       },
       {
         tipo: 'fala',
         quem: 'bianca',
-        texto: 'Se não abrir vaga, esses exemplos continuam sendo seus. Orçamento e espaço no time também entram nessa decisão.',
+        texto: 'Se a vaga não aparecer, isso continua sendo seu. E a decisão também passa pelo orçamento, pelo espaço no time... nem tudo depende da gente.',
       },
     ],
     efeitos: [
