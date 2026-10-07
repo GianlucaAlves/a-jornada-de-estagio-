@@ -19,7 +19,9 @@ Na produção, reservar a faixa superior direita à fala para deixar o monitor
 da linha visível. Na sala de reuniões, usar a faixa superior esquerda,
 preservando televisão e palestrante. Nesses dois layouts, o nome do locutor
 identifica a fala sem repetir um retrato; fonte de 24 px conserva a leitura.
-As demais cenas mantêm o retrato em escala 4x e fonte de 28 px.
+As demais cenas mantêm o retrato em escala 4x e fonte de 28 px. Toda reflexão
+da Ana inclui seu retrato, inclusive as duas cenas de faixa lateral; essa regra
+se refere aos pensamentos e não altera a composição dos diálogos laterais.
 
 Aceite: nenhum botão sob o HUD; nenhum texto cortado; slide totalmente
 visível durante a apresentação; pensamento sem transparência que confunda

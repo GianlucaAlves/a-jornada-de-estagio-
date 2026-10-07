@@ -47,7 +47,7 @@ export function posicaoDeEntrada(cena: Pick<Cena, 'lugarId' | 'bloco'> | null): 
   }
   // As paradas já conferidas contra o piso também são entradas seguras: a
   // mudança de fase muda a composição sem inventar uma segunda geometria.
-  if (cena?.lugarId === 'cafezinho' && cena.bloco === 2) return { x: 51.5, y: 81 };
+  if (cena?.lugarId === 'cafezinho' && cena.bloco === 2) return { x: 31, y: 80 };
   if (cena?.lugarId === 'linha-producao' && cena.bloco === 3) return { x: 12, y: 78 };
   if (cena?.lugarId === 'outra-area' && cena.bloco === 5) return { x: 71, y: 74 };
   if (cena?.lugarId === 'cafezinho' && cena.bloco === 6) return { x: 50, y: 76 };

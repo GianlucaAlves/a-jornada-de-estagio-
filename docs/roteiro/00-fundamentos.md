@@ -56,7 +56,7 @@ Suporte. Uns 30 anos. Bem-humorado, resolve rápido, fala em jargão e nem perce
 **Função narrativa:** é o primeiro "não sei do que ele está falando" da Ana. O gap não é só de faculdade pro mercado — é de vocabulário.
 
 ### 4. Bianca — a trajetória atípica
-Uns 34 anos. Veio de outra área completamente (formação em Letras, migrou pra tech). Reflexiva, fala devagar.
+Uns 34 anos. Veio de outra área completamente (formação em Letras, migrou para desenvolvimento de APIs). Reflexiva, fala devagar.
 
 - **B2 (Cafezinho):** o coração do Bloco 2. É ela que verbaliza o gap.
 - **B2 (Sala de Treinamento):** está estudando também. Ninguém para de estudar.
@@ -119,7 +119,7 @@ Lista de texto na lateral. Peso visual diferente do inventário: sem ícone, sem
 | 2 | Autoconhecimento | 1 | "Saber responder 'o que te trouxe aqui' antes que alguém pergunte." |
 | 3 | Leitura de mercado | 2 | "O diploma diz onde você passou. Não diz o que você sabe fazer." |
 | 4 | Aprendizado contínuo | 2 | "Ninguém aqui parou de estudar. Nem quem já chegou." |
-| 5 | Competência técnica | 2 | "Arquitetura de sistemas. Serviu antes do que eu imaginava." |
+| 5 | Conhecimento aplicado | 2 | "Aprender uma ferramenta e usar o que estudou numa tarefa real." |
 | 6 | Proatividade | 3 | "Resolver o que ninguém mandou é o que te diferencia de quem só cumpre." |
 | 7 | Protagonismo | 3 | "Liderança não vem com cargo. Vem de assumir o que ninguém assumiu." |
 | 8 | Visibilidade | 4 | "Trabalho que ninguém sabe que existe não vira oportunidade sozinho." |

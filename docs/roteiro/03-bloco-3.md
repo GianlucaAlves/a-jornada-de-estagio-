@@ -38,28 +38,31 @@ Ao entrar no Escritório, mais tarde:
 
 ---
 
-## 1. Tiago (apoio operacional) — o acesso e a frase do bloco
+## 1. Tiago (apoio operacional) — a passagem de turno
 
-> **Tiago:** Essa conferência aí sempre foi no papel. No fim do turno a gente
-> passa pra planilha, senão não fecha.
+> **Tiago:** Cada lote passa por essa conferência. A gente anota no papel e só
+> lança tudo na planilha no fim do turno.
 >
-> **Tiago:** *(dá de ombros)* Sei lá, quando eu cheguei já era assim.
+> **Ana:** E até lá o próximo turno não consegue ver o que ficou pendente?
 >
-> **Ana:** Eu fico pensando... gosto de achar onde a informação emperra. Se eu
-> guardar isso só pra mim, o pessoal da noite continua no escuro.
+> **Tiago:** Isso. Às vezes o pessoal chega e espera a gente terminar de lançar,
+> ou vem perguntar lote por lote.
 >
-> **Tiago:** Começa. Ninguém pediu pra você olhar isso.
+> **Ana:** Será que dá pra registrar cada lote na planilha enquanto a conferência
+> acontece?
 >
-> **Ana:** **Pois é. Mas também ninguém pediu pra eu deixar quieto.**
+> **Tiago:** *(dá de ombros)* Eu peguei o processo assim e fui seguindo. Ninguém
+> me pediu pra rever.
 >
-> **Tiago:** *(pausa, depois ri)* Tá bom. Olha aí.
+> **Ana:** Posso estudar um jeito de fazer isso sem atrasar a linha?
+>
+> **Tiago:** *(pausa, depois ri)* Pode. Ninguém pediu, mas eu quero ver se funciona.
 
-> 💡 **Gancho de fala:** aquela conferência virou rotina porque, quando o Tiago
-> chegou, já era feita daquele jeito. Muita equipe tem processo assim: todo mundo
-> sabe que existe, mas ninguém para pra perguntar se ainda faz sentido. E o Tiago não é
-> vilão: ele é uma pessoa razoável protegendo o próprio dia. A pergunta que fica
-> pra plateia é qual conferência no papel existe no time dela agora.
-
+> 💡 **Gancho de fala:** a conferência é anotada e só entra na planilha no fim do
+> turno, então o próximo time começa sem saber o que ficou pendente. Tiago segue
+> uma rotina que já existia; Ana faz uma pergunta prática e se oferece para testar
+> uma alternativa sem atrasar a linha. A pergunta para a plateia é qual processo
+> no time dela também poderia facilitar a passagem de turno.
 ---
 
 ## 2. Números da linha — porta trancada
@@ -144,7 +147,7 @@ Com o relatório — e diferente do Bloco 1, ela **para**:
 >
 > **Cláudia:** Peraí... seis meses fazendo isso à mão e ninguém tinha juntado por escrito?
 >
-> **Cláudia:** **Guardei seu nome.**
+> **Cláudia:** **Guardei seu nome. É bom ver alguém que percebe um problema e tenta melhorar o processo.**
 
 Ela volta pro monitor. A conversa acaba seca, sem despedida. **Deixe o silêncio.**
 
@@ -152,8 +155,8 @@ Ela volta pro monitor. A conversa acaba seca, sem despedida. **Deixe o silêncio
 **→ Destrava no mapa: Sala de Reuniões**
 
 > 💡 **Gancho de fala:** *"Ela não foi promovida. Não ganhou bônus. Não teve
-> aplauso. Ganhou quatro palavras de uma pessoa ocupada."* — e deixe essas quatro
-> palavras **no ar**, sem explicar. Elas voltam na fase 6, quando a mesma pessoa
+> aplauso. Uma pessoa ocupada reconheceu a iniciativa dela."* — deixe o
+> reconhecimento **no ar**, sem explicar. Ele volta na fase 6, quando a mesma pessoa
 > disser que o nome da Ana apareceu em três lugares diferentes. Se quiser reforço,
 > só aponte o contraste: é a mesma Cláudia que no Bloco 1 não parou dois segundos.
 

@@ -26,7 +26,7 @@ Bianca conversa com Ana sobre aprender ferramentas que o trabalho pede. Ela fala
 >
 > **Bianca:** Planilhas, o programa da área, gestão de projetos. E inglês também: tem documento e projeto de fora que chega assim.
 >
-> **Bianca:** Olha aquele notebook no Escritório. Tem umas situações pra ligar com jeitos de resolver. Vê se alguma te ajuda.
+> **Bianca:** Quando voltar pro Escritório, pesquisa essas ferramentas com calma. Escolhe uma pra começar; não precisa aprender tudo de uma vez.
 
 ## 2. Escritório — minigame `associar`
 
@@ -71,7 +71,7 @@ Rafael só conversa depois que o notebook foi concluído. Ao final, entrega as *
 | Minigames | `associar` no Escritório — 1 no total |
 | Item do minigame | Certificado de conclusão |
 | Item da conversa final | Anotações do treinamento |
-| Skills do minigame | Leitura do trabalho, Aprendizado contínuo e Competência técnica |
+| Skills do minigame | Leitura do trabalho, Aprendizado contínuo e Conhecimento aplicado |
 | Percurso | Cafezinho → Escritório → Cafezinho |
 
 O certificado só chega depois das associações no Escritório. Rafael não conclui o bloco antes disso. O minigame resume as práticas da apresentação: registrar pedidos e prazos, priorizar por urgência e esforço, reservar a manhã para tarefas mais exigentes, fazer cursos curtos aplicados ao trabalho e estudar inglês para ampliar a participação em projetos.

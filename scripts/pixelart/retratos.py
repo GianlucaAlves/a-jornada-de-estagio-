@@ -206,7 +206,7 @@ def _alcance_do_cabelo(c: Corpo) -> int:
     if c.comprimento_cabelo:
         return H_ROSTO + 3
     if c.franja:
-        return 9
+        return min(9, c.cabelo_lateral)
     return 3
 
 

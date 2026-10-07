@@ -529,6 +529,24 @@ def cafezinho(*, festa: bool = False, gesto: bool = False) -> Grade:
     )
     g.colar(212, 40, props.tv_de_parede(40, 26, "dash"))
     g.colar(252, 44, props.cartaz(24, 30, acento=props.VERDE[3]))
+    # Cartão de receitas preso abaixo da TV: um pequeno detalhe de uso diário
+    # ocupa a faixa de parede livre sem empurrar móveis para a rota de circulação.
+    g.retangulo(216, 75, 32, 32, props.MADEIRA[1])
+    g.linha_h(216, 75, 32, props.MADEIRA[4])
+    g.linha_v(216, 75, 32, props.MADEIRA[4])
+    g.retangulo(219, 78, 26, 26, props.NEUTRO[2])
+    g.linha_h(220, 79, 24, props.NEUTRO[5])
+    g.linha_h(222, 82, 20, props.LUZ[3])
+    # Três fichas e uma xícara desenhada à mão: a leitura é um mural de receitas,
+    # sem texto minúsculo que se perca na escala de projeção.
+    for y in (86, 91, 96):
+        g.retangulo(222, y, 2, 2, props.VERDE[3] if y == 91 else props.TELA[3])
+        g.linha_h(226, y + 1, 8 if y != 96 else 6, props.NEUTRO[6])
+    g.retangulo(237, 88, 5, 5, props.MADEIRA[4])
+    g.linha_h(236, 88, 7, props.NEUTRO[6])
+    g.retangulo(238, 89, 3, 3, props.NEUTRO[5])
+    g.ponto(243, 89, props.MADEIRA[4])
+    g.linha_h(236, 94, 7, props.MADEIRA[4])
     props.rodape(g, hz, tom=props.MADEIRA[0])
 
     props.piso_de_madeira(g, hz, ALTURA)

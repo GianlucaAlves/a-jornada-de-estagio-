@@ -52,7 +52,7 @@ export function Reflexao(): JSX.Element | null {
       Bloco {bloco} · {dados.tempo}
     </button> : <>
       <button type="button" onClick={avancar} aria-label="Avançar pensamento de Ana" style={{ position: 'absolute', left: geometria.esquerda, top: geometria.topo, width: geometria.largura, height: geometria.altura, padding: espaco.md, display: 'flex', alignItems: 'center', gap: espaco.md, border: `${borda.media}px dashed ${cores.destaque}`, background: cores.caixa, color: cores.texto, textAlign: 'left', fontSize: geometria.tamanhoTexto, lineHeight: tipografia.alturaLinha.compacta }}>
-        {geometria.mostrarRetrato ? <Imagem id={assetDoRetratoDaAna(sprite)} rotulo="Ana pensando" largura={caixaDeDialogo.retrato.largura} altura={caixaDeDialogo.retrato.altura} mostrarRotulo={false} decorativo /> : null}
+        <Imagem id={assetDoRetratoDaAna(sprite)} rotulo="Ana pensando" largura={caixaDeDialogo.retrato.largura} altura={caixaDeDialogo.retrato.altura} mostrarRotulo={false} decorativo />
         <span style={{ flex: 1, minWidth: 0 }}>
           <strong style={{ display: 'block', color: cores.destaque, fontSize: geometria.tamanhoTexto }}>Ana · pensando</strong>
           <em style={{ display: 'block', marginTop: espaco.xs, fontSize: geometria.tamanhoTexto, lineHeight: tipografia.alturaLinha.corpo }}>{ganchoVisivel ? dados.gancho : dados.falas[ativa.indice]}</em>

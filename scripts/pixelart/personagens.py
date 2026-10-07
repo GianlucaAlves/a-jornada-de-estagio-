@@ -224,6 +224,7 @@ def _cabeca(
     franja: bool = True,
     franja_baixa: bool = False,
     pescoco: bool = True,
+    cabelo_lateral: int = 9,
     barba: str = "",
     oculos: bool = False,
     coque: int = 0,
@@ -294,7 +295,7 @@ def _cabeca(
 
     # Moldura de cabelo atrás do rosto, depois o rosto por cima: ordem de
     # colagem é z-order, não existe z-index aqui (bíblia §9).
-    for i in range(_ROSTO_H):
+    for i in range(min(_ROSTO_H, cabelo_lateral)):
         g.linha_h(esq, y_rosto + i, volume, cabelo)
     _rosto(g, y_rosto, pele, cabelo)
 
@@ -333,9 +334,11 @@ def _cabeca(
 
     # Mandíbula: o rosto estreita em dois degraus e o cabelo avança na lateral.
     fim = y_rosto + _ROSTO_H
-    g.linha_h(esq, fim, volume, cabelo)
+    if cabelo_lateral >= _ROSTO_H:
+        g.linha_h(esq, fim, volume, cabelo)
     g.segmento(_ROSTO_X + 1, fim, (sombra + base * 7 + sombra))
-    g.linha_h(esq, fim + 1, volume, cabelo)
+    if cabelo_lateral >= _ROSTO_H:
+        g.linha_h(esq, fim + 1, volume, cabelo)
     g.segmento(_ROSTO_X + 2, fim + 1, (sombra + base * 5 + sombra))
     if barba:
         g.segmento(_ROSTO_X + 1, fim, barba * 9)
@@ -381,6 +384,8 @@ class Corpo:
     luz_cabelo: str = "Q"
     volume_cabelo: int = 15
     comprimento_cabelo: int = 0
+    cabelo_lateral: int = 9
+    """Altura de cabelo junto às bochechas: cortes curtos terminam antes da mandíbula."""
     franja: bool = True
     """Desliga a franja para cabeça raspada: franja em cabelo raspado lê como
     mancha na testa."""
@@ -584,6 +589,7 @@ def _figura(c: Corpo) -> Grade:
         franja=c.franja,
         franja_baixa=c.franja_baixa,
         pescoco=c.pescoco,
+        cabelo_lateral=c.cabelo_lateral,
         barba=c.barba,
         oculos=c.oculos,
         coque=c.coque,
@@ -700,8 +706,9 @@ def _figura(c: Corpo) -> Grade:
             # Os extras desenham perto do vão de propósito (capuz na nuca,
             # cordão no peito, antebraço cruzado). Carvar e conferir de novo é o
             # que permite que eles sejam escritos sem medo.
-            _abrir_vao(g, c.braco, segs_dir, tronco, y0, y1)
-            _conferir_vao(c.nome, g, y0, y1)
+            if c.extra is not _mesa_de_trabalho:
+                _abrir_vao(g, c.braco, segs_dir, tronco, y0, y1)
+                _conferir_vao(c.nome, g, y0, y1)
         return g
 
     if c.extra is not None:
@@ -881,6 +888,12 @@ def _mesa_de_trabalho(g: Grade, c: Corpo) -> None:
     cobre pernas e quadril porque a tela de encerramento precisa mostrar uma
     ação de trabalho, não uma Ana em pé diante de um escritório genérico.
     """
+    # A mesa pertence à camada dianteira. Pintar a figura inteira depois dela
+    # deixava as pernas e a silhueta em pé atravessarem o tampo na abertura.
+    for y in range(29, ALTURA):
+        for x in range(LARGURA):
+            g.ponto(x, y, VAZIO)
+
     g.retangulo(2, 49, 46, 3, MADEIRA[4])
     g.linha_h(2, 49, 46, MADEIRA[5])
     g.retangulo(2, 52, 46, 4, MADEIRA[2])
@@ -892,13 +905,13 @@ def _mesa_de_trabalho(g: Grade, c: Corpo) -> None:
         g.ponto(px, 51, NEUTRO[4])
 
     pele, sombra, _ = _PELES[c.pele]
-    manga = c.roupa[1]
-    g.retangulo(16, 44, 6, 3, manga)
-    g.retangulo(28, 44, 6, 3, manga)
-    g.retangulo(19, 46, 5, 3, pele)
-    g.retangulo(26, 46, 5, 3, pele)
-    g.linha_h(20, 48, 4, sombra)
-    g.linha_h(26, 48, 4, sombra)
+    # Dois braços contíguos saem dos ombros, dobram nos cotovelos sobre o tampo
+    # e terminam em mãos apoiadas no teclado; não há mãos extras flutuando.
+    _bloco(g, ((29, 35, 21, 30), (36, 42, 22, 29)), *c.roupa)
+    _bloco(g, ((29, 35, 16, 19), (36, 38, 18, 19), (39, 42, 18, 22)), *c.roupa)
+    _bloco(g, ((29, 35, 31, 34), (36, 38, 32, 33), (39, 42, 28, 33)), *c.roupa)
+    _bloco(g, ((43, 44, 19, 24), (45, 46, 21, 26)), pele, pele, sombra)
+    _bloco(g, ((43, 44, 27, 32), (45, 46, 25, 30)), pele, pele, sombra)
 
 
 ANA_TRABALHANDO = replace(ANA_NEUTRA, nome="ana-trabalhando", extra=_mesa_de_trabalho)
@@ -1104,8 +1117,9 @@ def _extra_marcos(g: Grade, c: Corpo) -> None:
     g.segmento(23, y + 6, "xz")
 
 
-# Ponte social, Engenharia de Dados. Cabelo volumoso (17px, o maior do elenco),
-# camisa social de manga arregaçada — o único com antebraço todo à mostra — e
+# Ponte social, Projetos. Cabelo crespo volumoso no topo e curto nas laterais;
+# sprite e retrato compartilham a medida `cabelo_lateral`. Camisa social de
+# manga arregaçada — o único com antebraço todo à mostra — e
 # colarinho aberto mostrando pele. Ombro direito 1px mais baixo: postura
 # relaxada de quem brinda com copo de café.
 # Terço inferior: chino caqui (madeira `o`, luminância 80 — o único do elenco de
@@ -1117,6 +1131,7 @@ RAFAEL = Corpo(
     cabelo="P",
     luz_cabelo="Q",
     volume_cabelo=17,
+    cabelo_lateral=5,
     y_topo=3,
     roupa=("e", "d", "c"),
     gola=("t", "T"),
@@ -1594,7 +1609,9 @@ def gerar(destino: Path) -> list[tuple[str, Grade]]:
         escrever_sprite(destino / f"{c.nome}.png", parado)
 
         idle = _tira_idle(c)
-        andando = _tira_andando(c)
+        # A pose apoiada na mesa só existe parada nas telas de abertura e fim;
+        # exportar uma caminhada com o tampo fixo inventaria braços sob a mesa.
+        andando = _tira_andando(replace(c, extra=None)) if c.extra is _mesa_de_trabalho else _tira_andando(c)
         escrever_tira(destino / f"{c.nome}-idle.png", idle)
         escrever_tira(destino / f"{c.nome}-andando.png", andando)
         # O quadro 2 da respiração e os 4 da caminhada também passam pela

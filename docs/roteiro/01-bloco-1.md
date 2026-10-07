@@ -118,10 +118,10 @@ verdade, e a diferença tem que ser sentida.
 
 Único que puxa conversa sem ela pedir.
 
-> **Rafael:** Você tá há quarenta minutos nessa tela, né? Eu levei quase uma hora
-> e meia. Tá indo bem.
+> **Rafael:** A tela de login pede a senha antes de deixar você abrir o e-mail
+> que tem a senha. Alguém desenhou isso numa sexta-feira, só pode.
 >
-> **Ana:** *(constrangida)* Tanto assim?
+> **Ana:** *(ri, aliviada)* Ainda bem que não sou a única achando isso estranho.
 >
 > **Rafael:** Sou o Rafael, do time de Projetos, ali do lado. No fim vai o dia
 > que você entrou: hoje é **03**.
@@ -138,9 +138,9 @@ verdade, e a diferença tem que ser sentida.
 > ⚠️ **Não aponte o cartão.** Ele é o item tardio nº 1 e paga na fase 6. Qualquer
 > ênfase aqui — na fala, no gesto ou no clique — entrega o clímax de graça.
 
-> 💡 **Gancho de fala:** ele sabia há quarenta minutos e esperou ela travar —
-> porque ele viveu isso ano passado. A coisa mais valiosa que ela levou do
-> primeiro dia não foi a senha, foi ele. E ela não tinha como saber disso ainda.
+> 💡 **Gancho de fala:** Rafael reconhece o absurdo da tela sem fazer Ana se
+> sentir avaliada. A coisa mais valiosa que ela levou do primeiro dia não foi a
+> senha, foi alguém disposto a ajudar. E ela não tinha como saber disso ainda.
 >
 > 💡 **Gancho extra (o que o Rafael não disse):** gente ocupada comprime
 > informação; quem está chegando lê compressão como desinteresse. Quase ninguém

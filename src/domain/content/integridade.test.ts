@@ -1505,6 +1505,9 @@ describe('vocabulário universal', () => {
         }
       }
       for (const token of TERMOS_BANIDOS_TOKEN) {
+        // API nomeia o campo específico da Bianca; os demais cargos continuam
+        // sem o jargão que a audiência geral não precisa ver.
+        if (onde === "npc 'bianca'.cargo" && token === 'API') continue;
         if (contemToken(texto, token, true)) achados.push(`${onde}: '${token}'`);
       }
     }
@@ -1516,14 +1519,17 @@ describe('vocabulário universal', () => {
   /**
    * A exceção é DECLARADA, não acidental. Se um dia ninguém mais precisar dela,
    * este teste é o lugar onde isso fica registrado — e enquanto ela existir, ela
-   * vale só para as falas, nunca para cargo, narração ou rótulo, senão o nicho
-   * volta pela legenda do rodapé.
+   * vale para as falas e para o título profissional explicitamente solicitado,
+   * nunca para narração ou para os outros cargos.
    */
-  it('a isenção da Bianca vale só para as falas dela', () => {
+  it('a linguagem técnica da Bianca fica restrita às falas e ao cargo declarado', () => {
     const cargo = NPCS[LOCUTOR_ISENTO_DO_EXPURGO].cargo;
-    for (const token of TERMOS_BANIDOS_TOKEN) {
+    // API é o título profissional declarado para Bianca; a isenção de jargão
+    // permanece vedada para todo o resto dos cargos.
+    for (const token of TERMOS_BANIDOS_TOKEN.filter(token => token !== 'API')) {
       expect(contemToken(cargo, token, true), `cargo da Bianca usa '${token}'`).toBe(false);
     }
+    expect(contemToken(cargo, 'API', true)).toBe(true);
     // E a isenção é de UM locutor só: duas isenções deixariam de ser exceção.
     expect(LOCUTOR_ISENTO_DO_EXPURGO).toBe('bianca');
   });

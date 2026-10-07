@@ -295,7 +295,7 @@ export const DIALOGOS_B5: Record<DialogoId, Dialogo> = {
       {
         tipo: 'fala',
         quem: 'bianca',
-        texto: 'Você circulou "passagem de turno" três vezes no caderno.',
+        texto: 'Você circulou "planejamento" três vezes no caderno.',
       },
       {
         tipo: 'fala',
@@ -310,7 +310,7 @@ export const DIALOGOS_B5: Record<DialogoId, Dialogo> = {
       {
         tipo: 'fala',
         quem: 'bianca',
-        texto: 'Sou formada em Letras e trabalho com documentação. Até descobrir esse caminho, achava que mudar era me desviar.',
+        texto: 'Sou formada em Letras e hoje desenvolvo APIs. Até descobrir esse caminho, achava que mudar era me desviar.',
       },
       {
         tipo: 'fala',

@@ -52,7 +52,7 @@ time dela.
 |---|---|---|
 | **Caderno dela** | o motivo de abrir o painel de skills | — |
 | **Grade do próximo semestre** | folha impressa, a pergunta da fase | — |
-| **Bianca** *(Documentação de produto)* | conversa sobre o contrato na chegada e fecho depois da reflexão | a conversa final exige caderno e grade |
+| **Bianca** *(Desenvolvedora de API)* | conversa sobre o contrato na chegada e fecho depois da reflexão | a conversa final exige caderno e grade |
 
 > 💡 **Gancho de abertura:** o lugar já é argumento. *"Ela não chamou ninguém pra
 > mesa dela. Ela levantou, atravessou o prédio e pediu meia hora de uma pessoa de
@@ -123,20 +123,20 @@ clicando cada skill enquanto fala.
 
 ---
 
-## 4. Bianca (Documentação de produto) — a fala do pivô
+## 4. Bianca (Desenvolvedora de API) — a fala do pivô
 
 Sem os dois beats anteriores: *"Bianca está terminando uma coisa. Ela pediu meia
 hora, e a meia hora é pra conversar — não pra chegar sem pergunta."*
 
 Com os dois, seis falas:
 
-> **Bianca:** Você circulou "passagem de turno" três vezes no caderno.
+> **Bianca:** Você circulou "planejamento" três vezes no caderno.
 >
 > **Ana:** Acho que gostei de descobrir onde a informação travava. Mas não sei se quero fazer isso aqui... ou em outra área.
 >
 > **Ana:** E a efetivação? Faltam três semanas e ninguém falou se tem vaga. Tento separar essa ansiedade da escolha da área, mas é difícil.
 >
-> **Bianca:** Sou formada em Letras e trabalho com documentação. Até descobrir esse caminho, achava que mudar era me desviar.
+> **Bianca:** Sou formada em Letras e hoje desenvolvo APIs. Até descobrir esse caminho, achava que mudar era me desviar.
 >
 > **Bianca:** Eu vi você lá na linha, montando a conferência. E depois explicando o que mudou na reunião.
 >
@@ -151,8 +151,8 @@ Com os dois, seis falas:
 
 > 💡 **Gancho de fala, e é aqui que a lição mora — é sua, não do jogo:**
 >
-> **1. Pivotar não é erro.** A Bianca é formada em Letras e trabalha com
-> tecnologia. Ela não seguiu o caminho previsto e está bem — e repare que ela não
+> **1. Pivotar não é erro.** A Bianca é formada em Letras e hoje desenvolve APIs.
+> Ela não seguiu o caminho previsto e está bem — e repare que ela não
 > disse que ia dar tudo certo para a Ana. Ela contou o que aconteceu com ela.
 > *"Ninguém neste time está exatamente onde planejou estar. E 'desvio' é um nome
 > que a gente dá depois, olhando pra trás."*

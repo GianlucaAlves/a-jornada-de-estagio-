@@ -15,7 +15,7 @@ export const niveis: readonly Nivel[] = [
   { nivel: 2, titulo: 'Estagiária em adaptação', spriteAna: 'ana-neutra', xpPorInteracao: { 'dialogo:b2-bianca': 10, 'puzzle:associar': 20, 'dialogo:b2-rafael': 10 } },
   { nivel: 3, titulo: 'Estagiária com autonomia', spriteAna: 'ana-neutra', pasta: true, xpPorInteracao: { 'dialogo:b3-tiago': 10, 'puzzle:estruturar': 20, 'hotspot:b3-relatorio': 10, 'dialogo:b3-claudia': 10 } },
   { nivel: 4, titulo: 'Estagiária de destaque', spriteAna: 'ana-confiante', xpPorInteracao: { 'dialogo:b4-preparacao': 10, 'puzzle:montar': 20, 'hotspot:b4-plateia': 10, 'dialogo:b4-apresentacao': 10, 'dialogo:b4-reconhecimento': 10, 'dialogo:b4-virada': 10 } },
-  { nivel: 5, titulo: 'Estagiária em transição de carreira', spriteAna: 'ana-confiante', pasta: true, xpPorInteracao: { 'dialogo:b5-contrato': 10, 'hotspot:b5-caderno': 10, 'hotspot:b5-grade': 10, 'dialogo:b5-pivo': 10 } },
+  { nivel: 5, titulo: 'Estagiária em fim de contrato', spriteAna: 'ana-confiante', pasta: true, xpPorInteracao: { 'dialogo:b5-contrato': 10, 'hotspot:b5-caderno': 10, 'hotspot:b5-grade': 10, 'dialogo:b5-pivo': 10 } },
   // A contratação só aparece no clímax: não antecipamos a Ana futura aqui.
   { nivel: 6, titulo: 'Estagiária sênior', spriteAna: 'ana-confiante', xpPorInteracao: {} },
 ];

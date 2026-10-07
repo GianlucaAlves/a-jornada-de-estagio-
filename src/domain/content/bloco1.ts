@@ -15,8 +15,8 @@
  * `NOVO`, `12` e `03` apareçam em texto alcançável desta fase.
  *
  * NENHUMA FALA DIZ O TEMA. O Tiago fala em sigla e volta pro que estava
- * fazendo; a Cláudia responde e vai embora; o Rafael esperou quarenta minutos
- * para oferecer ajuda. Medo de perguntar é o que a plateia VÊ acontecendo —
+ * fazendo; a Cláudia responde e vai embora; o Rafael quebra o gelo com uma
+ * piada sobre a tela de acesso e oferece ajuda. Medo de perguntar é o que a plateia VÊ acontecendo —
  * quem nomeia é quem apresenta (docs/roteiro/01-bloco-1.md).
  *
  * O CARTÃO DO RAFAEL É O ITEM TARDIO Nº 1 e paga na fase 6. Nada aqui o
@@ -209,9 +209,9 @@ export const DIALOGOS_B1: Record<DialogoId, Dialogo> = {
       {
         tipo: 'fala',
         quem: 'rafael',
-        texto: 'Você tá há quarenta minutos nessa tela, né? Eu levei quase uma hora e meia. Tá indo bem.',
+        texto: 'A tela de login pede a senha antes de deixar você abrir o e-mail que tem a senha. Alguém desenhou isso numa sexta-feira, só pode.',
       },
-      { tipo: 'fala', quem: 'ana', texto: '(constrangida) Tanto assim?' },
+      { tipo: 'fala', quem: 'ana', texto: '(ri, aliviada) Ainda bem que não sou a única achando isso estranho.' },
       {
         // PISTA 3, literal, com o dia em dois dígitos para não haver dúvida.
         tipo: 'fala',

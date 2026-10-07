@@ -115,10 +115,10 @@ export const SKILLS: Record<SkillId, Skill> = {
   },
   'competencia-tecnica': {
     id: 'competencia-tecnica',
-    nome: 'Competência que ela foi buscar',
-    // Era 'Arquitetura de sistemas. Serviu antes do que eu imaginava.' — o
-    // nome da matéria era o nicho inteiro em três palavras.
-    texto: 'Aprender o que ainda não sabia fazer. Serviu antes do que ela imaginava.',
+    nome: 'Conhecimento aplicado',
+    // O selo descreve a transferência do estudo para uma tarefa real, sem
+    // prender a habilidade a uma ferramenta ou curso específico.
+    texto: 'Aprender uma ferramenta e usar o que estudou numa tarefa real.',
     bloco: 2,
   },
   proatividade: {
@@ -172,7 +172,7 @@ export const NPCS: Record<NpcId, PerfilNpc> = {
   claudia: { id: 'claudia', nome: 'Cláudia', cargo: 'Líder do time' },
   rafael: { id: 'rafael', nome: 'Rafael', cargo: 'Projetos, outro time' },
   tiago: { id: 'tiago', nome: 'Tiago', cargo: 'Apoio operacional' },
-  bianca: { id: 'bianca', nome: 'Bianca', cargo: 'Documentação de produto' },
+  bianca: { id: 'bianca', nome: 'Bianca', cargo: 'Desenvolvedora de API' },
   marcos: { id: 'marcos', nome: 'Marcos', cargo: 'Eventos internos, outra área' },
 };
 

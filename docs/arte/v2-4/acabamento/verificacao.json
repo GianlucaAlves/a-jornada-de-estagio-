@@ -4,12 +4,12 @@
       "nome": "b1-tiago:0",
       "caixa": {
         "x": 500,
-        "y": 78.37709045410156,
+        "y": 71.43035888671875,
         "width": 940,
-        "height": 243.99998474121094
+        "height": 244
       },
-      "baseTexto": 296.3770751953125,
-      "baseCaixa": 322.3770751953125,
+      "baseTexto": 289.43035888671875,
+      "baseCaixa": 315.43035888671875,
       "larguraTexto": 708,
       "fonte": "28px"
     },
@@ -95,12 +95,12 @@
       "nome": "b1-claudia:0",
       "caixa": {
         "x": 500,
-        "y": 76.33267211914062,
+        "y": 84,
         "width": 940,
         "height": 244
       },
-      "baseTexto": 294.3326721191406,
-      "baseCaixa": 320.3326721191406,
+      "baseTexto": 302,
+      "baseCaixa": 328,
       "larguraTexto": 708,
       "fonte": "28px"
     },
@@ -160,12 +160,12 @@
       "nome": "b1-rafael:0",
       "caixa": {
         "x": 500,
-        "y": 82.84164428710938,
+        "y": 84,
         "width": 940,
         "height": 244
       },
-      "baseTexto": 300.8416442871094,
-      "baseCaixa": 326.8416442871094,
+      "baseTexto": 302,
+      "baseCaixa": 328,
       "larguraTexto": 708,
       "fonte": "28px"
     },
@@ -225,12 +225,12 @@
       "nome": "b2-bianca:0",
       "caixa": {
         "x": 500,
-        "y": 81.69620513916016,
+        "y": 79.45240020751953,
         "width": 940,
         "height": 244
       },
-      "baseTexto": 299.69620513916016,
-      "baseCaixa": 325.69620513916016,
+      "baseTexto": 297.45240020751953,
+      "baseCaixa": 323.45240020751953,
       "larguraTexto": 708,
       "fonte": "28px"
     },
@@ -303,12 +303,12 @@
       "nome": "b2-rafael:0",
       "caixa": {
         "x": 500,
-        "y": 82.8410873413086,
+        "y": 81.69654846191406,
         "width": 940,
-        "height": 244
+        "height": 243.99998474121094
       },
-      "baseTexto": 300.8410873413086,
-      "baseCaixa": 326.8410873413086,
+      "baseTexto": 299.696533203125,
+      "baseCaixa": 325.696533203125,
       "larguraTexto": 708,
       "fonte": "28px"
     },
@@ -459,12 +459,12 @@
       "nome": "b3-claudia:0",
       "caixa": {
         "x": 500,
-        "y": 82.8419189453125,
+        "y": 80.56806945800781,
         "width": 940,
-        "height": 244
+        "height": 243.99998474121094
       },
-      "baseTexto": 300.8419189453125,
-      "baseCaixa": 326.8419189453125,
+      "baseTexto": 298.56805419921875,
+      "baseCaixa": 324.56805419921875,
       "larguraTexto": 708,
       "fonte": "28px"
     },
@@ -784,12 +784,12 @@
       "nome": "b5-contrato:0",
       "caixa": {
         "x": 500,
-        "y": 79.45246887207031,
+        "y": 79.45726776123047,
         "width": 940,
-        "height": 243.99998474121094
+        "height": 244
       },
-      "baseTexto": 297.45245361328125,
-      "baseCaixa": 323.45245361328125,
+      "baseTexto": 297.45726776123047,
+      "baseCaixa": 323.45726776123047,
       "larguraTexto": 708,
       "fonte": "28px"
     },
@@ -836,12 +836,12 @@
       "nome": "b5-pivo:0",
       "caixa": {
         "x": 500,
-        "y": 81.69730377197266,
+        "y": 81.69942474365234,
         "width": 940,
         "height": 244
       },
-      "baseTexto": 299.69730377197266,
-      "baseCaixa": 325.69730377197266,
+      "baseTexto": 299.69942474365234,
+      "baseCaixa": 325.69942474365234,
       "larguraTexto": 708,
       "fonte": "28px"
     },
@@ -914,12 +914,12 @@
       "nome": "b6-noticia:0",
       "caixa": {
         "x": 500,
-        "y": 84,
+        "y": 79.45003509521484,
         "width": 940,
         "height": 244
       },
-      "baseTexto": 302,
-      "baseCaixa": 328,
+      "baseTexto": 297.45003509521484,
+      "baseCaixa": 323.45003509521484,
       "larguraTexto": 708,
       "fonte": "28px"
     },
@@ -992,12 +992,12 @@
       "nome": "b6-rafael-ramal:0",
       "caixa": {
         "x": 500,
-        "y": 84,
+        "y": 81.69353485107422,
         "width": 940,
         "height": 244
       },
-      "baseTexto": 302,
-      "baseCaixa": 328,
+      "baseTexto": 299.6935348510742,
+      "baseCaixa": 325.6935348510742,
       "larguraTexto": 708,
       "fonte": "28px"
     },
@@ -1018,12 +1018,12 @@
       "nome": "b6-tiago-pergunta:0",
       "caixa": {
         "x": 500,
-        "y": 84,
+        "y": 82.84336853027344,
         "width": 940,
-        "height": 244
+        "height": 244.00001525878906
       },
-      "baseTexto": 302,
-      "baseCaixa": 328,
+      "baseTexto": 300.8433837890625,
+      "baseCaixa": 326.8433837890625,
       "larguraTexto": 708,
       "fonte": "28px"
     },
@@ -1057,12 +1057,12 @@
       "nome": "b6-bianca-mudanca:0",
       "caixa": {
         "x": 500,
-        "y": 82.84150695800781,
+        "y": 84,
         "width": 940,
-        "height": 243.99998474121094
+        "height": 244
       },
-      "baseTexto": 300.84149169921875,
-      "baseCaixa": 326.84149169921875,
+      "baseTexto": 302,
+      "baseCaixa": 328,
       "larguraTexto": 708,
       "fonte": "28px"
     },
@@ -1083,12 +1083,12 @@
       "nome": "b6-marcos-proximo:0",
       "caixa": {
         "x": 500,
-        "y": 82.84454345703125,
+        "y": 84,
         "width": 940,
         "height": 244
       },
-      "baseTexto": 300.84454345703125,
-      "baseCaixa": 326.84454345703125,
+      "baseTexto": 302,
+      "baseCaixa": 328,
       "larguraTexto": 708,
       "fonte": "28px"
     },
@@ -1258,9 +1258,9 @@
         "width": 696,
         "height": 220
       },
-      "baseTexto": 267.1875,
+      "baseTexto": 284.59375,
       "baseCaixa": 324,
-      "larguraTexto": 648,
+      "larguraTexto": 468,
       "fonte": "24px"
     },
     {
@@ -1271,9 +1271,9 @@
         "width": 696,
         "height": 220
       },
-      "baseTexto": 267.1875,
+      "baseTexto": 284.59375,
       "baseCaixa": 324,
-      "larguraTexto": 648,
+      "larguraTexto": 468,
       "fonte": "24px"
     },
     {
@@ -1286,7 +1286,7 @@
       },
       "baseTexto": 267.1875,
       "baseCaixa": 324,
-      "larguraTexto": 648,
+      "larguraTexto": 468,
       "fonte": "24px"
     },
     {
@@ -1336,9 +1336,9 @@
         "width": 696,
         "height": 220
       },
-      "baseTexto": 249.796875,
+      "baseTexto": 267.1875,
       "baseCaixa": 324,
-      "larguraTexto": 648,
+      "larguraTexto": 468,
       "fonte": "24px"
     },
     {
@@ -1351,7 +1351,7 @@
       },
       "baseTexto": 267.1875,
       "baseCaixa": 324,
-      "larguraTexto": 648,
+      "larguraTexto": 468,
       "fonte": "24px"
     },
     {
@@ -1362,9 +1362,9 @@
         "width": 696,
         "height": 220
       },
-      "baseTexto": 284.59375,
+      "baseTexto": 302,
       "baseCaixa": 324,
-      "larguraTexto": 648,
+      "larguraTexto": 468,
       "fonte": "24px"
     },
     {

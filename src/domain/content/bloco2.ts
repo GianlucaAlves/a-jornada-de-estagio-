@@ -17,8 +17,10 @@ export const CENAS_B2: readonly Cena[] = [
         id: 'b2-bianca',
         rotulo: 'Bianca',
         arte: { tipo: 'npc', npcId: 'bianca' },
-        pos: { x: 32, y: 72 },
-        parada: { x: 21, y: 76 },
+        // Ela conversa com Ana do lado de quem pede café, diante da ponta do
+        // balcão; y=80 a traz para o piso de circulação, sem pô-la atrás do tampo.
+        pos: { x: 51, y: 80 },
+        parada: { x: 40, y: 80 },
         efeitos: [{ tipo: 'dialogo', dialogoId: 'b2-bianca' }],
       },
       {
@@ -72,7 +74,7 @@ export const DIALOGOS_B2: Record<DialogoId, Dialogo> = {
       { tipo: 'fala', quem: 'bianca', texto: 'Conheço. Eu vim de outra área e fui aprendendo com curso curto, já testando no trabalho.' },
       { tipo: 'fala', quem: 'ana', texto: 'Tipo o quê? Aqui já me pediram umas coisas que nunca vi na faculdade.' },
       { tipo: 'fala', quem: 'bianca', texto: 'Planilhas, o programa da área, gestão de projetos. E inglês também: tem documento e projeto de fora que chega assim.' },
-      { tipo: 'fala', quem: 'bianca', texto: 'Olha aquele notebook no Escritório. Tem umas situações pra ligar com jeitos de resolver. Vê se alguma te ajuda.' },
+      { tipo: 'fala', quem: 'bianca', texto: 'Quando voltar pro Escritório, pesquisa essas ferramentas com calma. Escolhe uma pra começar; não precisa aprender tudo de uma vez.' },
     ],
   },
   'b2-rafael': {

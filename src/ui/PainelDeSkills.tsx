@@ -9,7 +9,7 @@ import { barra, borda, cores, duracao, espaco, tipografia } from '../styles/toke
 export const NOMES_DOS_SELOS: Record<SkillId, string> = {
   'coragem-perguntar': 'Coragem de perguntar', autoconhecimento: 'Autoconhecimento',
   'leitura-mercado': 'Leitura do trabalho', 'aprendizado-continuo': 'Aprendizado contínuo',
-  'competencia-tecnica': 'Competência adquirida', proatividade: 'Proatividade',
+  'competencia-tecnica': 'Conhecimento aplicado', proatividade: 'Proatividade',
   protagonismo: 'Protagonismo', visibilidade: 'Visibilidade', 'plano-futuro': 'Plano de futuro',
 };
 const SIMBOLOS = ['?', '◎', '◈', '↗', '⚒', '⚡', '★', '◉', '➜'];

@@ -187,8 +187,8 @@ export const DIALOGOS_B3: Record<DialogoId, Dialogo> = {
    * vilão: ele está ocupado e nunca teve motivo para questionar a rotina. Toda
    * equipe tem processos que continuam por hábito, mesmo quando poderiam mudar.
    *
-   * O diálogo termina com ele liberando, e nenhum dos dois comenta o que acabou
-   * de acontecer.
+   * As falas tornam visível o custo da rotina entre turnos e deixam Ana propor
+   * uma verificação prática, sem transformar Tiago em obstáculo.
    */
   'b3-tiago': {
     id: 'b3-tiago',
@@ -196,24 +196,20 @@ export const DIALOGOS_B3: Record<DialogoId, Dialogo> = {
       {
         tipo: 'fala',
         quem: 'tiago',
-        texto:
-          'Essa conferência aí sempre foi no papel. No fim do turno a gente passa pra planilha, senão não fecha.',
+        texto: 'Cada lote passa por essa conferência. A gente anota no papel e só lança tudo na planilha no fim do turno.',
       },
-      { tipo: 'fala', quem: 'tiago', texto: '(dá de ombros) Sei lá, quando eu cheguei já era assim.' },
-      {
-        tipo: 'fala',
-        quem: 'ana',
-        texto: 'Eu fico pensando... gosto de achar onde a informação emperra. Se eu guardar isso só pra mim, o pessoal da noite continua no escuro.',
-      },
-      { tipo: 'fala', quem: 'tiago', texto: 'Começa. Ninguém pediu pra você olhar isso.' },
-      { tipo: 'fala', quem: 'ana', texto: 'Pois é. Mas também ninguém pediu pra eu deixar quieto.' },
-      { tipo: 'fala', quem: 'tiago', texto: '(pausa, depois ri) Tá bom. Olha aí.' },
+      { tipo: 'fala', quem: 'ana', texto: 'E até lá o próximo turno não consegue ver o que ficou pendente?' },
+      { tipo: 'fala', quem: 'tiago', texto: 'Isso. Às vezes o pessoal chega e espera a gente terminar de lançar, ou vem perguntar lote por lote.' },
+      { tipo: 'fala', quem: 'ana', texto: 'Será que dá pra registrar cada lote na planilha enquanto a conferência acontece?' },
+      { tipo: 'fala', quem: 'tiago', texto: '(dá de ombros) Eu peguei o processo assim e fui seguindo. Ninguém me pediu pra rever.' },
+      { tipo: 'fala', quem: 'ana', texto: 'Posso estudar um jeito de fazer isso sem atrasar a linha?' },
+      { tipo: 'fala', quem: 'tiago', texto: '(pausa, depois ri) Pode. Ninguém pediu, mas eu quero ver se funciona.' },
     ],
   },
 
   /**
-   * Quatro palavras de uma pessoa ocupada, e é tudo o que ela ganha: não há
-   * promoção, bônus nem aplauso. "Guardei seu nome" tem de ficar NO AR — ela
+   * Uma pessoa ocupada reconhece o que Ana fez: não há promoção, bônus nem
+   * aplauso. "Guardei seu nome" tem de ficar NO AR — ela
    * volta pro monitor e a conversa acaba seca, sem despedida.
    *
    * É o setup da fase 6, onde a Cláudia diz que o nome da Ana apareceu em três
@@ -235,7 +231,7 @@ export const DIALOGOS_B3: Record<DialogoId, Dialogo> = {
         quem: 'claudia',
         texto: 'Peraí... seis meses fazendo isso à mão e ninguém tinha juntado por escrito?',
       },
-      { tipo: 'fala', quem: 'claudia', texto: 'Guardei seu nome.' },
+      { tipo: 'fala', quem: 'claudia', texto: 'Guardei seu nome. É bom ver alguém que percebe um problema e tenta melhorar o processo.' },
     ],
     efeitos: [
       { tipo: 'concederSkill', skillId: 'protagonismo' },

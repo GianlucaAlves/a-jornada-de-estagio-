@@ -11,6 +11,11 @@ uma haste. O teclado precisa ficar atrás dos dedos. A camada
 resolver essa oclusão; acrescentar mãos em outra posição criava membros
 desligados. Conferir cada quadro ampliado, além da cena com elenco.
 
+O campo `Corpo.cabelo_lateral` guarda o fim das mechas junto à bochecha,
+separado da largura do topo (`volume_cabelo`) e da queda até o ombro
+(`comprimento_cabelo`). Retrato e sprite derivam do mesmo valor; cabelo curto
+e crespo não se alonga nas laterais só porque o retrato tem outra escala.
+
 Figurantes sentados usam anatomia própria em `figurante_sentado`: quadril
 sobre almofada, coxas horizontais, canelas abaixo do joelho e pés no piso.
 Não recortar a metade superior de um sprite em pé para sugerir esta pose.

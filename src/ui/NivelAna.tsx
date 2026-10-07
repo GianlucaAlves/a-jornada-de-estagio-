@@ -63,14 +63,14 @@ export function NivelAna(): JSX.Element | null {
     <EfeitosNivel />
     <aside aria-label="Nível de Ana" style={{ position: 'absolute', right: espaco.margem, top: progressao.topoHud, width: progressao.larguraHud, padding: espaco.md, boxSizing: 'border-box', zIndex: camada.overlayPersistente, background: cores.caixa, color: cores.texto, border: `${borda.fina}px solid ${cores.contorno}`, pointerEvents: 'none' }}>
       <h1 style={{ margin: 0, fontFamily: tipografia.familiaInterface, fontSize: tipografia.tamanhos.rotulo, lineHeight: tipografia.alturaLinha.compacta }}>{tela.tipo === 'cena' ? LUGARES[tela.lugarId].nome : 'Mapa da jornada'}</h1>
-      <p style={{ margin: `${espaco.xs}px 0 ${espaco.sm}px`, color: cores.textoApoio, fontSize: tipografia.minimo }}>Bloco {nivel} · {REFLEXOES[nivel].tempo}</p>
+      <div style={{ display: 'flex', justifyContent: 'space-between', gap: espaco.xs, margin: `${espaco.xs}px 0`, color: cores.textoApoio, fontSize: tipografia.minimo, lineHeight: tipografia.alturaLinha.compacta }}><span>Bloco {nivel}</span><span>{REFLEXOES[nivel].tempo}</span></div>
       <div style={{ display: 'flex', alignItems: 'center', gap: espaco.sm }}>
         <Imagem id={assetDoRetratoDaAna(def.spriteAna)} rotulo="Ana" largura={progressao.retrato.largura} altura={progressao.retrato.altura} />
         <strong style={{ fontFamily: tipografia.familiaInterface, fontSize: tipografia.tamanhos.rotulo }}>NÍVEL {nivel}</strong>
       </div>
-      <p style={{ margin: `${espaco.sm}px 0`, fontSize: tipografia.minimo, lineHeight: tipografia.alturaLinha.compacta }}>{def.titulo}</p>
+      <p style={{ margin: `${espaco.xs}px 0`, fontSize: tipografia.minimo, lineHeight: tipografia.alturaLinha.compacta }}>{def.titulo}</p>
       <BarraXp atual={xp} total={total} />
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', minHeight: espaco.xl, marginTop: espaco.xs, fontSize: tipografia.minimo }}><span>{total === 0 ? 'Experiência completa' : `${xp} / ${total} XP`}</span>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', minHeight: espaco.lg, marginTop: espaco.xs, fontSize: tipografia.minimo }}><span>{total === 0 ? 'Experiência completa' : `${xp} / ${total} XP`}</span>
       {ganho && !ocupado ? <strong key={ganho.sequencia} role="status" className="nivel-ganho" style={{ padding: espaco.xs, background: cores.sucesso, color: cores.textoInverso }}>+{ganho.valor} XP</strong> : null}</div>
     </aside>
   </>;
