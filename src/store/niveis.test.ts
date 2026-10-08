@@ -37,7 +37,7 @@ describe('experiência e evolução de Ana', () => {
   });
 
   it('última ação fecha exatamente a barra e cada fase tem apenas referências válidas', () => {
-    expect(niveis.map(n => xpTotal(n.nivel))).toEqual([60, 40, 50, 70, 40, 0]);
+    expect(niveis.map(n => xpTotal(n.nivel))).toEqual([60, 40, 50, 50, 40, 0]);
     for (const def of niveis) for (const [id, peso] of Object.entries(def.xpPorInteracao)) {
       expect(peso).toBeGreaterThan(0);
       const [tipo, referencia] = id.split(':');

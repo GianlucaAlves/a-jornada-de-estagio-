@@ -60,12 +60,8 @@
  *   É ISSO    "Se eu ficar, eu já sei onde eu sento na segunda. Se não ficar, eu
  *             saio com esse caderno e sem saber o que ele vale lá fora."
  *
- * As duas hipóteses aparecem JUNTAS e SIMÉTRICAS, uma frase cada, e nenhuma é
- * apostada. O que ela construiu não depende do resultado — mas não é ela quem
- * diz isso: a fala dela termina em dúvida (`b5-pivo`, nó 3) e a resposta vem da
- * Bianca, no nó 6. Se a Ana fechasse a própria pergunta, o nó 6 viraria eco e a
- * tese da fase sairia da boca de quem ainda não sabe nada. O que existe aqui é
- * insegurança COM orgulho do que foi construído.
+ * A fase 5 separa duas questões: a vaga depende de haver espaço no time, mas
+ * Ana fez a parte dela e conserva o que aprendeu, qualquer que seja a resposta.
  *
  * A PERGUNTA DA FASE FICA ABERTA de propósito. `b5-grade` põe as competências
  * dela contra a grade da faculdade e não resolve nada: três matérias que ela
@@ -80,11 +76,9 @@
  * exatamente o argumento de que dá para pivotar. Para uma plateia de estagiários
  * de áreas diferentes, ela é a figura com quem mais gente vai se identificar.
  *
- * E a ARMADILHA dela é o consolo. A Bianca não promete final feliz, não diz que
- * vai dar tudo certo e não responde à dúvida da Ana com garantia nenhuma: ela
- * conta o que aconteceu com ela — não seguiu o caminho previsto e está bem — e
- * reenquadra de passagem. No minuto em que ela consolar, a fase 5 passa a gastar
- * o que é da fase 6 e a Ana deixa de ser alguém que não sabe.
+ * A Bianca não promete contratação: reconhece a entrega da Ana e esclarece que
+ * uma vaga depende do espaço disponível, enquanto experiência e conhecimento
+ * continuam com ela.
  *
  * COORDENADAS: remedidas em `outra-area`, contra a janela do cabeçalho. As
  * herdadas do Escritório não valiam mais nada aqui — a parada em 12%/80% era o
@@ -285,9 +279,8 @@ export const DIALOGOS_B5: Record<DialogoId, Dialogo> = {
    * O diálogo dá espaço ao desejo de efetivação, às dúvidas de carreira e a
    * fatores de contratação externos sem prever a resposta que chega na fase 6.
    *
-   * A LIÇÃO NÃO ESTÁ AQUI. Que pivotar não é erro, que a experiência adquirida é
-   * o que mais importa, e o que fazer com isso na segunda-feira — tudo isso é
-   * fala da Marianna (docs/roteiro/05-bloco-5.md).
+   * Bianca valida o trabalho já feito sem prometer contratação: a vaga depende
+   * do espaço no time, mas o conhecimento e a experiência pertencem à Ana.
    */
   'b5-pivo': {
     id: 'b5-pivo',
@@ -315,16 +308,22 @@ export const DIALOGOS_B5: Record<DialogoId, Dialogo> = {
       {
         tipo: 'fala',
         quem: 'bianca',
-        texto: 'Eu vi você lá na linha, montando a conferência. E depois explicando o que mudou na reunião.',
+        texto: 'Eu vi você aprender na linha, organizar a conferência e explicar a solução na reunião. Você fez a sua parte.',
       },
       {
         tipo: 'fala',
         quem: 'bianca',
-        texto: 'Se a vaga não aparecer, isso continua sendo seu. E a decisão também passa pelo orçamento, pelo espaço no time... nem tudo depende da gente.',
+        texto: 'Se não houver vaga, não é porque você falhou. O conhecimento e a experiência ficam com você; às vezes o time simplesmente não tem espaço.',
+      },
+      {
+        tipo: 'fala',
+        quem: 'ana',
+        texto: '(anota no caderno) Quero explorar desenvolvimento de software. Vou estudar como os sistemas se conectam e praticar em projetos pequenos.',
       },
     ],
     efeitos: [
       { tipo: 'concederSkill', skillId: 'plano-futuro' },
+      { tipo: 'concederItem', itemId: 'plano-carreira' },
       // Conclui OUTRA ÁREA, não o Escritório: a fase mudou de lugar e concluir
       // um lugar em que ela não esteve apagaria do mapa um slot que a fase 6
       // ainda precisa nomear.

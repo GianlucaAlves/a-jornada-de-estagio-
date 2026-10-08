@@ -2,7 +2,7 @@
 
 **Tema:** competências, faculdade, incerteza
 **Apresenta:** Marianna
-**Laço:** Outra área da empresa *(um lugar só — ADR-031)*
+**Laço:** Engenharia *(identificador interno preservado: `outra-area`)*
 **Sprite:** `ana-confiante`
 **Cartão:** **2 anos depois — É esse o caminho?**
 **Puzzle:** nenhum — **a mecânica desta fase é o painel de skills**
@@ -13,8 +13,8 @@
 > apresenta.
 >
 > O clímax **não** é mais aqui: ele migrou para a fase 6 (ADR-024, ADR-029). O
-> roteiro da v1 desta fase está preservado no apêndice, no fim, até existir
-> `docs/roteiro/06-bloco-6.md`.
+> roteiro da v1 fica no apêndice apenas como registro histórico. A versão
+> vigente do clímax está em `docs/roteiro/06-bloco-6.md`.
 
 ---
 
@@ -44,9 +44,8 @@ A linha entre as duas coisas é fina, e quem apresenta pode apagá-la sem querer
 
 ## Estado da cena
 
-Um lugar só. **Outra área da empresa**: andar diferente, baias de outro time,
-outra luz. A Ana atravessou o prédio para ter meia hora com alguém de fora do
-time dela.
+Um lugar só. **Engenharia**: andar diferente, baias de outro time, outra luz.
+A Ana atravessou o prédio para conversar com alguém da área em que pensa crescer.
 
 | Hotspot | O que é | Porta |
 |---|---|---|
@@ -128,7 +127,7 @@ clicando cada skill enquanto fala.
 Sem os dois beats anteriores: *"Bianca está terminando uma coisa. Ela pediu meia
 hora, e a meia hora é pra conversar — não pra chegar sem pergunta."*
 
-Com os dois, seis falas:
+Com os dois, sete falas:
 
 > **Bianca:** Você circulou "planejamento" três vezes no caderno.
 >
@@ -138,12 +137,13 @@ Com os dois, seis falas:
 >
 > **Bianca:** Sou formada em Letras e hoje desenvolvo APIs. Até descobrir esse caminho, achava que mudar era me desviar.
 >
-> **Bianca:** Eu vi você lá na linha, montando a conferência. E depois explicando o que mudou na reunião.
+> **Bianca:** Se não houver vaga, não é porque você falhou. O conhecimento e a experiência ficam com você; às vezes o time simplesmente não tem espaço.
 >
-> **Bianca:** Se a vaga não aparecer, isso continua sendo seu. E a decisão também passa pelo orçamento, pelo espaço no time... nem tudo depende da gente.
+> **Ana:** *(anota no caderno)* Quero explorar desenvolvimento de software. Vou estudar como os sistemas se conectam e praticar em projetos pequenos.
 >
 
 **→ Ganha skill: Plano de futuro**
+**→ Ganha item: Plano de carreira**, com a decisão de explorar desenvolvimento de software e estudar como os sistemas se conectam.
 **→ Fecha a fase.**
 
 > ⚠️ A conversa final conclui a fase. Deixe a fala sobre o percurso de Bianca e
@@ -157,10 +157,9 @@ Com os dois, seis falas:
 > *"Ninguém neste time está exatamente onde planejou estar. E 'desvio' é um nome
 > que a gente dá depois, olhando pra trás."*
 >
-> **2. A experiência adquirida é o que mais importa.** As duas hipóteses da Ana
-> têm uma coisa em comum, e é a única coisa que ela controla: a lista do caderno.
-> *"Efetivação é uma decisão de outra pessoa. O que você sabe fazer é a única
-> parte que é sua."*
+> **2. Ana fez a parte dela; a vaga não está sob seu controle.** Ela aprendeu,
+> entregou e tomou iniciativa. Se não houver espaço no time, isso não transforma
+> seu trabalho em fracasso: o conhecimento e a experiência seguem com ela.
 >
 > **3. E na segunda-feira?** Peça uma coisa concreta: escrever a própria lista.
 > Não o currículo — a lista do que sabe fazer hoje e não sabia no primeiro dia.
@@ -175,8 +174,8 @@ Com os dois, seis falas:
 
 ## Fecho do bloco
 
-> *Ela quer ficar. Ainda não sabe se vai poder.*
-> *E começa a escolher onde quer crescer.*
+> *Ela quer ficar e ainda não sabe se haverá uma vaga.*
+> *Fez a parte dela; leva o que aprendeu. Escolheu explorar desenvolvimento de software.*
 
 > 💡 **Gancho de fecho:** as duas frases do fecho são a fase inteira, e a segunda
 > não é consolo — é inventário. *"Ela não está em paz com a incerteza. Ela só não
@@ -190,15 +189,15 @@ Com os dois, seis falas:
 
 | Elemento | Status |
 |---|---|
-| Itens ganhos | nenhum |
-| Itens consumidos | nenhum — os três tardios seguem na barra até a fase 6 |
+| Itens ganhos | Plano de carreira |
+| Itens consumidos | nenhum — contato, certificado e crachá seguem na barra até a fase 6 |
 | Skills ganhas | Plano de futuro *(a nona)* |
-| Lugar | Outra área *(destravado na entrada, concluído no fim do diálogo)* |
+| Lugar | Engenharia *(identificador interno `outra-area`)* |
 | NPCs | Bianca |
 | Puzzle | nenhum — **o painel de skills é a mecânica** |
-| Laço | abre e fecha em Outra área |
+| Laço | abre e fecha em Engenharia |
 | Porta | Bianca fecha o bloco depois do Caderno **e** da Grade |
-| Requisito de fala | parar no nó 3 e deixar as duas hipóteses na tela |
+| Requisito de fala | percorrer dúvida de contratação, reconhecimento do esforço e escolha de carreira |
 
 ---
 
@@ -240,12 +239,9 @@ chão protege pessoas, não objetos sobre mesas.
 
 # APÊNDICE — o roteiro da v1 deste arquivo
 
-> ⚠️ **NADA DAQUI PARA BAIXO É A FASE 5.** Este é o roteiro da v1, e ele descreve
-> o **clímax**, que migrou para a fase 6 (ADR-024, ADR-029, ADR-030). Está
-> preservado aqui, e não apagado, porque é o único lugar do repositório onde a
-> especificação de animação das quatro conexões existe em prosa — e a fase 6
-> ainda não tem arquivo de roteiro próprio. **Quem escrever
-> `docs/roteiro/06-bloco-6.md` leva este apêndice para lá e o atualiza.**
+> ⚠️ **NADA DAQUI PARA BAIXO É A FASE 5.** Este é o roteiro legado da v1;
+> não descreve o jogo atual e não deve orientar implementação. O clímax vigente
+> está documentado em `docs/roteiro/06-bloco-6.md`.
 >
 > O que já se sabe que mudou, e que este apêndice **não** reflete:
 > `laboratorio`, `innovation` e `sala-treinamento` deixaram de ser lugares
@@ -287,9 +283,9 @@ Ana senta. A tela abre **sem senha** — ela digita de cor, sem olhar. Detalhe d
 Chega uma mensagem. **Cinco falas no total** — o e-mail cabe em duas linhas:
 
 > **De: Cláudia Reis**
-> **Assunto: Vaga — Engenharia de Plataforma**
+> **Assunto: Vaga — Desenvolvimento de software**
 >
-> Abriu uma posição no time de Plataforma. É efetivação, não é estágio.
+> Abriu uma posição no time de desenvolvimento de software. É efetivação, não é estágio.
 >
 > Seu nome apareceu em três lugares diferentes na conversa de ontem. Você tem interesse?
 

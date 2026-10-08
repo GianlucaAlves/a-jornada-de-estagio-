@@ -126,7 +126,6 @@ export function Cena(): JSX.Element | null {
   const narracao = useJogo((s) => s.narracao);
   const itensRecebidos = useJogo((s) => s.itensRecebidos);
   const mensagemFalha = useJogo((s) => s.mensagemFalha);
-  const pausaBloco4 = useJogo((s) => s.pausaBloco4);
   const lugares = useJogo((s) => s.lugares);
   const hotspotsFeitos = useJogo((s) => s.hotspotsFeitos);
   const dialogosConcluidos = useJogo((s) => s.dialogosConcluidos);
@@ -186,7 +185,7 @@ export function Cena(): JSX.Element | null {
   const lugar: Lugar | undefined = LUGARES[lugarId];
   const npcEmMovimento = Object.entries(presencasNpcs).some(([chave, p]) => chave.startsWith(`${cena?.bloco}:${lugarId}:`) && Boolean(p.movimento));
   const bloqueado = npcEmMovimento ||
-    reflexaoAtiva !== null || dialogoAtivo !== null || puzzleAberto !== null || narracao !== null || mensagemFalha !== null || itensRecebidos.length > 0 || pausaBloco4 === 'rodando';
+    reflexaoAtiva !== null || dialogoAtivo !== null || puzzleAberto !== null || narracao !== null || mensagemFalha !== null || itensRecebidos.length > 0;
 
   /**
    * Lugar concluído deixa de oferecer interações, mas conserva o elenco.
@@ -225,18 +224,16 @@ export function Cena(): JSX.Element | null {
   })();
 
   /**
-   * Saída recusada pela store enquanto há diálogo, puzzle ou a pausa do Bloco 4.
+   * Saída recusada pela store enquanto há diálogo ou puzzle aberto.
    * Mesmo raciocínio do hotspot morto: botão visível que não responde parece
    * bug. A caixa de diálogo não cobre o canto do botão, então ele fica à vista —
    * por isso `disabled` com aria-label que diz o motivo, em vez de esconder: o
    * botão nunca muda de lugar, e o apresentador vê que a saída é só temporária.
    */
   const saidaBloqueada =
-    reflexaoAtiva !== null || dialogoAtivo !== null || puzzleAberto !== null || pausaBloco4 === 'rodando';
+    reflexaoAtiva !== null || dialogoAtivo !== null || puzzleAberto !== null;
   const rotuloDaSaida =
-    pausaBloco4 === 'rodando'
-      ? 'Voltar ao mapa. Indisponível durante a pausa.'
-      : puzzleAberto !== null
+    puzzleAberto !== null
         ? 'Voltar ao mapa. Indisponível com um desafio aberto: termine o desafio primeiro.'
         : dialogoAtivo !== null
           ? 'Voltar ao mapa. Indisponível durante a conversa: termine a conversa primeiro.'
@@ -311,7 +308,12 @@ export function Cena(): JSX.Element | null {
           <div aria-hidden="true" style={{ position: 'absolute', left: '53%', top: '85.4%', transform: 'translate(-50%, -100%)', pointerEvents: 'none', zIndex: camada.cenario + 1 }}>
             <Imagem id="objeto-plateia-vazia" rotulo="" largura={936} altura={256} decorativo mostrarRotulo={false} />
           </div>
-            <div aria-hidden="true" style={{ position: 'absolute', left: dialogosConcluidos.includes('b4-apresentacao') ? '-60%' : '53%', transition: `left ${duracao.maxima}ms ${easing.constante}`, top: '85.4%', transform: 'translate(-50%, -100%)', pointerEvents: 'none', zIndex: camada.hotspot - 1 }}>
+          <div aria-hidden="true" style={{ position: 'absolute', left: '53%', top: '85.4%', transform: 'translate(-50%, -100%) translateY(-120px)', pointerEvents: 'none', zIndex: camada.cenario + 2 }}>
+            <Imagem id="objeto-plateia" rotulo="" largura={936} altura={136} decorativo mostrarRotulo={false} />
+          </div>
+            {/* A plateia permanece como parte da sala: retirar o clique não era
+                retirar as pessoas da cena depois da apresentação. */}
+            <div aria-hidden="true" style={{ position: 'absolute', left: '53%', top: '85.4%', transform: 'translate(-50%, -100%)', pointerEvents: 'none', zIndex: camada.hotspot - 1 }}>
               <Imagem id="objeto-plateia-frente" rotulo="" largura={936} altura={256} decorativo mostrarRotulo={false} />
             </div>
         </>
@@ -450,7 +452,7 @@ export function Cena(): JSX.Element | null {
             const puzzleConcluido = puzzleDoHotspot?.tipo === 'abrirPuzzle' && puzzles[puzzleDoHotspot.puzzleId] === 'resolvido';
             const acaoConcluida = hotspot.mensagemConcluido !== undefined && hotspotsFeitos.includes(hotspot.id);
             const concluido = puzzleConcluido || acaoConcluida;
-            const inerte = lugarConcluido || (hotspot.id === 'b4-plateia' && dialogosConcluidos.includes('b4-apresentacao')) || hotspotInerte(hotspot, hotspotsFeitos) && !concluido;
+            const inerte = lugarConcluido || hotspotInerte(hotspot, hotspotsFeitos) && !concluido;
 
             /** Nome com cargo: o leitor de telas ouve o mesmo que a plateia lê. */
             const rotulo = rotuloComCargo(hotspot.rotulo, hotspot.arte);
@@ -478,7 +480,7 @@ export function Cena(): JSX.Element | null {
               position: 'relative',
               cursor: 'pointer',
               /**
-               * Cena bloqueada (fala, puzzle, narração, pausa do Bloco 4):
+               * Cena bloqueada (fala, puzzle ou narração):
                * `acionar` já recusa o clique, mas sem isto o hotspot ainda
                * acenderia a aura ao passar o ponteiro — prometendo uma resposta
                * que não vem. A caixa de diálogo não cobre a tela inteira, então
@@ -519,10 +521,10 @@ export function Cena(): JSX.Element | null {
             );
             return chave && presenca
               ? <PresencaEmCena key={chave} chave={chave} presenca={presenca}>{conteudo}</PresencaEmCena>
-              : <Posicionado key={hotspot.id} pos={hotspot.id === 'b4-plateia' && dialogosConcluidos.includes('b4-apresentacao') ? { ...hotspot.pos, x: -60 } : hotspot.pos} ancora={ancora} zIndex={camada.hotspot} style={hotspot.id === 'b4-plateia' ? { transition: `left ${duracao.maxima}ms ${easing.constante}` } : undefined}>{conteudo}</Posicionado>;
+              : <Posicionado key={hotspot.id} pos={hotspot.pos} ancora={ancora} zIndex={camada.hotspot}>{conteudo}</Posicionado>;
           })}
 
-      <Protagonista comando={comando} onChegar={aoChegar} apresentando={dialogoAtivo?.dialogoId === 'b4-apresentacao' && dialogoAtivo.indice % 2 === 1} />
+      <Protagonista comando={comando} onChegar={aoChegar} />
 
       {reflexaoAtiva ? <div aria-hidden style={{ position: 'absolute', inset: 0, background: cores.veuLeve, zIndex: camada.protagonista - 1, pointerEvents: 'none' }} /> : null}
       {/* Uma linha, sempre no mesmo lugar, com o nome do que está sob o

@@ -102,6 +102,7 @@ export const MANIFEST: Record<string, string> = {
   'item-cartao-rafael': `${RAIZ}/itens/cartao-rafael.png`,
   'item-certificado-degree': `${RAIZ}/itens/certificado-degree.png`,
   'item-cracha-innovation': `${RAIZ}/itens/cracha-innovation.png`,
+  'item-plano-carreira': `${RAIZ}/itens/indicacao-trilha.png`,
 
   // ------------------------------------------- itens na CENA (contorno duplo)
   // O mesmo objeto precisa de duas artes. Na barra de itens ele aparece sobre
@@ -114,6 +115,7 @@ export const MANIFEST: Record<string, string> = {
   'item-cartao-rafael-cena': `${RAIZ}/itens/cartao-rafael-cena.png`,
   'item-certificado-degree-cena': `${RAIZ}/itens/certificado-degree-cena.png`,
   'item-cracha-innovation-cena': `${RAIZ}/itens/cracha-innovation-cena.png`,
+  'item-plano-carreira-cena': `${RAIZ}/itens/indicacao-trilha-cena.png`,
 
   // ------------------------------------------------ objetos interativos
   // Objeto que é hotspot precisa de PNG PRÓPRIO, com transparência, e o
@@ -161,7 +163,7 @@ export const MANIFEST: Record<string, string> = {
 
   // A fase 4 usava o CRACHÁ como botão da ação de apresentar — a recompensa
   // fazendo papel do gesto. Quem assiste não entendia o que estava acontecendo,
-  // e o silêncio da PAUSA caía sem que nada tivesse sido mostrado antes.
+  // e a sequência não deixava claro o que deveria acontecer após a montagem.
   /** Atril/púlpito: o lugar de onde se apresenta. É o gesto, não o prêmio. */
   'objeto-atril': `${RAIZ}/objetos/atril.png`,
   /**

@@ -173,8 +173,8 @@ export const PUZZLES: Record<PuzzleId, PuzzleDef> = {
    * da fase é que trabalho que ninguém sabe que existe não vira oportunidade, e
    * a plateia precisa reconhecer a mesma história dita de outro jeito.
    *
-   * Deliberadamente o mais satisfatório dos cinco: a PAUSA que vem depois só
-   * funciona se resolver isto tiver sido gostoso.
+   * Deliberadamente o mais satisfatório dos cinco: resolver já abre a
+   * apresentação de Ana, então a conclusão precisa ficar legível e clara.
    */
   montar: {
     id: 'montar',
@@ -182,6 +182,7 @@ export const PUZZLES: Record<PuzzleId, PuzzleDef> = {
     rotulo: 'Uma página para o gestor',
     instrucao: 'Quatro campos, quatro peças. Cada peça pertence a um campo.',
     textoErro: 'Essa peça não é desse campo.',
+    efeitosSucesso: [{ tipo: 'dialogo', dialogoId: 'b4-apresentacao' }],
     mensagemConcluido: 'Telão: Situação, tarefa, ação e resultado no lugar. O que eu fiz deixou de ser só meu e passou a poder ser visto.',
     campos: [
       { id: 'situacao', rotulo: 'Situação' },

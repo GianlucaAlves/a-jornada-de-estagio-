@@ -163,7 +163,7 @@ export const CENAS_B6: readonly Cena[] = [
         arte: { tipo: 'npc', npcId: 'rafael' },
         pos: { x: 28, y: 74 },
         parada: { x: 50, y: 76 },
-        efeitos: [{ tipo: 'dialogo', dialogoId: 'b6-rafael-ramal' }],
+        efeitos: [{ tipo: 'dialogo', dialogoId: 'b6-rafael-teams' }],
       },
       {
         id: 'b6-bianca',
@@ -211,9 +211,9 @@ export const DIALOGOS_B6: Record<DialogoId, Dialogo> = {
       {
         tipo: 'fala',
         quem: 'claudia',
-        texto: 'Assinaram hoje cedo. Você foi efetivada. É oficial.',
+        texto: 'Assinaram hoje cedo. Você foi efetivada no time de desenvolvimento de software. É oficial.',
       },
-      { tipo: 'fala', quem: 'ana', texto: 'Eu... espera, é sério?' },
+      { tipo: 'fala', quem: 'ana', texto: 'Eu tô muito feliz. Ainda nem caiu a ficha.' },
       {
         tipo: 'fala',
         quem: 'claudia',
@@ -223,7 +223,7 @@ export const DIALOGOS_B6: Record<DialogoId, Dialogo> = {
       {
         tipo: 'fala',
         quem: 'claudia',
-        texto: 'O pessoal de Produto precisava de alguém pra organizar a documentação. Foi por aí que seu nome chegou até lá.',
+        texto: 'Abriu uma vaga no time de desenvolvimento de software, e sua apresentação mostrou como você pensa. Foi assim que seu nome chegou até eles.',
       },
       { tipo: 'fala', quem: 'claudia', texto: 'Vem cá. Eu te mostro de onde veio cada um.' },
     ],
@@ -240,11 +240,11 @@ export const DIALOGOS_B6: Record<DialogoId, Dialogo> = {
    * NÃO conta aqui que disse o nome dela — essa é a primeira conexão, e dizê-la
    * antes do mapa queimaria a linha que vai acender.
    */
-  'b6-rafael-ramal': {
-    id: 'b6-rafael-ramal',
+  'b6-rafael-teams': {
+    id: 'b6-rafael-teams',
     nos: [
-      { tipo: 'fala', quem: 'rafael', texto: 'Anotei seu ramal. Pra ficar justo, né?' },
-      { tipo: 'fala', quem: 'ana', texto: '(ri) Sem cartão dessa vez, hein.' },
+      { tipo: 'fala', quem: 'rafael', texto: 'Te achei no Teams rapidinho. Agora tenho seu contato também.' },
+      { tipo: 'fala', quem: 'ana', texto: '(ri) Desta vez já estava salva nos seus contatos.' },
     ],
   },
 
@@ -263,9 +263,8 @@ export const DIALOGOS_B6: Record<DialogoId, Dialogo> = {
   },
 
   /**
-   * Callback da fase 5 sem repeti-la: a Bianca cobra a própria fala do pivô, e a
-   * Ana responde que mudou de ideia quatro vezes sem sair do lugar. A resposta
-   * dela é o que sobra do medo da fase anterior.
+   * Callback da fase 5: Ana nomeia a escolha que fez, o motivo que encontrou e
+   * o primeiro passo prático para crescer no time de desenvolvimento de software.
    */
   'b6-bianca-mudanca': {
     id: 'b6-bianca-mudanca',
@@ -273,9 +272,10 @@ export const DIALOGOS_B6: Record<DialogoId, Dialogo> = {
       {
         tipo: 'fala',
         quem: 'bianca',
-        texto: 'Eu falei que dava pra mudar de ideia no meio do caminho, lembra?',
+        texto: 'E aquela dúvida sobre mudar de área? Você conseguiu decidir o que quer fazer?',
       },
-      { tipo: 'fala', quem: 'ana', texto: 'Eu achava que gostava da planilha. Acho que gostei mesmo foi de fazer a informação chegar a quem precisava.' },
+      { tipo: 'fala', quem: 'ana', texto: 'Sim. Quero trabalhar com desenvolvimento de software: gosto de fazer a informação chegar a quem precisa.' },
+      { tipo: 'fala', quem: 'ana', texto: 'Vou estudar como os sistemas do time se conectam e começar por projetos pequenos.' },
     ],
   },
 
@@ -310,7 +310,7 @@ export const DIALOGOS_B6: Record<DialogoId, Dialogo> = {
       {
         tipo: 'fala',
         quem: 'ana',
-        texto: 'Eu passei três semanas com uma pergunta na cabeça. "Eu fui efetivada?"',
+        texto: 'Eu passei três semanas pensando: "O que me trouxe até aqui?"',
       },
     ],
   },

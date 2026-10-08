@@ -34,8 +34,8 @@ export const BLOCOS: Record<BlocoId, Bloco> = {
       lugaresConcluidos: [],
     },
     fechoTexto:
-      'Ela precisou falar com três pessoas pra digitar oito caracteres.\n' +
-      'Nenhuma delas deu a resposta inteira.',
+      'O nervosismo quase a fez ficar calada.\n' +
+      'Perguntando e conhecendo pessoas, ela começou a construir relações no trabalho.',
   },
 
   2: {
@@ -83,14 +83,14 @@ export const BLOCOS: Record<BlocoId, Bloco> = {
   4: {
     id: 4,
     titulo: 'Mostrar o que fez',
-    // Da fase 3: nada novo na barra além dos dois tardios — as Anotações e o
-    // Relatório foram consumidos no caminho e não voltam.
+    // Da fase 3: as Anotações foram consumidas na produção, o Relatório persiste,
+    // e o cartão e o certificado continuam na barra.
     // O Escritório e a Linha de Produção entram concluídos pelo mesmo motivo do
     // Cafezinho na fase 3. A Linha precisa constar: sem ela o mapa esquece o
     // nome de um lugar em que a plateia acabou de ver a Ana trabalhar, e a
-    // quarta conexão do clímax é traçada justamente por ele (conexoes.ts).
+    // quinta conexão do clímax é traçada justamente por ele (conexoes.ts).
     estadoAssumido: {
-      itens: ['cartao-rafael', 'certificado-degree'],
+      itens: ['cartao-rafael', 'certificado-degree', 'relatorio'],
       skills: [
         'coragem-perguntar',
         'autoconhecimento',
@@ -119,7 +119,7 @@ export const BLOCOS: Record<BlocoId, Bloco> = {
     // então entra concluído junto dos outros três. A fase não fecha em lugar
     // recorrente de propósito — ela se deslocou para ter aquela conversa.
     estadoAssumido: {
-      itens: ['cartao-rafael', 'certificado-degree', 'cracha-innovation'],
+      itens: ['cartao-rafael', 'certificado-degree', 'cracha-innovation', 'relatorio'],
       skills: [
         'coragem-perguntar',
         'autoconhecimento',
@@ -133,23 +133,23 @@ export const BLOCOS: Record<BlocoId, Bloco> = {
       lugaresDestravados: ['outra-area'],
       lugaresConcluidos: ['escritorio', 'cafezinho', 'linha-producao', 'sala-reunioes'],
     },
-    // A fase 5 NUNCA afirma o desfecho (ADR-028): ela não sabe, e por não saber
-    // poderia ser que não fosse. O fecho é orgulho com incerteza, não consolo.
-    fechoTexto: 'Ela não sabe se fica.\nSabe o que leva se não ficar.',
+    // A fase 5 não prevê a resposta do contrato. Reconhece o esforço da Ana,
+    // separa a vaga das competências conquistadas e nomeia o caminho escolhido.
+    fechoTexto: 'Ela aprendeu, entregou e tomou iniciativa. Fez a parte dela; a vaga depende do espaço no time.\nO conhecimento e a experiência seguem com ela, e agora ela quer explorar desenvolvimento de software.',
   },
 
   6: {
     id: 6,
     titulo: 'O que ela se tornou',
-    // As nove skills no painel e os três tardios na barra: é exatamente o que a
+    // As nove skills no painel e os quatro tardios na barra: é exatamente o que a
     // revelação consome, uma conexão por clique. A festa acontece no Cafezinho,
     // que volta a estar aberto — o mesmo lugar transformado é o argumento visual
     // de que ele mudou porque ela mudou (ADR-029).
     // Os outros QUATRO entram concluídos, e os cinco slots do mapa têm de estar
-    // nomeados aqui: as quatro conexões são traçadas sobre eles, e linha que
+    // nomeados aqui: as cinco conexões são traçadas sobre eles, e linha que
     // chega num slot silhuetado e sem nome não lê como razão (ADR-030).
     estadoAssumido: {
-      itens: ['cartao-rafael', 'certificado-degree', 'cracha-innovation'],
+      itens: ['cartao-rafael', 'certificado-degree', 'cracha-innovation', 'plano-carreira', 'relatorio'],
       skills: [
         'coragem-perguntar',
         'autoconhecimento',

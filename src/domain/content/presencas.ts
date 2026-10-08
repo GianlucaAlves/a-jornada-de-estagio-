@@ -24,8 +24,6 @@ export function presencasIniciais(): PresencasNpcs {
 interface MarcaDeDialogo { inicial: Ponto; final: Ponto; visivelAoFinal: boolean; via?: Ponto[] }
 const marcas: Record<string, Partial<Record<NpcId, MarcaDeDialogo>>> = {
   'b4-preparacao': { marcos: { inicial: { x: 86, y: 70 }, final: { x: 106, y: 70 }, visivelAoFinal: false } },
-  // A fileira de cadeiras impede uma saída horizontal no y do palco.
-  'b4-reconhecimento': { claudia: { inicial: { x: 34, y: 62 }, final: { x: -6, y: 70 }, via: [{ x: 34, y: 70 }], visivelAoFinal: false } },
   'b4-virada': { bianca: { inicial: { x: 11, y: 70 }, final: { x: -6, y: 70 }, visivelAoFinal: false } },
   'b5-pivo': { bianca: { inicial: { x: 44, y: 70 }, final: { x: 44, y: 70 }, visivelAoFinal: true } },
 };

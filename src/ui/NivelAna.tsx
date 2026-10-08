@@ -41,7 +41,7 @@ export function NivelAna(): JSX.Element | null {
   const xp = useJogo(s => s.xpAtual);
   const puzzle = useJogo(s => s.puzzleAberto);
   const tela = useJogo(s => s.tela);
-  const ocupado = useJogo(s => Boolean(s.dialogoAtivo || s.reflexaoAtiva || s.narracao || s.mensagemFalha || s.itensRecebidos.length || s.puzzleAberto || s.mensagemConclusao || s.pausaBloco4 === 'rodando'));
+  const ocupado = useJogo(s => Boolean(s.dialogoAtivo || s.reflexaoAtiva || s.narracao || s.mensagemFalha || s.itensRecebidos.length || s.puzzleAberto || s.mensagemConclusao));
   type Ganho = NonNullable<ReturnType<typeof useJogo.getState>['ganhoXp']>;
   const [fila, setFila] = useState<Ganho[]>([]);
   // A assinatura captura também ganhos consecutivos no mesmo quadro React.

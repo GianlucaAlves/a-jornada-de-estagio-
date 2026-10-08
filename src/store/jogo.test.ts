@@ -85,9 +85,9 @@ type Fronteira = 2 | 3 | 4 | 5 | 6;
 const INVENTARIO_NA_FRONTEIRA: Record<Fronteira, ItemId[]> = {
   2: ['cartao-rafael'],
   3: ['anotacoes-treinamento', 'cartao-rafael', 'certificado-degree'],
-  4: ['cartao-rafael', 'certificado-degree'],
-  5: ['cartao-rafael', 'certificado-degree', 'cracha-innovation'],
-  6: ['cartao-rafael', 'certificado-degree', 'cracha-innovation'],
+  4: ['cartao-rafael', 'certificado-degree', 'relatorio'],
+  5: ['cartao-rafael', 'certificado-degree', 'cracha-innovation', 'relatorio'],
+  6: ['cartao-rafael', 'certificado-degree', 'cracha-innovation', 'plano-carreira', 'relatorio'],
 };
 
 /** Fronteira → quantas skills o painel deve ter. Literal pelo mesmo motivo. */
@@ -133,12 +133,7 @@ function prepararReuniaoDoBloco4(): void {
   if (!marcos) throw new Error('a fase 4 precisa da conversa de preparação com Marcos');
   j().clicarHotspot(marcos.id);
   concluirDialogo();
-  const plateia = cenasDaFase(4)
-    .flatMap((cena) => cena.hotspots)
-    .find((hotspot) => hotspot.id === 'b4-plateia');
-  if (!plateia) throw new Error('a fase 4 precisa do beat da plateia');
-  j().clicarHotspot(plateia.id);
-  j().fecharNarracao();
+  expect(cenasDaFase(4).flatMap((cena) => cena.hotspots).some((hotspot) => hotspot.id === 'b4-plateia')).toBe(false);
 }
 
 /**
@@ -185,7 +180,7 @@ function concluirDialogo(jaVistos: readonly DialogoId[] = []): void {
 /**
  * Aciona um hotspot do jeito que uma pessoa acionaria: se ele aceita um item que
  * está na mão, usa o item; se abre diálogo, lê até o fim; se abre puzzle,
- * resolve; se dispara a PAUSA, espera ela terminar.
+ * resolve; se dispara uma fala automática do puzzle, lê até o fim.
  *
  * Resolver o puzzle aqui é legítimo e não esconde nada: a MECÂNICA de cada
  * puzzle é testada na suíte do componente dele. O que interessa à store é que
@@ -201,7 +196,7 @@ function acionar(h: Hotspot): void {
   if (j().dialogoAtivo) concluirDialogo();
   const aberto = j().puzzleAberto;
   if (aberto) j().resolverPuzzle(aberto);
-  if (j().pausaBloco4 === 'rodando') j().concluirPausaBloco4();
+  if (j().dialogoAtivo) concluirDialogo();
   j().fecharNarracao();
 }
 
@@ -348,7 +343,6 @@ function instantaneo() {
     dialogosConcluidos: [...s.dialogosConcluidos],
     narracao: s.narracao,
     sprite: s.sprite,
-    pausaBloco4: s.pausaBloco4,
     revelacao: { ...s.revelacao },
     blocoConcluido: s.blocoConcluido,
   };
@@ -469,10 +463,11 @@ describe('playthrough completo das seis fases', () => {
       expect(seletores.conexoesFeitas(j())).toEqual(CONEXOES.slice(0, i + 1));
     }
     for (const id of ITENS_TARDIOS) expect(j().itens[id]).toBe('consumido');
+    expect(j().itens.relatorio).toBe('presente');
 
     j().esvaziarBarra();
     expect(seletores.itensNaBarra(j())).toEqual([]);
-    expect(Object.values(j().itens)).not.toContain('presente');
+    expect(Object.entries(j().itens).filter(([, estado]) => estado === 'presente').map(([id]) => id)).toEqual(['relatorio']);
     expect(skillsNoPainel()).toHaveLength(TOTAL_SKILLS);
 
     j().mostrarVersaoFutura();
@@ -497,7 +492,7 @@ describe('playthrough completo das seis fases', () => {
   });
 
   it('a tese: os cinco itens foram consumidos e as nove skills continuam no painel', () => {
-    expect(TODOS_ITENS).toHaveLength(5);
+    expect(TODOS_ITENS).toHaveLength(6);
     const rastro = rastrearItensConsumidos();
     try {
       jogarTudoAteRevelacao();
@@ -506,11 +501,11 @@ describe('playthrough completo das seis fases', () => {
 
       // Consumidos, não escondidos: o estado é lido direto, sem passar pelo
       // seletor que zera a barra quando `barraSaiu`.
-      expect(Object.values(j().itens)).not.toContain('presente');
+      expect(Object.entries(j().itens).filter(([, estado]) => estado === 'presente').map(([id]) => id)).toEqual(['relatorio']);
       expect(j().itemSelecionado).toBeNull();
-      // Os CINCO passaram por 'consumido' ao longo da jornada — incluindo os dois
-      // de leva-e-traz, gastos antes de a fase seguinte recriar o inventário.
-      expect(rastro.vistos()).toEqual([...TODOS_ITENS].sort());
+      // Os itens de porta passam por 'consumido'; o relatório fica presente.
+      expect(rastro.vistos()).toEqual(TODOS_ITENS.filter((id) => id !== 'relatorio').sort());
+      expect(j().itens.relatorio).toBe('presente');
       // Nada do que ela aprendeu se gastou.
       expect(skillsNoPainel()).toEqual([...BLOCOS[6].estadoAssumido.skills]);
       expect(skillsNoPainel()).toHaveLength(TOTAL_SKILLS);
@@ -527,7 +522,7 @@ describe('playthrough completo das seis fases', () => {
 
     for (const id of ITENS_TARDIOS) expect(consumidos).not.toContain(id);
     // Só os dois itens de leva-e-traz são gastos no caminho.
-    expect([...new Set(consumidos)].sort()).toEqual(['anotacoes-treinamento', 'relatorio']);
+    expect([...new Set(consumidos)].sort()).toEqual(['anotacoes-treinamento']);
   });
 });
 
@@ -860,7 +855,7 @@ describe('diálogo pode ser relido (ADR-016)', () => {
    *
    * O que torna a releitura segura é os EFEITOS valerem uma vez só. Sem isso,
    * reler uma conversa que concede item ressuscitaria item já consumido, e reler
-   * a que inicia a PAUSA reiniciaria o silêncio no meio da fala do apresentador.
+   * reler uma cena não pode reiniciar efeitos que já aconteceram.
    */
   it('reler um diálogo repete a fala e NÃO repete os efeitos', () => {
     j().entrarNoBloco(6);
@@ -893,7 +888,6 @@ describe('diálogo pode ser relido (ADR-016)', () => {
     expect(j().itens).toEqual(depoisDaPrimeira.itens);
     expect(j().skills).toEqual(depoisDaPrimeira.skills);
     expect(j().lugares).toEqual(depoisDaPrimeira.lugares);
-    expect(j().pausaBloco4).toEqual(depoisDaPrimeira.pausaBloco4);
   });
 });
 
@@ -1052,6 +1046,8 @@ describe('saída do palco com interação em curso', () => {
     expect(j().puzzleAberto).toBe('montar');
 
     j().resolverPuzzle('montar');
+    expect(j().dialogoAtivo?.dialogoId).toBe('b4-apresentacao');
+    concluirDialogo();
     j().voltarAoMapa();
     expect(j().tela).toEqual({ tipo: 'mapa' });
   });
@@ -1074,58 +1070,30 @@ describe('saída do palco com interação em curso', () => {
     expect(j().tela).toEqual({ tipo: 'mapa' });
   });
 
-  it('recusa sair durante a pausa da fase 4, e libera depois de concluída', () => {
-    j().entrarNoBloco(4);
-    jogarFase(4);
-    // A pausa já foi concluída por `jogarFase`; refaz o estado à mão.
+  it('a apresentação começa ao resolver o puzzle e só há conversa posterior com Cláudia', () => {
     j().reiniciar();
     instalarArmazenamento();
     j().entrarNoBloco(4);
     j().entrarNoLugar('sala-reunioes');
-    // A abertura da cena deixa narração na tela, e ela não tem nada a ver com a
-    // PAUSA: dispensar antes é o que torna a asserção de silêncio honesta.
     j().fecharNarracao();
     prepararReuniaoDoBloco4();
+    const cena = acharCena('sala-reunioes', 4);
+    expect(cena?.hotspots.map((h) => h.id)).not.toContain('b4-plateia');
+    expect(cena?.hotspots.map((h) => h.id)).not.toContain('b4-entrega');
+    expect(cena?.hotspots.map((h) => h.id)).not.toContain('b4-bianca');
+    j().clicarHotspot('b4-claudia');
+    expect(j().narracao).toBe('Cláudia espera Ana terminar de apresentar o trabalho.');
+    j().fecharNarracao();
     j().clicarHotspot(hotspotQueAbre(4, 'montar').id);
     j().resolverPuzzle('montar');
-    const cena = acharCena('sala-reunioes', 4);
-    const apresentar = cena?.hotspots.find((h) => h.id === 'b4-entrega');
-    expect(apresentar, 'a fase 4 precisa do hotspot de apresentação').toBeDefined();
-    if (!apresentar) return;
-    j().clicarHotspot(apresentar.id);
-    expect(j().pausaBloco4).not.toBe('rodando');
-    // Diálogo em andamento não é persistido; ao retomar, o atril precisa
-    // continuar disponível para repetir a fala e só então disparar a pausa.
-    j().continuar();
-    expect(j().dialogoAtivo).toBeNull();
-    j().clicarHotspot(apresentar.id);
     expect(j().dialogoAtivo?.dialogoId).toBe('b4-apresentacao');
     concluirDialogo();
-    expect(j().pausaBloco4).toBe('rodando');
-
-    // O SILÊNCIO É O REQUISITO: nem narração, nem diálogo, nem skill.
-    expect(j().narracao).toBeNull();
-    expect(j().dialogoAtivo).toBeNull();
-
-    j().voltarAoMapa();
-    expect(j().tela.tipo).toBe('cena');
-    // Durante a pausa o palco não responde a clique nenhum.
-    const outro = cena?.hotspots.find((h) => h.id !== apresentar.id);
-    if (outro) {
-      j().clicarHotspot(outro.id);
-      expect(j().dialogoAtivo).toBeNull();
-    }
-
-    j().concluirPausaBloco4();
-    const crachaDepoisDaPrimeiraApresentacao = j().itens['cracha-innovation'];
-    j().clicarHotspot(apresentar.id);
-    expect(j().dialogoAtivo?.dialogoId).toBe('b4-apresentacao');
+    expect(j().dialogosConcluidos).toContain('b4-apresentacao');
+    j().clicarHotspot('b4-claudia');
+    expect(j().dialogoAtivo?.dialogoId).toBe('b4-reconhecimento');
     concluirDialogo();
-    expect(j().pausaBloco4).toBe('concluida');
-    expect(j().itens['cracha-innovation']).toBe(crachaDepoisDaPrimeiraApresentacao);
-
-    j().voltarAoMapa();
-    expect(j().tela).toEqual({ tipo: 'mapa' });
+    expect(j().blocoConcluido).toBe(true);
+    expect(j().dialogosConcluidos).not.toContain('b4-virada');
   });
 });
 
@@ -1246,12 +1214,12 @@ describe('sequência da revelação', () => {
     expect(j().revelacao.conexoesFeitas).toBe(CONEXOES.length);
   });
 
-  it('as três primeiras conexões apagam o item de origem, uma por vez', () => {
+  it('as quatro conexões consumíveis apagam o item de origem, uma por vez', () => {
     atalharAteRevelacao();
     const naBarraAntes = seletores.itensNaBarra(j()).length;
     expect(naBarraAntes).toBe(BLOCOS[6].estadoAssumido.itens.length);
 
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 4; i++) {
       const conexao = CONEXOES[i];
       expect(conexao?.consomeOrigem).toBe(true);
       const origem = conexao?.origem;
@@ -1264,12 +1232,13 @@ describe('sequência da revelação', () => {
       expect(seletores.itensNaBarra(j())).toHaveLength(naBarraAntes - (i + 1));
     }
     for (const id of ITENS_TARDIOS) expect(j().itens[id]).toBe('consumido');
+    expect(j().itens.relatorio).toBe('presente');
   });
 
-  it('a quarta conexão sai da skill proatividade e não consome a origem', () => {
-    const quarta = CONEXOES[CONEXOES.length - 1];
-    expect(quarta?.origem).toEqual({ tipo: 'skill', skillId: 'proatividade' });
-    expect(quarta?.consomeOrigem).toBe(false);
+  it('a última conexão parte do relatório e preserva a origem', () => {
+    const ultima = CONEXOES[CONEXOES.length - 1];
+    expect(ultima?.origem).toEqual({ tipo: 'item', itemId: 'relatorio' });
+    expect(ultima?.consomeOrigem).toBe(false);
 
     atalharAteRevelacao();
     dispararTodasAsConexoes();
@@ -1278,7 +1247,7 @@ describe('sequência da revelação', () => {
     expect(skillsNoPainel()).toHaveLength(TOTAL_SKILLS);
   });
 
-  it('esvaziarBarra não responde antes das quatro conexões', () => {
+  it('esvaziarBarra não responde antes das cinco conexões', () => {
     atalharAteRevelacao();
     j().dispararConexao();
     j().esvaziarBarra();
@@ -1341,9 +1310,10 @@ describe('estado assumido por fase', () => {
     }
 
     jogarFase(6);
-    expect(CONEXOES).toHaveLength(4);
+    expect(CONEXOES).toHaveLength(5);
     dispararTodasAsConexoes();
     for (const id of ITENS_TARDIOS) expect(j().itens[id]).toBe('consumido');
+    expect(j().itens.relatorio).toBe('presente');
 
     j().esvaziarBarra();
     j().mostrarVersaoFutura();

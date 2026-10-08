@@ -31,11 +31,12 @@ export const REFLEXOES: Record<BlocoId, ReflexaoDeBloco> = {
   5: { lugarId: 'outra-area', tempo: 'Fim do contrato', falas: [
     'Meu contrato está acabando. Eu quero ficar, isso eu sei.',
     'Mas, se me efetivarem, eu quero continuar nessa área? E se não, pra onde eu vou?',
-    'Efetivação e escolha de carreira não são a mesma pergunta. Acho que a pergunta de verdade é: que tipo de problema eu gosto de resolver?',
+    'Eu fiz a minha parte: aprendi, entreguei e tomei iniciativa. Se não houver vaga, isso não apaga meu trabalho. O conhecimento e a experiência seguem comigo.',
+    'Quero explorar desenvolvimento de software. A vaga e a escolha da minha carreira são coisas diferentes.',
   ], gancho: 'Que tipo de problema você gosta de resolver, independentemente do cargo?' },
-  6: { lugarId: 'cafezinho', tempo: 'Último dia de contrato', falas: [
-    'Último dia de contrato. Eu não sei como isso vai terminar.',
-    'No primeiro dia eu nem sabia como pedir uma senha. Hoje eu sei o que gosto, o que aprendi e o que ainda quero aprender.',
-    'Seja qual for a resposta, essa história é minha.',
-  ], gancho: 'Se uma oportunidade não vier, o que depende de você e o que leva dessa experiência?' },
+  6: { lugarId: 'cafezinho', tempo: 'Festa da efetivação', falas: [
+    'Hoje assinaram minha efetivação no time de desenvolvimento de software. Eu tô feliz demais — ainda estou tentando acreditar.',
+    'Escolhi desenvolvimento porque gosto de entender como a informação chega a quem precisa e como os sistemas conectam as equipes.',
+    'Agora vou estudar como os serviços do time se conectam e começar com projetos pequenos, aprendendo com quem já trabalha na área.',
+  ], gancho: 'Que trabalho seu outras pessoas poderiam conhecer melhor depois de você contar o que fez?' },
 };

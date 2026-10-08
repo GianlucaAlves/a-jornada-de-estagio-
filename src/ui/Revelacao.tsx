@@ -15,10 +15,9 @@
  *
  * Agora cada ponta carrega o que ela é:
  *
- *   - a ORIGEM é a arte do próprio item (ou a PALAVRA da competência), e ela
- *     VIAJA da barra de itens / do painel de skills até o lugar. A plateia vê a
- *     coisa que a Ana carregou a apresentação inteira sair do inventário e
- *     pousar no mapa — o que a barra perde, o mapa ganha, no mesmo clique.
+ *   - a ORIGEM é a arte do item. As quatro portas VIAJAM da barra até o lugar;
+ *     a quinta origem, o relatório, fica como evidência. O que a barra perde
+ *     aparece no mapa no mesmo clique.
  *   - o NÓ DO MEIO é o CENÁRIO do lugar, a mesma miniatura que o mapa mostra a
  *     apresentação toda, com o nome embaixo. "Isto aconteceu ali" passa a ser
  *     uma imagem, não um rótulo.
@@ -28,7 +27,7 @@
  *     desfecho, é o porquê.
  *
  * UMA LINHA POR CONEXÃO, E ELAS NÃO SE CRUZAM. Cada conexão era uma polilinha de
- * três pontos: barra → lugar → centro. Com quatro delas, duas atravessavam o nó
+ * três pontos: barra → lugar → centro. Com cinco delas, duas atravessavam o nó
  * de um lugar que não tinha nada a ver com a razão sendo contada (linha reta da
  * barra ao Escritório passa por cima da Sala de Reuniões) e ainda cruzavam uma à
  * outra. Agora a linha é o raio lugar → convite, e raios que partem do mesmo
@@ -41,10 +40,10 @@
  * painel espelha `PainelDeSkills`, para que nada salte de lugar na troca de tela
  * — é de uma linha DESTE painel que a quarta origem sai.
  *
- * E A TESE, que é o motivo de a fase existir: as três primeiras conexões saem de
- * ITENS e SE APAGAM quando a barra sai; a quarta sai da competência
- * `proatividade` e PERMANECE ACESA, sozinha, ligada ao convite (ADR-017). Ver
- * `conexaoAcesa` — a regra mora numa função pura porque é ela que o teste prova.
+ * E A TESE, que é o motivo de a fase existir: quatro itens se consomem, e o
+ * relatório permanece como evidência da iniciativa e do protagonismo de Ana.
+ * Quando a barra sai, só a conexão do relatório fica acesa, ligada ao convite.
+ * Ver `conexaoAcesa` — a regra mora numa função pura porque é ela que o teste prova.
  *
  * Sem partícula, sem brilho difuso, sem linha fina, sem gradiente, sem animação
  * rápida: traçado grosso, alto contraste, 800–1200ms.
@@ -128,7 +127,7 @@ const MAPA_TOPO = FALA_TOPO + FALA_A + espaco.md;
  */
 const MINIATURA_L = 208;
 const MINIATURA_A = (MINIATURA_L * 9) / 16;
-const ALTURA_NOME = Math.round(tipografia.tamanhos.apoio * tipografia.alturaLinha.compacta);
+const ALTURA_NOME = Math.round(tipografia.minimo * tipografia.alturaLinha.compacta) * 2;
 const CARD_L = MINIATURA_L + 2 * espaco.sm + 2 * borda.grossa;
 const CARD_A = MINIATURA_A + espaco.xs + ALTURA_NOME + 2 * espaco.sm + 2 * borda.grossa;
 /** A faixa do nome avança sobre o respiro lateral: é ela que precisa da largura. */
@@ -139,16 +138,15 @@ const NOME_L = CARD_L - 2 * borda.grossa;
  *
  * Mesma altura para os dois tipos, para que a fileira de origens seja uma
  * fileira. A largura é que difere, e a diferença é deliberada: item é um OBJETO
- * (96px de arte na escala única, moldurado) e competência é uma PALAVRA — a
- * quarta conexão tem de ler como sendo de outra natureza antes de qualquer
- * animação acontecer (ADR-017).
+ * miniatura do item e rótulo — cada uma das cinco origens precisa ler antes de
+ * qualquer animação acontecer.
  *
  * A moldura não é enfeite: é onde a origem mostra que está acesa ou apagada, e
- * ela mantém a borda em `borda.media` para que os 96px de arte caiam exatos
+ * ela mantém a borda em `borda.media` para que o ícone compacto caia exato
  * dentro dela (`box-sizing: border-box` é global).
  */
-const ORIGEM_A = arte.item.altura + 2 * espaco.xs + 2 * borda.media;
-const ORIGEM_ITEM_L = arte.item.largura + 2 * espaco.xs + 2 * borda.media;
+const ORIGEM_A = barra.iconeCompacto + 3 * espaco.xs + 2 * borda.media + 2 * Math.round(tipografia.minimo * tipografia.alturaLinha.compacta);
+const ORIGEM_ITEM_L = barra.item.larguraCompacta + 2 * espaco.xs + 2 * borda.media;
 const ORIGEM_SKILL_L = CARD_L;
 
 /**
@@ -190,8 +188,8 @@ const CONVITE_CENTRO: Ponto = { x: (CENTRO_ESQ + CENTRO_DIR) / 2, y: CENTRO_BASE
  * VALE PARA IMAGEM, NÃO PARA TRAÇO. O traçado se apaga trocando de COR, com
  * opacidade cheia: 7px de `silhuetaContorno` a 32% sobre o fundo quase preto
  * compõem para algo em torno de 1,6:1 de contraste, e a compressão do Teams
- * apaga isso por inteiro — as três portas desapareceriam em vez de se apagarem,
- * e a plateia não veria que havia três. Cor cheia mantém o caminho legível como
+ * apaga isso por inteiro — as quatro portas desapareceriam em vez de se apagarem,
+ * e a plateia não veria que havia quatro. Cor cheia mantém o caminho legível como
  * caminho gasto, e ainda fica a uma distância enorme do amarelo do destaque.
  */
 const OPACIDADE_APAGADA = 0.35;
@@ -201,7 +199,7 @@ const OPACIDADE_APAGADA = 0.35;
 // Antes eram números repetidos aqui e lá, e "o painel não salta de lugar quando
 // a tela troca" era uma coincidência entre dois literais iguais escritos em
 // arquivos diferentes. Quando o painel virou acordeão (ADR-020) a coincidência
-// se desfez, e é de uma entrada DESTE painel que a quarta origem do clímax sai.
+// se desfez. Nesta versão todas as origens do clímax são itens.
 const PAINEL_X = barra.zonaItens;
 const PAINEL_Y = CANVAS.altura - overlay.barraDeItens;
 // Barra de itens — as mesmas métricas que BarraDeItens.tsx usa, por token.
@@ -217,11 +215,11 @@ const PAINEL_Y = CANVAS.altura - overlay.barraDeItens;
 const BARRA_A = overlay.barraDeItens;
 const BARRA_Y = CANVAS.altura - BARRA_A;
 const BARRA_ROTULO_L = barra.larguraDoRotulo;
-const ITEM_L = barra.item.largura;
-const ICONE = barra.icone;
+const ITEM_L = barra.item.larguraCompacta;
+const ICONE = barra.iconeCompacto;
 const ITEM_X = espaco.md + BARRA_ROTULO_L + espaco.md;
 const ITEM_PASSO = ITEM_L + espaco.xs;
-const ITEM_A = barra.item.altura;
+const ITEM_A = barra.item.alturaCompacta;
 const ITEM_Y = BARRA_Y + borda.grossa + espaco.xs + (BARRA_A - borda.grossa - 2 * espaco.xs - ITEM_A) / 2;
 
 /** ~5s de sustentação da versão futura apontando o mapa, sem texto. */
@@ -236,13 +234,13 @@ const PERGUNTA_VISIVEL_MS = 2000;
  * aqui aparece sozinha, sem a moldura da citação, porque na tela ela é a
  * pergunta sendo feita e não a Ana contando que a fez.
  */
-const PERGUNTA_FINAL = 'Eu fui efetivada?';
+const PERGUNTA_FINAL = 'O que me trouxe até aqui?';
 
 /**
  * A DUPLA DA VERSÃO FUTURA, e o gesto.
  *
  * Elas ficam na faixa que a barra de itens acabou de desocupar — a barra só sai
- * depois da quarta conexão, então este espaço existe exatamente neste momento e
+ * depois da quinta conexão, então este espaço existe exatamente neste momento e
  * não antes. À esquerda, longe da placa do convite e da única corrente que
  * ficou acesa: a versão futura aponta para o convite, e não pode estar em cima
  * dele quando aponta.
@@ -417,18 +415,15 @@ export function partidaDaConexao(
 }
 
 /**
- * A TESE, EM UMA FUNÇÃO.
+ * A evidência que permanece é o relatório, com a iniciativa registrada.
  *
  * Enquanto a barra está em cena, tudo o que foi traçado está aceso. Quando a
- * barra sai, as PORTAS se apagam — item é coisa que se gasta — e o MOTIVO
- * permanece: uma corrente acesa (competência → lugar → convite) sozinha no
- * mapa. É o argumento inteiro do projeto (ADR-017): não foi o que ela entregou,
- * foi o que ela se tornou.
+ * barra sai, os itens usados como portas se apagam; o relatório permanece como
+ * registro do problema que Ana percebeu e resolveu por iniciativa própria.
  *
  * A regra lê `consomeOrigem`, e não `origem.tipo`, porque é `consomeOrigem` que
- * o domínio declara para dizer "esta se gasta" — no conteúdo de hoje as duas
- * leituras coincidem, e o teste cobra que continuem coincidindo: exatamente uma
- * conexão sobrevive, e ela é a da skill.
+ * o domínio declara para dizer "esta se gasta" — o relatório é a origem
+ * persistente, e o teste cobra que ele seja a única conexão sobrevivente.
  *
  * É função pura e exportada porque isto é a coisa mais importante da tela, e
  * markup de estado inicial não alcança: fora do navegador o zustand serve o
@@ -539,7 +534,7 @@ function LinhaConexao({
        *
        * E apaga por COR, com opacidade CHEIA: baixar a opacidade de um traço
        * sobre fundo quase preto o remove da tela, e o que se quer é um caminho
-       * gasto — se as três portas desaparecerem, a plateia não vê que havia três
+ * gasto — se as quatro portas desaparecerem, a plateia não vê que havia quatro
        * e "sobrou uma acesa" deixa de ser uma comparação.
        */
       stroke={aceso ? cores.destaque : cores.silhuetaContorno}
@@ -580,7 +575,7 @@ function CardDoLugar({ lugarId, aceso }: { lugarId: LugarId; aceso: boolean }): 
       <Imagem
         /**
          * O cenário do lugar COMO ELE ERA na jornada, não a versão de festa do
-         * Cafezinho: as quatro conexões falam do passado, e a festa é o presente
+         * Cafezinho: as cinco conexões falam do passado, e a festa é o presente
          * que espera do outro lado desta tela.
          */
         id={assetDoCenario(lugarId)}
@@ -711,6 +706,7 @@ function OrigemDaConexao({
       }}
     >
       {conexao.origem.tipo === 'item' ? (
+        <span style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: espaco.xs }}>
         <Imagem
           /**
            * A arte da BARRA, não a de cena: é a mesma imagem que estava no slot
@@ -718,12 +714,14 @@ function OrigemDaConexao({
            * troca visível de objeto.
            */
           id={assetDoItem(conexao.origem.itemId)}
-          rotulo={ITENS[conexao.origem.itemId].nome}
-          largura={arte.item.largura}
-          altura={arte.item.altura}
+          rotulo={ROTULOS_DOS_ITENS[conexao.origem.itemId]}
+          largura={barra.iconeCompacto}
+          altura={barra.iconeCompacto}
           mostrarRotulo={false}
           decorativo
         />
+        <span style={{ color: aceso ? cores.texto : cores.textoApoio, fontSize: tipografia.minimo, fontWeight: tipografia.pesos.forte, lineHeight: tipografia.alturaLinha.compacta }}>{ROTULOS_DOS_ITENS[conexao.origem.itemId]}</span>
+        </span>
       ) : (
         <span
           style={{
@@ -761,7 +759,7 @@ export interface PropsMapaDaRevelacao {
  * O MAPA DO CLÍMAX, separado da tela que lê a store.
  *
  * A separação não é gosto de arquitetura: é a única forma de PROVAR a tese. O
- * teste precisa do quadro em que as quatro conexões existem e a barra já saiu, e
+ * teste precisa do quadro em que as cinco conexões existem e a barra já saiu, e
  * por store isso é inalcançável fora do navegador — o zustand serve o estado
  * inicial ao renderizar em `node`. Aqui o quadro entra por prop.
  */
@@ -1013,7 +1011,7 @@ export function Revelacao(): JSX.Element {
           zIndex: camada.overlayPersistente,
           background: cores.painel,
           borderTop: `${borda.grossa}px solid ${cores.contorno}`,
-          // Depois da quarta conexão a barra se recolhe e sai de cena.
+          // Depois da quinta conexão a barra se recolhe e sai de cena.
           transform: barraSaiu ? `translateY(${BARRA_A + 40}px)` : 'translateY(0)',
           opacity: barraSaiu ? 0 : 1,
           transition: `transform ${duracao.longa}ms ease-out, opacity ${duracao.longa}ms ease-out`,
@@ -1079,7 +1077,7 @@ export function Revelacao(): JSX.Element {
               </span>
               <span
                 style={{
-                  // Duas linhas RESERVADAS: os três nomes da fase 6 quebram, e
+                  // Duas linhas RESERVADAS: os nomes da fase 6 quebram, e
                   // altura que depende da métrica da fonte não é geometria.
                   height: ALTURA_NOME,
                   overflow: 'hidden',
@@ -1132,9 +1130,9 @@ export function Revelacao(): JSX.Element {
       </p>
 
       {/*
-        A TESE EM IMAGEM, e ela não tem legenda de propósito. Depois da quarta
+        A TESE EM IMAGEM, e ela não tem legenda de propósito. Depois da quinta
         conexão a faixa de fala se apaga: o que fica é a barra saindo vazia, as
-        três portas apagadas e UMA corrente acesa — competência, lugar, convite.
+        quatro portas apagadas e UMA corrente acesa — relatório, lugar, convite.
         Qualquer parágrafo aqui competiria com a imagem que ele deveria deixar
         falar. O apresentador diz a tese em voz alta; está no roteiro como gancho.
       */}

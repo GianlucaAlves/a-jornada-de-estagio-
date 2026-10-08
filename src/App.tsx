@@ -27,7 +27,6 @@ import { Reflexao } from './ui/Reflexao';
 import { Narracao } from './ui/Narracao';
 import { ItemRecebido } from './ui/ItemRecebido';
 import { BarraDeItens } from './ui/BarraDeItens';
-import { PausaBloco4 } from './ui/PausaBloco4';
 import { PuzzleAtivo } from './ui/puzzles';
 import { Revelacao } from './ui/Revelacao';
 import { Perguntas } from './ui/Perguntas';
@@ -73,7 +72,6 @@ export function App(): JSX.Element {
   const tela = useJogo((s) => s.tela);
   const bloco = useJogo((s) => s.bloco);
   const blocoConcluido = useJogo((s) => s.blocoConcluido);
-  const pausaBloco4 = useJogo((s) => s.pausaBloco4);
   const barraSaiu = useJogo((s) => s.revelacao.barraSaiu);
   const avancarBloco = useJogo((s) => s.avancarBloco);
   const reflexaoAtiva = useJogo(s => s.reflexaoAtiva);
@@ -115,7 +113,7 @@ export function App(): JSX.Element {
   // leitura; conservar os itens ali fazia botões esconderem seus rótulos.
   const mostrarBarra = overlaysVisiveis && !barraSaiu && reflexaoAtiva === null;
   const mostrarAvanco =
-    overlaysVisiveis && !janelaAberta && !reflexaoAtiva && blocoConcluido && bloco < ULTIMO_BLOCO && pausaBloco4 !== 'rodando';
+    overlaysVisiveis && !janelaAberta && !reflexaoAtiva && blocoConcluido && bloco < ULTIMO_BLOCO;
   const mostrarHistoria =
     mostrarAvanco && bloco2 && historiaApresentador.trim() !== '' && !historiaLida;
 
@@ -133,8 +131,7 @@ export function App(): JSX.Element {
       {reflexaoAtiva === null ? <Narracao /> : null}
       {reflexaoAtiva === null ? <ItemRecebido /> : null}
 
-      {/* Puzzle: overlay opaco e modal, acima dos overlays persistentes e
-          abaixo da pausa da fase 4. Dirigido por `puzzleAberto` na store. */}
+      {/* O puzzle é modal e bloqueia os overlays persistentes enquanto está aberto. */}
       <PuzzleAtivo />
 
       {/* Cue de passagem de bastão: o bloco sinalizou fim, o cartão pode entrar. */}
@@ -170,7 +167,6 @@ export function App(): JSX.Element {
         </button>
       ) : null}
 
-      {pausaBloco4 === 'rodando' ? <PausaBloco4 /> : null}
       {import.meta.env.DEV ? <FasesDev aoTrocar={() => setHistoriaLida(false)} /> : null}
     </Canvas>
   );

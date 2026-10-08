@@ -121,16 +121,16 @@ verdade, e a diferença tem que ser sentida.
 > **Rafael:** A tela de login pede a senha antes de deixar você abrir o e-mail
 > que tem a senha. Alguém desenhou isso numa sexta-feira, só pode.
 >
-> **Ana:** *(ri, aliviada)* Ainda bem que não sou a única achando isso estranho.
+> **Ana:** *(ri, aliviada)* Vou lembrar disso na minha primeira reunião.
 >
 > **Rafael:** Sou o Rafael, do time de Projetos, ali do lado. No fim vai o dia
 > que você entrou: hoje é **03**.
 >
-> **Rafael:** *(escreve o ramal atrás de um cartão)* Qualquer coisa que travar, me
-> chama. Sério.
+> **Rafael:** *(abre o Teams)* Te mandei um oi por lá. Qualquer coisa, me chama
+> no Teams.
 >
-> **Rafael:** Pra primeiro dia, três ramais já é bastante. Eu levei uma semana
-> pra achar todo mundo.
+> **Rafael:** Pronto: você já tem um contato por aqui — e eu alguém pra dividir as
+> reuniões “rapidinhas”.
 
 **→ Campo 3: `03`**
 **→ Ganha: Cartão do Rafael**
@@ -138,9 +138,9 @@ verdade, e a diferença tem que ser sentida.
 > ⚠️ **Não aponte o cartão.** Ele é o item tardio nº 1 e paga na fase 6. Qualquer
 > ênfase aqui — na fala, no gesto ou no clique — entrega o clímax de graça.
 
-> 💡 **Gancho de fala:** Rafael reconhece o absurdo da tela sem fazer Ana se
-> sentir avaliada. A coisa mais valiosa que ela levou do primeiro dia não foi a
-> senha, foi alguém disposto a ajudar. E ela não tinha como saber disso ainda.
+> 💡 **Gancho de fala:** Rafael quebra o gelo com uma piada de reunião e troca
+> contato com Ana no Teams. O networking começa com uma conversa simples, não
+> com uma apresentação formal.
 >
 > 💡 **Gancho extra (o que o Rafael não disse):** gente ocupada comprime
 > informação; quem está chegando lê compressão como desinteresse. Quase ninguém

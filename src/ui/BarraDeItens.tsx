@@ -230,9 +230,12 @@ export function BarraDeItens(): JSX.Element {
         </h2>
 
         <ul style={{ display: 'flex', alignItems: 'stretch', gap: espaco.xs, flex: '0 0 auto' }}>
-          {Array.from({ length: barra.slotsItens }, (_, indice) => {
+          {Array.from({ length: Math.max(barra.slotsItensIniciais, itens.length) }, (_, indice) => {
             const id = itens[indice];
-            if (!id) return <li key={`vazio-${indice}`} aria-label="Espaço vazio de item" style={{ width: barra.item.largura, height: barra.item.altura, border: `${borda.media}px solid ${cores.silhuetaContorno}`, background: cores.fundoElevado }} />;
+            const compacta = itens.length > 3;
+            const larguraSlot = compacta ? barra.item.larguraCompacta : barra.item.largura;
+            const ladoIcone = compacta ? barra.iconeCompacto : barra.icone;
+            if (!id) return <li key={`vazio-${indice}`} aria-label="Espaço vazio de item" style={{ width: larguraSlot, height: compacta ? barra.item.alturaCompacta : barra.item.altura, border: `${borda.media}px solid ${cores.silhuetaContorno}`, background: cores.fundoElevado }} />;
             // Um único caminho de renderização para todos os itens.
             const item: Item | undefined = ITENS[id];
             if (item === undefined) return null;
@@ -258,8 +261,8 @@ export function BarraDeItens(): JSX.Element {
                     flexDirection: 'column',
                     alignItems: 'center',
                     gap: espaco.xs,
-                    width: barra.item.largura,
-                    height: barra.item.altura,
+                    width: larguraSlot,
+                    height: compacta ? barra.item.alturaCompacta : barra.item.altura,
                     padding: borda.fina,
                     background: ativo ? cores.destaque : cores.fundoElevado,
                     color: ativo ? cores.textoInverso : cores.texto,
@@ -274,8 +277,8 @@ export function BarraDeItens(): JSX.Element {
                   <Imagem
                     id={assetDoItem(id)}
                     rotulo={item.nome}
-                    largura={barra.icone}
-                    altura={barra.icone}
+                    largura={ladoIcone}
+                    altura={ladoIcone}
                     mostrarRotulo={false}
                     decorativo
                     style={{ filter: `drop-shadow(0 ${borda.fina}px 0 ${cores.sombra})` }}
@@ -286,7 +289,12 @@ export function BarraDeItens(): JSX.Element {
                       fontWeight: tipografia.pesos.forte,
                       lineHeight: tipografia.alturaLinha.compacta,
                       textAlign: 'center',
-                      whiteSpace: 'nowrap',
+                      maxWidth: '100%',
+                      overflowWrap: 'anywhere',
+                      display: '-webkit-box',
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden',
                     }}
                   >
                     {ROTULOS_DOS_ITENS[id]}

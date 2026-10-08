@@ -209,9 +209,9 @@ export const DIALOGOS_B1: Record<DialogoId, Dialogo> = {
       {
         tipo: 'fala',
         quem: 'rafael',
-        texto: 'A tela de login pede a senha antes de deixar você abrir o e-mail que tem a senha. Alguém desenhou isso numa sexta-feira, só pode.',
+        texto: 'Dica de escritório: quando alguém disser “é rapidinho”, confira se não bloqueou a agenda inteira.',
       },
-      { tipo: 'fala', quem: 'ana', texto: '(ri, aliviada) Ainda bem que não sou a única achando isso estranho.' },
+      { tipo: 'fala', quem: 'ana', texto: '(ri, aliviada) Vou lembrar disso na minha primeira reunião.' },
       {
         // PISTA 3, literal, com o dia em dois dígitos para não haver dúvida.
         tipo: 'fala',
@@ -223,12 +223,12 @@ export const DIALOGOS_B1: Record<DialogoId, Dialogo> = {
         // tardio nº 1 e não pode ganhar ênfase nenhuma.
         tipo: 'fala',
         quem: 'rafael',
-        texto: '(escreve o ramal atrás de um cartão) Qualquer coisa que travar, me chama. Sério.',
+        texto: '(abre o Teams) Te mandei um oi por lá. Qualquer coisa, me chama no Teams.',
       },
       {
         tipo: 'fala',
         quem: 'rafael',
-        texto: 'Pra primeiro dia, três ramais já é bastante. Eu levei uma semana pra achar todo mundo.',
+        texto: 'Pronto: você já tem um contato por aqui — e eu alguém pra dividir as reuniões “rapidinhas”.',
       },
     ],
     efeitos: [{ tipo: 'concederItem', itemId: 'cartao-rafael' }],

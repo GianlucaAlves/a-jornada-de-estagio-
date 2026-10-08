@@ -14,6 +14,7 @@ import { CENAS_B6, DIALOGOS_B6 } from './bloco6';
 
 export {
   ITENS,
+  ORDEM_ITENS,
   SKILLS,
   LUGARES,
   NPCS,

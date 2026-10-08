@@ -177,12 +177,15 @@ def main() -> int:
             continue
         g = fundo.clone()
 
-        # A sala monta cadeiras em camada de UI para preservá-las após a saída
-        # da plateia; a prévia precisa da mesma base para revelar sobreposições.
+        # Cadeiras vazias formam a base; as duas camadas ocupadas recompõem as
+        # fileiras sem hotspot e na mesma ordem de sobreposição usada pela UI.
         if lugar == "sala-reunioes" and bloco == 4:
             cadeiras = cat.get("plateia-vazia")
             if cadeiras is not None:
                 g.colar_base(round(0.53 * LARGURA), round(0.854 * ALTURA), cadeiras)
+            tras = cat.get("plateia")
+            if tras is not None:
+                g.colar_base(round(0.53 * LARGURA), round(0.854 * ALTURA) - 30, tras)
             frente = cat.get("plateia-frente")
             if frente is not None:
                 g.colar_base(round(0.53 * LARGURA), round(0.854 * ALTURA), frente)

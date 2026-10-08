@@ -178,8 +178,8 @@ Ela volta pro monitor. A conversa acaba seca, sem despedida. **Deixe o silêncio
 
 | Elemento | Status |
 |---|---|
-| Itens ganhos | Relatório *(consumido na entrega)* |
-| Itens consumidos | Anotações do treinamento *(nos números)*, Relatório *(na Cláudia)* |
+| Itens ganhos | Relatório *(permanece como evidência até a revelação final)* |
+| Itens consumidos | Anotações do treinamento *(nos números)* |
 | Skills ganhas | Proatividade, Protagonismo *(nesta ordem)* |
 | Lugar destravado | Sala de Reuniões |
 | NPCs | Tiago, Cláudia |

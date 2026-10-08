@@ -196,6 +196,11 @@ const DIALOGOS_ALCANCAVEIS: ReadonlySet<DialogoId> = (() => {
     for (const h of cena.hotspots) {
       for (const e of [...h.efeitos, ...(h.efeitosComItem ?? [])]) {
         if (e.tipo === 'dialogo') fila.push(e.dialogoId);
+        if (e.tipo === 'abrirPuzzle') {
+          for (const efeitoDoPuzzle of PUZZLES[e.puzzleId].efeitosSucesso ?? []) {
+            if (efeitoDoPuzzle.tipo === 'dialogo') fila.push(efeitoDoPuzzle.dialogoId);
+          }
+        }
       }
     }
   }
@@ -267,7 +272,7 @@ const FRASES_ASSINATURA: readonly string[] = [
   // no mapa sem pergunta que as peça.
   'Seu nome apareceu em três lugares diferentes na conversa de ontem.',
   // Última fala da apresentação.
-  'Eu fui efetivada?',
+  'O que me trouxe até aqui?',
 ];
 
 /**
@@ -1221,7 +1226,7 @@ describe('alcançabilidade de itens e skills', () => {
     const concedidos = EFEITOS_ALCANCAVEIS.filter((e) => e.tipo === 'concederItem').map((e) =>
       e.tipo === 'concederItem' ? e.itemId : '',
     );
-    expect(Object.keys(ITENS)).toHaveLength(5);
+    expect(Object.keys(ITENS)).toHaveLength(6);
     for (const id of Object.keys(ITENS)) {
       expect(concedidos, `item '${id}' nunca é concedido`).toContain(id);
     }
@@ -1253,13 +1258,13 @@ describe('alcançabilidade de itens e skills', () => {
         if (!origensDeConexao.has(item.id)) {
           semUso.push(`'${item.id}' é tardio e não é origem de nenhuma conexão`);
         }
-      } else if (!consumidos.has(item.id)) {
+      } else if (item.id !== 'relatorio' && !consumidos.has(item.id)) {
         semUso.push(`'${item.id}' é concedido e nunca consumido`);
       }
     }
     expect(semUso).toEqual([]);
     // Não passa por vacuidade: existem itens das duas naturezas.
-    expect(Object.values(ITENS).filter((i) => i.tardio)).toHaveLength(3);
+    expect(Object.values(ITENS).filter((i) => i.tardio)).toHaveLength(4);
     expect(Object.values(ITENS).filter((i) => !i.tardio)).toHaveLength(2);
   });
 
@@ -1424,7 +1429,7 @@ describe('conexões da revelação', () => {
     }
   });
 
-  it('as origens de item são exatamente os três itens tardios, e são consumidas', () => {
+  it('as origens de item incluem os quatro itens tardios e o relatório persistente', () => {
     const origensDeItem = CONEXOES.flatMap((c) =>
       c.origem.tipo === 'item' ? [c.origem.itemId] : [],
     );
@@ -1432,20 +1437,16 @@ describe('conexões da revelação', () => {
       .filter((i) => i.tardio)
       .map((i) => i.id);
 
-    expect([...origensDeItem].sort()).toEqual([...tardios].sort());
+    expect([...origensDeItem].sort()).toEqual([...tardios, 'relatorio'].sort());
     for (const c of CONEXOES) {
-      if (c.origem.tipo === 'item') expect(c.consomeOrigem, c.origem.itemId).toBe(true);
+      if (c.origem.tipo === 'item' && c.origem.itemId !== 'relatorio') expect(c.consomeOrigem, c.origem.itemId).toBe(true);
     }
   });
 
-  it('a última conexão sai de uma skill e não consome a origem: é a tese', () => {
+  it('a última conexão sai do relatório e o preserva como evidência de protagonismo', () => {
     const ultima = CONEXOES[CONEXOES.length - 1];
-    expect(ultima?.origem).toEqual({ tipo: 'skill', skillId: 'proatividade' });
+    expect(ultima?.origem).toEqual({ tipo: 'item', itemId: 'relatorio' });
     expect(ultima?.consomeOrigem).toBe(false);
-
-    const deSkill = CONEXOES.filter((c) => c.origem.tipo === 'skill');
-    expect(deSkill).toHaveLength(1);
-    for (const c of deSkill) expect(c.consomeOrigem).toBe(false);
   });
 
   it('nenhuma origem se repete e cada lugar de passagem é usado uma vez', () => {
@@ -1458,14 +1459,12 @@ describe('conexões da revelação', () => {
     expect([...new Set(lugares)]).toHaveLength(lugares.length);
   });
 
-  it('a skill de origem da tese é concedida em algum lugar do jogo', () => {
+  it('a origem persistente é concedida em algum lugar do jogo', () => {
     const concedidas = new Set(
-      EFEITOS_ALCANCAVEIS.flatMap((e) => (e.tipo === 'concederSkill' ? [e.skillId] : [])),
+      EFEITOS_ALCANCAVEIS.flatMap((e) => (e.tipo === 'concederItem' ? [e.itemId] : [])),
     );
     for (const c of CONEXOES) {
-      if (c.origem.tipo === 'skill') {
-        expect([...concedidas], `skill '${c.origem.skillId}'`).toContain(c.origem.skillId);
-      }
+      if (c.origem.tipo === 'item') expect([...concedidas], `item '${c.origem.itemId}'`).toContain(c.origem.itemId);
     }
   });
 

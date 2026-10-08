@@ -100,7 +100,7 @@ Ficam **totalmente misturados** aos outros na barra. Descrições factuais e cal
 
 | Item | Bloco | Descrição no inventário |
 |---|---|---|
-| **Cartão do Rafael** | 1 | "Rafael Moreira — Engenharia de Dados. Ele escreveu o ramal atrás, à mão." |
+| **Cartão do Rafael** | 1 | "Rafael Moreira — Engenharia de Dados. Rafael adicionou Ana no Teams no primeiro dia." |
 | **Certificado do Degree** | 2 | "Certificado de conclusão. Fundamentos de Arquitetura de Sistemas. 40h." |
 | **Crachá do Innovation** | 3 | "Crachá de participante. Innovation Day. O cordão ficou torto na foto." |
 

@@ -132,11 +132,6 @@ export const CENAS_B3: readonly Cena[] = [
         bloqueadoTexto: 'Problema, solução e impacto ainda estão embaralhados. Não há relatório.',
         umaVezSo: true,
         efeitos: [
-          {
-            tipo: 'narrar',
-            texto:
-              'Três páginas num domingo à noite. Ninguém pediu, ninguém vai cobrar, e ela ainda não sabe se vai entregar.',
-          },
           { tipo: 'concederItem', itemId: 'relatorio' },
           { tipo: 'concederSkill', skillId: 'proatividade' },
         ],
@@ -167,7 +162,6 @@ export const CENAS_B3: readonly Cena[] = [
         parada: { x: 63, y: 76 },
         aceitaItem: 'relatorio',
         efeitosComItem: [
-          { tipo: 'consumirItem', itemId: 'relatorio' },
           { tipo: 'dialogo', dialogoId: 'b3-claudia' },
         ],
         efeitos: [

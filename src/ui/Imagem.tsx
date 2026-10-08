@@ -30,7 +30,7 @@ export interface PropsImagem {
   largura: number;
   altura: number;
   forma?: FormaPlaceholder;
-  /** Falso onde texto na tela é proibido (ex.: a pausa do Bloco 4). */
+  /** Falso em telas em que o rótulo contextual já aparece por outro caminho. */
   mostrarRotulo?: boolean;
   decorativo?: boolean;
   className?: string;

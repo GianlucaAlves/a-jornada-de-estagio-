@@ -1658,7 +1658,7 @@ def sala_reunioes(*, quadro: int = 0) -> Grade:
     # material de credenciamento na credência, na faixa livre do tampo (x 266..310)
 
     # A plateia e suas cadeiras são camadas da UI, não pixels do cenário. Assim
-    # o piso continua legível, e as cadeiras permanecem quando as pessoas saem.
+    # o piso continua legível e as duas fileiras podem ser compostas em camadas.
     # A faixa opaca antiga escondia toda a frente como uma parede preta.
     refinamentos.decorar(g, 'sala-reunioes', quadro)
     _vinheta(g)
@@ -1780,7 +1780,7 @@ CAIXAS_DE_OBJETO: dict[str, tuple[int, int]] = {
     # Os dois da fase 4 são novos e não têm caixa herdada. Estes são os números
     # que a frente de interação precisa declarar em `bloco4.ts`:
     #   objeto-atril   -> largura: 144, altura: 224
-    #   objeto-plateia -> largura: 936, altura: 136 (fileira clicável)
+    #   objeto-plateia -> largura: 936, altura: 136 (fileira de trás, cenário)
     "atril": (36, 56),
     "plateia": (234, 34),
     "plateia-frente": (234, 64),

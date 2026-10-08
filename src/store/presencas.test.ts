@@ -46,19 +46,13 @@ describe('continuidade física dos NPCs', () => {
     expect(j().presencasNpcs[chave]).toEqual({ posicaoAtual: { x: 44, y: 70 }, visivel: true });
   });
 
-  it('Cláudia já está visível na sala; depois da fala sai andando antes de desaparecer', () => {
+  it('Cláudia já está visível na sala e permanece para a conversa pós-apresentação', () => {
     entrar(4, 'sala-reunioes');
     const chave = chaveDaPresenca(4, 'sala-reunioes', 'claudia');
     expect(j().presencasNpcs[chave]?.visivel).toBe(true);
-    useJogo.setState({ hotspotsFeitos: ['b4-entrega'], dialogosConcluidos: ['b4-apresentacao'], pausaBloco4: 'concluida' });
+    useJogo.setState({ dialogosConcluidos: ['b4-apresentacao'] });
     j().clicarHotspot('b4-claudia'); terminarConversa();
-    expect(j().presencasNpcs[chave]).toMatchObject({ visivel: true, movimento: { destino: { x: 34, y: 70 }, proximos: [{ x: -6, y: 70 }], visivelAoChegar: false } });
-    j().concluirMovimentoNpc(chave);
-    j().concluirMovimentoNpc(chave);
-    expect(j().presencasNpcs[chave]?.visivel).toBe(false);
-    // Reler traz a mesma pessoa da borda, sem recriar o sprite no meio da sala.
-    j().clicarHotspot('b4-claudia');
-    expect(j().presencasNpcs[chave]).toMatchObject({ visivel: true, movimento: { origem: { x: -6, y: 70 }, destino: { x: 34, y: 70 }, proximos: [{ x: 34, y: 62 }] } });
+    expect(j().presencasNpcs[chave]).toMatchObject({ posicaoAtual: { x: 34, y: 62 }, visivel: true });
   });
 
   it('cada locutor de NPC tem posição inicial e final configuradas na sua cena', () => {

@@ -287,9 +287,9 @@ Ana senta. A tela abre **sem senha** — ela digita de cor, sem olhar. Detalhe d
 Chega uma mensagem. **Cinco falas no total** — o e-mail cabe em duas linhas:
 
 > **De: Cláudia Reis**
-> **Assunto: Vaga — Engenharia de Plataforma**
+> **Assunto: Vaga — Desenvolvimento de software**
 >
-> Abriu uma posição no time de Plataforma. É efetivação, não é estágio.
+> Abriu uma posição no time de desenvolvimento de software. É efetivação, não é estágio.
 >
 > Seu nome apareceu em três lugares diferentes na conversa de ontem. Você tem interesse?
 

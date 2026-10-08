@@ -2984,8 +2984,8 @@ def atril(largura: int = 32, altura: int = 52) -> Grade:
 def plateia(largura: int = 230, altura: int = 60, *, ocupada: bool = True, fileira: str = "toda") -> Grade:
     """Nove espectadores em duas fileiras, vistos de costas para o palco.
 
-    Cadeiras e pessoas compartilham coordenadas. A versão vazia fica fixa sob o
-    hotspot: na pausa só a camada ocupada sai, sem levar cadeiras junto.
+    Cadeiras e pessoas compartilham coordenadas. A versão vazia serve de base;
+    as fileiras ocupadas são camadas decorativas independentes, sem hotspot.
     """
     g = Grade(largura, altura)
     lugares = [(23, 0), (69, 1), (115, 0), (161, 2), (207, 1),

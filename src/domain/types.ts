@@ -58,6 +58,7 @@ export type ItemId =
   // usados no meio do jogo, e consumidos
   | 'anotacoes-treinamento'
   | 'relatorio'
+  | 'plano-carreira'
   // tardios: sem uso aparente até a fase 6, quando viram as PORTAS do clímax
   | 'cartao-rafael'
   | 'certificado-degree'
@@ -141,7 +142,6 @@ export type Efeito =
   | { tipo: 'destravarLugar'; lugarId: LugarId }
   | { tipo: 'concluirLugar'; lugarId: LugarId }
   | { tipo: 'trocarSprite'; sprite: SpriteId }
-  | { tipo: 'iniciarPausaBloco4' }
   | { tipo: 'irParaMapa' }
   | { tipo: 'irParaRevelacao' }
   | { tipo: 'blocoConcluido' };
@@ -202,6 +202,8 @@ export interface Hotspot {
   requerPuzzleResolvido?: PuzzleId;
   /** Só responde depois de todos estes hotspots já terem sido acionados. */
   requerHotspotsFeitos?: HotspotId[];
+  /** Só responde depois destes diálogos terem sido concluídos. */
+  requerDialogosConcluidos?: DialogoId[];
   /**
    * Uso de item em alvo: acionar com este item SELECIONADO dispara
    * `efeitosComItem` e consome a seleção.

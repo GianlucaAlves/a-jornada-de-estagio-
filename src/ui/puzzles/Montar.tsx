@@ -21,8 +21,8 @@
  *
  * O QUE FICOU: a mecânica (escolher peça, encaixar em alvo) e a satisfação — a
  * peça VIAJA da bandeja até a seção com snap firme, e a página inteira acende no
- * fim. Isso não é enfeite: a PAUSA da fase 4 cai logo depois, e o silêncio só
- * dói se resolver isto tiver sido gostoso.
+ * fim. Resolver conduz direto à apresentação automática de Ana, então a
+ * conclusão precisa ser clara sem interromper o fluxo.
  *
  * A LÓGICA INTEIRA É UM REDUTOR PURO, exportado e testado por mutação
  * (`Montar.test.ts`). O componente é casca: `useReducer` e coordenadas. Se o

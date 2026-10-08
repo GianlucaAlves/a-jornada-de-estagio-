@@ -9,7 +9,7 @@
  * GEOMETRIA — os cinco cards, os slots de origem e a placa do convite cabem na
  * caixa livre, não se sobrepõem, não invadem a faixa da barra nem a do painel, e
  * a placa cai na única célula VAZIA do arranjo. Mais importante: nenhuma das
- * quatro linhas atravessa o card de um lugar que não é o dela — era esse o
+ * cinco linhas atravessam o card de um lugar que não é o delas — era esse o
  * defeito da versão anterior, onde a linha da barra até o Escritório passava por
  * cima da Sala de Reuniões e a plateia não sabia em qual lugar a razão parava.
  *
@@ -28,9 +28,9 @@
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 
-import { BLOCOS, CONEXOES, ITENS, LUGARES, SKILLS } from '../domain/content';
+import { BLOCOS, CONEXOES, ITENS, LUGARES, ORDEM_ITENS, SKILLS } from '../domain/content';
 import type { ItemId, LugarId, Ponto, SkillId } from '../domain/types';
-import { CANVAS, barra, cores, overlay, tipografia } from '../styles/tokens';
+import { CANVAS, barra, borda, cores, overlay, tipografia } from '../styles/tokens';
 import {
   CAIXA_DO_CONVITE,
   GEOMETRIA_DA_REVELACAO,
@@ -44,19 +44,18 @@ import {
   partidaDaConexao,
 } from './Revelacao';
 import type { Caixa, ConexaoNaTela } from './Revelacao';
+import { ROTULOS_DOS_ITENS } from './rotulosDosItens';
 
 const IDS = Object.keys(LUGARES) as LugarId[];
 
 /**
- * O estado que a fase 6 declara ter recebido é o estado real desta tela: três
+ * O estado que a fase 6 declara ter recebido é o estado real desta tela: cinco
  * itens na barra e as nove skills no painel. As coordenadas de partida das
- * quatro origens saem dele, então usar outra coisa aqui testaria uma tela que
+ * cinco origens saem dele, então usar outra coisa aqui testaria uma tela que
  * não existe.
  */
 const ASSUMIDO = BLOCOS[6].estadoAssumido;
-const SLOTS: readonly ItemId[] = (Object.keys(ITENS) as ItemId[]).filter((id) =>
-  ASSUMIDO.itens.includes(id),
-);
+const SLOTS: readonly ItemId[] = ORDEM_ITENS.filter((id) => ASSUMIDO.itens.includes(id));
 const SKILLS_NO_PAINEL: readonly SkillId[] = ASSUMIDO.skills;
 
 const CONEXOES_NA_TELA: readonly ConexaoNaTela[] = CONEXOES.map((conexao) => ({
@@ -236,7 +235,7 @@ describe('os cinco lugares e o convite no mapa do clímax', () => {
   });
 });
 
-describe('as quatro linhas não atravessam o que não é delas', () => {
+describe('as cinco linhas não atravessam o que não é delas', () => {
   /**
    * O DEFEITO QUE ESTE TESTE TRANCA. A versão anterior traçava barra → lugar →
    * convite, e a perna de baixo cruzava nós de lugares que não tinham nada a ver
@@ -291,7 +290,7 @@ describe('as quatro linhas não atravessam o que não é delas', () => {
 });
 
 describe('de onde a arte de cada origem parte', () => {
-  it('as quatro origens existem no estado que a fase 6 assume', () => {
+  it('as cinco origens existem no estado que a fase 6 assume', () => {
     for (const conexao of CONEXOES) {
       if (conexao.origem.tipo === 'item') {
         expect(SLOTS, `item '${conexao.origem.itemId}' fora da barra`).toContain(
@@ -321,14 +320,9 @@ describe('de onde a arte de cada origem parte', () => {
    * tem largura de card e, centrada na linha, apagaria as skills vizinhas no
    * primeiro quadro — a origem precisa sair do painel, não cobri-lo.
    */
-  it('a placa da competência parte encostada no painel, sem invadi-lo', () => {
+  it('não há placas de skills: todas as conexões partem de itens', () => {
     const daSkill = CONEXOES_NA_TELA.filter((c) => c.conexao.origem.tipo === 'skill');
-    expect(daSkill).toHaveLength(1);
-    for (const { partida } of daSkill) {
-      const direita = partida.x + GEOMETRIA_DA_REVELACAO.origem.larguraSkill / 2;
-      expect(direita).toBeLessThanOrEqual(CANVAS.largura);
-      expect(partida.y).toBeGreaterThanOrEqual(GEOMETRIA_DA_REVELACAO.barra.topo);
-    }
+    expect(daSkill).toHaveLength(0);
   });
 
   it('cada arte de origem pousa no slot do lugar da própria conexão', () => {
@@ -345,16 +339,13 @@ describe('de onde a arte de cada origem parte', () => {
 
 // ------------------------------------------------------------ a tese
 
-describe('a tese: três portas se apagam, um motivo permanece', () => {
-  it('há quatro conexões, e exatamente uma não se consome', () => {
-    expect(CONEXOES).toHaveLength(4);
+describe('a tese: quatro portas se apagam, um motivo permanece', () => {
+  it('há cinco conexões, e exatamente uma não se consome', () => {
+    expect(CONEXOES).toHaveLength(5);
     const permanentes = CONEXOES.filter((c) => !c.consomeOrigem);
     expect(permanentes).toHaveLength(1);
     const unica = permanentes[0];
-    expect(unica?.origem.tipo).toBe('skill');
-    if (unica?.origem.tipo === 'skill') {
-      expect(unica.origem.skillId).toBe('proatividade');
-    }
+    expect(unica?.origem).toEqual({ tipo: 'item', itemId: 'relatorio' });
   });
 
   it('com a barra em cena, tudo o que foi traçado está aceso', () => {
@@ -364,21 +355,21 @@ describe('a tese: três portas se apagam, um motivo permanece', () => {
     expect(lugaresAcesos(CONEXOES, false)).toHaveLength(CONEXOES.length);
   });
 
-  it('quando a barra sai, sobra UMA conexão acesa e ela é a da competência', () => {
+  it('quando a barra sai, sobra UMA conexão acesa: o relatório', () => {
     const acesas = CONEXOES.filter((c) => conexaoAcesa(c, true));
     expect(acesas).toHaveLength(1);
-    expect(acesas[0]?.origem.tipo).toBe('skill');
+    expect(acesas[0]?.origem).toEqual({ tipo: 'item', itemId: 'relatorio' });
   });
 
   it('e sobra UM lugar aceso: o lugar onde ela agiu sem ninguém pedir', () => {
     const acesos = lugaresAcesos(CONEXOES, true);
     expect(acesos).toHaveLength(1);
-    const daSkill = CONEXOES.find((c) => c.origem.tipo === 'skill');
-    expect(acesos[0]).toBe(daSkill?.viaLugar);
+    const doRelatorio = CONEXOES.find((c) => c.origem.tipo === 'item' && c.origem.itemId === 'relatorio');
+    expect(acesos[0]).toBe(doRelatorio?.viaLugar);
   });
 
   /** O motivo também é o traço mais grosso: a diferença é de natureza. */
-  it('a conexão que permanece é a mais grossa e a mais lenta das quatro', () => {
+  it('a conexão que permanece é a mais grossa e a mais lenta das cinco', () => {
     const permanente = CONEXOES.find((c) => !c.consomeOrigem);
     expect(permanente).toBeDefined();
     if (!permanente) return;
@@ -389,8 +380,8 @@ describe('a tese: três portas se apagam, um motivo permanece', () => {
     }
   });
 
-  /** Os quatro lugares são distintos: quatro linhas num slot só não leem como quatro razões. */
-  it('as quatro conexões passam por quatro lugares diferentes', () => {
+  /** Os cinco lugares são distintos: cinco linhas num slot só não leem como cinco razões. */
+  it('as cinco conexões passam por cinco lugares diferentes', () => {
     const lugares = new Set(CONEXOES.map((c) => c.viaLugar));
     expect(lugares.size).toBe(CONEXOES.length);
   });
@@ -471,10 +462,10 @@ describe('o texto do clímax cabe onde ele é desenhado', () => {
    * conclusão" mede 282px contra 178px de caixa útil — e a barra desta tela não
    * pode crescer. Duas linhas são reservadas; três não caberiam.
    */
-  it('o nome de cada item na barra cabe nas duas linhas reservadas', () => {
-    const util = 210 - 2 * 4 - 2 * 12; // largura do slot menos borda média e padding sm
+  it('o rótulo de cada item na barra cabe nas duas linhas reservadas', () => {
+    const util = barra.item.larguraCompacta - 2 * borda.media - 2 * borda.fina;
     for (const id of SLOTS) {
-      expect(linhas(ITENS[id].nome, tipografia.tamanhos.apoio, util)).toBeLessThanOrEqual(2);
+      expect(linhas(ROTULOS_DOS_ITENS[id], tipografia.minimo, util)).toBeLessThanOrEqual(2);
     }
     const slot = GEOMETRIA_DA_REVELACAO.barra.slot;
     expect(slot.topo).toBeGreaterThanOrEqual(GEOMETRIA_DA_REVELACAO.barra.topo);
@@ -490,7 +481,7 @@ describe('a versão futura não cobre a resposta que ela aponta', () => {
     if (!acesa) return;
     const proibidas: Caixa[] = [
       caixaDoCard(acesa.viaLugar),
-      caixaDaOrigem(acesa.viaLugar, 'skill'),
+      caixaDaOrigem(acesa.viaLugar, acesa.origem.tipo),
       CAIXA_DO_CONVITE,
     ];
     for (const [nome, figura] of [
@@ -548,9 +539,9 @@ describe('o mapa do clímax, no HTML', () => {
     expect(polilinhas(VAZIO)).toHaveLength(0);
   });
 
-  it('as quatro conexões traçadas são quatro linhas, todas acesas', () => {
+  it('as cinco conexões traçadas são cinco linhas, todas acesas', () => {
     const linhas = polilinhas(DURANTE);
-    expect(linhas).toHaveLength(4);
+    expect(linhas).toHaveLength(5);
     expect(linhas.every((l) => l.stroke === cores.destaque)).toBe(true);
   });
 
@@ -561,20 +552,19 @@ describe('o mapa do clímax, no HTML', () => {
    */
   it('depois que a barra sai, exatamente um traço continua aceso', () => {
     const linhas = polilinhas(FINAL);
-    expect(linhas).toHaveLength(4);
+    expect(linhas).toHaveLength(5);
     const acesas = linhas.filter((l) => l.stroke === cores.destaque);
     const apagadas = linhas.filter((l) => l.stroke === cores.silhuetaContorno);
     expect(acesas).toHaveLength(1);
-    expect(apagadas).toHaveLength(3);
+    expect(apagadas).toHaveLength(4);
     expect(acesas[0]?.largura).toBe(Math.max(...linhas.map((l) => l.largura)));
   });
 
-  it('o que permanece aceso é NOMEADO na tela, e é a competência', () => {
-    const daSkill = CONEXOES.find((c) => c.origem.tipo === 'skill');
-    expect(daSkill).toBeDefined();
-    if (daSkill?.origem.tipo !== 'skill') return;
-    expect(FINAL).toContain(SKILLS[daSkill.origem.skillId].nome);
-    expect(FINAL).toContain(LUGARES[daSkill.viaLugar].nome);
+  it('o relatório que permanece é nomeado na tela', () => {
+    const doRelatorio = CONEXOES.find((c) => c.origem.tipo === 'item' && c.origem.itemId === 'relatorio');
+    expect(doRelatorio).toBeDefined();
+    expect(FINAL).toContain(ITENS.relatorio.nome);
+    expect(FINAL).toContain(LUGARES[doRelatorio!.viaLugar].nome);
   });
 
   it('acender menos coisas no fim: o quadro final tem menos destaque que o anterior', () => {

@@ -18,7 +18,7 @@ export interface PropsPlaceholder {
   largura: number;
   altura: number;
   forma?: FormaPlaceholder;
-  /** Falso onde texto na tela é proibido (ex.: a pausa do Bloco 4). */
+  /** Falso em telas em que o rótulo contextual já aparece por outro caminho. */
   mostrarRotulo?: boolean;
   /** Decorativo: some da árvore de acessibilidade. */
   decorativo?: boolean;

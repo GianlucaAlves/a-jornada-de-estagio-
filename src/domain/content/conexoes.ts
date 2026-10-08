@@ -1,23 +1,20 @@
 /**
- * As quatro conexões do clímax, na ordem em que o apresentador as dispara —
+ * As cinco conexões do clímax, na ordem em que o apresentador as dispara —
  * uma por clique, nunca por timer.
  *
  * As três primeiras saem de itens tardios e são PORTAS: indicação social,
  * competência, visibilidade. Elas se apagam da barra ao conectar.
- * A quarta sai do painel de skills e é o MOTIVO. Ela permanece acesa — é a tese.
+ * A quarta vem do plano que Ana escolheu. A quinta sai do relatório e é a
+ * EVIDÊNCIA persistente do protagonismo.
  *
- * A quarta NÃO pode ser um item. Promover um item a quarta porta parecia
- * elegante e destruiria o argumento: a mensagem passaria a ser "o que importa é
- * o que você entrega", quando o projeto inteiro argumenta que é o que você se
- * tornou (ADR-017). É por isso que ela é a única que não se consome, e é ela que
- * sobra na tela quando a barra de itens sai.
+ * O relatório permanece no mapa como evidência concreta da iniciativa de Ana.
  *
  * As conexões são traçadas ENQUANTO o personagem fala, na fase 6: cada uma é uma
  * razão, dita e desenhada ao mesmo tempo (ADR-030). Depois corta para a festa.
  *
- * `viaLugar` aponta para o lugar onde aquilo aconteceu, e os quatro são
- * distintos: quatro linhas saindo do centro para o mesmo slot não leem como
- * quatro razões.
+ * `viaLugar` aponta para o lugar onde aquilo aconteceu, e os cinco são
+ * distintos: cinco linhas saindo do centro para o mesmo slot não leem como
+ * cinco razões.
  *
  * Parâmetros contra a compressão do Teams: linha grossa de alto contraste,
  * traçado lento.
@@ -65,15 +62,19 @@ export const CONEXOES: readonly Conexao[] = [
     duracaoMs: 800,
   },
   {
-    // Linha de Produção: é lá que ela agiu sem ninguém pedir. A quarta conexão
-    // tinha de sair do lugar do protagonismo, senão a skill se acende sobre um
-    // lugar onde ela não fez nada.
-    origem: { tipo: 'skill', skillId: 'proatividade' },
+    // Engenharia: o plano registra a direção de carreira e o próximo passo concreto.
+    origem: { tipo: 'item', itemId: 'plano-carreira' },
+    viaLugar: 'outra-area',
+    texto: 'Ela escolheu explorar desenvolvimento de software e já sabe como começar.',
+    consomeOrigem: true,
+    espessura: 7,
+    duracaoMs: 800,
+  },
+  {
+    // O relatório permanece como prova concreta da iniciativa e do protagonismo.
+    origem: { tipo: 'item', itemId: 'relatorio' },
     viaLugar: 'linha-producao',
-    texto:
-      'Três pessoas tinham o perfil. Uma tinha entregue algo que ninguém pediu.\n' +
-      '"Guardei seu nome."',
-    // A skill NÃO se apaga. É o que sobra na tela quando a barra sai.
+    texto: 'Ela identificou o problema e tomou a iniciativa de propor uma solução.',
     consomeOrigem: false,
     espessura: 10,
     duracaoMs: 1200,

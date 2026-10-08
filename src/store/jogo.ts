@@ -7,6 +7,7 @@ import {
   BLOCOS,
   CENAS,
   CONEXOES,
+  ORDEM_ITENS,
   DIALOGOS,
   ITENS,
   LUGARES,
@@ -33,9 +34,6 @@ import type {
   SpriteId,
   Tela,
 } from '../domain/types';
-
-/** Estado da pausa dramática da fase 4 — requisito mecânico, não direção. */
-export type PausaBloco4 = 'inativa' | 'rodando' | 'concluida';
 
 export interface EstadoJogo {
   nivel: BlocoId;
@@ -78,8 +76,7 @@ export interface EstadoJogo {
    *
    * Existe porque diálogo pode ser RELIDO (ADR-016) e os efeitos de um diálogo
    * NÃO podem valer duas vezes. Sem isto, reler uma conversa que concede item
-   * ressuscitaria um item já consumido, e reler a que inicia a PAUSA da fase 4
-   * reiniciaria o silêncio no meio da fala do apresentador. A releitura tem de
+   * ressuscitaria um item já consumido. A releitura tem de
    * repetir a FALA, não o efeito — quem relê quer a informação que perdeu.
    */
   dialogosConcluidos: DialogoId[];
@@ -87,7 +84,6 @@ export interface EstadoJogo {
   /** Mensagem genérica de falha. Uma só para todas as combinações erradas. */
   mensagemFalha: string | null;
   sprite: SpriteId;
-  pausaBloco4: PausaBloco4;
   revelacao: {
     conexoesFeitas: number;
     barraSaiu: boolean;
@@ -118,7 +114,6 @@ export interface AcoesJogo {
   fecharNarracao: () => void;
   fecharItemRecebido: () => void;
   fecharMensagemFalha: () => void;
-  concluirPausaBloco4: () => void;
   avancarBloco: () => void;
   entrarNoBloco: (bloco: BlocoId) => void;
   dispararConexao: () => void;
@@ -188,7 +183,6 @@ function estadoInicial(): EstadoJogo {
     narracao: null,
     mensagemFalha: null,
     sprite: 'ana-encolhida',
-    pausaBloco4: 'inativa',
     revelacao: {
       conexoesFeitas: 0,
       barraSaiu: false,
@@ -410,9 +404,14 @@ export const useJogo = create<Jogo>((set, get) => {
     const valor = nivelDoBloco(s.bloco).xpPorInteracao[id];
     if (!valor || s.interacoesPontuadas.includes(id) || s.tela.tipo !== 'cena') return;
     const lugarId = s.tela.lugarId;
-    const hotspot = CENAS.find(c => c.bloco === s.bloco && c.lugarId === lugarId)?.hotspots.find(h =>
-      id === `hotspot:${h.id}` || [...h.efeitos, ...(h.efeitosComItem ?? [])].some(e =>
-        (e.tipo === 'dialogo' && id === `dialogo:${e.dialogoId}`) || (e.tipo === 'abrirPuzzle' && id === `puzzle:${e.puzzleId}`)));
+    const hotspot = CENAS.find(c => c.bloco === s.bloco && c.lugarId === lugarId)?.hotspots.find(h => {
+      const efeitos = [...h.efeitos, ...(h.efeitosComItem ?? [])];
+      const dialogosDoPuzzle = efeitos
+        .filter((efeito) => efeito.tipo === 'abrirPuzzle')
+        .flatMap((efeito) => efeito.tipo === 'abrirPuzzle' ? PUZZLES[efeito.puzzleId].efeitosSucesso ?? [] : []);
+      return id === `hotspot:${h.id}` || [...efeitos, ...dialogosDoPuzzle].some(e =>
+        (e.tipo === 'dialogo' && id === `dialogo:${e.dialogoId}`) || (e.tipo === 'abrirPuzzle' && id === `puzzle:${e.puzzleId}`));
+    });
     if (!hotspot) return;
     const interacoesPontuadas = [...s.interacoesPontuadas, id];
     set({ interacoesPontuadas, xpAtual: xpDasInteracoes(s.bloco, interacoesPontuadas), ganhoXp: { id, valor, lugarId, pos: hotspot.pos, sequencia: (s.ganhoXp?.sequencia ?? 0) + 1 } });
@@ -496,11 +495,6 @@ export const useJogo = create<Jogo>((set, get) => {
           set({ sprite: efeito.sprite });
           break;
 
-        case 'iniciarPausaBloco4':
-          // Sem texto, sem som, sem item, sem skill. A ausência é a mensagem.
-          set({ pausaBloco4: 'rodando' });
-          break;
-
         case 'irParaMapa':
           set({
             tela: { tipo: 'mapa' },
@@ -540,6 +534,9 @@ export const useJogo = create<Jogo>((set, get) => {
     if (h.requerHotspotsFeitos?.some((id) => !s.hotspotsFeitos.includes(id))) {
       return h.bloqueadoTexto ?? MENSAGEM_GENERICA;
     }
+    if (h.requerDialogosConcluidos?.some((id) => !s.dialogosConcluidos.includes(id))) {
+      return h.bloqueadoTexto ?? MENSAGEM_GENERICA;
+    }
     return null;
   }
 
@@ -561,7 +558,7 @@ export const useJogo = create<Jogo>((set, get) => {
     },
     reabrirReflexao: () => {
       const s = get();
-      if (s.tela.tipo !== 'cena' || s.dialogoAtivo || s.puzzleAberto || s.narracao || s.itensRecebidos.length || s.pausaBloco4 === 'rodando') return;
+      if (s.tela.tipo !== 'cena' || s.dialogoAtivo || s.puzzleAberto || s.narracao || s.itensRecebidos.length) return;
       set({ reflexaoAtiva: { etapa: 'falas', indice: 0 }, itemSelecionado: null });
     },
     avancarReflexao: () => {
@@ -614,7 +611,7 @@ export const useJogo = create<Jogo>((set, get) => {
      */
     voltarAoMapa: () => {
       const s = get();
-      if (s.reflexaoAtiva || s.dialogoAtivo || s.puzzleAberto || s.pausaBloco4 === 'rodando') return;
+      if (s.reflexaoAtiva || s.dialogoAtivo || s.puzzleAberto) return;
       set({
         tela: { tipo: 'mapa' },
         presencasNpcs: assentarPresencas(s.presencasNpcs),
@@ -626,7 +623,7 @@ export const useJogo = create<Jogo>((set, get) => {
 
     clicarHotspot: (hotspotId) => {
       const s = get();
-      if (s.reflexaoAtiva || s.dialogoAtivo || s.puzzleAberto || s.pausaBloco4 === 'rodando') return;
+      if (s.reflexaoAtiva || s.dialogoAtivo || s.puzzleAberto) return;
       const cena = cenaAtual();
       const h = cena?.hotspots.find((x) => x.id === hotspotId);
       if (!h || !cena) return;
@@ -731,6 +728,8 @@ export const useJogo = create<Jogo>((set, get) => {
       if (primeiraResolucao) {
         pontuar(`puzzle:${puzzleId}`);
         aplicar(PUZZLES[puzzleId].efeitosSucesso ?? []);
+      } else {
+        aplicar((PUZZLES[puzzleId].efeitosSucesso ?? []).filter((efeito) => efeito.tipo === 'dialogo'));
       }
     },
 
@@ -766,14 +765,9 @@ export const useJogo = create<Jogo>((set, get) => {
     fecharItemRecebido: () => set((s) => ({ itensRecebidos: s.itensRecebidos.slice(1) })),
     fecharMensagemFalha: () => set({ mensagemFalha: null }),
 
-    concluirPausaBloco4: () => {
-      if (get().pausaBloco4 !== 'rodando') return;
-      set({ pausaBloco4: 'concluida' });
-    },
-
     avancarBloco: () => {
       const s = get();
-      if (s.reflexaoAtiva || s.dialogoAtivo || s.puzzleAberto || s.pausaBloco4 === 'rodando') return;
+      if (s.reflexaoAtiva || s.dialogoAtivo || s.puzzleAberto) return;
       if (s.tela.tipo === 'evolucao' || s.tela.tipo === 'cartao') return;
       if (s.bloco >= ULTIMO_BLOCO) return;
       const proximo = (s.bloco + 1) as BlocoId;
@@ -845,16 +839,16 @@ export const useJogo = create<Jogo>((set, get) => {
     /**
      * Fim das conexões: a barra se recolhe e sai de cena.
      *
-     * Os itens restantes são marcados como consumidos de verdade, não apenas
-     * escondidos. "Tudo o que ela carregou, ela usou" passa a ser uma afirmação
-     * sobre o estado, então o teste da tese deixa de ser tautológico.
+     * A barra desaparece depois da quinta conexão. Todos os itens que abriram
+     * portas já foram consumidos; o relatório fica presente como evidência,
+     * embora o seletor o esconda junto com a barra recolhida.
      */
     esvaziarBarra: () => {
       const s = get();
       if (s.revelacao.conexoesFeitas < CONEXOES.length) return;
       const itens = { ...s.itens };
       for (const id of TODOS_ITENS) {
-        if (itens[id] === 'presente') itens[id] = 'consumido';
+        if (id !== 'relatorio' && itens[id] === 'presente') itens[id] = 'consumido';
       }
       set({ itens, itemSelecionado: null, revelacao: { ...s.revelacao, barraSaiu: true } });
     },
@@ -966,7 +960,7 @@ export const seletores = {
   itensNaBarra: (s: EstadoJogo): ItemId[] =>
     s.revelacao.barraSaiu
       ? []
-      : (Object.keys(s.itens) as ItemId[]).filter((id) => s.itens[id] === 'presente'),
+      : ORDEM_ITENS.filter((id) => s.itens[id] === 'presente'),
 
   skillsNoPainel: (s: EstadoJogo) => s.skills.map((id) => SKILLS[id]),
 

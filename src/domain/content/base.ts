@@ -26,12 +26,12 @@ import type {
 // ---------------------------------------------------------------- itens
 
 /**
- * Cinco itens: dois de leva-e-traz e três tardios. Eram oito.
+ * Seis itens: Anotações, quatro itens tardios e o Relatório persistente. Eram oito.
  *
  * `senha`, `indicacao-trilha` e `projeto-entregue` foram cortados porque
  * nenhum efeito do jogo os usava (ADR-014, ADR-017). O corte importa: item que
  * entra na barra e nunca sai ensina à plateia que a barra é decoração — e a
- * barra é o mecanismo do clímax, onde três itens viram três portas.
+ * barra é o mecanismo do clímax: quatro itens viram portas e o Relatório fica.
  *
  * `tardio` é metadado interno. A UI não diferencia, porque qualquer marcação
  * anunciaria o clímax.
@@ -46,13 +46,19 @@ export const ITENS: Record<ItemId, Item> = {
   relatorio: {
     id: 'relatorio',
     nome: 'Relatório',
-    descricao: 'Três páginas sobre uma falha na passagem de turno. Quem percebe o problema antes de receber a tarefa?',
+    descricao: 'Relatório criado por iniciativa própria: o registro de um problema, da solução proposta e do impacto para o próximo turno.',
     tardio: false,
+  },
+  'plano-carreira': {
+    id: 'plano-carreira',
+    nome: 'Plano de carreira',
+    descricao: 'Ana escolheu explorar desenvolvimento de software: estudar como os sistemas se conectam e praticar em projetos pequenos.',
+    tardio: true,
   },
   'cartao-rafael': {
     id: 'cartao-rafael',
     nome: 'Cartão do Rafael',
-    descricao: 'Rafael escreveu o ramal atrás, à mão. Uma conversa do primeiro dia ainda pode abrir uma porta?',
+    descricao: 'Rafael adicionou Ana no Teams no primeiro dia. Uma conversa pode abrir uma porta?',
     tardio: true,
   },
   'certificado-degree': {
@@ -71,6 +77,16 @@ export const ITENS: Record<ItemId, Item> = {
     tardio: true,
   },
 };
+
+/** Ordem persistente da barra: origem visual e sequência de leitura do clímax. */
+export const ORDEM_ITENS: readonly ItemId[] = [
+  'cartao-rafael',
+  'certificado-degree',
+  'cracha-innovation',
+  'plano-carreira',
+  'relatorio',
+  'anotacoes-treinamento',
+];
 
 // ---------------------------------------------------------------- skills
 
@@ -183,7 +199,7 @@ export const NPCS: Record<NpcId, PerfilNpc> = {
  *
  * DUAS RESTRIÇÕES GOVERNAM ESTES NÚMEROS, e as duas são verificáveis:
  *
- * 1. O CENTRO FICA LIVRE. É de lá que as quatro conexões do clímax saem, e uma
+ * 1. O CENTRO FICA LIVRE. É de lá que as cinco conexões do clímax saem, e uma
  *    moldura de 300x250 no meio do mapa faria a primeira linha nascer por baixo
  *    de um slot. A fileira de cima fica 227px acima do centro da área útil e a
  *    de baixo 227px abaixo: sobra um miolo limpo para a origem das linhas.
@@ -208,7 +224,7 @@ export const LUGARES: Record<LugarId, Lugar> = {
     pos: { x: 84, y: 26 },
   },
   'sala-reunioes': { id: 'sala-reunioes', nome: 'Sala de Reuniões', pos: { x: 16, y: 74 } },
-  'outra-area': { id: 'outra-area', nome: 'Outra área', pos: { x: 84, y: 74 } },
+  'outra-area': { id: 'outra-area', nome: 'Engenharia', pos: { x: 84, y: 74 } },
 };
 
 // ---------------------------------------------------------------- textos avulsos

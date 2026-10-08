@@ -69,7 +69,7 @@ export function PuzzleAtivo(): JSX.Element | null {
       style={{
         position: 'absolute',
         inset: 0,
-        // Acima dos overlays persistentes e da narração, abaixo da pausa do B4.
+        // Acima dos overlays persistentes e da narração.
         zIndex: camada.narracao + 5,
         display: 'flex',
         alignItems: 'center',

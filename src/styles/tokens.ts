@@ -347,16 +347,18 @@ export const overlay = {
  */
 export const barra = {
   zonaItens: 826,
-  slotsItens: 3,
+  slotsItens: 5,
+  slotsItensIniciais: 3,
   slotsHabilidades: 9,
   colunasHabilidades: 3,
   alturaSelo: 32,
   larguraSelo: 340,
   larguraDoRotulo: 120,
   /** Slot de item: moldura + ícone + nome. */
-  item: { largura: 210, altura: 112 },
+  item: { largura: 210, altura: 112, larguraCompacta: 124, alturaCompacta: 112 },
   /** Lado do ícone dentro do slot. */
   icone: 64,
+  iconeCompacto: 48,
   /** Teto de largura da descrição de item, que nasce acima da barra. */
   larguraDaDescricao: 1180,
 } as const;
